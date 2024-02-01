@@ -54,3 +54,61 @@ for Kubernetes secrets management including:
 Besides SOPS, Flux works with any 3rd-party Kubernetes secrets management
 tools, for more information please refer to the
 [Flux Secrets Management](https://fluxcd.io/flux/security/secrets-management/).
+
+## Supply Chain Security
+
+The build, release and provenance portions of the ControlPlane distribution supply chain meet
+[SLSA Build Level 3](https://slsa.dev/spec/v1.0/levels).
+
+### Software Bill of Materials
+
+The controller images come with SBOMs for each CPU architecture,
+you can extract the SPDX JSON using Docker’s inspect command:
+
+```shell
+docker buildx imagetools inspect \
+    <registry>/<channel>/source-controller:v1.2.3 \
+    --format "{{ json (index .SBOM \"linux/amd64\").SPDX}}"
+```
+
+### Signature Verification
+
+The controller images are signed using Sigstore Cosign and GitHub OIDC.
+
+To verify the authenticity of a container image, install cosign v2 and run:
+
+```shell
+cosign verify <registry>/<channel>/source-controller:v1.2.3 \
+  --certificate-identity-regexp=^https://github\\.com/controlplaneio-fluxcd/.*$ \
+  --certificate-oidc-issuer=https://token.actions.githubusercontent.com
+```
+
+### SLSA Provenance verification
+
+The provenance attestations are generated at build time with Docker Buildkit and
+include facts about the build process such as:
+
+- Build timestamps
+- Build parameters and environment
+- Version control metadata
+- Source code details
+- Materials (files, scripts) consumed during the build
+
+To extract the SLSA provenance JSON for a specific CPU architecture, you can use Docker’s inspect command:
+
+```shell
+docker buildx imagetools inspect \
+  <registry>/<channel>/source-controller:v1.2.3 \
+  --format "{{ json (index .Provenance \"linux/amd64\").SLSA}}"
+```
+
+The provenance of the build artifacts is generated with the official
+[SLSA GitHub Generator](https://github.com/slsa-framework/slsa-github-generator)
+can be verified using Sigstore Cosign:
+
+```shell
+cosign verify-attestation --type slsaprovenance \
+  --certificate-identity-regexp=^https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml.*$ \
+  --certificate-oidc-issuer=https://token.actions.githubusercontent.com \
+  <registry>/<channel>/source-controller:v1.2.3
+```
