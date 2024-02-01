@@ -1,5 +1,7 @@
 # Enterprise Distribution for Flux CD
 
+[![e2e-fips](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/e2e-fips.yaml/badge.svg)](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/e2e-fips.yaml)
+
 The [ControlPlane](https://control-plane.io) distribution for [Flux CD](https://fluxcd.io)
 comes with enterprise-hardened container images for the
 [GitOps Toolkit controllers](https://fluxcd.io/flux/components/) including:

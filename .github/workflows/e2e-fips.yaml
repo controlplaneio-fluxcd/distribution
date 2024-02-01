@@ -1,0 +1,79 @@
+name: e2e-fips
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '18 10 * * 3'
+
+permissions:
+  contents: read
+
+jobs:
+  kind:
+    strategy:
+      matrix:
+        variant:
+          - distroless
+        kubernetes:
+          - v1.26.6
+          - v1.27.3
+          - v1.28.0
+          - v1.29.0
+        flux:
+          - v2.2.2
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Setup Flux
+        uses: fluxcd/flux2/action@5c5c15ea212b8f029a110f9975851d25c8272695 #v2.2.2
+        with:
+          version: ${{ matrix.flux }}
+      - name: Setup Kubernetes
+        uses: helm/kind-action@dda0770415bac9fc20092cacbc54aa298604d140 # v1.8.0
+        with:
+          cluster_name: flux
+          node_image: kindest/node:${{ matrix.kubernetes }}
+      - name: Install Flux
+        run: |
+          kubectl create ns flux-system
+          
+          flux create secret oci control-plane-auth \
+          --url=ghcr.io \
+          --username=${{ github.actor }} \
+          --password=${{ secrets.GHCR_READONLY }}
+          
+          flux install \
+          --components-extra="image-reflector-controller,image-automation-controller" \
+          --registry=ghcr.io/controlplaneio-fluxcd/${{ matrix.variant }} \
+          --image-pull-secret=control-plane-auth
+      - name: Verify installation
+        run: flux check
+      - name: Setup cluster reconciliation
+        run: |
+          flux create source git flux-system \
+          --url=https://github.com/fluxcd/flux2-kustomize-helm-example \
+          --branch=main \
+          --username=${{ github.actor }} \
+          --password=${{ secrets.GITHUB_TOKEN }} \
+          --ignore-paths="clusters/**/flux-system/"
+          flux create kustomization flux-system \
+          --source=flux-system \
+          --path=./clusters/staging
+      - name: Verify cluster reconciliation
+        run: |
+          kubectl -n flux-system wait kustomization/infra-controllers --for=condition=ready --timeout=5m
+          kubectl -n flux-system wait kustomization/apps --for=condition=ready --timeout=5m
+      - name: Verify helm reconciliation
+        run: |
+          kubectl -n podinfo wait helmrelease/podinfo --for=condition=ready --timeout=5m
+      - name: Debug failure
+        if: failure()
+        run: |
+          kubectl -n flux-system get all
+          kubectl -n flux-system logs deploy/source-controller
+          kubectl -n flux-system logs deploy/kustomize-controller
+          kubectl -n flux-system logs deploy/helm-controller
+          flux get all --all-namespaces
