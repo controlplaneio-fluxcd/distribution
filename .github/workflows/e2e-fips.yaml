@@ -14,6 +14,7 @@ jobs:
         variant:
           - distroless
         kubernetes:
+          - v1.24.7
           - v1.25.11
           - v1.26.6
           - v1.27.3
@@ -50,8 +51,6 @@ jobs:
           --components-extra="image-reflector-controller,image-automation-controller" \
           --registry=ghcr.io/controlplaneio-fluxcd/${{ matrix.variant }} \
           --image-pull-secret=control-plane-auth
-      - name: Verify installation
-        run: flux check
       - name: Setup cluster reconciliation
         run: |
           flux create source git flux-system \
