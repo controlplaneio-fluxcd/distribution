@@ -51,6 +51,8 @@ jobs:
           --components-extra="image-reflector-controller,image-automation-controller" \
           --registry=ghcr.io/controlplaneio-fluxcd/${{ matrix.variant }} \
           --image-pull-secret=control-plane-auth
+      - name: Verify images
+        run: kubectl -n flux-system get deployments.apps -o yaml | grep ${{ matrix.variant }}
       - name: Setup cluster reconciliation
         run: |
           flux create source git flux-system \
