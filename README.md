@@ -1,5 +1,6 @@
 # Enterprise Distribution for Flux CD
 
+[![release](https://img.shields.io/github/release/controlplaneio-fluxcd/distribution/all.svg)](https://github.com/controlplaneio-fluxcd/distribution/releases)
 [![e2e-fips](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/e2e-fips.yaml/badge.svg)](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/e2e-fips.yaml)
 
 The [ControlPlane](https://control-plane.io) distribution for [Flux CD](https://fluxcd.io)
