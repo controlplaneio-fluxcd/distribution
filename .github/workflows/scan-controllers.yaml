@@ -63,6 +63,9 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+        env:
+          TRIVY_USERNAME: ${{ github.actor }}
+          TRIVY_PASSWORD: ${{ secrets.pull-token }}
       - name: Scan kustomize-controller
         id: kc
         continue-on-error: ${{ inputs.continue-on-error }}
@@ -74,6 +77,9 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+        env:
+          TRIVY_USERNAME: ${{ github.actor }}
+          TRIVY_PASSWORD: ${{ secrets.pull-token }}
       - name: Scan helm-controller
         id: hc
         continue-on-error: ${{ inputs.continue-on-error }}
@@ -85,6 +91,9 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+        env:
+          TRIVY_USERNAME: ${{ github.actor }}
+          TRIVY_PASSWORD: ${{ secrets.pull-token }}
       - name: Scan notification-controller
         id: nc
         continue-on-error: ${{ inputs.continue-on-error }}
@@ -96,6 +105,9 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+        env:
+          TRIVY_USERNAME: ${{ github.actor }}
+          TRIVY_PASSWORD: ${{ secrets.pull-token }}
       - name: Scan image-reflector-controller
         id: irc
         continue-on-error: ${{ inputs.continue-on-error }}
@@ -107,6 +119,9 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+        env:
+          TRIVY_USERNAME: ${{ github.actor }}
+          TRIVY_PASSWORD: ${{ secrets.pull-token }}
       - name: Scan image-automation-controller
         id: iac
         continue-on-error: ${{ inputs.continue-on-error }}
@@ -118,8 +133,17 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+        env:
+          TRIVY_USERNAME: ${{ github.actor }}
+          TRIVY_PASSWORD: ${{ secrets.pull-token }}
       - name: Scan result
         if : steps.sc.outcome == 'failure' || steps.kc.outcome == 'failure' || steps.hc.outcome == 'failure' || steps.nc.outcome == 'failure' || steps.irc.outcome == 'failure' || steps.iac.outcome == 'failure'
         run: |
           echo "One or more controllers have vulnerabilities"
+          echo "source-controller: ${{ steps.sc.outcome }}"
+          echo "kustomize-controller: ${{ steps.kc.outcome }}"
+          echo "helm-controller: ${{ steps.hc.outcome }}"
+          echo "notification-controller: ${{ steps.nc.outcome }}"
+          echo "image-reflector-controller: ${{ steps.irc.outcome }}"
+          echo "image-automation-controller: ${{ steps.iac.outcome }}"
           exit 1
