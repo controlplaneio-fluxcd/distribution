@@ -1,4 +1,4 @@
-name: FIPS vulnerability scan
+name: Distribution vulnerability scan
 
 on:
   workflow_dispatch:
@@ -30,7 +30,7 @@ jobs:
           FLUX_IMAGES="flux-images-$(flux -v | awk '{print $3}').txt"
           
           flux install \
-          --registry=ghcr.io/controlplaneio-fluxcd/distroless \
+          --registry=ghcr.io/controlplaneio-fluxcd/alpine \
           --components-extra=image-reflector-controller,image-automation-controller \
           --export | grep 'ghcr.io/' | awk '{print $2}' > "${FLUX_IMAGES}"
           

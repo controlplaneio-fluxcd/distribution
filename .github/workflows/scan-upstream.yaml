@@ -1,4 +1,4 @@
-name: Upstream CVE scan
+name: Upstream vulnerability scan
 
 on:
   workflow_dispatch:
@@ -51,7 +51,7 @@ jobs:
     permissions:
       contents: read
       packages: read
-    uses: ./.github/workflows/scan-controllers.yaml
+    uses: ./.github/workflows/x-scan-controllers.yaml
     with:
       sc: ${{ needs.get-controllers.outputs.sc }}
       kc: ${{ needs.get-controllers.outputs.kc }}
