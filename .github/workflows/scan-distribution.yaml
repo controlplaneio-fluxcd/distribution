@@ -1,4 +1,4 @@
-name: Distribution vulnerability scan
+name: Standard vulnerability scan
 
 on:
   workflow_dispatch:
