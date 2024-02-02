@@ -3,15 +3,14 @@
 [![e2e-fips](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/e2e-fips.yaml/badge.svg)](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/e2e-fips.yaml)
 
 The [ControlPlane](https://control-plane.io) distribution for [Flux CD](https://fluxcd.io)
-comes with enterprise-hardened container images for the
-[GitOps Toolkit controllers](https://fluxcd.io/flux/components/) including:
+comes with enterprise-hardened Flux controllers including:
 
 - Hardened container images and SBOMs in-sync with upstream Flux releases.
 - Continuous scanning and CVE patching for Flux container base images.
 - SLAs for remediation of critical vulnerabilities affecting Flux functionality.
 - FIPS-compliant Flux builds based on FIPS 140-2 validated BoringSSL.
 - Extended compatibility of Flux controllers for the latest six minor releases of Kubernetes.
-- Assured compatibility with Kubernetes LTS versions provided by cloud vendors such as Azure, AWS, Google and others.
+- Assured compatibility with Kubernetes LTS versions provided by cloud vendors.
 
 ## Distribution Channels
 

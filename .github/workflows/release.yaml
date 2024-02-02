@@ -1,0 +1,65 @@
+name: release
+on:
+  push:
+    tags: [ 'v*' ]
+
+permissions:
+  contents: read
+
+jobs:
+  manifests:
+    strategy:
+      matrix:
+        variant:
+          - distroless
+          - alpine
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Setup Flux
+        uses: fluxcd/flux2/action@5c5c15ea212b8f029a110f9975851d25c8272695 #v2.2.2
+        with:
+          version: ${{ github.ref_name }}
+      - name: Login to GHCR
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build manifests
+        run: |
+          mkdir -p bin/${{ matrix.variant }}
+          flux install \
+          --components-extra="image-reflector-controller,image-automation-controller" \
+          --registry=ghcr.io/controlplaneio-fluxcd/${{ matrix.variant }} \
+          --image-pull-secret=flux-enterprise-auth \
+          --export > --export > bin/${{ matrix.variant }}/gotk-components.yaml
+      - name: Push manifests
+        id: push
+        run: |
+          set -euo pipefail
+          
+          img_digest=$(flux push artifact \
+          oci://ghcr.io/controlplaneio-fluxcd/${{ matrix.variant }}/flux-manifests:${{ github.ref_name }} \
+          --path=bin/${{ matrix.variant }} \
+          --source=${{ github.repositoryUrl }} \
+          --revision="${{ github.ref_name }}@sha1:${{ github.sha }}" \
+          --annotations='org.opencontainers.image.description=ControlPLane Enterprise for Flux CD' \
+          --output=json | jq -r '.digest')
+          
+          echo "img_digest=$img_digest" >> $GITHUB_OUTPUT
+          
+          img_repository=ghcr.io/controlplaneio-fluxcd/${{ matrix.variant }}/flux-manifests
+          echo "img_repository=$img_repository" >> $GITHUB_OUTPUT
+
+          img_url=${img_repository}:${{ github.ref_name }}
+          echo "img_url=$img_url" >> $GITHUB_OUTPUT
+      - uses: sigstore/cosign-installer@e1523de7571e31dbe865fd2e80c5c7c23ae71eb4 # v3.4.0
+      - name: Sign manifests
+        run: |
+          cosign sign --yes ${{ steps.push.outputs.img_repository }}@${{ steps.push.outputs.img_digest }}
