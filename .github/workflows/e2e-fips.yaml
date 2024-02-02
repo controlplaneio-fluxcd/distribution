@@ -1,8 +1,8 @@
-name: e2e-fips
+name: FIPS conformance tests
 on:
   workflow_dispatch:
   schedule:
-    - cron: '18 10 * * 3'
+    - cron: '00 5 * * 1-5'
 
 permissions:
   contents: read
@@ -10,6 +10,7 @@ permissions:
 jobs:
   kind:
     strategy:
+      fail-fast: false
       matrix:
         variant:
           - distroless
