@@ -17,6 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         variant:
+          - alpine
           - distroless
         kubernetes:
           - v1.29.0
