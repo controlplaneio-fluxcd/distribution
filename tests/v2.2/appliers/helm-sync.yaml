@@ -1,0 +1,45 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: podinfo
+  namespace: appliers
+spec:
+  type: oci
+  interval: 10m
+  url: oci://ghcr.io/stefanprodan/charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: podinfo
+  namespace: appliers
+spec:
+  interval: 10m
+  timeout: 2m
+  chart:
+    spec:
+      chart: podinfo
+      version: ">1.0.0"
+      sourceRef:
+        kind: HelmRepository
+        name: podinfo
+      interval: 50m
+  releaseName: podinfo-helm
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  test:
+    enable: false
+  driftDetection:
+    mode: enabled
+    ignore:
+      - paths: ["/spec/replicas"]
+        target:
+          kind: Deployment
+  values:
+    replicaCount: 2
