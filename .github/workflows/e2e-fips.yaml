@@ -2,7 +2,7 @@ name: FIPS conformance tests
 on:
   workflow_dispatch:
   schedule:
-    - cron: '00 6 * * 1-5'
+    - cron: '00 8 * * 1'
 
 permissions:
   contents: read
@@ -43,7 +43,7 @@ jobs:
         run: |
           kubectl create ns flux-system
           
-          flux create secret oci control-plane-auth \
+          flux create secret oci flux-enterprise-auth \
           --url=ghcr.io \
           --username=${{ github.actor }} \
           --password=${{ secrets.GHCR_READONLY }}
@@ -51,27 +51,30 @@ jobs:
           flux install \
           --components-extra="image-reflector-controller,image-automation-controller" \
           --registry=ghcr.io/controlplaneio-fluxcd/${{ matrix.variant }} \
-          --image-pull-secret=control-plane-auth
+          --image-pull-secret=flux-enterprise-auth
       - name: Verify images
         run: kubectl -n flux-system get deployments.apps -o yaml | grep ${{ matrix.variant }}
       - name: Setup cluster reconciliation
+        env:
+          FLUX_VERSION: ${{ matrix.flux }}
+        shell: bash
         run: |
           flux create source git flux-system \
-          --url=https://github.com/fluxcd/flux2-kustomize-helm-example \
-          --branch=main \
-          --username=${{ github.actor }} \
+          --url=${{ github.event.repository.html_url }} \
+          --branch=${{ github.ref_name }} \
+          --username=${GITHUB_ACTOR} \
           --password=${{ secrets.GITHUB_TOKEN }} \
           --ignore-paths="clusters/**/flux-system/"
           flux create kustomization flux-system \
           --source=flux-system \
-          --path=./clusters/staging
+          --path=./tests/${FLUX_VERSION:0:4}/clusters/kind
       - name: Verify cluster reconciliation
         run: |
-          kubectl -n flux-system wait kustomization/infra-controllers --for=condition=ready --timeout=5m
-          kubectl -n flux-system wait kustomization/apps --for=condition=ready --timeout=5m
-      - name: Verify helm reconciliation
+          kubectl -n flux-system wait kustomization/sources --for=condition=ready --timeout=2m
+          kubectl -n flux-system wait kustomization/appliers --for=condition=ready --timeout=2m
+      - name: Verify managed resources
         run: |
-          kubectl -n podinfo wait helmrelease/podinfo --for=condition=ready --timeout=5m
+          flux tree kustomization flux-system
       - name: Debug failure
         if: failure()
         run: |
