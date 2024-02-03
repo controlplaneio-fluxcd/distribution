@@ -1,7 +1,9 @@
-name: index-images
+name: Update images
 
 on:
   workflow_dispatch:
+  release:
+    types: [created, published]
   schedule:
     - cron: '00 10 * * 1-5'
 
@@ -14,7 +16,6 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      packages: read
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -23,7 +24,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GHCR_READONLY }}
       - name: Setup Flux
         uses: fluxcd/flux2/action@5c5c15ea212b8f029a110f9975851d25c8272695 #v2.2.2
       - name: Write image files
@@ -34,17 +35,17 @@ jobs:
           REGISTRY: ghcr.io/controlplaneio-fluxcd
         run: |
           VERSION=$(gh release view --json tagName -q '.tagName')
-          echo "version=${VERSION}" >> $GITHUB_ENV
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
           
           VARIANT="alpine" \
           REGISTRY="${REGISTRY}" \
           VERSION="${VERSION}" \
-          ./workflows/index-images.sh
+          .github/workflows/index-images.sh
           
           VARIANT="distroless" \
           REGISTRY="${REGISTRY}" \
           VERSION="${VERSION}" \
-          ./workflows/index-images.sh
+          .github/workflows/index-images.sh
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38 # v5.0.2
         with:
