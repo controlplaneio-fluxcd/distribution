@@ -1,4 +1,4 @@
-name: x-release
+name: workflow release
 on:
   push:
     tags: [ 'v*' ]

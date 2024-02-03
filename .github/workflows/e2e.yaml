@@ -1,12 +1,12 @@
-name: e2e
+name: Conformance tests
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - 'e2e-*'
-    tags-ignore:
-      - '*'
+    inputs:
+      version:
+        description: 'Flux version'
+        required: false
+        default: 'latest'
 
 permissions:
   contents: read
@@ -21,8 +21,6 @@ jobs:
           - distroless
         kubernetes:
           - v1.29.0
-        flux:
-          - v2.2.2
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -30,10 +28,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Latest release
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(gh release view --json tagName -q '.tagName')
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
       - name: Setup Flux
         uses: fluxcd/flux2/action@5c5c15ea212b8f029a110f9975851d25c8272695 #v2.2.2
         with:
-          version: ${{ matrix.flux }}
+          version: ${{ steps.release.outputs.version }}
       - name: Setup Kubernetes
         uses: helm/kind-action@dda0770415bac9fc20092cacbc54aa298604d140 # v1.8.0
         with:
@@ -41,6 +46,12 @@ jobs:
           node_image: kindest/node:${{ matrix.kubernetes }}
       - name: Install Flux
         run: |
+          VERSION="${{ steps.release.outputs.version }}"
+          
+          if [ "${{ github.event.inputs.version }}" != "latest" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          fi
+          
           kubectl create ns flux-system
           
           flux create secret oci flux-enterprise-auth \
@@ -48,7 +59,7 @@ jobs:
           --username=${{ github.actor }} \
           --password=${{ secrets.GHCR_READONLY }}
           
-          flux install \
+          flux install --version=${VERSION} \
           --components-extra="image-reflector-controller,image-automation-controller" \
           --registry=ghcr.io/controlplaneio-fluxcd/${{ matrix.variant }} \
           --image-pull-secret=flux-enterprise-auth

@@ -1,30 +1,10 @@
-name: x-scan-controllers
+name: workflow scan
 
 on:
   workflow_call:
     inputs:
-      sc:
-        description: 'source-controller image'
-        required: true
-        type: string
-      kc:
-        description: 'kustomize-controller image'
-        required: true
-        type: string
-      hc:
-        description: 'helm-controller image'
-        required: true
-        type: string
-      nc:
-        description: 'notification-controller image'
-        required: true
-        type: string
-      irc:
-        description: 'image-reflector-controller image'
-        required: true
-        type: string
-      iac:
-        description: 'image-automation-controller image'
+      registry:
+        description: 'container registry address'
         required: true
         type: string
       severity:
@@ -47,7 +27,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: read
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -57,12 +36,29 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.pull-token }}
+      - name: Latest release
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(gh release view --json tagName -q '.tagName')
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+      - name: Setup Flux
+        uses: fluxcd/flux2/action@5c5c15ea212b8f029a110f9975851d25c8272695 #v2.2.2
+        with:
+          version: ${{ steps.release.outputs.version }}
+      - name: Export images
+        id: images
+        run: |
+          REGISTRY="${{ inputs.registry }}" \
+          VERSION="${{ steps.release.outputs.version }}" \
+          .github/workflows/export-images.sh
       - name: Scan source-controller
         id: sc
         continue-on-error: true
         uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
         with:
-          image-ref: ${{ inputs.sc }}
+          image-ref: ${{ steps.images.outputs.sc }}
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
@@ -76,7 +72,7 @@ jobs:
         continue-on-error: true
         uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
         with:
-          image-ref: ${{ inputs.kc }}
+          image-ref: ${{ steps.images.outputs.kc }}
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
@@ -90,7 +86,7 @@ jobs:
         continue-on-error: true
         uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
         with:
-          image-ref: ${{ inputs.hc }}
+          image-ref: ${{ steps.images.outputs.hc }}
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
@@ -104,7 +100,7 @@ jobs:
         continue-on-error: true
         uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
         with:
-          image-ref: ${{ inputs.nc }}
+          image-ref: ${{ steps.images.outputs.nc }}
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
@@ -118,7 +114,7 @@ jobs:
         continue-on-error: true
         uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
         with:
-          image-ref: ${{ inputs.irc }}
+          image-ref: ${{ steps.images.outputs.irc }}
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
@@ -132,7 +128,7 @@ jobs:
         continue-on-error: true
         uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
         with:
-          image-ref: ${{ inputs.iac }}
+          image-ref: ${{ steps.images.outputs.iac }}
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
@@ -144,17 +140,17 @@ jobs:
       - name: Scan result
         run: |
           echo "source-controller: ${{ steps.sc.outcome }}"
-          echo "image: ${{ inputs.sc }}"
+          echo "image: ${{ steps.images.outputs.sc }}"
           echo "kustomize-controller: ${{ steps.kc.outcome }}"
-          echo "image: ${{ inputs.kc }}"
+          echo "image: ${{ steps.images.outputs.kc }}"
           echo "helm-controller: ${{ steps.hc.outcome }}"
-          echo "image: ${{ inputs.hc }}"
+          echo "image: ${{ steps.images.outputs.hc }}"
           echo "notification-controller: ${{ steps.nc.outcome }}"
-          echo "image: ${{ inputs.nc }}"
+          echo "image: ${{ steps.images.outputs.nc }}"
           echo "image-reflector-controller: ${{ steps.irc.outcome }}"
-          echo "image: ${{ inputs.irc }}"
+          echo "image: ${{ steps.images.outputs.irc }}"
           echo "image-automation-controller: ${{ steps.iac.outcome }}"
-          echo "image: ${{ inputs.iac }}"
+          echo "image: ${{ steps.images.outputs.iac }}"
       - name: Check result
         shell: bash
         if : steps.sc.outcome == 'failure' || steps.kc.outcome == 'failure' || steps.hc.outcome == 'failure' || steps.nc.outcome == 'failure' || steps.irc.outcome == 'failure' || steps.iac.outcome == 'failure'

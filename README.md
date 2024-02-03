@@ -1,6 +1,7 @@
 # Enterprise Distribution for Flux CD
 
 [![release](https://img.shields.io/github/release/controlplaneio-fluxcd/distribution/all.svg)](https://github.com/controlplaneio-fluxcd/distribution/releases)
+[![Vulnerability scan](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/scan-distribution.yaml/badge.svg)](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/scan-distribution.yaml)
 [![e2e-fips](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/e2e-fips.yaml/badge.svg)](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/e2e-fips.yaml)
 
 The [ControlPlane](https://control-plane.io) distribution for [Flux CD](https://fluxcd.io)
@@ -19,8 +20,6 @@ ControlPlane offers two distribution channels for the Flux controllers:
 
 ### Standard
 
-[![Vulnerability scan](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/scan-distribution.yaml/badge.svg)](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/scan-distribution.yaml)
-
 The standard distribution channel offers hardened Alpine Linux-based images fully
 compatible with the upstream Flux feature set.
 
@@ -28,8 +27,6 @@ The Alpine images are continuously scanned for vulnerabilities and patched
 accordingly.
 
 ### FIPS-compliant
-
-[![Vulnerability scan](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/scan-fips.yaml/badge.svg)](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/scan-fips.yaml)
 
 The ControlPlane distribution offers hardened
 [Google Distrosless](https://github.com/GoogleContainerTools/distroless)-based Flux images

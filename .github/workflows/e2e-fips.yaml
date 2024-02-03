@@ -21,8 +21,6 @@ jobs:
           - v1.27.3
           - v1.28.0
           - v1.29.0
-        flux:
-          - v2.2.2
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -30,16 +28,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Latest release
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(gh release view --json tagName -q '.tagName')
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
       - name: Setup Flux
         uses: fluxcd/flux2/action@5c5c15ea212b8f029a110f9975851d25c8272695 #v2.2.2
         with:
-          version: ${{ matrix.flux }}
+          version: ${{ steps.release.outputs.version }}
       - name: Setup Kubernetes
         uses: helm/kind-action@dda0770415bac9fc20092cacbc54aa298604d140 # v1.8.0
         with:
           cluster_name: flux
           node_image: kindest/node:${{ matrix.kubernetes }}
       - name: Install Flux
+        shell: bash
         run: |
           kubectl create ns flux-system
           
