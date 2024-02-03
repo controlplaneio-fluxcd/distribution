@@ -1,12 +1,10 @@
-name: x-test
+name: e2e
 
 on:
   workflow_dispatch:
   push:
     branches:
       - '*'
-    branches-ignore:
-      - main
     tags-ignore:
       - '*'
 
@@ -66,7 +64,10 @@ jobs:
           --path=./tests/${{ matrix.flux }}/clusters/kind
       - name: Verify cluster reconciliation
         run: |
-          kubectl -n flux-system wait kustomization/sources --for=condition=ready --timeout=5m
+          kubectl -n flux-system wait kustomization/sources --for=condition=ready --timeout=2m
+      - name: Verify managed resources
+        run: |
+          flux tree kustomization flux-system
       - name: Debug failure
         if: failure()
         run: |
