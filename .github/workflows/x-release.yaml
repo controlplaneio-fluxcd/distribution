@@ -15,7 +15,7 @@ jobs:
           - alpine
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
       id-token: write
     steps:
@@ -63,3 +63,10 @@ jobs:
       - name: Sign manifests
         run: |
           cosign sign --yes ${{ steps.push.outputs.img_repository }}@${{ steps.push.outputs.img_digest }}
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          title="Flux ${{ github.ref_name }}"
+          notes="See the distribution [release notes](https://github.com/controlplaneio-fluxcd/distribution/blob/main/releases/release-${GITHUB_REF_NAME:0:4}.md) for more details."
+          gh release create ${{ github.ref_name }} --title="${title}" --notes="${notes}" --verify-tag
