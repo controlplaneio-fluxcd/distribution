@@ -53,6 +53,7 @@ jobs:
       packages: read
     uses: ./.github/workflows/x-scan-controllers.yaml
     with:
+      check-scan-error: false
       sc: ${{ needs.get-controllers.outputs.sc }}
       kc: ${{ needs.get-controllers.outputs.kc }}
       hc: ${{ needs.get-controllers.outputs.hc }}

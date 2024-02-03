@@ -1,4 +1,4 @@
-name: release
+name: x-release
 on:
   push:
     tags: [ 'v*' ]
@@ -64,6 +64,7 @@ jobs:
         run: |
           cosign sign --yes ${{ steps.push.outputs.img_repository }}@${{ steps.push.outputs.img_digest }}
       - name: Create release
+        shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

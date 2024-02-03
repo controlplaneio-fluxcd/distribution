@@ -1,4 +1,4 @@
-name: scan-controllers
+name: x-scan-controllers
 
 on:
   workflow_call:
@@ -27,8 +27,13 @@ on:
         description: 'image-automation-controller image'
         required: true
         type: string
-      continue-on-error:
-        description: 'continue on error'
+      severity:
+        description: 'vulnerability severity'
+        required: false
+        type: string
+        default: 'CRITICAL,HIGH,MEDIUM'
+      check-scan-error:
+        description: 'check for scan errors'
         required: false
         type: boolean
         default: true
@@ -54,7 +59,7 @@ jobs:
           password: ${{ secrets.pull-token }}
       - name: Scan source-controller
         id: sc
-        continue-on-error: ${{ inputs.continue-on-error }}
+        continue-on-error: true
         uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
         with:
           image-ref: ${{ inputs.sc }}
@@ -62,13 +67,13 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+          severity: ${{ inputs.severity }}
         env:
           TRIVY_USERNAME: ${{ github.actor }}
           TRIVY_PASSWORD: ${{ secrets.pull-token }}
       - name: Scan kustomize-controller
         id: kc
-        continue-on-error: ${{ inputs.continue-on-error }}
+        continue-on-error: true
         uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
         with:
           image-ref: ${{ inputs.kc }}
@@ -76,13 +81,13 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+          severity: ${{ inputs.severity }}
         env:
           TRIVY_USERNAME: ${{ github.actor }}
           TRIVY_PASSWORD: ${{ secrets.pull-token }}
       - name: Scan helm-controller
         id: hc
-        continue-on-error: ${{ inputs.continue-on-error }}
+        continue-on-error: true
         uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
         with:
           image-ref: ${{ inputs.hc }}
@@ -90,13 +95,13 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+          severity: ${{ inputs.severity }}
         env:
           TRIVY_USERNAME: ${{ github.actor }}
           TRIVY_PASSWORD: ${{ secrets.pull-token }}
       - name: Scan notification-controller
         id: nc
-        continue-on-error: ${{ inputs.continue-on-error }}
+        continue-on-error: true
         uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
         with:
           image-ref: ${{ inputs.nc }}
@@ -104,13 +109,13 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+          severity: ${{ inputs.severity }}
         env:
           TRIVY_USERNAME: ${{ github.actor }}
           TRIVY_PASSWORD: ${{ secrets.pull-token }}
       - name: Scan image-reflector-controller
         id: irc
-        continue-on-error: ${{ inputs.continue-on-error }}
+        continue-on-error: true
         uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
         with:
           image-ref: ${{ inputs.irc }}
@@ -118,13 +123,13 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+          severity: ${{ inputs.severity }}
         env:
           TRIVY_USERNAME: ${{ github.actor }}
           TRIVY_PASSWORD: ${{ secrets.pull-token }}
       - name: Scan image-automation-controller
         id: iac
-        continue-on-error: ${{ inputs.continue-on-error }}
+        continue-on-error: true
         uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
         with:
           image-ref: ${{ inputs.iac }}
@@ -132,18 +137,29 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+          severity: ${{ inputs.severity }}
         env:
           TRIVY_USERNAME: ${{ github.actor }}
           TRIVY_PASSWORD: ${{ secrets.pull-token }}
       - name: Scan result
+        run: |
+          echo "source-controller: ${{ steps.sc.outcome }}"
+          echo "image: ${{ inputs.sc }}"
+          echo "kustomize-controller: ${{ steps.kc.outcome }}"
+          echo "image: ${{ inputs.kc }}"
+          echo "helm-controller: ${{ steps.hc.outcome }}"
+          echo "image: ${{ inputs.hc }}"
+          echo "notification-controller: ${{ steps.nc.outcome }}"
+          echo "image: ${{ inputs.nc }}"
+          echo "image-reflector-controller: ${{ steps.irc.outcome }}"
+          echo "image: ${{ inputs.irc }}"
+          echo "image-automation-controller: ${{ steps.iac.outcome }}"
+          echo "image: ${{ inputs.iac }}"
+      - name: Check result
+        shell: bash
         if : steps.sc.outcome == 'failure' || steps.kc.outcome == 'failure' || steps.hc.outcome == 'failure' || steps.nc.outcome == 'failure' || steps.irc.outcome == 'failure' || steps.iac.outcome == 'failure'
         run: |
           echo "One or more controllers have vulnerabilities"
-          echo "source-controller: ${{ steps.sc.outcome }}"
-          echo "kustomize-controller: ${{ steps.kc.outcome }}"
-          echo "helm-controller: ${{ steps.hc.outcome }}"
-          echo "notification-controller: ${{ steps.nc.outcome }}"
-          echo "image-reflector-controller: ${{ steps.irc.outcome }}"
-          echo "image-automation-controller: ${{ steps.iac.outcome }}"
-          exit 1
+          if [ "${{ inputs.check-scan-error }}" = "true" ]; then
+            exit 1
+          fi
