@@ -22,7 +22,7 @@ jobs:
         kubernetes:
           - v1.29.0
         flux:
-          - v2.2
+          - v2.2.2
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -32,6 +32,8 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Setup Flux
         uses: fluxcd/flux2/action@5c5c15ea212b8f029a110f9975851d25c8272695 #v2.2.2
+        with:
+          version: ${{ matrix.flux }}
       - name: Setup Kubernetes
         uses: helm/kind-action@dda0770415bac9fc20092cacbc54aa298604d140 # v1.8.0
         with:
@@ -53,6 +55,9 @@ jobs:
       - name: Verify images
         run: kubectl -n flux-system get deployments.apps -o yaml | grep ${{ matrix.variant }}
       - name: Setup cluster reconciliation
+        env:
+          FLUX_VERSION: ${{ matrix.flux }}
+        shell: bash
         run: |
           flux create source git flux-system \
           --url=${{ github.event.repository.html_url }} \
@@ -62,10 +67,11 @@ jobs:
           --ignore-paths="clusters/**/flux-system/"
           flux create kustomization flux-system \
           --source=flux-system \
-          --path=./tests/${{ matrix.flux }}/clusters/kind
+          --path=./tests/${FLUX_VERSION:0:4}/clusters/kind
       - name: Verify cluster reconciliation
         run: |
           kubectl -n flux-system wait kustomization/sources --for=condition=ready --timeout=2m
+          kubectl -n flux-system wait kustomization/appliers --for=condition=ready --timeout=2m
       - name: Verify managed resources
         run: |
           flux tree kustomization flux-system
