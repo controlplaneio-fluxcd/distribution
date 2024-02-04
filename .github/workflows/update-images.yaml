@@ -2,8 +2,6 @@ name: Update images
 
 on:
   workflow_dispatch:
-  release:
-    types: [ created ]
   schedule:
     - cron: '00 10 * * 1-5'
 
@@ -13,8 +11,6 @@ permissions:
 env:
   ENTERPRISE_REGISTRY: ghcr.io/controlplaneio-fluxcd
   ENTERPRISE_VARIANTS: alpine;distroless
-  UPSTREAM_REGISTRY: ghcr.io/fluxcd
-  UPSTREAM_VARIANT: alpine
 
 jobs:
   generate:
@@ -42,14 +38,6 @@ jobs:
         uses: fluxcd/flux2/action@5c5c15ea212b8f029a110f9975851d25c8272695 #v2.2.2
         with:
           version: ${{ steps.release.outputs.version }}
-      - name: Upstream images
-        shell: bash
-        run: |
-          DISTRIBUTION="upstream" \
-          REGISTRY="${UPSTREAM_REGISTRY}" \
-          VARIANT="${UPSTREAM_VARIANT}" \
-          VERSION="${{ steps.release.outputs.version }}" \
-          .github/workflows/update-images.sh
       - name: Enterprise images
         shell: bash
         run: |

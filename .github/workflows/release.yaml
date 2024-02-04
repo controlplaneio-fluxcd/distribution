@@ -15,7 +15,7 @@ jobs:
           - alpine
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       packages: write
       id-token: write
     steps:
@@ -65,11 +65,17 @@ jobs:
           cosign sign --yes ${{ steps.push.outputs.img_repository }}@${{ steps.push.outputs.img_digest }}
 
   release:
+    runs-on: ubuntu-latest
+    env:
+      ENTERPRISE_REGISTRY: ghcr.io/controlplaneio-fluxcd
+      ENTERPRISE_VARIANTS: alpine;distroless
+      UPSTREAM_REGISTRY: ghcr.io/fluxcd
+      UPSTREAM_VARIANT: alpine
     needs:
       - manifests
-    runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -81,3 +87,40 @@ jobs:
           title="Flux ${{ github.ref_name }}"
           notes="See the distribution [release notes](https://github.com/controlplaneio-fluxcd/distribution/blob/main/releases/release-${GITHUB_REF_NAME:0:4}.md) for more details."
           gh release create ${{ github.ref_name }} --title="${title}" --notes="${notes}" --verify-tag
+      - name: Setup Flux
+        uses: fluxcd/flux2/action@5c5c15ea212b8f029a110f9975851d25c8272695 #v2.2.2
+        with:
+          version: ${{ github.ref_name }}
+      - name: Generate upstream images
+        shell: bash
+        run: |
+          DISTRIBUTION="upstream" \
+          REGISTRY="${UPSTREAM_REGISTRY}" \
+          VARIANT="${UPSTREAM_VARIANT}" \
+          VERSION="${{ github.ref_name }}" \
+          .github/workflows/update-images.sh
+      - name: Generate enterprise images
+        shell: bash
+        run: |
+          for variant in ${ENTERPRISE_VARIANTS//;/$'\n'}
+          do
+            DISTRIBUTION="enterprise" \
+            REGISTRY="${ENTERPRISE_REGISTRY}" \
+            VARIANT="${variant}" \
+            VERSION="${{ github.ref_name }}" \
+            .github/workflows/update-images.sh         
+          done
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38 # v5.0.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            Add images for Flux ${{ github.ref_name }}
+          committer: GitHub <noreply@github.com>
+          signoff: true
+          branch: update-images-${{ github.ref_name }}
+          title: Add images for Flux ${{ github.ref_name }}
+          body: |
+            Add images with digests for Flux ${{ github.ref_name }}
+          labels: |
+            area/images
