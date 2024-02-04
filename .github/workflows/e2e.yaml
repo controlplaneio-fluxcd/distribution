@@ -9,11 +9,10 @@ on:
   push:
     branches:
       - 'main'
+      - 'test-*'
+      - 'release-*'
     tags-ignore:
-      - 'v*'
-  pull_request:
-    branches:
-      - 'main'
+      - '*'
 
 permissions:
   contents: read
@@ -37,10 +36,22 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Latest release
         id: release
+        shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION=$(gh release view --json tagName -q '.tagName')
+          
+          branch=${{ github.ref_name }}
+          prefix="release-"
+          if [[ "${branch}" =~ ^$prefix.*  ]]; then
+            VERSION=${branch#"$prefix"}
+          fi
+          
+          if [ "${{ github.event.inputs.version }}" != "" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          fi
+          
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
       - name: Setup Flux
         uses: fluxcd/flux2/action@5c5c15ea212b8f029a110f9975851d25c8272695 #v2.2.2
@@ -54,13 +65,6 @@ jobs:
       - name: Install Flux
         id: install
         run: |
-          VERSION="${{ steps.release.outputs.version }}"
-          
-          if [ "${{ github.event.inputs.version }}" != "" ]; then
-            VERSION="${{ github.event.inputs.version }}"
-          fi
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          
           kubectl create ns flux-system
           
           flux create secret oci flux-enterprise-auth \
@@ -68,7 +72,7 @@ jobs:
           --username=${{ github.actor }} \
           --password=${{ secrets.GHCR_READONLY }}
           
-          flux install --version=${VERSION} \
+          flux install \
           --components-extra="image-reflector-controller,image-automation-controller" \
           --registry=ghcr.io/controlplaneio-fluxcd/${{ matrix.variant }} \
           --image-pull-secret=flux-enterprise-auth
@@ -76,7 +80,7 @@ jobs:
         run: kubectl -n flux-system get deployments.apps -o yaml | grep ${{ matrix.variant }}
       - name: Setup cluster reconciliation
         env:
-          FLUX_VERSION: ${{ steps.install.outputs.version }}
+          FLUX_VERSION: ${{ steps.release.outputs.version }}
         shell: bash
         run: |
           flux create source git flux-system \
