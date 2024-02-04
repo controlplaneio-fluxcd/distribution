@@ -2,21 +2,27 @@
 
 set -eoux pipefail
 
+DISTRIBUTION="${DISTRIBUTION}"
 REGISTRY="${REGISTRY}"
 VARIANT="${VARIANT}"
 VERSION="${VERSION}"
 
 ROOT_DIR="$(git rev-parse --show-toplevel)"
-WORK_DIR="${ROOT_DIR}/images"
+WORK_DIR="${ROOT_DIR}/images/${VERSION}"
 
 mkdir -p "${WORK_DIR}"
 
 cd "${WORK_DIR}"
 
-FLUX_IMAGES="${VERSION}-${VARIANT}.yaml"
+FLUX_IMAGES="${DISTRIBUTION}-${VARIANT}.yaml"
+
+FLUX_REGISTRY="${REGISTRY}/${VARIANT}"
+if [ "${DISTRIBUTION}" == "upstream" ]; then
+  FLUX_REGISTRY="${REGISTRY}"
+fi
 
 flux install --version ${VERSION} \
---registry=${REGISTRY}/${VARIANT} \
+--registry=${FLUX_REGISTRY} \
 --components-extra=image-reflector-controller,image-automation-controller \
 --export | grep 'ghcr.io/' | awk '{print $2}' > "${FLUX_IMAGES}"
 
@@ -36,22 +42,22 @@ iac_digest=$(docker buildx imagetools inspect ${iac}  --format '{{json .}}' | jq
 
 cat >${FLUX_IMAGES} <<EOF
 images:
-  - name: ${REGISTRY}/${VARIANT}/source-controller
+  - name: ${FLUX_REGISTRY}/source-controller
     newTag: ${sc#*:}
     digest: ${sc_digest}
-  - name: ${REGISTRY}/${VARIANT}/kustomize-controller
+  - name: ${FLUX_REGISTRY}/kustomize-controller
     newTag: ${kc#*:}
     digest: ${kc_digest}
-  - name: ${REGISTRY}/${VARIANT}/helm-controller
+  - name: ${FLUX_REGISTRY}/helm-controller
     newTag: ${hc#*:}
     digest: ${hc_digest}
-  - name: ${REGISTRY}/${VARIANT}/notification-controller
+  - name: ${FLUX_REGISTRY}/notification-controller
     newTag: ${nc#*:}
     digest: ${nc_digest}
-  - name: ${REGISTRY}/${VARIANT}/image-reflector-controller
+  - name: ${FLUX_REGISTRY}/image-reflector-controller
     newTag: ${irc#*:}
     digest: ${irc_digest}
-  - name: ${REGISTRY}/${VARIANT}/image-automation-controller
+  - name: ${FLUX_REGISTRY}/image-automation-controller
     newTag: ${iac#*:}
     digest: ${iac_digest}
 EOF

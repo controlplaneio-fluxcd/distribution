@@ -45,12 +45,14 @@ jobs:
           cluster_name: flux
           node_image: kindest/node:${{ matrix.kubernetes }}
       - name: Install Flux
+        id: install
         run: |
           VERSION="${{ steps.release.outputs.version }}"
           
           if [ "${{ github.event.inputs.version }}" != "latest" ]; then
             VERSION="${{ github.event.inputs.version }}"
           fi
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
           
           kubectl create ns flux-system
           
@@ -67,7 +69,7 @@ jobs:
         run: kubectl -n flux-system get deployments.apps -o yaml | grep ${{ matrix.variant }}
       - name: Setup cluster reconciliation
         env:
-          FLUX_VERSION: ${{ matrix.flux }}
+          FLUX_VERSION: ${{ steps.flux.install.version }}
         shell: bash
         run: |
           flux create source git flux-system \

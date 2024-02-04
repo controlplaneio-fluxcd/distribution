@@ -3,7 +3,7 @@ name: Update images
 on:
   workflow_dispatch:
   release:
-    types: [created, published]
+    types: [ created ]
   schedule:
     - cron: '00 10 * * 1-5'
 
@@ -11,7 +11,10 @@ permissions:
   contents: read
 
 env:
-  REGISTRY: ghcr.io/controlplaneio-fluxcd
+  ENTERPRISE_REGISTRY: ghcr.io/controlplaneio-fluxcd
+  ENTERPRISE_VARIANTS: alpine;distroless
+  UPSTREAM_REGISTRY: ghcr.io/fluxcd
+  UPSTREAM_VARIANT: alpine
 
 jobs:
   generate:
@@ -39,18 +42,25 @@ jobs:
         uses: fluxcd/flux2/action@5c5c15ea212b8f029a110f9975851d25c8272695 #v2.2.2
         with:
           version: ${{ steps.release.outputs.version }}
-      - name: Write image files
+      - name: Upstream images
         shell: bash
         run: |
-          VARIANT="alpine" \
-          REGISTRY="${REGISTRY}" \
+          DISTRIBUTION="upstream" \
+          REGISTRY="${UPSTREAM_REGISTRY}" \
+          VARIANT="${UPSTREAM_VARIANT}" \
           VERSION="${{ steps.release.outputs.version }}" \
           .github/workflows/update-images.sh
-          
-          VARIANT="distroless" \
-          REGISTRY="${REGISTRY}" \
-          VERSION="${{ steps.release.outputs.version }}" \
-          .github/workflows/update-images.sh
+      - name: Enterprise images
+        shell: bash
+        run: |
+          for variant in ${ENTERPRISE_VARIANTS//;/$'\n'}
+          do
+            DISTRIBUTION="enterprise" \
+            REGISTRY="${ENTERPRISE_REGISTRY}" \
+            VARIANT="${variant}" \
+            VERSION="${{ steps.release.outputs.version }}" \
+            .github/workflows/update-images.sh         
+          done
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38 # v5.0.2
         with:
