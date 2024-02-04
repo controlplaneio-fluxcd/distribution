@@ -1,10 +1,45 @@
 # Enterprise Distribution for Flux v2.2.x
 
-Releases
-
+- [apis](#api-versions)
+  - [ga](#general-availability-ga)
+  - [beta](#beta-preview)
+  - [promotions](#promotions)
 - [v2.2.2](#v222)
-  - [Standard Channel](#standard-channel)
-  - [FIPS-compliant Channel](#fips-compliant-channel)
+  - [standard](#standard-channel)
+  - [FIPS-compliant](#fips-compliant-channel)
+
+## API Versions
+
+### General Availability (GA)
+
+| kind                                                                                   | apiVersion                          |
+|:---------------------------------------------------------------------------------------|:------------------------------------|
+| [GitRepository](https://v2-2.docs.fluxcd.io/flux/components/source/gitrepositories/)   | `source.toolkit.fluxcd.io/v1`       |
+| [Kustomization](https://v2-2.docs.fluxcd.io/flux/components/kustomize/kustomizations/) | `kustomize.toolkit.fluxcd.io/v1`    |
+| [Receiver](https://v2-2.docs.fluxcd.io/flux/components/notification/receivers/)        | `notification.toolkit.fluxcd.io/v1` |
+
+### Beta (Preview)
+
+| kind                                                                                               | apiVersion                               |
+|:---------------------------------------------------------------------------------------------------|:-----------------------------------------|
+| [Alert](https://v2-2.docs.fluxcd.io/flux/components/notification/alerts/)                          | `notification.toolkit.fluxcd.io/v1beta3` |
+| [Bucket](https://v2-2.docs.fluxcd.io/flux/components/source/buckets/)                              | `source.toolkit.fluxcd.io/v1beta2`       |
+| [HelmChart](https://v2-2.docs.fluxcd.io/flux/components/source/helmcharts/)                        | `source.toolkit.fluxcd.io/v1beta2`       |
+| [HelmRelease](https://v2-2.docs.fluxcd.io/flux/components/helm/helmreleases/)                      | `helm.toolkit.fluxcd.io/v2beta2`         |
+| [HelmRepository](https://v2-2.docs.fluxcd.io/flux/components/source/helmrepositories/)             | `source.toolkit.fluxcd.io/v1beta2`       |
+| [ImagePolicy](https://v2-2.docs.fluxcd.io/flux/components/image/imagepolicies/)                    | `image.toolkit.fluxcd.io/v1beta2`        |
+| [ImageRepository](https://v2-2.docs.fluxcd.io/flux/components/image/imagerepositories/)            | `image.toolkit.fluxcd.io/v1beta2`        |
+| [ImageUpdateAutomation](https://v2-2.docs.fluxcd.io/flux/components/image/imageupdateautomations/) | `image.toolkit.fluxcd.io/v1beta1`        |
+| [OCIRepository](https://v2-2.docs.fluxcd.io/flux/components/source/ocirepositories/)               | `source.toolkit.fluxcd.io/v1beta2`       |
+| [Provider](https://v2-2.docs.fluxcd.io/flux/components/notification/providers/)                    | `notification.toolkit.fluxcd.io/v1beta3` |
+
+### Promotions
+
+| Kind        | New Version | Deprecated Version | Group                            |
+|:------------|:------------|:-------------------|:---------------------------------|
+| Alert       | **v1beta3** | v1beta2            | `notification.toolkit.fluxcd.io` |
+| Provider    | **v1beta3** | v1beta2            | `notification.toolkit.fluxcd.io` |
+| HelmRelease | **v2beta2** | v2beta2            | `helm.toolkit.fluxcd.io`         |
 
 ## v2.2.2
 

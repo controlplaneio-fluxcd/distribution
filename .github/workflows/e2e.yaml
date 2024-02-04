@@ -6,7 +6,6 @@ on:
       version:
         description: 'Flux version'
         required: false
-        default: 'latest'
   push:
     branches:
       - 'main'
@@ -57,7 +56,7 @@ jobs:
         run: |
           VERSION="${{ steps.release.outputs.version }}"
           
-          if [ "${{ github.event.inputs.version }}" != "latest" ]; then
+          if [ "${{ github.event.inputs.version }}" != "" ]; then
             VERSION="${{ github.event.inputs.version }}"
           fi
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
