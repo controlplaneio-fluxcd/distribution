@@ -63,6 +63,16 @@ jobs:
       - name: Sign manifests
         run: |
           cosign sign --yes ${{ steps.push.outputs.img_repository }}@${{ steps.push.outputs.img_digest }}
+
+  release:
+    needs:
+      - manifests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Create release
         shell: bash
         env:
