@@ -125,6 +125,7 @@ jobs:
           committer: GitHub <noreply@github.com>
           signoff: true
           branch: update-images-${{ github.ref_name }}
+          base: main
           title: Add images for Flux ${{ github.ref_name }}
           body: |
             Add images with digests for Flux ${{ github.ref_name }}
