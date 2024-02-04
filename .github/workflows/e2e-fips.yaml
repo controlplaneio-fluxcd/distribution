@@ -62,7 +62,7 @@ jobs:
         run: kubectl -n flux-system get deployments.apps -o yaml | grep ${{ matrix.variant }}
       - name: Setup cluster reconciliation
         env:
-          FLUX_VERSION: ${{ matrix.flux }}
+          FLUX_VERSION: ${{ steps.release.outputs.version }}
         shell: bash
         run: |
           flux create source git flux-system \
