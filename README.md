@@ -14,6 +14,11 @@ comes with enterprise-hardened Flux controllers including:
 - Extended compatibility of Flux controllers for the latest six minor releases of Kubernetes.
 - Assured compatibility with Kubernetes LTS versions provided by cloud vendors.
 
+> [!TIP]
+> Connect with us at solutions@control-plane.io to explore how the Enterprise Distribution
+> aligns with your unique requirements. Together, we'll develop and review a plan
+> tailored to your challenges, goals, and budget.
+
 ## Distribution Channels
 
 ControlPlane offers two distribution channels for the Flux controllers:
