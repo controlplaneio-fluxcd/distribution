@@ -12,7 +12,7 @@ jobs:
   scan:
     permissions:
       contents: read
-    uses: ./.github/workflows/x-scan-controllers.yaml
+    uses: ./.github/workflows/scan-controllers.yaml
     with:
       check-scan-error: false
       registry: ghcr.io/fluxcd
