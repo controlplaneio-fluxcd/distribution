@@ -11,6 +11,7 @@ inputs:
     required: true
   variant:
     description: "Base image variant e.g. alpine or distroless"
+    default: "alpine"
     required: true
   components:
     description: "Flux components comma separated list e.g. source-controller,kustomize-controller"
