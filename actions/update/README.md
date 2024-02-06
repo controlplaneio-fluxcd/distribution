@@ -53,4 +53,14 @@ The above example will run the workflow every Monday to Friday at 7am UTC,
 and will create a Pull Request for the Flux manifests under `clusters/production/flux-system`
 when new versions of the Enterprise Distribution are available.
 
+## Action Inputs
 
+| Name                | Description                                                                             | Default                                                                                                                                 |
+|---------------------|-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| `path`              | Path to the flux-system dir e.g. `clusters/production/flux-system/`                     |                                                                                                                                         |
+| `registry`          | Container Registry Address                                                              | `ghcr.io/controlplaneio-fluxcd`                                                                                                         |
+| `variant`           | Base image OS e.g. `alpine` or `distroless`                                             | `alpine`                                                                                                                                |
+| `image-pull-secret` | Name of the Enterprise Kubernetes image pull secret                                     | `flux-enterprise-auth`                                                                                                                  |
+| `components`        | Flux components comma separated list                                                    | `source-controller,kustomize-controller,notification-controller,helm-controller,image-automation-controller,image-reflector-controller` |
+| `token`             | Token used to authentication against the GitHub.com API to query for the latest version | `github.token`                                                                                                                          |
+| `bindir`            | Alternative location for the Flux binary                                                | `$RUNNER_TOOL_CACHE`                                                                                                                    |
