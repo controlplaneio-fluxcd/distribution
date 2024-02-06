@@ -14,8 +14,11 @@ comes with enterprise-hardened Flux controllers including:
 - Extended compatibility of Flux controllers for the latest six minor releases of Kubernetes.
 - Assured compatibility with Kubernetes LTS versions provided by cloud vendors.
 
+The ControlPlane distribution is offered on a yearly subscription basis and includes
+enterprise-grade support services for running Flux in production.
+
 > [!TIP]
-> Connect with us at solutions@control-plane.io to explore how the Enterprise Distribution
+> Connect with us at solutions@control-plane.io to explore how the enterprise distribution
 > aligns with your unique requirements. Together, we'll develop and review a plan
 > tailored to your challenges, goals, and budget.
 
@@ -23,9 +26,9 @@ comes with enterprise-hardened Flux controllers including:
 
 ControlPlane offers two distribution channels for the Flux controllers:
 
-### Standard
+### Mainline
 
-The standard distribution channel offers hardened Alpine Linux-based images fully
+The mainline distribution channel offers hardened Alpine Linux-based images fully
 compatible with the upstream Flux feature set.
 
 The Alpine images are continuously scanned for vulnerabilities and patched

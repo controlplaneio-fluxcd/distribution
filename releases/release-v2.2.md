@@ -5,16 +5,16 @@
   - [beta](#beta-preview)
   - [promotions](#promotions)
 - [v2.2.3](#v223)
-  - [standard](#standard-v223)
+  - [mainline](#mainline-v223)
   - [FIPS-compliant](#fips-compliant-v223)
 - [v2.2.2](#v222)
-  - [standard](#standard-v222)
+  - [mainline](#mainline-v222)
   - [FIPS-compliant](#fips-compliant-v222)
 - [v2.2.1](#v221)
-  - [standard](#standard-v221)
+  - [mainline](#mainline-v221)
   - [FIPS-compliant](#fips-compliant-v221)
 - [v2.2.0](#v220)
-  - [standard](#standard-v220)
+  - [mainline](#mainline-v220)
   - [FIPS-compliant](#fips-compliant-v220)
 
 ## API Versions
@@ -55,7 +55,7 @@
 
 Upstream changelog: [fluxcd/flux2 v2.2.3](https://github.com/fluxcd/flux2/releases/tag/v2.2.3)
 
-### Standard v2.2.3
+### Mainline v2.2.3
 
 #### Flux Controllers
 
@@ -97,7 +97,7 @@ Upstream changelog: [fluxcd/flux2 v2.2.3](https://github.com/fluxcd/flux2/releas
 
 Upstream changelog: [fluxcd/flux2 v2.2.2](https://github.com/fluxcd/flux2/releases/tag/v2.2.2)
 
-### Standard v2.2.2
+### Mainline v2.2.2
 
 #### Flux Controllers
 
@@ -139,7 +139,7 @@ Upstream changelog: [fluxcd/flux2 v2.2.2](https://github.com/fluxcd/flux2/releas
 
 Upstream changelog: [fluxcd/flux2 v2.2.1](https://github.com/fluxcd/flux2/releases/tag/v2.2.1)
 
-### Standard v2.2.1
+### Mainline v2.2.1
 
 #### Flux Controllers
 
@@ -181,7 +181,7 @@ Upstream changelog: [fluxcd/flux2 v2.2.1](https://github.com/fluxcd/flux2/releas
 
 Upstream changelog: [fluxcd/flux2 v2.2.0](https://github.com/fluxcd/flux2/releases/tag/v2.2.0)
 
-### Standard v2.2.0
+### Mainline v2.2.0
 
 #### Flux Controllers
 
