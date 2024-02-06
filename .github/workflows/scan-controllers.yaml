@@ -44,7 +44,7 @@ jobs:
           VERSION=$(gh release view --json tagName -q '.tagName')
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
       - name: Setup Flux
-        uses: fluxcd/flux2/action@5c5c15ea212b8f029a110f9975851d25c8272695 #v2.2.2
+        uses: fluxcd/flux2/action@534684601ec8888beb0cc4f51117b59e97606c4d #v2.2.3
         with:
           version: ${{ steps.release.outputs.version }}
       - name: Export images
@@ -56,7 +56,7 @@ jobs:
       - name: Scan source-controller
         id: sc
         continue-on-error: true
-        uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
+        uses: aquasecurity/trivy-action@84384bd6e777ef152729993b8145ea352e9dd3ef # v0.17.0
         with:
           image-ref: ${{ steps.images.outputs.sc }}
           format: 'table'
@@ -70,7 +70,7 @@ jobs:
       - name: Scan kustomize-controller
         id: kc
         continue-on-error: true
-        uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
+        uses: aquasecurity/trivy-action@84384bd6e777ef152729993b8145ea352e9dd3ef # v0.17.0
         with:
           image-ref: ${{ steps.images.outputs.kc }}
           format: 'table'
@@ -84,7 +84,7 @@ jobs:
       - name: Scan helm-controller
         id: hc
         continue-on-error: true
-        uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
+        uses: aquasecurity/trivy-action@84384bd6e777ef152729993b8145ea352e9dd3ef # v0.17.0
         with:
           image-ref: ${{ steps.images.outputs.hc }}
           format: 'table'
@@ -98,7 +98,7 @@ jobs:
       - name: Scan notification-controller
         id: nc
         continue-on-error: true
-        uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
+        uses: aquasecurity/trivy-action@84384bd6e777ef152729993b8145ea352e9dd3ef # v0.17.0
         with:
           image-ref: ${{ steps.images.outputs.nc }}
           format: 'table'
@@ -112,7 +112,7 @@ jobs:
       - name: Scan image-reflector-controller
         id: irc
         continue-on-error: true
-        uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
+        uses: aquasecurity/trivy-action@84384bd6e777ef152729993b8145ea352e9dd3ef # v0.17.0
         with:
           image-ref: ${{ steps.images.outputs.irc }}
           format: 'table'
@@ -126,7 +126,7 @@ jobs:
       - name: Scan image-automation-controller
         id: iac
         continue-on-error: true
-        uses: aquasecurity/trivy-action@d43c1f16c00cfd3978dde6c07f4bbcf9eb6993ca # v0.16.1
+        uses: aquasecurity/trivy-action@84384bd6e777ef152729993b8145ea352e9dd3ef # v0.17.0
         with:
           image-ref: ${{ steps.images.outputs.iac }}
           format: 'table'

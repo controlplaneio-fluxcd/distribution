@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Setup Flux
-        uses: fluxcd/flux2/action@5c5c15ea212b8f029a110f9975851d25c8272695 #v2.2.2
+        uses: fluxcd/flux2/action@534684601ec8888beb0cc4f51117b59e97606c4d #v2.2.3
         with:
           version: ${{ github.ref_name }}
       - name: Login to GHCR
@@ -88,7 +88,7 @@ jobs:
           notes="See the distribution [release notes](https://github.com/controlplaneio-fluxcd/distribution/blob/main/releases/release-${GITHUB_REF_NAME:0:4}.md) for more details."
           gh release create ${{ github.ref_name }} --title="${title}" --notes="${notes}" --verify-tag
       - name: Setup Flux
-        uses: fluxcd/flux2/action@5c5c15ea212b8f029a110f9975851d25c8272695 #v2.2.2
+        uses: fluxcd/flux2/action@534684601ec8888beb0cc4f51117b59e97606c4d #v2.2.3
         with:
           version: ${{ github.ref_name }}
       - name: Login to GHCR
