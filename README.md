@@ -3,6 +3,7 @@
 [![release](https://img.shields.io/github/release/controlplaneio-fluxcd/distribution/all.svg)](https://github.com/controlplaneio-fluxcd/distribution/releases)
 [![Vulnerability scan](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/scan-distribution.yaml/badge.svg)](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/scan-distribution.yaml)
 [![e2e-fips](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/e2e-fips.yaml/badge.svg)](https://github.com/controlplaneio-fluxcd/distribution/actions/workflows/e2e-fips.yaml)
+[![SLSA 3](https://slsa.dev/images/gh-badge-level3.svg)](#supply-chain-security)
 
 The [ControlPlane](https://control-plane.io) distribution for [Flux CD](https://fluxcd.io)
 comes with enterprise-hardened Flux controllers including:
@@ -26,13 +27,10 @@ enterprise-grade support services for running Flux in production.
 
 ControlPlane offers two distribution channels for the Flux controllers:
 
-### Mainline
+- [FIPS-compliant](#fips-compliant) images hosted at `ghcr.io/controlplaneio-fluxcd/distroless`.
+- [Mainline](#mainline) images hosted at `ghcr.io/controlplaneio-fluxcd/alpine`.
 
-The mainline distribution channel offers hardened Alpine Linux-based images fully
-compatible with the upstream Flux feature set.
-
-The Alpine images are continuously scanned for vulnerabilities and patched
-accordingly.
+The ControlPlane container images are continuously scanned for vulnerabilities and patched accordingly.
 
 ### FIPS-compliant
 
@@ -45,26 +43,15 @@ The Flux controller binaries are statically linked against the
 and the Go runtime restricts all TLS configuration to FIPS-approved settings
 by importing the `crypto/tls/fipsonly` package.
 
-The FIPS-compliant distribution channel does not support the following Flux features:
+### Mainline
 
-- **Kustomize remote bases** due to the lack of a shell and `git` CLI in the runtime image.
-- **SOPS OpenPGP decryption** due to the lack of OpenSSL libraries and `gnupg` binary in the runtime image.
+The mainline distribution channel offers
+[Alpine Linux](https://www.alpinelinux.org/)-based
+images fully compatible with the upstream Flux feature set.
 
-The usage of Kustomize remote bases are discouraged by the Flux project due to the security implications
-of fetching remote code from untrusted sources. For more information, please refer to the
-[Flux FAQ](https://fluxcd.io/flux/faq/#should-i-be-using-kustomize-remote-bases) and
-[Flux Security Best Practices](https://fluxcd.io/flux/security/best-practices/#kustomize-controller).
-
-Flux SOPS integration offers various modern and secure alternatives to OpenPGP
-for Kubernetes secrets management including:
-[AGE encryption](https://fluxcd.io/flux/components/kustomize/kustomizations/#age-secret-entry),
-[AWS KMS](https://fluxcd.io/flux/components/kustomize/kustomizations/#aws-kms-secret-entry),
-[Azure Key Vault](https://fluxcd.io/flux/components/kustomize/kustomizations/#azure-key-vault-secret-entry),
-[Google Cloud KMS](https://fluxcd.io/flux/components/kustomize/kustomizations/#gcp-kms-secret-entry),
-[Hashicorp Vault](https://fluxcd.io/flux/components/kustomize/kustomizations/#hashicorp-vault-secret-entry).
-Besides SOPS, Flux works with any 3rd-party Kubernetes secrets management
-tools, for more information please refer to the
-[Flux Secrets Management](https://fluxcd.io/flux/security/secrets-management/).
+The major difference between the Flux upstream images and mainline images is the
+continuous scanning and CVE patching for the container base images, OS packages,
+and Go dependencies.
 
 ## Supply Chain Security
 
@@ -73,23 +60,24 @@ The build, release and provenance portions of the ControlPlane distribution supp
 
 ### Software Bill of Materials
 
-The controller images come with SBOMs for each CPU architecture,
-you can extract the SPDX JSON using Docker’s inspect command:
+The ControlPlane images come with SBOMs in SPDX format for each CPU architecture.
+
+Example of extracting the SBOM from the source-controller image:
 
 ```shell
 docker buildx imagetools inspect \
-    <registry>/<channel>/source-controller:v1.2.3 \
+    <registry>/source-controller:v1.2.3 \
     --format "{{ json (index .SBOM \"linux/amd64\").SPDX}}"
 ```
 
 ### Signature Verification
 
-The controller images are signed using Sigstore Cosign and GitHub OIDC.
+The ControlPlane images are signed using Sigstore Cosign and GitHub OIDC.
 
-To verify the authenticity of a container image, install cosign v2 and run:
+Example of verifying the signature of the source-controller image:
 
 ```shell
-cosign verify <registry>/<channel>/source-controller:v1.2.3 \
+cosign verify <registry>/source-controller:v1.2.3 \
   --certificate-identity-regexp=^https://github\\.com/controlplaneio-fluxcd/.*$ \
   --certificate-oidc-issuer=https://token.actions.githubusercontent.com
 ```
@@ -105,21 +93,59 @@ include facts about the build process such as:
 - Source code details
 - Materials (files, scripts) consumed during the build
 
-To extract the SLSA provenance JSON for a specific CPU architecture, you can use Docker’s inspect command:
+Example of extracting the SLSA provenance JSON for the source-controller image:
 
 ```shell
 docker buildx imagetools inspect \
-  <registry>/<channel>/source-controller:v1.2.3 \
+  <registry>/source-controller:v1.2.3 \
   --format "{{ json (index .Provenance \"linux/amd64\").SLSA}}"
 ```
 
 The provenance of the build artifacts is generated with the official
-[SLSA GitHub Generator](https://github.com/slsa-framework/slsa-github-generator)
-can be verified using Sigstore Cosign:
+[SLSA GitHub Generator](https://github.com/slsa-framework/slsa-github-generator).
+
+Example of verifying the provenance of the source-controller image:
 
 ```shell
 cosign verify-attestation --type slsaprovenance \
   --certificate-identity-regexp=^https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml.*$ \
   --certificate-oidc-issuer=https://token.actions.githubusercontent.com \
-  <registry>/<channel>/source-controller:v1.2.3
+  <registry>/source-controller:v1.2.3
 ```
+
+## Installation and Upgrades
+
+ControlPlane offers a seamless transition between CNCF Flux to the enterprise distribution with no
+impact to Flux availability. The hardened container images provided by ControlPlane are fully
+compatible with the upstream Flux installation and bootstrap procedure.
+
+To access the ControlPlane registry, customers need to create a Kubernetes image pull secret
+in the `flux-system` namespace with their credentials:
+
+```bash
+kubectl create secret docker-registry flux-enterprise-auth \
+  --namespace flux-system \
+  --docker-server=ghcr.io \
+  --docker-username=flux \
+  --docker-password=$TOKEN
+```
+
+Customers can then bootstrap Flux with the enterprise distribution using the Flux CLI or the Flux TF provider.
+
+Example of bootstrapping Flux with the enterprise distribution:
+
+```bash
+flux bootstrap github \
+  --owner=customer-org \
+  --repository=customer-repo \
+  --branch=main \
+  --path=./clusters/production \
+  --image-pull-secret=flux-enterprise-auth \
+  --registry=ghcr.io/controlplaneio-fluxcd/disroless
+```
+
+For keeping the Flux controllers images digests
+and manifests up-to-date with the latest version of the Enterprise Distribution, ControlPlane
+provides Kustomize images patches for the Flux manifests, which can be found in the
+[distribution repository](https://github.com/controlplaneio-fluxcd/distribution/tree/main/images).
+We provide support for configuring automated updates of the Flux manifests in bootstrap repositories.
