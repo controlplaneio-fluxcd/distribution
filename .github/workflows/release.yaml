@@ -132,6 +132,10 @@ jobs:
             .github/workflows/update-images.sh;
             cp "images/${{ github.ref_name }}/enterprise-${variant}.yaml" "workspace/images-${variant}.yaml";
           done
+      - name: Update latest version
+        shell: bash
+        run: |
+          echo "${{ github.ref_name }}" > "images/VERSION"
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@b1ddad2c994a25fbc81a28b3ec0e368bb2021c50 # v6.0.0
         with:
