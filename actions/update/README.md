@@ -36,7 +36,6 @@ jobs:
           image-pull-secret: flux-enterprise-auth
           registry: ghcr.io/controlplaneio-fluxcd
           variant: distroless
-          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
@@ -55,12 +54,11 @@ when new versions of the Enterprise Distribution are available.
 
 ## Action Inputs
 
-| Name                | Description                                                                             | Default                                                                                                                                 |
-|---------------------|-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| `path`              | Path to the flux-system dir e.g. `clusters/production/flux-system/`                     |                                                                                                                                         |
-| `registry`          | Container Registry Address                                                              | `ghcr.io/controlplaneio-fluxcd`                                                                                                         |
-| `variant`           | Base image OS e.g. `alpine` or `distroless`                                             | `alpine`                                                                                                                                |
-| `image-pull-secret` | Name of the Enterprise Kubernetes image pull secret                                     | `flux-enterprise-auth`                                                                                                                  |
-| `components`        | Flux components comma separated list                                                    | `source-controller,kustomize-controller,notification-controller,helm-controller,image-automation-controller,image-reflector-controller` |
-| `token`             | Token used to authentication against the GitHub.com API to query for the latest version | `github.token`                                                                                                                          |
-| `bindir`            | Alternative location for the Flux binary                                                | `$RUNNER_TOOL_CACHE`                                                                                                                    |
+| Name                | Description                                                         | Default                                                                                                                                 |
+|---------------------|---------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| `path`              | Path to the flux-system dir e.g. `clusters/production/flux-system/` |                                                                                                                                         |
+| `registry`          | Container Registry Address                                          | `ghcr.io/controlplaneio-fluxcd`                                                                                                         |
+| `variant`           | Base image OS e.g. `alpine` or `distroless`                         | `alpine`                                                                                                                                |
+| `image-pull-secret` | Name of the Kubernetes image pull secret                            | `flux-enterprise-auth`                                                                                                                  |
+| `components`        | Flux components comma separated list                                | `source-controller,kustomize-controller,helm-controller,notification-controller,image-reflector-controller,image-automation-controller` |
+| `bindir`            | Alternative location for the Flux CLI binary                        | `$RUNNER_TOOL_CACHE`                                                                                                                    |

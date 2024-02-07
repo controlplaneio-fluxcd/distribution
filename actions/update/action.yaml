@@ -6,7 +6,7 @@ branding:
   icon: command
 inputs:
   registry:
-    description: "Enterprise Container Registry"
+    description: "Distribution Container Registry"
     default: "ghcr.io/controlplaneio-fluxcd"
     required: true
   variant:
@@ -15,23 +15,24 @@ inputs:
     required: true
   components:
     description: "Flux components comma separated list e.g. source-controller,kustomize-controller"
-    default: "source-controller,kustomize-controller,notification-controller,helm-controller,image-automation-controller,image-reflector-controller"
+    default: "source-controller,kustomize-controller,helm-controller,notification-controller,image-reflector-controller,image-automation-controller"
     required: true
   path:
     description: "Path to the flux-system dir e.g. clusters/production/flux-system/"
     required: true
   image-pull-secret:
-    description: "Name of the Enterprise Kubernetes image pull secret"
+    description: "Name of the Kubernetes image pull secret for accessing the distribution registry"
     default: "flux-enterprise-auth"
     required: true
   version:
-    description: "Flux version e.g. 2.2.0 (defaults to latest stable release)"
+    description: "Distribution version e.g. v2.2.0 (defaults to latest stable release)"
     required: false
   bindir:
     description: "Alternative location for the Flux binary, defaults to path relative to $RUNNER_TOOL_CACHE."
     required: false
-  token:
-    description: "Token used to authentication against the GitHub.com API. Defaults to the token from the GitHub context of the workflow."
+  distribution-url:
+    description: "Distribution images info URL"
+    default: "https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/main/images"
     required: false
 outputs:
   version:
@@ -40,22 +41,17 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: "Download the binary to the runner's cache dir"
+    - name: "Download the Flux CLI binary to the runner's cache dir"
       id: cli
       shell: bash
       run: |
         VERSION=${{ inputs.version }}
 
-        TOKEN=${{ inputs.token }}
-        if [[ -z "$TOKEN" ]]; then
-          TOKEN=${{ github.token }}
-        fi
-
         if [[ -z "$VERSION" ]] || [[ "$VERSION" = "latest" ]]; then
-          VERSION=$(curl -fsSL -H "Authorization: token ${TOKEN}" https://api.github.com/repos/controlplaneio-fluxcd/distribution/releases/latest | grep tag_name | cut -d '"' -f 4)
+          VERSION=$(curl -fsSL ${{ inputs.distribution-url }}/VERSION | head -n1)
         fi
         if [[ -z "$VERSION" ]]; then
-          echo "Unable to determine Flux CLI version"
+          echo "Unable to determine the latest distribution version"
           exit 1
         fi
         if [[ $VERSION = v* ]]; then
@@ -148,8 +144,8 @@ runs:
       run: |
         cd ${{ inputs.path }}
         version=$(flux -v | awk '{ print $3 }')
-        base_url="https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/main/images"
-        curl -fsSL -o enterprise-images.yaml ${base_url}/v${version}/enterprise-${{ inputs.variant }}.yaml
+        images_url="${{ inputs.distribution-url }}/v${version}/enterprise-${{ inputs.variant }}.yaml"
+        curl -fsSL -o enterprise-images.yaml ${images_url}
         yq '. *= load("enterprise-images.yaml")' kustomization.yaml > kustomization.yaml.tmp
         mv kustomization.yaml.tmp kustomization.yaml
         rm enterprise-images.yaml
