@@ -56,6 +56,9 @@ kind: FluxInstance
 metadata:
   name: flux
   namespace: flux-system
+  annotations:
+    # Continuously check for updates
+    fluxcd.controlplane.io/reconcile: "Enabled"
 spec:
   # Enterprise distribution settings
   distribution:
