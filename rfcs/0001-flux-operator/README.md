@@ -4,7 +4,7 @@
 
 **Creation date:** 2024-02-25
 
-**Last update:** 2024-02-25
+**Last update:** 2024-02-26
 
 ## Summary
 
@@ -117,12 +117,19 @@ metadata:
 status:
   conditions:
   - lastTransitionTime: "2024-02-25T16:11:42Z"
-    message: "Applied version v2.2.3 revision e197eca"
+    message: "Applied version 2.2.3 revision e197eca"
     observedGeneration: 2
     reason: ReconciliationSucceeded
     status: "True"
     type: Ready
+  - lastTransitionTime: "2024-02-25T16:11:42Z"
+    message: "Upgrade to latest version 2.3.0 blocked by semver range 2.2.x"
+    observedGeneration: 2
+    reason: NewVersionAvailable
+    status: "False"
+    type: UpToDate
   observedGeneration: 2
+  latestVersion: "2.3.0"
   lastAppliedVersion: "2.2.3"
   lastAppliedImages:
     - name: "ghcr.io/controlplaneio-fluxcd/distroless/source-controller:v1.2.4"
