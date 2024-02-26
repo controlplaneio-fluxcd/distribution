@@ -59,6 +59,7 @@ metadata:
   annotations:
     # Continuously check for updates
     fluxcd.controlplane.io/reconcile: "Enabled"
+    fluxcd.controlplane.io/reconcileEvery: "10m"
 spec:
   # Enterprise distribution settings
   distribution:
