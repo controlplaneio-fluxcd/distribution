@@ -129,7 +129,7 @@ status:
   - lastTransitionTime: "2024-02-25T16:11:42Z"
     message: "Upgrade to latest version 2.3.0 blocked by semver range 2.2.x"
     observedGeneration: 2
-    reason: NewVersionAvailable
+    reason: UpgradePending
     status: "False"
     type: UpToDate
   observedGeneration: 2
@@ -144,4 +144,13 @@ status:
       digest: "sha256:41edc971254af789db9d7b8f39843fb228023c49f98429114de98431b1efe550"
     - name: "ghcr.io/controlplaneio-fluxcd/distroless/notification-controller:v1.2.4"
       digest: "sha256:327b5cfa11e0daa596fe5b156acadccb1278a9b1ece4534a89b70fc6400f2a61"
+```
+
+Events example:
+
+```text
+  Type     Reason                   Age   From             Message
+  ----     ------                   ----  ----             -------
+  Normal   ReconciliationSucceeded  59s   flux-operator    Applied version 2.2.3 revision e197eca
+  Warning  UpgradePending           59s   flux-operator    Upgrade to latest version 2.3.0 blocked by semver range 2.2.x
 ```
