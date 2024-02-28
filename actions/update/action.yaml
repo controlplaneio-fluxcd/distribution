@@ -134,9 +134,13 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.path }}
+        registry=${{ inputs.registry }}
+        if [[ "${{ inputs.registry }}" == "ghcr.io/controlplaneio-fluxcd" ]]; then
+          registry=${{ inputs.registry }}/${{ inputs.variant }}
+        fi
         flux install \
         --components="${{ inputs.components }}" \
-        --registry=${{ inputs.registry }}/${{ inputs.variant }} \
+        --registry=${registry} \
         --image-pull-secret=${{ inputs.image-pull-secret }} \
         --export > gotk-components.yaml
     - name: "Update images digests"
@@ -144,7 +148,10 @@ runs:
       run: |
         cd ${{ inputs.path }}
         version=$(flux -v | awk '{ print $3 }')
-        images_url="${{ inputs.distribution-url }}/v${version}/enterprise-${{ inputs.variant }}.yaml"
+        images_url="${{ inputs.distribution-url }}/v${version}/upstream-${{ inputs.variant }}.yaml"
+        if [[ "${{ inputs.registry }}" == "ghcr.io/controlplaneio-fluxcd" ]]; then
+          images_url="${{ inputs.distribution-url }}/v${version}/enterprise-${{ inputs.variant }}.yaml"
+        fi
         curl -fsSL -o enterprise-images.yaml ${images_url}
         yq '. *= load("enterprise-images.yaml")' kustomization.yaml > kustomization.yaml.tmp
         mv kustomization.yaml.tmp kustomization.yaml
