@@ -22,8 +22,7 @@ inputs:
     required: true
   image-pull-secret:
     description: "Name of the Kubernetes image pull secret for accessing the distribution registry"
-    default: "flux-enterprise-auth"
-    required: true
+    required: false
   version:
     description: "Distribution version e.g. v2.2.0 (defaults to latest stable release)"
     required: false
@@ -133,11 +132,11 @@ runs:
     - name: "Update components manifests"
       shell: bash
       run: |
-        cd ${{ inputs.path }}
         registry=${{ inputs.registry }}
         if [[ "${{ inputs.registry }}" == "ghcr.io/controlplaneio-fluxcd" ]]; then
           registry=${{ inputs.registry }}/${{ inputs.variant }}
         fi
+        cd ${{ inputs.path }}
         flux install \
         --components="${{ inputs.components }}" \
         --registry=${registry} \
@@ -146,12 +145,12 @@ runs:
     - name: "Update images digests"
       shell: bash
       run: |
+        if [[ "${{ inputs.registry }}" != "ghcr.io/controlplaneio-fluxcd" ]]; then
+          exit 0
+        fi
         cd ${{ inputs.path }}
         version=$(flux -v | awk '{ print $3 }')
-        images_url="${{ inputs.distribution-url }}/v${version}/upstream-${{ inputs.variant }}.yaml"
-        if [[ "${{ inputs.registry }}" == "ghcr.io/controlplaneio-fluxcd" ]]; then
-          images_url="${{ inputs.distribution-url }}/v${version}/enterprise-${{ inputs.variant }}.yaml"
-        fi
+        images_url="${{ inputs.distribution-url }}/v${version}/enterprise-${{ inputs.variant }}.yaml"
         curl -fsSL -o enterprise-images.yaml ${images_url}
         yq '. *= load("enterprise-images.yaml")' kustomization.yaml > kustomization.yaml.tmp
         mv kustomization.yaml.tmp kustomization.yaml
