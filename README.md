@@ -150,3 +150,19 @@ and manifests up-to-date with the latest version of the Enterprise Distribution,
 provides Kustomize images patches for the Flux manifests, which can be found in the
 [distribution repository](https://github.com/controlplaneio-fluxcd/distribution/tree/main/images).
 We provide support for configuring automated updates of the Flux manifests in bootstrap repositories.
+
+## Guides and Documentation
+
+The ControlPlane distribution comes with a set of guides and documentation to help customers
+configure and operate the Flux controllers in production environments.
+
+### Flux d1 Reference Architecture
+
+The aim of this guide is to provide a comprehensive description of the Flux d1 reference 
+architecture, offered by the d1 repositories housed within the controlplaneio-fluxcd organization.
+These repositories and the [flux d1 reference architecture guide](/guides/ControlPlane_Flux_D1_Reference_Architecture_Guide.pdf) expand upon the 
+established Flux documentation, which includes a quickstart guide for orchestrating a single cluster.
+Our focus is to showcase how Flux can address the requirements of organizations managing
+multiple teams deploying applications across numerous multi-tenant Kubernetes clusters using Flux.
+Through this comprehensive resource, users can gain insights into leveraging Flux 
+for streamlined multi-cluster management and efficient application deployment workflows.
