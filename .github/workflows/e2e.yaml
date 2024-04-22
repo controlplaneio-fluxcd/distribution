@@ -26,7 +26,7 @@ jobs:
           - alpine
           - distroless
         kubernetes:
-          - v1.29.0
+          - v1.30.0
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -61,7 +61,7 @@ jobs:
         uses: helm/kind-action@99576bfa6ddf9a8e612d83b513da5a75875caced # v1.9.0
         with:
           cluster_name: flux
-          node_image: kindest/node:${{ matrix.kubernetes }}
+          node_image: ghcr.io/fluxcd/kindest/node:${{ matrix.kubernetes }}-amd64
       - name: Install Flux
         id: install
         run: |
