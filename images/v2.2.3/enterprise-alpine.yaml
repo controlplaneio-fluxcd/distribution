@@ -1,7 +1,7 @@
 images:
   - name: ghcr.io/controlplaneio-fluxcd/alpine/source-controller
-    newTag: v1.2.4
-    digest: sha256:278878a8922543705ae9a9a95151ec700987702b058336924b994f002718954c
+    newTag: v1.2.5
+    digest: sha256:911c127af3a893dc1ecb77d755cfaf4a4f209045767ccfd0c5f0615c56f710fa
   - name: ghcr.io/controlplaneio-fluxcd/alpine/kustomize-controller
     newTag: v1.2.2
     digest: sha256:8f67cbbe09fb352475794c54f94091256b24da754b7f5416a7a2b9fb0ce359dc
