@@ -2,6 +2,10 @@ name: Update images
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Flux version'
+        required: false
   schedule:
     - cron: '00 10 * * 1-5'
 
@@ -33,6 +37,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION=$(gh release view --json tagName -q '.tagName')
+          
+          if [ "${{ github.event.inputs.version }}" != "" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          fi
+          
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
       - name: Setup Flux
         uses: fluxcd/flux2/action@534684601ec8888beb0cc4f51117b59e97606c4d #v2.2.3
