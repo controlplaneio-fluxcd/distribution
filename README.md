@@ -13,7 +13,7 @@ comes with enterprise-hardened Flux controllers including:
 - SLAs for remediation of critical vulnerabilities affecting Flux functionality.
 - FIPS-compliant Flux builds based on FIPS 140-2 validated BoringSSL.
 - Extended compatibility of Flux controllers for the latest six minor releases of Kubernetes.
-- Assured compatibility with Kubernetes LTS versions provided by cloud vendors.
+- Assured compatibility with OpenShift and Kubernetes LTS versions provided by cloud vendors.
 
 The ControlPlane distribution is offered on a
 [yearly subscription basis](https://control-plane.io/enterprise-flux/) and includes
@@ -67,7 +67,7 @@ Example of extracting the SBOM from the source-controller image:
 
 ```shell
 docker buildx imagetools inspect \
-    <registry>/source-controller:v1.2.3 \
+    <registry>/source-controller:v1.3.0 \
     --format "{{ json (index .SBOM \"linux/amd64\").SPDX}}"
 ```
 
@@ -78,7 +78,7 @@ The ControlPlane images are signed using Sigstore Cosign and GitHub OIDC.
 Example of verifying the signature of the source-controller image:
 
 ```shell
-cosign verify <registry>/source-controller:v1.2.3 \
+cosign verify <registry>/source-controller:v1.3.0 \
   --certificate-identity-regexp=^https://github\\.com/controlplaneio-fluxcd/.*$ \
   --certificate-oidc-issuer=https://token.actions.githubusercontent.com
 ```
@@ -98,7 +98,7 @@ Example of extracting the SLSA provenance JSON for the source-controller image:
 
 ```shell
 docker buildx imagetools inspect \
-  <registry>/source-controller:v1.2.3 \
+  <registry>/source-controller:v1.3.0 \
   --format "{{ json (index .Provenance \"linux/amd64\").SLSA}}"
 ```
 
@@ -111,7 +111,7 @@ Example of verifying the provenance of the source-controller image:
 cosign verify-attestation --type slsaprovenance \
   --certificate-identity-regexp=^https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml.*$ \
   --certificate-oidc-issuer=https://token.actions.githubusercontent.com \
-  <registry>/source-controller:v1.2.3
+  <registry>/source-controller:v1.3.0
 ```
 
 ## Installation and Upgrades
@@ -120,20 +120,11 @@ ControlPlane offers a seamless transition between CNCF Flux to the enterprise di
 impact to Flux availability. The hardened container images provided by ControlPlane are fully
 compatible with the upstream Flux installation and bootstrap procedure.
 
-To access the ControlPlane registry, customers need to create a Kubernetes image pull secret
-in the `flux-system` namespace with their credentials:
+Customers can bootstrap Flux with the enterprise distribution using the Flux CLI or the Flux TF provider.
+To access the ControlPlane registry, customers need to provide their credentials using the
+`--registry-cred` flag.
 
-```bash
-kubectl create secret docker-registry flux-enterprise-auth \
-  --namespace flux-system \
-  --docker-server=ghcr.io \
-  --docker-username=flux \
-  --docker-password=$TOKEN
-```
-
-Customers can then bootstrap Flux with the enterprise distribution using the Flux CLI or the Flux TF provider.
-
-Example of bootstrapping Flux with the enterprise distribution:
+Example of bootstrapping Flux with the FIPS-compliant distribution:
 
 ```bash
 flux bootstrap github \
@@ -142,7 +133,8 @@ flux bootstrap github \
   --branch=main \
   --path=./clusters/production \
   --image-pull-secret=flux-enterprise-auth \
-  --registry=ghcr.io/controlplaneio-fluxcd/disroless
+  --registry-cred=flux:$ENTERPRISE_TOKEN \
+  --registry=ghcr.io/controlplaneio-fluxcd/distroless
 ```
 
 For keeping the Flux controllers images digests
