@@ -1,5 +1,6 @@
 # Enterprise Distribution for Flux v2.3.x
 
+- [k8s](#supported-kubernetes-versions)
 - [apis](#api-versions)
   - [ga](#general-availability-ga)
   - [beta](#beta-preview)
@@ -7,6 +8,13 @@
 - [v2.3.0](#v230)
   - [mainline](#mainline-v230)
   - [FIPS-compliant](#fips-compliant-v230)
+
+## Supported Kubernetes Versions
+
+| Distribution | Versions                                          |
+|:-------------|:--------------------------------------------------|
+| Kubernetes   | 1.25 <br>1.26 <br>1.27 <br>1.28 <br>1.29 <br>1.30 |
+| OpenShift    | 4.12 <br>4.13 <br>4.14 <br>4.15                   |
 
 ## API Versions
 
