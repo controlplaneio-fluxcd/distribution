@@ -10,6 +10,7 @@ on:
   push:
     branches:
       - 'release-*'
+      - 'test-*'
     tags-ignore:
       - '*'
 
@@ -26,10 +27,11 @@ jobs:
         kubernetes:
           - v1.24.17
           - v1.25.16
-          - v1.26.14
-          - v1.27.11
-          - v1.28.7
-          - v1.29.2
+          - v1.26.15
+          - v1.27.13
+          - v1.28.9
+          - v1.29.4
+          - v1.30.0
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -63,6 +65,7 @@ jobs:
         uses: helm/kind-action@0025e74a8c7512023d06dc019c617aa3cf561fde # v1.10.0
         with:
           cluster_name: flux
+          version: v0.23.0
           node_image: kindest/node:${{ matrix.kubernetes }}
       - name: Install Flux
         shell: bash
