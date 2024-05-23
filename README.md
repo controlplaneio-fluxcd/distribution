@@ -96,6 +96,9 @@ automated updates for the Flux enterprise distribution.
 The ControlPlane distribution comes with a set of guides and documentation to help customers
 configure and operate the Flux controllers in production environments.
 
+For an overview of the enterprise offering and pricing, see the
+[ControlPlane presentation document](/guides/ControlPlane_Flux_Presentation.pdf).
+
 ### Flux Architecture Overview
 
 The [Flux CD Architecture Overview](https://control-plane.io/posts/fluxcd-architecture-overview/)
