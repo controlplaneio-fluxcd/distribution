@@ -1,7 +1,8 @@
 # Update Flux GitHub Action
 
 This GitHub Action can be used to automate the update of the
-Enterprise Distribution for Flux CD on clusters via Pull Requests.
+[Enterprise Distribution](https://control-plane.io/enterprise-for-flux-cd/)
+for Flux CD on clusters via Pull Requests.
 
 ## Usage
 
