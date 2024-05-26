@@ -61,9 +61,11 @@ ControlPlane offers a seamless transition from CNCF Flux to the enterprise distr
 impact to Flux availability. The hardened container images provided by ControlPlane are fully
 compatible with the upstream Flux installation and bootstrap procedure.
 
+### Bootstrap
+
 Customers can bootstrap Flux with the enterprise distribution using the Flux CLI or the Flux Terraform provider.
 To access the ControlPlane registry, customers need to provide their credentials using the
-`--registry-cred` flag.
+`--registry-creds` flag.
 
 Example of bootstrapping Flux with the FIPS-compliant distribution:
 
@@ -72,11 +74,14 @@ flux bootstrap github \
   --owner=customer-org \
   --repository=customer-repo \
   --branch=main \
-  --path=./clusters/production \
+  --path=clusters/production \
   --image-pull-secret=flux-enterprise-auth \
-  --registry-cred=flux:$ENTERPRISE_TOKEN \
+  --registry-creds=flux:$ENTERPRISE_TOKEN \
   --registry=ghcr.io/controlplaneio-fluxcd/distroless
 ```
+
+Running the bootstrap command for a cluster with an existing Flux installation will trigger
+an in-place upgrade of the Flux controllers to the ControlPlane distribution.
 
 ### Automated Updates
 
