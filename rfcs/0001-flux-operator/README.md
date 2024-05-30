@@ -180,4 +180,7 @@ Events example:
 
 ## Implementation History
 
-- 2024-02-30: Partially implemented [flux-operator](https://github.com/controlplaneio-fluxcd/flux-operator)
+- 2024-05-30: Initial implementation released in flux-operator [v0.1.0](https://github.com/controlplaneio-fluxcd/flux-operator/releases/tag/v0.1.0)
+  - Support for the `FluxInstance` custom resource with the `distribution`, `components`, `cluster`, and `kustomize` spec fields.
+  - Support for the `Ready` status condition and the `components`, `inventory`, `lastAppliedRevision` and `lastAttemptedRevision` status fields.
+  - Automated patching of the Flux components container image digest for upstream and enterprise distribution registries.
