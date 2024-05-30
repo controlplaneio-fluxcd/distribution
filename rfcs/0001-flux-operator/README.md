@@ -1,14 +1,15 @@
-# [RFC] Flux Operator
+# [RFC-0001] Flux Operator
 
-**Status:** provisional
+**Status:** implementable
 
 **Creation date:** 2024-02-25
 
-**Last update:** 2024-02-26
+**Last update:** 2024-05-30
 
 ## Summary
 
-The Flux Operator is a Kubernetes CRD controller that manages the lifecycle of the enterprise distribution.
+The Flux Operator is a Kubernetes CRD controller that manages the lifecycle of Flux CD
+and the ControlPlane enterprise distribution.
 
 ## Motivation
 
@@ -33,7 +34,7 @@ contain all the complexity of the Flux components and their various configuratio
 - Provide a security-first approach to the Flux deployment and FIPS compliance.
 - Incorporate best practices for running Flux at scale with persistent storage, sharding and horizontal scaling.
 - Manage the update of Flux custom resources and prevent disruption during the upgrade process.
-- Facilitate a clean uninstallation and reinstall process without affecting the Flux-managed workloads.
+- Facilitate a clean uninstall and reinstall process without affecting the Flux-managed workloads.
 
 ### Non-Goals
 
@@ -45,13 +46,14 @@ contain all the complexity of the Flux components and their various configuratio
 
 ## Proposal
 
-The Flux Operator will come with a Kubernetes CRD called `FluxInstance`. A single custom resource of this kind
-can exist in a Kubernetes cluster and must be created in the same namespace where the operator is deployed.
+The Flux Operator comes with a Kubernetes CRD called `FluxInstance`.
+A single custom resource of this kind can exist in a Kubernetes cluster with the name
+`flux` that must be created in the same namespace where the operator is deployed.
 
 Spec example:
 
 ```yaml
-apiVersion: fluxcd.controlplane.io/v1alpha1
+apiVersion: fluxcd.controlplane.io/v1
 kind: FluxInstance
 metadata:
   name: flux
@@ -59,16 +61,17 @@ metadata:
   annotations:
     # Continuously check for updates
     fluxcd.controlplane.io/reconcile: "Enabled"
-    fluxcd.controlplane.io/reconcileEvery: "10m"
+    fluxcd.controlplane.io/reconcileTimeout: "5m"
+    fluxcd.controlplane.io/reconcileEvery: "1h"
 spec:
   # Enterprise distribution settings
   distribution:
     # Hotfixes and CVE patches auto-updates
-    version: "2.2.x"
+    version: "2.3.x"
     # Container registry hosting the FIPS-compliant images
     registry: ghcr.io/controlplaneio-fluxcd/distroless
     # Pull secret for the enterprise container images
-    pullSecret: enterprise-flux-auth
+    imagePullSecret: enterprise-flux-auth
   # Flux CRD controllers to deploy on this cluster
   components:
     - source-controller
@@ -113,37 +116,56 @@ spec:
 Status example:
 
 ```yaml
-apiVersion: fluxcd.controlplane.io/v1alpha1
+apiVersion: fluxcd.controlplane.io/v1
 kind: FluxInstance
 metadata:
   name: flux
   namespace: flux-system
+  finalizers:
+  - fluxcd.controlplane.io/finalizer
 status:
   conditions:
-  - lastTransitionTime: "2024-02-25T16:11:42Z"
-    message: "Applied version 2.2.3 revision e197eca"
+  - lastTransitionTime: "2024-05-25T16:11:42Z"
+    message: "Reconciliation finished in 25s"
     observedGeneration: 2
     reason: ReconciliationSucceeded
     status: "True"
     type: Ready
-  - lastTransitionTime: "2024-02-25T16:11:42Z"
-    message: "Upgrade to latest version 2.3.0 blocked by semver range 2.2.x"
+  - lastTransitionTime: "2024-05-25T16:11:42Z"
+    message: "Upgrade to latest version v2.4.0 blocked by semver range 2.3.x"
     observedGeneration: 2
     reason: UpgradePending
     status: "False"
     type: UpToDate
   observedGeneration: 2
-  latestVersion: "2.3.0"
-  lastAppliedVersion: "2.2.3"
-  lastAppliedImages:
-    - name: "ghcr.io/controlplaneio-fluxcd/distroless/source-controller:v1.2.4"
-      digest: "sha256:5d18da29824d840d7341191b16a6430140f47cb75bfc0cbdb5be2b96552cec84"
-    - name: "ghcr.io/controlplaneio-fluxcd/distroless/kustomize-controller:v1.2.2"
-      digest: "sha256:05fe5ef1f059c35698caf11e4e9de465a40ad4384ef00c5c810203f2a4167512"
-    - name: "ghcr.io/controlplaneio-fluxcd/distroless/helm-controller:v0.37.4"
-      digest: "sha256:41edc971254af789db9d7b8f39843fb228023c49f98429114de98431b1efe550"
-    - name: "ghcr.io/controlplaneio-fluxcd/distroless/notification-controller:v1.2.4"
-      digest: "sha256:327b5cfa11e0daa596fe5b156acadccb1278a9b1ece4534a89b70fc6400f2a61"
+  lastAppliedRevision: v2.3.0@sha256:8d7eab6395c8e7c3558a2f3df2f280cb52139b4b480ac7b6f2b88b2c8056ec9f
+  lastAttemptedRevision: v2.3.0@sha256:8d7eab6395c8e7c3558a2f3df2f280cb52139b4b480ac7b6f2b88b2c8056ec9f
+  components:
+    - digest: sha256:161da425b16b64dda4b3cec2ba0f8d7442973aba29bb446db3b340626181a0bc
+      name: source-controller
+      repository: ghcr.io/controlplaneio-fluxcd/distroless/source-controller
+      tag: v1.3.0
+    - digest: sha256:48a032574dd45c39750ba0f1488e6f1ae36756a38f40976a6b7a588d83acefc1
+      name: kustomize-controller
+      repository: ghcr.io/controlplaneio-fluxcd/distroless/kustomize-controller
+      tag: v1.3.0
+    - digest: sha256:a67a037faa850220ff94d8090253732079589ad9ff10b6ddf294f3b7cd0f3424
+      name: helm-controller
+      repository: ghcr.io/controlplaneio-fluxcd/distroless/helm-controller
+      tag: v1.0.1
+    - digest: sha256:c0fab940c7e578ea519097d36c040238b0cc039ce366fdb753947428bbf0c3d6
+      name: notification-controller
+      repository: ghcr.io/controlplaneio-fluxcd/distroless/notification-controller
+      tag: v1.3.0
+    - digest: sha256:aed795c7a8b85bca93f6d199d5a14bbefaf925ad5aa5316b32a716cfa4070d0b
+      name: image-reflector-controller
+      repository: ghcr.io/controlplaneio-fluxcd/distroless/image-reflector-controller
+      tag: v0.32.0
+    - digest: sha256:ab5097213194f3cd9f0e68d8a937d94c4fc7e821f6544453211e94815b282aa2
+      name: image-automation-controller
+      repository: ghcr.io/controlplaneio-fluxcd/distroless/image-automation-controller
+      tag: v0.38.0
+  inventory: [...]
 ```
 
 Events example:
@@ -151,6 +173,11 @@ Events example:
 ```text
   Type     Reason                   Age   From             Message
   ----     ------                   ----  ----             -------
-  Normal   ReconciliationSucceeded  59s   flux-operator    Applied version 2.2.3 revision e197eca
-  Warning  UpgradePending           59s   flux-operator    Upgrade to latest version 2.3.0 blocked by semver range 2.2.x
+  Normal   Progressing              59s   flux-operator    Installing revision v2.3.0@sha256:8d7eab6395c8e7c3558a2f3df2f280cb52139b4b480ac7b6f2b88b2c8056ec9f
+  Normal   ReconciliationSucceeded  35s   flux-operator    Reconciliation finished in 25s
+  Warning  UpgradePending           25s   flux-operator    Upgrade to latest version 2.4.0 blocked by semver range 2.3.x
 ```
+
+## Implementation History
+
+- 2024-02-30: Partially implemented [flux-operator](https://github.com/controlplaneio-fluxcd/flux-operator)
