@@ -61,9 +61,11 @@ ControlPlane offers a seamless transition from CNCF Flux to the enterprise distr
 impact to Flux availability. The hardened container images provided by ControlPlane are fully
 compatible with the upstream Flux installation and bootstrap procedure.
 
+### Bootstrap
+
 Customers can bootstrap Flux with the enterprise distribution using the Flux CLI or the Flux Terraform provider.
 To access the ControlPlane registry, customers need to provide their credentials using the
-`--registry-cred` flag.
+`--registry-creds` flag.
 
 Example of bootstrapping Flux with the FIPS-compliant distribution:
 
@@ -72,13 +74,16 @@ flux bootstrap github \
   --owner=customer-org \
   --repository=customer-repo \
   --branch=main \
-  --path=./clusters/production \
+  --path=clusters/production \
   --image-pull-secret=flux-enterprise-auth \
-  --registry-cred=flux:$ENTERPRISE_TOKEN \
+  --registry-creds=flux:$ENTERPRISE_TOKEN \
   --registry=ghcr.io/controlplaneio-fluxcd/distroless
 ```
 
-### Automated Updates
+Running the bootstrap command for a cluster with an existing Flux installation will trigger
+an in-place upgrade of the Flux controllers to the ControlPlane distribution.
+
+### Automated Updates to Bootstrap Repositories
 
 For keeping the Flux controllers images digests
 and manifests up-to-date with the latest version of the Enterprise Distribution, ControlPlane
@@ -91,6 +96,14 @@ update of the Flux manifests in their bootstrap repositories. For more informati
 
 For customers using other Git providers, ControlPlane provides support for configuring
 automated updates for the Flux enterprise distribution.
+
+### Flux Operator
+
+The ControlPlane distribution includes the [Flux Operator](https://github.com/controlplaneio-fluxcd/flux-operator),
+which provides a declarative API for the installation and upgrade of the Flux controllers. The operator
+automates the patching of hotfixes and CVEs affecting the Flux container images.
+
+For more information, see the Flux Operator [documentation](https://github.com/controlplaneio-fluxcd/flux-operator).
 
 ## Guides and Documentation
 
