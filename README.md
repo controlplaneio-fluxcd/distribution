@@ -83,7 +83,7 @@ flux bootstrap github \
 Running the bootstrap command for a cluster with an existing Flux installation will trigger
 an in-place upgrade of the Flux controllers to the ControlPlane distribution.
 
-### Automated Updates
+### Automated Updates to Bootstrap Repositories
 
 For keeping the Flux controllers images digests
 and manifests up-to-date with the latest version of the Enterprise Distribution, ControlPlane
@@ -96,6 +96,14 @@ update of the Flux manifests in their bootstrap repositories. For more informati
 
 For customers using other Git providers, ControlPlane provides support for configuring
 automated updates for the Flux enterprise distribution.
+
+### Flux Operator
+
+The ControlPlane distribution includes the [Flux Operator](https://github.com/controlplaneio-fluxcd/flux-operator),
+which provides a declarative API for the installation and upgrade of the Flux controllers. The operator
+automates the patching of hotfixes and CVEs affecting the Flux container images.
+
+For more information, see the Flux Operator [documentation](https://github.com/controlplaneio-fluxcd/flux-operator).
 
 ## Guides and Documentation
 
