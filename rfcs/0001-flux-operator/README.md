@@ -184,3 +184,6 @@ Events example:
   - Support for the `FluxInstance` custom resource with the `distribution`, `components`, `cluster`, and `kustomize` spec fields.
   - Support for the `Ready` status condition and the `components`, `inventory`, `lastAppliedRevision` and `lastAttemptedRevision` status fields.
   - Automated patching of the Flux components container image digest for upstream and enterprise distribution registries.
+- 2024-05-31: Additional features released in flux-operator [v0.2.0](https://github.com/controlplaneio-fluxcd/flux-operator/releases/tag/v0.2.0)
+  - Support for persistent storage configuration with the `storage` spec field.
+  - Support for taking ownership of the Flux resources deployed with kubectl, Helm or the Flux CLI.
