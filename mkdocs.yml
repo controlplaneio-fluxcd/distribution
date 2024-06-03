@@ -1,0 +1,96 @@
+site_name: ControlPlane Enterprise for Flux CD
+site_description: |
+  ControlPlane offers a hardened, enterprise-grade distribution and
+  support services for the CNCF-graduated Flux project.
+site_author: ControlPLane
+#site_url: https://fluxcd.controlplane.io
+repo_name: distribution
+repo_url: https://github.com/controlplaneio-fluxcd/distribution
+edit_uri: ""
+copyright: Copyright © 2024 ControlPlane.io
+
+home:
+  image: images/flux-ee-white.png
+  tagline: Assured Flux CD
+  description: |
+    ControlPlane Enterprise enhances the security and stability of
+    Kubernetes GitOps delivery through comprehensive security assurance, including
+    rigorous bitstream remediation and compliance with required regulatory
+    standards for Flux CD.
+  features: true
+
+theme:
+  name: material
+  #logo: images/flux-logo.png
+  #favicon: images/flux-logo.png
+  language: en
+  custom_dir: docs/theme/
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - content.code.copy
+    - navigation.sections
+    - navigation.top
+    - navigation.tabs
+
+extra:
+  social:
+    - icon: fontawesome/brands/square-x-twitter
+      link: https://x.com/controlplaneio
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/controlplane/mycompany/
+
+docs_dir: docs
+
+plugins:
+  - search
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - admonition
+  - meta
+  - codehilite
+  - pymdownx.tilde
+  - pymdownx.progressbar
+  - pymdownx.tasklist
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+nav:
+  - Home: index.md
+  - Flux Distribution:
+    - Introduction: distribution/introduction.md
+    - Installation: distribution/install.md
+    - Security: distribution/security.md
+    - Versions:
+        - Release v2.3: releases/release-v2.3.md
+        - Release v2.2: releases/release-v2.2.md
+  - Flux Operator:
+      - Introduction: operator/introduction.md
+      - Installation: operator/install.md
+      - API Reference:
+          - FluxInstance: operator/fluxinstance.md
+  - Pricing: pricing/index.md

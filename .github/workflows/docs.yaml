@@ -1,0 +1,26 @@
+name: docs
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ 'docs*' ]
+    tags: [ 'v*' ]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4.1.3
+      - name: Run mkdocs
+        uses: mhausenblas/mkdocs-deploy-gh-pages@e55ecab6718b449a90ebd4313f1320f9327f1386 # master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          #CUSTOM_DOMAIN: timoni.sh
+          CONFIG_FILE: mkdocs.yml
+          REQUIREMENTS: docs/.mkdocs/requirements.txt
