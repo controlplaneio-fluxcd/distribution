@@ -86,6 +86,17 @@ Upstream changelog: [fluxcd/flux2 v2.3.0](https://github.com/fluxcd/flux2/releas
 | `ghcr.io/controlplaneio-fluxcd/distroless/image-reflector-controller`   | v0.32.0 | amd64 / arm64 |
 | `ghcr.io/controlplaneio-fluxcd/distroless/image-automation-controller`  | v0.38.0 | amd64 / arm64 |
 
+#### Flux Controllers for AWS Marketplace
+
+| Controller                                                                                     | Version | Architectures |
+|:-----------------------------------------------------------------------------------------------|---------|---------------|
+| `709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd/source-controller`           | v1.3.0  | amd64 / arm64 |
+| `709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd/kustomize-controller`        | v1.3.0  | amd64 / arm64 |
+| `709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd/helm-controller`             | v1.0.1  | amd64 / arm64 |
+| `709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd/notification-controller`     | v1.3.0  | amd64 / arm64 |
+| `709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd/image-reflector-controller`  | v0.32.0 | amd64 / arm64 |
+| `709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd/image-automation-controller` | v0.38.0 | amd64 / arm64 |
+
 #### Flux Manifests
 
 | OCI Artifact                                               | Version |
