@@ -35,7 +35,7 @@ provides Kustomize images patches for the Flux manifests, which can be found in 
 
 Customers using GitHub can leverage the ControlPlane GitHub Actions to automate the
 update of the Flux manifests in their bootstrap repositories. For more information, see the
-[Update Flux GitHub Action](actions/update/README.md) documentation.
+[Update Flux GitHub Action](https://github.com/controlplaneio-fluxcd/distribution/tree/main/actions/update/README.md) documentation.
 
 For customers using other Git providers, ControlPlane provides support for configuring
 automated updates for the Flux enterprise distribution.
