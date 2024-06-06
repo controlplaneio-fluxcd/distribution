@@ -21,8 +21,8 @@ home:
 
 theme:
   name: material
-  #logo: images/flux-logo.png
-  #favicon: images/flux-logo.png
+  logo: images/cp-logo.png
+  favicon: images/cp-logo.png
   language: en
   custom_dir: docs/theme/
   palette:
