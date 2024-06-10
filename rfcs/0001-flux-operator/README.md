@@ -225,3 +225,5 @@ to allow transitioning a bootstrapped cluster to a `FluxInstance` managed one.
 - 2024-05-31: Additional features released in flux-operator [v0.2.0](https://github.com/controlplaneio-fluxcd/flux-operator/releases/tag/v0.2.0)
   - Support for persistent storage configuration with the `storage` spec field.
   - Support for taking ownership of the Flux resources deployed with kubectl, Helm or the Flux CLI.
+- 2024-06-04: Additional features released in flux-operator [v0.3.0](https://github.com/controlplaneio-fluxcd/flux-operator/releases/tag/v0.3.0)
+  - Support for disabling the reconciliation using the `fluxcd.controlplane.io/reconcile: disabled` annotation.
