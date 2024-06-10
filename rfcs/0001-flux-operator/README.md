@@ -4,7 +4,7 @@
 
 **Creation date:** 2024-02-25
 
-**Last update:** 2024-05-30
+**Last update:** 2024-06-10
 
 ## Summary
 
@@ -29,6 +29,7 @@ contain all the complexity of the Flux components and their various configuratio
 
 - Provide a declarative API for the installation and upgrade of the enterprise distribution.
 - Automate patching for hotfixes and CVEs affecting the Flux controllers container images.
+- Support for syncing the cluster state from Git repositories, OCI artifacts and S3-compatible storage.
 - Provide first-class support for OpenShift, Azure, AWS, GCP and other marketplaces.
 - Simplify the configuration of multi-tenancy lockdown on shared Kubernetes clusters.
 - Provide a security-first approach to the Flux deployment and FIPS compliance.
@@ -177,6 +178,43 @@ Events example:
   Normal   ReconciliationSucceeded  35s   flux-operator    Reconciliation finished in 25s
   Warning  UpgradePending           25s   flux-operator    Upgrade to latest version 2.4.0 blocked by semver range 2.3.x
 ```
+
+### Sync configuration
+
+The `.spec.sync` field is optional and specifies the Flux sync configuration.
+When set, a Flux source and a Flux Kustomization are generated to sync
+the cluster state with the source repository.
+
+Sync fields:
+
+- `kind`: The source kind, supported values are `GitRepository`, `OCIRepository` and `Bucket`.
+- `url`: The URL of the source repository, can be a Git repository HTTP/S or SSH address, an OCI repository address or a Bucket endpoint.
+- `ref`: The source reference, can be a Git ref name e.g. `refs/heads/main`, an OCI tag e.g. `latest` or a Bucket name.
+- `path`: The path to the source directory containing the kustomize overlay or plain Kubernetes manifests to sync from.
+- `pullSecret`: The name of the Kubernetes secret that contains the credentials to pull the source repository. This field is optional.
+- `interval`: The sync interval. This field is optional, when not set the default is `1m`.
+
+Example:
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+metadata:
+  name: flux
+  namespace: flux-system
+spec:
+  sync:
+    kind: GitRepository
+    url: "https://github.com/my-org/my-fleet.git"
+    ref: "refs/heads/main"
+    path: "clusters/my-cluster"
+    pullSecret: "flux-system"
+```
+
+The Flux objects are created in the same namespace where the `FluxInstance` is deployed
+using the namespace name as the Flux source and `Kustomization` name. The naming convention
+matches the one used by `flux bootstrap` to ensure compatibility with upstream, and
+to allow transitioning a bootstrapped cluster to a `FluxInstance` managed one.
 
 ## Implementation History
 
