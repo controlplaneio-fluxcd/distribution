@@ -3,7 +3,7 @@ site_description: |
   ControlPlane offers a hardened, enterprise-grade distribution and
   support services for the CNCF-graduated Flux project.
 site_author: ControlPLane
-#site_url: https://fluxcd.controlplane.io
+site_url: https://fluxcd.control-plane.io
 repo_name: distribution
 repo_url: https://github.com/controlplaneio-fluxcd/distribution
 edit_uri: ""

@@ -3,8 +3,8 @@
 {% block extrahead %}
 
 <meta property="og:url" content="{{ page.canonical_url }}">
-<meta property="og:image" content="https://timoni.sh/images/logo_card.png">
-<meta property="og:image:alt" content="fluxcd.controlplane.io">
+<meta property="og:image" content="https://fluxcd.control-plane.io/images/logo-card.png">
+<meta property="og:image:alt" content="fluxcd.control-plane.io">
 <meta property="og:image:type" content="image/png">
 {% if page.is_homepage %}
 <meta property="og:title" content="{{ config.site_name }}">
@@ -16,15 +16,15 @@
 
 <meta name="twitter:site" content="@controlplaneio">
 <meta name="twitter:creator" content="@controlplaneio">
-<meta name="twitter:image:alt" content="fluxcd.controlplane.io">
+<meta name="twitter:image:alt" content="fluxcd.control-plane.io">
 {% if page.is_homepage %}
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://controlplaneio-fluxcd.github.io/distribution/images/logo_card.png">
+<meta name="twitter:image" content="https://fluxcd.control-plane.io/images/logo-card.png">
 <meta property="twitter:title" content="{{ config.site_name }}">
 <meta property="twitter:description" content="{{ config.site_description }}">
 {% else %}
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://controlplaneio-fluxcd.github.io/distribution/images/cp-logo.png">
+<meta name="twitter:image" content="https://fluxcd.control-plane.io/images/images/cp-logo.png">
 <meta property="twitter:title" content="{{ page.title }}">
 <meta property="twitter:description" content="{{ config.site_description }}">
 {% endif %}
