@@ -1,4 +1,4 @@
-# Flux configuration
+# Flux Controllers Configuration
 
 The Flux Operator comes with a Kubernetes CRD called [FluxInstance](fluxinstance.md).
 A single custom resource of this kind can exist in a Kubernetes cluster with the name
@@ -25,28 +25,6 @@ spec:
     type: kubernetes
 ```
 
-!!! tip "Enterprise Distribution"
-
-    To install the enterprise distribution of Flux, point the operator to the ControlPlane registry:
-    
-    ```yaml
-    apiVersion: fluxcd.controlplane.io/v1
-    kind: FluxInstance
-    metadata:
-      name: flux
-      namespace: flux-system
-    spec:
-      distribution:
-        version: "2.3.x"
-        registry: "ghcr.io/controlplaneio-fluxcd/distroless"
-        imagePullSecret: "flux-enterprise-auth"
-    ```
-
-    The operator will check for updates in the ControlPlane
-    [distribution repository](https://github.com/controlplaneio-fluxcd/distribution).
-    If a new patch version is available, the operator will update the Flux components by pinning the
-    container images to the latest digest published in the ControlPlane registry.
-
 Save the above manifest to a file and apply it with `kubectl`:
 
 ```shell
@@ -67,6 +45,41 @@ To uninstall the Flux instance:
 
 ```shell
 kubectl -n flux-system delete fluxinstance flux
+```
+
+## Enterprise Distribution configuration
+
+To install the enterprise distribution of Flux, point the operator to the ControlPlane registry:
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+metadata:
+  name: flux
+  namespace: flux-system
+spec:
+  distribution:
+    version: "2.3.x"
+    registry: "ghcr.io/controlplaneio-fluxcd/distroless"
+    imagePullSecret: "flux-enterprise-auth"
+```
+
+!!! tip "Automated updates"
+
+    The operator will check for updates in the ControlPlane
+    [distribution repository](https://github.com/controlplaneio-fluxcd/distribution).
+    If a new patch version is available, the operator will update the Flux components by pinning the
+    container images to the latest digest published in the ControlPlane registry.
+
+To access the ControlPlane registry, the `flux-enterprise-auth` Kubernetes secret must be
+created in the `flux-system` namespace and should contain the credentials to pull the enterprise images:
+
+```shell
+kubectl create secret docker-registry flux-enterprise-auth \
+  --namespace flux-system \
+  --docker-server=ghcr.io \
+  --docker-username=flux \
+  --docker-password=$ENTERPRISE_TOKEN
 ```
 
 ## Custom configuration
@@ -121,4 +134,4 @@ spec:
 
 To find out more about the available configuration options, refer to the
 [FluxInstance API reference](fluxinstance.md).
-```
+

@@ -91,7 +91,9 @@ nav:
   - Flux Operator:
       - Introduction: operator/index.md
       - Installation: operator/install.md
-      - Flux Configuration: operator/flux-config.md
+      - Configuration:
+          - Flux Controllers: operator/flux-config.md
+          - Flux Sync: operator/flux-sync.md
       - API Reference:
           - FluxInstance CRD: operator/fluxinstance.md
   - Pricing: pricing/index.md
