@@ -6,8 +6,8 @@ statically compiled as a single binary with no external dependencies.
 
 ## Install methods
 
-The Flux Operator can be installed with Helm, Operator Lifecycle Manager (OLM), or kubectl.
-It is recommended to install the Flux Operator in a dedicated namespace, such as `flux-system`.
+The Flux Operator can be installed with Helm, Operator Lifecycle Manager, or kubectl.
+It is recommended to install the operator in a dedicated namespace, such as `flux-system`.
 
 ### Helm
 
@@ -43,22 +43,23 @@ spec:
 
 ### Kubectl
 
-The Flux Operator can be installed with kubectl by
+The Flux Operator can be installed with `kubectl` by
 applying the Kubernetes manifests published on the releases page:
 
 ```shell
 kubectl apply -f https://github.com/controlplaneio-fluxcd/flux-operator/releases/latest/download/install.yaml
 ```
 
-## Flux installation
+## Flux configuration
 
-The Flux Operator comes with a Kubernetes CRD called `FluxInstance`. A single custom resource of this kind
-can exist in a Kubernetes cluster with the name `flux` that must be created in the same
-namespace where the operator is deployed.
+The Flux Operator comes with a Kubernetes CRD called [FluxInstance](fluxinstance.md).
+A single custom resource of this kind can exist in a Kubernetes cluster with the name
+**flux** that must be created in the same namespace where the operator is deployed.
 
-The `FluxInstance` resource is used to install and configure the Flux distribution.
+The `FluxInstance` resource is used to install and configure the automated update
+of the Flux distribution.
 
-Example of minimal `FluxInstance` resource:
+Example of a minimal `FluxInstance` resource:
 
 ```yaml
 apiVersion: fluxcd.controlplane.io/v1
@@ -82,5 +83,24 @@ spec:
     type: kubernetes
 ```
 
+Save the above manifest to a file and apply it with `kubectl`:
+
+```shell
+kubectl apply -f flux-instance.yaml
+```
+
 The operator will reconcile the `FluxInstance` resource and install
-the latest upstream Flux stable version in the `2.3` range with the specified components.
+the latest upstream Flux version in the `2.3` range with the specified components.
+Every hour, the operator will check for Flux patch releases and apply them if available.
+
+To verify the installation status:
+
+```shell
+kubectl -n flux-system get fluxinstance flux
+```
+
+To uninstall the Flux instance:
+
+```shell
+kubectl -n flux-system delete fluxinstance flux
+```
