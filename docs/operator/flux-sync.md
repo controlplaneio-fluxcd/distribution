@@ -1,4 +1,4 @@
-# Flux Sync Configuration
+# Flux Cluster Sync Configuration
 
 The `FluxInstance` resource can be configured to instruct the operator to generate
 a Flux source (`GitRepository`, `OCIRepository` or `Bucket`) and a Flux `Kustomization`

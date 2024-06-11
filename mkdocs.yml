@@ -93,8 +93,9 @@ nav:
       - Installation: operator/install.md
       - Configuration:
           - Flux Controllers: operator/flux-config.md
-          - Flux Sync: operator/flux-sync.md
+          - Flux Cluster Sync: operator/flux-sync.md
+          - Bootstrap Migration: operator/flux-bootstrap-migration.md
       - API Reference:
-          - FluxInstance CRD: operator/fluxinstance.md
+          - Flux Instance: operator/fluxinstance.md
   - Pricing: pricing/index.md
   - Contact: https://control-plane.io/contact/?inquiry=fluxcd
