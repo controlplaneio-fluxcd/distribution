@@ -9,7 +9,7 @@ using the namespace name as the Flux source and Kustomization name. The naming c
 matches the one used by `flux bootstrap` to ensure compatibility with upstream, and
 to allow transitioning a bootstrapped cluster to a `FluxInstance` managed one.
 
-## Sync from a Git repository
+## Sync from a Git Repository
 
 To sync the cluster state from a Git repository, add the following configuration to the `FluxInstance`:
 
@@ -21,7 +21,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.3.x"
+    version: "2.x"
     registry: "ghcr.io/fluxcd"
   sync:
     kind: GitRepository
@@ -41,7 +41,7 @@ flux create secret git flux-system \
   --password=$GITHUB_TOKEN
 ```
 
-## Sync from a container registry
+## Sync from a Container Registry
 
 To sync the cluster state from a container registry where the Kubernetes manifests
 are pushed as OCI artifacts using `flux push artifact`:
@@ -54,7 +54,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.3.x"
+    version: "2.x"
     registry: "ghcr.io/fluxcd"
   sync:
     kind: OCIRepository
@@ -74,6 +74,39 @@ flux create secret oci flux-system \
   --url=ghcr.io \
   --username=flux \
   --password=$GITHUB_TOKEN
+```
+
+## Sync from a Bucket
+
+To sync the cluster state from an S3 bucket where the Kubernetes manifests
+are stored as YAML files:
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+metadata:
+  name: flux
+  namespace: flux-system
+spec:
+  distribution:
+    version: "2.x"
+    registry: "ghcr.io/fluxcd"
+  sync:
+    kind: Bucket
+    url: "minio.my-org.com"
+    ref: "my-bucket-fleet"
+    path: "clusters/my-cluster"
+    pullSecret: "bucket-auth"
+```
+
+The Kubernetes secret must be created
+in the same namespace where the FluxInstance is deployed, with the following keys:
+
+```shell
+kubectl create secret generic bucket-auth \
+  --namespace flux-system \
+  --from-literal=accesskey=my-accesskey \
+  --from-literal=secretkey=my-secretkey
 ```
 
 To find out more about the available configuration options, refer to the

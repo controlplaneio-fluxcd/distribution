@@ -49,7 +49,7 @@ kubectl -n flux-system delete fluxinstance flux
 
 ## Enterprise Distribution configuration
 
-To install the enterprise distribution of Flux, point the operator to the ControlPlane registry:
+To deploy the enterprise distribution of Flux, point the operator to the ControlPlane registry:
 
 ```yaml
 apiVersion: fluxcd.controlplane.io/v1
@@ -64,10 +64,10 @@ spec:
     imagePullSecret: "flux-enterprise-auth"
 ```
 
-!!! tip "Automated updates"
+!!! tip "Automated CVE patching"
 
     The operator will check for updates in the ControlPlane
-    [distribution repository](https://github.com/controlplaneio-fluxcd/distribution).
+    [distribution repository](https://github.com/controlplaneio-fluxcd/distribution) at regular intervals.
     If a new patch version is available, the operator will update the Flux components by pinning the
     container images to the latest digest published in the ControlPlane registry.
 
