@@ -6,7 +6,7 @@ statically compiled as a single binary with no external dependencies.
 
 ## Install methods
 
-The Flux Operator can be installed with Helm, Operator Lifecycle Manager, or kubectl.
+The Flux Operator can be installed with Helm, Terraform, Operator Lifecycle Manager, or kubectl.
 It is recommended to install the operator in a dedicated namespace, such as `flux-system`.
 
 ### Helm
@@ -19,6 +19,21 @@ available in the ControlPlane registry:
 helm install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator \
   --namespace flux-system \
   --create-namespace
+```
+
+### Terraform
+
+Installing the Flux Operator with Terraform is possible using the
+[Helm provider](https://registry.terraform.io/providers/hashicorp/helm/latest/docs):
+
+```hcl
+resource "helm_release" "flux_operator" {
+  name       = "flux-operator"
+  namespace  = "flux-system"
+  repository = "oci://ghcr.io/controlplaneio-fluxcd/charts"
+  chart      = "flux-operator"
+  create_namespace = true
+}
 ```
 
 ### Operator Lifecycle Manager (OLM)
@@ -50,57 +65,24 @@ applying the Kubernetes manifests published on the releases page:
 kubectl apply -f https://github.com/controlplaneio-fluxcd/flux-operator/releases/latest/download/install.yaml
 ```
 
-## Flux configuration
+## Uninstall
 
-The Flux Operator comes with a Kubernetes CRD called [FluxInstance](fluxinstance.md).
-A single custom resource of this kind can exist in a Kubernetes cluster with the name
-**flux** that must be created in the same namespace where the operator is deployed.
-
-The `FluxInstance` resource is used to install and configure the automated update
-of the Flux distribution.
-
-Example of a minimal `FluxInstance` resource:
-
-```yaml
-apiVersion: fluxcd.controlplane.io/v1
-kind: FluxInstance
-metadata:
-  name: flux
-  namespace: flux-system
-  annotations:
-    fluxcd.controlplane.io/reconcileEvery: "1h"
-    fluxcd.controlplane.io/reconcileTimeout: "5m"
-spec:
-  distribution:
-    version: "2.3.x"
-    registry: "ghcr.io/fluxcd"
-  components:
-    - source-controller
-    - kustomize-controller
-    - helm-controller
-    - notification-controller
-  cluster:
-    type: kubernetes
-```
-
-Save the above manifest to a file and apply it with `kubectl`:
+Before uninstalling the Flux Operator, make sure to delete the `FluxInstance` resources with:
 
 ```shell
-kubectl apply -f flux-instance.yaml
+kubectl -n flux-system delete fluxinstances --all
 ```
 
-The operator will reconcile the `FluxInstance` resource and install
-the latest upstream Flux version in the `2.3` range with the specified components.
-Every hour, the operator will check for Flux patch releases and apply them if available.
+The operator will uninstall Flux from the cluster without affecting the Flux-managed workloads.
 
-To verify the installation status:
+Verify that the Flux controllers have been removed:
 
 ```shell
-kubectl -n flux-system get fluxinstance flux
+kubectl -n flux-system get deployments
 ```
 
-To uninstall the Flux instance:
+Uninstall the Flux Operator with your preferred method, e.g. Helm:
 
 ```shell
-kubectl -n flux-system delete fluxinstance flux
+helm -n flux-system uninstall flux-operator
 ```

@@ -91,7 +91,8 @@ nav:
   - Flux Operator:
       - Introduction: operator/index.md
       - Installation: operator/install.md
+      - Flux Configuration: operator/flux-config.md
       - API Reference:
-          - FluxInstance: operator/fluxinstance.md
+          - FluxInstance CRD: operator/fluxinstance.md
   - Pricing: pricing/index.md
   - Contact: https://control-plane.io/contact/?inquiry=fluxcd
