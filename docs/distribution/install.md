@@ -4,7 +4,7 @@ ControlPlane offers a seamless transition from CNCF Flux to the enterprise distr
 impact to Flux availability. The hardened container images provided by ControlPlane are fully
 compatible with the upstream Flux installation and bootstrap procedure.
 
-## Bootstrap
+## Flux Bootstrap
 
 Customers can bootstrap Flux with the enterprise distribution using the Flux CLI or the Flux Terraform provider.
 To access the ControlPlane registry, customers need to provide their credentials using the
@@ -46,4 +46,4 @@ The ControlPlane distribution includes the [Flux Operator](https://github.com/co
 which provides a declarative API for the installation and upgrade of the Flux controllers. The operator
 automates the patching of hotfixes and CVEs affecting the Flux container images.
 
-For more information, see the Flux Operator [documentation](../operator/index).
+For more information, see the Flux Operator [documentation](../operator/index.md).

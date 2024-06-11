@@ -23,6 +23,7 @@ We offer two distribution channels for the Flux controllers:
 - [Mainline](#mainline) images
 
 The ControlPlane container images are continuously scanned for vulnerabilities and patched accordingly.
+The images are built for `linux/amd64` and `linux/arm64` architectures.
 
 ### FIPS-compliant
 
