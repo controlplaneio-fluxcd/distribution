@@ -94,3 +94,4 @@ nav:
       - API Reference:
           - FluxInstance: operator/fluxinstance.md
   - Pricing: pricing/index.md
+  - Contact: https://control-plane.io/contact/?inquiry=fluxcd
