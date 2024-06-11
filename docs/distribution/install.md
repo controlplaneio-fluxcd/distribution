@@ -46,4 +46,4 @@ The ControlPlane distribution includes the [Flux Operator](https://github.com/co
 which provides a declarative API for the installation and upgrade of the Flux controllers. The operator
 automates the patching of hotfixes and CVEs affecting the Flux container images.
 
-For more information, see the Flux Operator [documentation](../operator/introduction.md).
+For more information, see the Flux Operator [documentation](../operator/index).

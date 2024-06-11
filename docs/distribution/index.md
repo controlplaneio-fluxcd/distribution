@@ -3,23 +3,24 @@
 The [ControlPlane](https://control-plane.io) distribution for [Flux CD](https://fluxcd.io)
 comes with enterprise-hardened Flux controllers including:
 
-- Hardened container images and SBOMs in-sync with upstream Flux releases.
+- Hardened container images in-sync with upstream Flux releases.
 - Continuous scanning and CVE patching for Flux container base images.
 - SLAs for remediation of critical vulnerabilities affecting Flux functionality.
+- SBOMs and VEX documents for Flux container images, dependencies and build environments.
 - FIPS-compliant Flux builds based on FIPS 140-2 validated BoringSSL.
 - Extended compatibility of Flux controllers for the latest six minor releases of Kubernetes.
 - Assured compatibility with OpenShift and Kubernetes LTS versions provided by cloud vendors.
 
 The ControlPlane distribution is offered on a
-[yearly subscription basis](https://control-plane.io/enterprise-for-flux-cd/) and includes
+[yearly subscription basis](../pricing/index.md) and includes
 enterprise-grade support services for running Flux in production.
 
 ## Distribution Channels
 
-ControlPlane offers two distribution channels for the Flux controllers:
+We offer two distribution channels for the Flux controllers:
 
-- [FIPS-compliant](#fips-compliant) images hosted at `ghcr.io/controlplaneio-fluxcd/distroless`.
-- [Mainline](#mainline) images hosted at `ghcr.io/controlplaneio-fluxcd/alpine`.
+- [FIPS-compliant](#fips-compliant) images
+- [Mainline](#mainline) images
 
 The ControlPlane container images are continuously scanned for vulnerabilities and patched accordingly.
 
