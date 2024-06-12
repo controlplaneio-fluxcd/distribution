@@ -1,4 +1,4 @@
-# Flux Multi-cluster Architecture
+# Flux Architecture
 
 In this guide we will explore the architecture of **Flux CD**, and we will compare the deployment strategies
 of the Flux components when implementing GitOps for multi-cluster continuous delivery.
@@ -12,19 +12,64 @@ progressive delivery rollouts.
 
 The Flux project is made out of the following components:
 
-- **Flux CLI** - a command-line tool for installing, upgrading, operating, monitoring and debugging the Flux controllers running on Kubernetes clusters.
-- **Flux Terraform Provider** - a provider for bootstrapping Flux with Terraform and OpenTofu.
-- **Flux APIs** - a set of Kubernetes CRDs that allow defining continuous delivery workflows in a declarative manner.
-- **Flux controllers** - a set of Kubernetes controllers that automate all aspects of continuous delivery based on the declarative workflows defined with the Flux APIs.
+<div class="grid cards" markdown>
 
-The Flux controllers currently available are:
+-   :octicons-command-palette-24:{ .lg .middle } __Flux CLI__
 
-- **source-controller** - a controller specialised in artifacts acquisition from external sources such as Git, OCI, Helm repositories and S3-compatible buckets.
-- **kustomize-controller** - a controller specialized in running continuous delivery pipelines for infrastructure and workloads defined with Kubernetes manifests and assembled with Kustomize.
-- **helm-controller** - a controller specialized in managing the lifecycle of applications packaged as Helm charts.
-- **notification-controller** - a controller specialized in sending and receiving continuous delivery events to/from external services.
-- **image-reflector-controller** - a controller specialized in scanning container registries for new image versions and OCI artifacts revisions.
-- **image-automation-controller** - a controller specialized in automating the update of container images and OCI artifacts to Git.
+    ---
+    A command-line tool for installing, upgrading, operating, monitoring and debugging the Flux controllers running on Kubernetes clusters.
+
+-   :octicons-log-24:{ .lg .middle } __Flux Terraform Provider__
+
+    ---
+    An infrastructure-as-code provider for bootstrapping Flux with Terraform and OpenTofu.
+
+-   :octicons-file-code-24:{ .lg .middle } __Flux APIs__
+
+    ---
+    A set of Kubernetes CRDs that allow defining continuous delivery workflows in a declarative manner.
+
+-   :octicons-cpu-24:{ .lg .middle } __Flux controllers__
+
+    ---
+    A set of Kubernetes controllers that automate all aspects of continuous delivery based on the declarative workflows defined with the Flux APIs.
+
+</div>
+
+## Flux controllers
+
+<div class="grid cards" markdown>
+-   :octicons-cpu-24:{ .lg .middle } __source-controller__
+
+    ---
+    A controller specialised in artifacts acquisition from external sources such as Git, OCI, Helm repositories and S3-compatible buckets.
+
+-   :octicons-cpu-24:{ .lg .middle } __kustomize-controller__
+
+    ---
+    A controller specialized in running continuous delivery pipelines for infrastructure and workloads defined with Kubernetes manifests and assembled with Kustomize.
+
+-   :octicons-cpu-24:{ .lg .middle } __helm-controller__
+
+    ---
+    A controller specialized in managing the lifecycle of applications packaged as Helm charts.
+
+-   :octicons-cpu-24:{ .lg .middle } __notification-controller__
+
+    ---
+    A controller specialized in sending and receiving continuous delivery events to/from external services.
+
+-   :octicons-cpu-24:{ .lg .middle } __image-reflector-controller__
+
+    ---
+    A controller specialized in scanning container registries for new image versions and OCI artifacts revisions.
+
+-   :octicons-cpu-24:{ .lg .middle } __image-automation-controller__
+
+    ---
+    A controller specialized in automating the update of container images and OCI artifacts to Git.
+
+</div>
 
 Unlike most CI/CD systems, Flux does not rely on 3rd-party tools to perform its operations
 and can't be used to execute arbitrary scripts or commands on the cluster.
@@ -86,8 +131,20 @@ bootstrap repo and apply policies that enforce security, compliance, and best pr
 When managing a fleet of Kubernetes clusters with Flux, the platform team can
 choose between two deployment strategies:
 
-- **Standalone** - Flux is bootstrapped on each Kubernetes cluster.
-- **Hub and Spoke** - Flux is bootstrapped on a central cluster, acting as a GitOps hub.
+
+<div class="grid cards" markdown>
+
+-   :octicons-issue-opened-24:{ .lg .middle } __Standalone__
+
+    ---
+    Flux is bootstrapped on each Kubernetes cluster.
+
+-   :octicons-issue-reopened-24:{ .lg .middle } __Hub and Spoke__
+
+    ---
+    Flux is bootstrapped on a central cluster, acting as a GitOps hub.
+
+</div>
 
 ### Standalone
 
