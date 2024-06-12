@@ -85,6 +85,8 @@ nav:
     - Introduction: distribution/index.md
     - Installation: distribution/install.md
     - Security: distribution/security.md
+    - Guides:
+        - Multi-cluster Architecture: guides/flux-architecture.md
     - Versions:
         - Release v2.3: releases/release-v2.3.md
         - Release v2.2: releases/release-v2.2.md
