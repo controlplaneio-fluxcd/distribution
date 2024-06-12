@@ -1,10 +1,48 @@
----
-hide:
-  - toc
-  - navigation
----
-
 # Pricing
+
+<div class="grid cards" markdown>
+
+-   :octicons-package-24:{ .lg .middle } __1 cluster / 10 nodes__
+
+    ---
+
+    :octicons-container-24: Product $12000 USD
+
+    :octicons-person-add-24: Inc Support $15000 USD
+
+    [:octicons-arrow-right-24: Buy](https://control-plane.io/contact/?inquiry=fluxcd)
+
+-   :octicons-package-24:{ .lg .middle } __10 clusters / 100 nodes__
+
+    ---
+
+    :octicons-container-24: Product $60000 USD
+
+    :octicons-person-add-24: Inc Support $75000 USD
+
+    [:octicons-arrow-right-24: Buy](https://control-plane.io/contact/?inquiry=fluxcd)
+
+-   :octicons-package-24:{ .lg .middle } __25 clusters / 250 nodes__
+
+    ---
+
+    :octicons-container-24: Product $100000 USD
+
+    :octicons-person-add-24: Inc Support $125000 USD
+
+    [:octicons-arrow-right-24: Buy](https://control-plane.io/contact/?inquiry=fluxcd)
+
+-   :octicons-package-24:{ .lg .middle } __100 clusters / 1000 nodes__
+
+    ---
+
+    :octicons-container-24: Product $350000 USD
+
+    :octicons-person-add-24: Inc Support $500000 USD
+
+    [:octicons-arrow-right-24: Buy](https://control-plane.io/contact/?inquiry=fluxcd)
+
+</div>
 
 At ControlPlane, we understand that organizations come in various sizes and have different requirements,
 especially when it comes to managing and securing their Kubernetes deployments using GitOps principles.
