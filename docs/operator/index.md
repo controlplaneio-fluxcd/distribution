@@ -8,6 +8,7 @@ the lifecycle of CNCF Flux and the ControlPlane enterprise distribution.
 - Provides a declarative API for the installation, configuration and upgrade of Flux.
 - Automates the patching of hotfixes and CVEs affecting the Flux controllers container images.
 - Simplifies the configuration of multi-tenancy lockdown on shared Kubernetes clusters.
+- Allows syncing the cluster state from Git repositories, OCI artifacts and S3-compatible storage.
 - Provides a security-first approach to the Flux deployment and FIPS compliance.
 - Incorporates best practices for running Flux at scale with persistent storage and vertical scaling.
 - Manages the update of Flux custom resources and prevents disruption during the upgrade process.

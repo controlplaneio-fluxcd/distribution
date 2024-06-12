@@ -18,7 +18,7 @@ includes enterprise-grade support services for running Flux in production.
 
     :octicons-stack-24: Up to 1 cluster or 10 nodes
 
-    :octicons-tag-24: $15000 USD / year
+    :octicons-tag-24: $1250 USD / month
 
     [:octicons-arrow-right-24: Contact us](https://control-plane.io/contact/?inquiry=fluxcd)
 
@@ -28,7 +28,7 @@ includes enterprise-grade support services for running Flux in production.
 
     :octicons-stack-24: Up to 10 clusters or 100 nodes
 
-    :octicons-tag-24: $75000 USD / year
+    :octicons-tag-24: $6250 USD / month
 
     [:octicons-arrow-right-24: Contact us](https://control-plane.io/contact/?inquiry=fluxcd)
 
@@ -38,7 +38,7 @@ includes enterprise-grade support services for running Flux in production.
 
     :octicons-stack-24: Up to 25 clusters or 250 nodes
 
-    :octicons-tag-24: $125000 USD / year
+    :octicons-tag-24: $10500 USD / month
 
     [:octicons-arrow-right-24: Contact us](https://control-plane.io/contact/?inquiry=fluxcd)
 
@@ -48,7 +48,7 @@ includes enterprise-grade support services for running Flux in production.
 
     :octicons-stack-24: Up to 100 clusters or 1000 nodes
 
-    :octicons-tag-24: $500000 USD / year
+    :octicons-tag-24: $42000 USD / month
 
     [:octicons-arrow-right-24: Contact us](https://control-plane.io/contact/?inquiry=fluxcd)
 
