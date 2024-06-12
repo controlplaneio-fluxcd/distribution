@@ -1,69 +1,64 @@
+---
+hide:
+  - navigation
+---
+
 # Pricing
+
+The ControlPlane distribution is offered on a yearly subscription basis and
+includes enterprise-grade support services for running Flux in production.
+
+## Subscription Plans
 
 <div class="grid cards" markdown>
 
--   :octicons-package-24:{ .lg .middle } __1 cluster / 10 nodes__
+-   :octicons-package-24:{ .lg .middle } __CPE-1 Bundle__
 
     ---
 
-    :octicons-container-24: Product $12000 USD
+    :octicons-stack-24: Up to 1 cluster or 10 nodes
 
-    :octicons-person-add-24: Inc Support $15000 USD
+    :octicons-tag-24: $15000 USD / year
 
-    [:octicons-arrow-right-24: Buy](https://control-plane.io/contact/?inquiry=fluxcd)
+    [:octicons-arrow-right-24: Contact us](https://control-plane.io/contact/?inquiry=fluxcd)
 
--   :octicons-package-24:{ .lg .middle } __10 clusters / 100 nodes__
-
-    ---
-
-    :octicons-container-24: Product $60000 USD
-
-    :octicons-person-add-24: Inc Support $75000 USD
-
-    [:octicons-arrow-right-24: Buy](https://control-plane.io/contact/?inquiry=fluxcd)
-
--   :octicons-package-24:{ .lg .middle } __25 clusters / 250 nodes__
+-   :octicons-package-24:{ .lg .middle } __CPE-10 Bundle__
 
     ---
 
-    :octicons-container-24: Product $100000 USD
+    :octicons-stack-24: Up to 10 clusters or 100 nodes
 
-    :octicons-person-add-24: Inc Support $125000 USD
+    :octicons-tag-24: $75000 USD / year
 
-    [:octicons-arrow-right-24: Buy](https://control-plane.io/contact/?inquiry=fluxcd)
+    [:octicons-arrow-right-24: Contact us](https://control-plane.io/contact/?inquiry=fluxcd)
 
--   :octicons-package-24:{ .lg .middle } __100 clusters / 1000 nodes__
+-   :octicons-package-24:{ .lg .middle } __CPE-25 Bundle__
 
     ---
 
-    :octicons-container-24: Product $350000 USD
+    :octicons-stack-24: Up to 25 clusters or 250 nodes
 
-    :octicons-person-add-24: Inc Support $500000 USD
+    :octicons-tag-24: $125000 USD / year
 
-    [:octicons-arrow-right-24: Buy](https://control-plane.io/contact/?inquiry=fluxcd)
+    [:octicons-arrow-right-24: Contact us](https://control-plane.io/contact/?inquiry=fluxcd)
+
+-   :octicons-package-24:{ .lg .middle } __CPE-100 Bundle__
+
+    ---
+
+    :octicons-stack-24: Up to 100 clusters or 1000 nodes
+
+    :octicons-tag-24: $500000 USD / year
+
+    [:octicons-arrow-right-24: Contact us](https://control-plane.io/contact/?inquiry=fluxcd)
 
 </div>
 
-At ControlPlane, we understand that organizations come in various sizes and have different requirements,
-especially when it comes to managing and securing their Kubernetes deployments using GitOps principles.
-Our goal is to provide exceptional value to our customers while also contributing positively
-to the open-source CNCF Flux project.
-ControlPlane Enterprise for Flux CD is designed to meet this dual objective
-by offering a hardened, enterprise-grade distribution and support services that go
-beyond what the open-source project provides.
+!!! tip "Free for non-Production environments"
 
-## Annual Subscription Plans
-
-Flexible packages based on number of Production clusters or number of Production
-nodes across clusters (whichever is hit first) and pricing to accommodate
-various organisational needs and sizes.  
-
-| Cluster bundles | Node bundles | Product     | Inc. Support |
-|-----------------|--------------|-------------|--------------|
-| 1 cluster       | 10 nodes     | $12000 USD  | $15000 USD   |
-| 10 clusters     | 100 nodes    | $60000 USD  | $75000 USD   |
-| 25 clusters     | 250 nodes    | $100000 USD | $125000 USD  |
-| 100 clusters    | 1000 nodes   | $350000 USD | $500000 USD  |
+    The offer is based on the number of Production clusters or
+    the number of Production nodes across clusters (whichever is hit first).  
+    Dev & Staging environments are covered at no extra cost.
 
 ## Support Services
 
@@ -76,6 +71,16 @@ Enterprise for Flux CD. The support services included in the subscription plans 
 
 Additional support services such as training, consulting, architectural reviews,
 and custom development are available upon request.
+
+## Custom Plans
+
+At ControlPlane, we understand that organizations come in various sizes and have different requirements,
+especially when it comes to managing and securing their Kubernetes deployments using GitOps principles.
+Our goal is to provide exceptional value to our customers while also contributing positively
+to the open-source CNCF Flux project.
+ControlPlane Enterprise for Flux CD is designed to meet this dual objective
+by offering a hardened, enterprise-grade distribution and support services that go
+beyond what the open-source project provides.
 
 [Contact us](https://control-plane.io/contact/?inquiry=fluxcd) to discuss your specific
 requirements and to get a quote that fits your needs.
