@@ -84,7 +84,7 @@ done
 
 ## Flux Operator
 
-The ControlPlane distribution includes the [Flux Operator](https://github.com/controlplaneio-fluxcd/flux-operator),
+The ControlPlane distribution includes the [Flux Operator](../operator/index.md),
 which provides a declarative API for the lifecycle management of the Flux controllers, including
 automated CVE patching and upgrades.
 
