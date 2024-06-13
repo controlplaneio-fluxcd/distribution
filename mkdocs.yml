@@ -52,6 +52,9 @@ extra:
       link: https://x.com/controlplaneio
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/company/controlplane/mycompany/
+  analytics:
+    provider: google
+    property: G-366254752
 
 docs_dir: docs
 
