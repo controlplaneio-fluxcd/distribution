@@ -44,14 +44,21 @@ The ControlPlane distribution comes with enterprise-hardened Flux controllers in
 
 </div>
 
+!!! tip "Flux Operator"
+
+    To streamline the deployment of the enterprise distribution, the ControlPlane team
+    created the [Flux Operator](../operator). The operator manages the lifecycle of the
+    Flux controllers and automates the upgrade process, including the patching of hotfixes
+    and CVEs affecting Flux functionality.
+
 ## Distribution Channels
 
 We offer the following distribution channels for the Flux controllers:
 
 <div class="grid cards" markdown>
 
-- [FIPS-compliant](#fips-compliant)
-- [Mainline](#mainline)
+- :octicons-verified-24: __[FIPS-compliant](#fips-compliant)__
+- :octicons-commit-24: __[Mainline](#mainline)__
 
 </div>
 

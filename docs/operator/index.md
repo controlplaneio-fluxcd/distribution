@@ -1,24 +1,36 @@
 # Flux Operator Introduction
 
-The [Flux Operator](https://github.com/controlplaneio-fluxcd/flux-operator).
+The [Flux Operator](https://github.com/controlplaneio-fluxcd/flux-operator)
 is a Kubernetes CRD controller that manages
 the lifecycle of CNCF Flux and the ControlPlane enterprise distribution.
-
-The operator provides first-class support for running Flux in production on
-OpenShift, Amazon EKS, Azure AKS, Google GKE, and other Kubernetes platforms.
 
 ## Features
 
 <div class="grid cards" markdown>
 
-- Provides a declarative API for the installation, configuration and upgrade of Flux.
-- Automates the patching of hotfixes and CVEs affecting the Flux controllers container images.
-- Simplifies the configuration of multi-tenancy lockdown on shared Kubernetes clusters.
-- Allows syncing the cluster state from Git repositories, OCI artifacts and S3-compatible storage.
-- Provides a security-first approach to the Flux deployment and FIPS compliance.
-- Incorporates best practices for running Flux at scale with persistent storage and vertical scaling.
-- Manages the update of Flux custom resources and prevents disruption during the upgrade process.
-- Facilitates a clean uninstall and reinstall process without affecting the Flux-managed workloads.
+-   :octicons-gear-24:{ .lg .middle } __Lifecycle Management__
+
+    ---
+    The operator automates the installation, configuration and upgrade of the Flux controllers through a declarative API. 
+    It manages the update of Flux CRDs and prevents disruption during the upgrade process.
+
+-   :octicons-checklist-24:{ .lg .middle } __Advanced Configuration__
+
+    ---
+    The operator allows the configuration of Flux multi-tenancy lockdown, vertical scaling, persistent storage,
+    and the syncing of the cluster state from Git repositories, OCI artifacts and S3-compatible storage.
+
+-   :octicons-check-circle-24:{ .lg .middle } __Kubernetes Support__
+
+    ---
+    The operator is end-to-end tested on various Kubernetes distributions and provides first-class
+    support for running Flux in production on OpenShift, Amazon EKS, Azure AKS and Google GKE. 
+
+-   :octicons-shield-check-24:{ .lg .middle } __Enterprise Automation__
+
+    ---
+    The operator streamlines the deployment of the ControlPlane Enterprise Distribution for Flux CD,
+    and automates the patching of hotfixes and CVEs affecting the Flux controllers container images.
 
 </div>
 

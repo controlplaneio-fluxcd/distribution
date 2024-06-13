@@ -6,7 +6,7 @@ statically compiled as a single binary with no external dependencies.
 
 ## Install methods
 
-The Flux Operator can be installed with Helm, Terraform, Operator Lifecycle Manager, or kubectl.
+The Flux Operator can be installed with Helm, Terraform, Operator Lifecycle Manager (OLM), or kubectl.
 It is recommended to install the operator in a dedicated namespace, such as `flux-system`.
 
 ### Helm
@@ -36,7 +36,7 @@ resource "helm_release" "flux_operator" {
 }
 ```
 
-### Operator Lifecycle Manager (OLM)
+### Operator Lifecycle Manager
 
 The Flux Operator can be installed on OpenShift using the bundle published on OperatorHub
 at [operatorhub.io/operator/flux-operator](https://operatorhub.io/operator/flux-operator).
