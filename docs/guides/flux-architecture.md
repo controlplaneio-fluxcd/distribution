@@ -72,7 +72,7 @@ The Flux project is made out of the following components:
 </div>
 
 Unlike most CI/CD systems, Flux does not rely on 3rd-party tools to perform its operations
-and can't be used to execute arbitrary scripts or commands on the cluster.
+and can't be used to execute arbitrary scripts or commands in the cluster.
 From a security perspective, Flux execution is limited to the operations defined in the
 Flux APIs and the controllers are designed for multi-tenancy, using Kubernetes impersonation
 when deploying applications on behalf of tenants.
@@ -202,7 +202,7 @@ by connecting to their Kubernetes API servers.
 
 - Reduced operational and maintenance overhead, bootstrapping and updating Flux is done once on the hub cluster.
 - Single pane of glass, the platform team can monitor and observe the continuous delivery for all clusters using the Flux metrics and events from the hub instance.
-- Suitable for when clusters are provisioned with [Kubernetes Cluster API](https://cluster-api.sigs.k8s.io/), where the hub cluster acts as a management cluster.
+- Suitable when clusters are provisioned with [Kubernetes Cluster API](https://cluster-api.sigs.k8s.io/), where the hub cluster acts as a management cluster.
 
 **Cons**:
 

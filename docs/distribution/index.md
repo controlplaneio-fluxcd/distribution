@@ -65,7 +65,7 @@ We offer the following distribution channels for the Flux controllers:
 ### FIPS-compliant
 
 The ControlPlane distribution offers hardened
-[Google Distrosless](https://github.com/GoogleContainerTools/distroless)-based Flux images
+[Google Distroless](https://github.com/GoogleContainerTools/distroless)-based Flux images
 to organizations that must comply with NIST FIPS-140-2 standards.
 
 The Flux controller binaries are statically linked against the
