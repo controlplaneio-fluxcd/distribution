@@ -1,0 +1,230 @@
+{% extends "main.html" %}
+{% block tabs %}
+{{ super() }}
+
+<style>
+    .md-header {
+        position: initial
+    }
+
+    .md-main__inner {
+        margin: 0
+    }
+
+    .md-content {
+        display: none
+    }
+
+    .container-hero {
+        padding-top: .0rem;
+        background: linear-gradient(to bottom, var(--md-primary-fg-color), hsl(187, 69%, 42%) 99%);
+    }
+
+    .tx-hero {
+        margin: 32px 2.8rem;
+        color: var(--md-primary-bg-color);
+        justify-content: center;
+    }
+
+    .tx-hero h1 {
+        margin-bottom: 1rem;
+        color: currentColor;
+        font-weight: 700
+    }
+
+    .tx-hero__content {
+        padding-bottom: 1rem;
+        margin: 0 auto;
+    }
+
+    .tx-hero__image {
+        width: 17rem;
+        height: 17rem;
+        order: 1;
+        padding-right: 2.5rem;
+    }
+
+    .tx-hero .md-button {
+        margin-top: .5rem;
+        margin-right: .5rem;
+        color: var(--md-primary-bg-color);
+        border-color: transparent
+    }
+
+    .tx-hero .md-button--primary {
+        background-color: var(--md-primary-bg-color);
+        color: hsla(280deg, 37%, 48%, 1);
+        border-color: var(--md-primary-bg-color)
+    }
+
+    .tx-hero .md-button:focus,
+    .tx-hero .md-button:hover {
+        background-color: #000000;
+        color: #ffffff;
+        border-color: #000000
+    }
+
+    @media screen and (min-width: 60em) {
+        .md-sidebar--secondary {
+            display: none
+        }
+
+        .tx-hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tx-hero__content {
+            max-width: 22rem;
+            margin: 3.5rem 4.0rem 3.5rem 1.0rem;
+            align-items: center;
+        }
+    }
+
+    @media screen and (min-width: 76.25em) {
+        .md-sidebar--primary {
+            display: none
+        }
+    }
+
+    .content-container-centered {
+        padding: 1.8rem 0;
+        margin: 0 0.8rem;
+    }
+
+    .centered-content-grid {
+        margin-top: 2.4rem
+
+    }
+
+    .centered-content-grid ul.centered-content-grid__list {
+        display: flex;
+        flex-flow: row wrap;
+        gap: 1.6rem;
+        padding: 0;
+        margin: 0;
+    }
+
+    .centered-content-grid ul.centered-content-grid__list > li.centered-content-grid__item {
+        display: flex;
+        flex: 1 0 48%;
+        gap: 0.6rem;
+        margin: 0;
+    }
+
+    .centered-content-grid ul.centered-content-grid__list > li.centered-content-grid__item div.item_content {
+        color: var(--md-typeset-color) !important;
+    }
+
+
+    .centered-content-grid ul.centered-content-grid__list > li.centered-content-grid__item div.item_content h2.card_title {
+        font-weight: 700;
+        margin-top: 0.175em;
+    }
+
+    .centered-content-grid ul.centered-content-grid__list > li.centered-content-grid__item div.content_icon {
+        fill: currentcolor;
+        background-color: var(--md-default-fg-color--lightest);
+        border-radius: 100%;
+        flex-shrink: 0;
+        height: 2.2rem;
+        padding: 0.4rem;
+        width: 2.2rem;
+    }
+
+</style>
+
+<section class="tx-container container-hero">
+    <div class="md-grid md-typeset">
+        <div class="tx-hero">
+            <div class="tx-hero__image">
+                <img src="{{ config.home.image }}" draggable="false" alt="Flux Enterprise">
+            </div>
+            <div class="tx-hero__content">
+                <h1>{{ config.home.tagline }}</h1>
+                <p>{{ config.home.description }}</p>
+                <a href="distribution/" title="Get Started" class="md-button md-button--primary">
+                    Get Started
+                </a>
+                <a href="pricing/" title="Pricing" class="md-button">
+                    Pricing
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{%- if config.home.features -%}
+<section class="tx-container">
+    <div class="md-grid md-typeset">
+        <div class="content-container-centered">
+            <h1>Enterprise Distribution Features</h1>
+            <div class="centered-content-grid">
+                <ul class="centered-content-grid__list">
+                    <li class="centered-content-grid__item md-typeset">
+                        <div class="content_icon">
+                            {% include ".icons/fontawesome/solid/layer-group.svg" %}
+                        </div>
+                        <div class="item_content">
+                            <h2 class="card_title">Hardened Images</h2>
+                            <p>The ControlPlane distribution comes with hardened container images and FIPS-compliance for the Flux controllers.</p>
+                        </div>
+                    </li>
+                    <li class="centered-content-grid__item md-typeset">
+                        <div class="content_icon">
+                            {% include ".icons/fontawesome/solid/cloud-arrow-up.svg" %}
+                        </div>
+                        <div class="item_content">
+                            <h2 class="card_title">Zero CVEs</h2>
+                            <p>We employ continuous vulnerabilities scanning and CVE patching for the Flux controllers.</p>
+                        </div>
+                    </li>
+                    <li class="centered-content-grid__item md-typeset">
+                        <div class="content_icon">
+                            {% include ".icons/fontawesome/solid/arrows-spin.svg" %}
+                        </div>
+                        <div class="item_content">
+                            <h2 class="card_title">24/7 Support</h2>
+                            <p>Our team provides best-in-class expertise to securely design, deploy, and operate your Flux CD instances at scale.</p>
+                        </div>
+                    </li>
+                    <li class="centered-content-grid__item md-typeset">
+                        <div class="content_icon">
+                            {% include ".icons/fontawesome/solid/lock.svg" %}
+                        </div>
+                        <div class="item_content">
+                            <h2 class="card_title">FIPS Compliance</h2>
+                            <p>The ControlPlane distribution includes FIPS-compliant Flux builds based on FIPS 140-2 validated BoringSSL.</p>
+                        </div>
+                    </li>
+                    <li class="centered-content-grid__item md-typeset">
+                        <div class="content_icon">
+                            {% include ".icons/fontawesome/solid/gear.svg" %}
+                        </div>
+                        <div class="item_content">
+                            <h2 class="card_title">Kubernetes Compatibility</h2>
+                            <p>The ControlPlane distribution comes with assured compatibility for OpenShift and Kubernetes LTS versions provided by cloud vendors.</p>
+                        </div>
+                    </li>
+                    <li class="centered-content-grid__item md-typeset">
+                        <div class="content_icon">
+                            {% include ".icons/fontawesome/solid/certificate.svg" %}
+                        </div>
+                        <div class="item_content">
+                            <h2 class="card_title">Supply Chain Security</h2>
+                            <p>The ControlPlane distribution supply chain is SLSA Build Level 3, and ships cryptographically signed images, SBOMs and VEX documents.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{%- endif -%}
+
+{% endblock %}
+{% block content %}{% endblock %}
+{% block footer %}
+{{ super() }}
+{% endblock %}
