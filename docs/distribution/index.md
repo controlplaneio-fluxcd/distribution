@@ -1,8 +1,15 @@
 # Flux Distribution Introduction
 
-The ControlPlane distribution for [Flux CD](https://fluxcd.io)
-comes with enterprise-hardened Flux controllers including [support services](../pricing) for
-running Flux in production.
+ControlPlane Enterprise for Flux CD is a comprehensive solution for organizations seeking
+to leverage the power of GitOps in their Kubernetes environments.
+
+Built on top of the [CNCF-graduated](https://www.cncf.io/projects/flux/) Flux project,
+the ControlPlane distribution provides a secure, scalable, and enterprise-ready platform
+for managing the delivery of application and infrastructure workloads on
+multi-tenant Kubernetes clusters.
+
+The ControlPlane distribution comes with enterprise-hardened Flux controllers including
+[support services](../pricing) for running Flux in production.
 
 ## Highlights
 
@@ -39,12 +46,12 @@ running Flux in production.
 
 ## Distribution Channels
 
-We offer two distribution channels for the Flux controllers:
+We offer the following distribution channels for the Flux controllers:
 
 <div class="grid cards" markdown>
 
-- FIPS-compliant images
-- Mainline images
+- [FIPS-compliant](#fips-compliant)
+- [Mainline](#mainline)
 
 </div>
 
@@ -58,9 +65,6 @@ The Flux controller binaries are statically linked against the
 [Google BoringSSL](https://boringssl.googlesource.com/boringssl/) libraries,
 and the Go runtime restricts all TLS configuration to FIPS-approved settings
 by importing the `crypto/tls/fipsonly` package.
-
-The FIPS-compliant container images are available for
-`linux/amd64` and `linux/arm64` architectures.
 
 ### Mainline
 
