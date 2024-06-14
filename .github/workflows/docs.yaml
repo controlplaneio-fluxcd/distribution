@@ -16,9 +16,9 @@ jobs:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4.1.3
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Run mkdocs
-        uses: mhausenblas/mkdocs-deploy-gh-pages@e55ecab6718b449a90ebd4313f1320f9327f1386 # master
+        uses: mhausenblas/mkdocs-deploy-gh-pages@55d676092a2f2a3bf0420a1e2ac070868e29f5bc # master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CUSTOM_DOMAIN: fluxcd.control-plane.io
