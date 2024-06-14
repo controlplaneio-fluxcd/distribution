@@ -102,6 +102,7 @@ nav:
       - Configuration:
           - Flux Controllers: operator/flux-config.md
           - Flux Cluster Sync: operator/flux-sync.md
+          - Flux Customizations: operator/flux-kustomize.md
           - Bootstrap Migration: operator/flux-bootstrap-migration.md
       - API Reference:
           - Flux Instance: operator/fluxinstance.md
