@@ -59,6 +59,12 @@ spec:
     pullSecret: "flux-system"
 ```
 
+!!! note "Kustomize patches"
+
+    Note that if you have customized the Flux manifests, you should copy the Kustomize patches
+    from `flux-system/kustomization.yaml` in the `FluxInstance` under `.spec.kustomize.patches`.
+    For more information, see the [instance customization guide](flux-kustomize.md).
+
 Apply the `FluxInstance` resource to the cluster:
 
 ```shell

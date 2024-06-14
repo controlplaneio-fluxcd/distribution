@@ -12,25 +12,25 @@ or target a specific controller:
 apiVersion: fluxcd.controlplane.io/v1
 kind: FluxInstance
 spec:
-kustomize:
-  patches:
-    # target all controller deployments
-    - patch: |
-        # strategic merge or JSON patch
-      target:
-        kind: Deployment
-    # target multiple controller deployments by name
-    - patch: |
-        # strategic merge or JSON patch      
-      target:
-        kind: Deployment
-        name: "(kustomize-controller|helm-controller)"
-    # target a single controller service account by name
-    - patch: |
-        # strategic merge or JSON patch     
-      target:
-        kind: ServiceAccount
-        name: "source-controller"
+  kustomize:
+    patches:
+      # target all controller deployments
+      - patch: |
+          # strategic merge or JSON patch
+        target:
+          kind: Deployment
+      # target multiple controller deployments by name
+      - patch: |
+          # strategic merge or JSON patch      
+        target:
+          kind: Deployment
+          name: "(kustomize-controller|helm-controller)"
+      # target a single controller service account by name
+      - patch: |
+          # strategic merge or JSON patch     
+        target:
+          kind: ServiceAccount
+          name: "source-controller"
 ```
 
 ## Examples
@@ -43,23 +43,23 @@ The following examples demonstrate how to customize the Flux manifests.
 apiVersion: fluxcd.controlplane.io/v1
 kind: FluxInstance
 spec:
-kustomize:
-  patches:
-    - patch: |
-        - op: add
-          path: /spec/template/spec/containers/0/args/-
-          value: --concurrent=10
-        - op: add
-          path: /spec/template/spec/containers/0/args/-
-          value: --requeue-dependency=5s 
-        - op: replace
-          path: /spec/template/spec/containers/0/resources/limits
-          value:
-            cpu: 2000m
-            memory: 2048Mi
-      target:
-        kind: Deployment
-        name: "(kustomize-controller|helm-controller|source-controller)"
+  kustomize:
+    patches:
+      - patch: |
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --concurrent=10
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --requeue-dependency=5s 
+          - op: replace
+            path: /spec/template/spec/containers/0/resources/limits
+            value:
+              cpu: 2000m
+              memory: 2048Mi
+        target:
+          kind: Deployment
+          name: "(kustomize-controller|helm-controller|source-controller)"
 ```
 
 ### Node affinity and tolerations
@@ -68,35 +68,35 @@ kustomize:
 apiVersion: fluxcd.controlplane.io/v1
 kind: FluxInstance
 spec:
-kustomize:
-  patches:
-    - patch: |
-        apiVersion: apps/v1
-        kind: Deployment
-        metadata:
-          name: all
-        spec:
-          template:
-            metadata:
-              annotations:
-                cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
-            spec:
-              affinity:
-                nodeAffinity:
-                  requiredDuringSchedulingIgnoredDuringExecution:
-                    nodeSelectorTerms:
-                      - matchExpressions:
-                          - key: role
-                            operator: In
-                            values:
-                              - flux
-              tolerations:
-                - effect: NoSchedule
-                  key: role
-                  operator: Equal
-                  value: flux      
-      target:
-        kind: Deployment
+  kustomize:
+    patches:
+      - patch: |
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: all
+          spec:
+            template:
+              metadata:
+                annotations:
+                  cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+              spec:
+                affinity:
+                  nodeAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                      nodeSelectorTerms:
+                        - matchExpressions:
+                            - key: role
+                              operator: In
+                              values:
+                                - flux
+                tolerations:
+                  - effect: NoSchedule
+                    key: role
+                    operator: Equal
+                    value: flux      
+        target:
+          kind: Deployment
 ```
 
 ### HTTP/S Proxy
@@ -105,25 +105,25 @@ kustomize:
 apiVersion: fluxcd.controlplane.io/v1
 kind: FluxInstance
 spec:
-kustomize:
-  patches:
-    - patch: |
-        apiVersion: apps/v1
-        kind: Deployment
-        metadata:
-          name: all
-        spec:
-          template:
-            spec:
-              containers:
-                - name: manager
-                  env:
-                    - name: "HTTPS_PROXY"
-                      value: "https://proxy.example.com"
-                    - name: "NO_PROXY"
-                      value: ".cluster.local.,.cluster.local,.svc"      
-      target:
-        kind: Deployment
+  kustomize:
+    patches:
+      - patch: |
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: all
+          spec:
+            template:
+              spec:
+                containers:
+                  - name: manager
+                    env:
+                      - name: "HTTPS_PROXY"
+                        value: "https://proxy.example.com"
+                      - name: "NO_PROXY"
+                        value: ".cluster.local.,.cluster.local,.svc"      
+        target:
+          kind: Deployment
 ```
 
 ### Cluster sync semver range
@@ -132,15 +132,15 @@ kustomize:
 apiVersion: fluxcd.controlplane.io/v1
 kind: FluxInstance
 spec:
-kustomize:
-  patches:
-    - patch: |
-        - op: replace
-          path: /spec/ref
-          value:
-            semver: ">=1.0.0-0"
-      target:
-        kind: (GitRepository|OCIRepository)
+  kustomize:
+    patches:
+      - patch: |
+          - op: replace
+            path: /spec/ref
+            value:
+              semver: ">=1.0.0-0"
+        target:
+          kind: (GitRepository|OCIRepository)
 ```
 
 For more examples, refer to the [Flux bootstrap documentation](https://fluxcd.io/flux/installation/configuration/).
