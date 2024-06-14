@@ -143,4 +143,33 @@ spec:
           kind: (GitRepository|OCIRepository)
 ```
 
+### Cluster sync AWS workload identity
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+spec:
+  kustomize:
+    patches:
+      - patch: |
+          apiVersion: v1
+          kind: ServiceAccount
+          metadata:
+            name: controller
+          annotations:
+            eks.amazonaws.com/role-arn: <ROLE ARN>
+        target:
+          kind: ServiceAccount
+          name: "(source-controller|image-reflector-controller)"
+      - patch: |
+          apiVersion: source.toolkit.fluxcd.io/v1beta2
+          kind: OCIRepository
+          metadata:
+            name: flux-system
+          spec:
+            provider: aws
+        target:
+          kind: OCIRepository
+```
+
 For more examples, refer to the [Flux bootstrap documentation](https://fluxcd.io/flux/installation/configuration/).
