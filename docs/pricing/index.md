@@ -60,12 +60,17 @@ includes enterprise-grade support services for running Flux in production.
     the number of Production nodes across clusters (whichever is hit first).  
     Dev & Staging environments are covered at no extra cost.
 
+!!! info "AWS Marketplace"
+
+    Amazon EKS customers can purchase the ControlPlane Enterprise for Flux CD
+    from the [AWS Marketplace](https://aws.amazon.com/marketplace/pp/prodview-ndm54wno7tayg).
+
 ## Support Services
 
 ControlPlane offers a range of support services to help you get the most out of
 Enterprise for Flux CD. The support services included in the subscription plans are:
 
-- **Around-the-Clock Support**: dedicated 24/7/365 on-call assistance
+- **Around-the-Clock Support**: dedicated 24/7/365 on-call assistance for Flux-related production outages
 - **Vulnerability Management**: disclosures and remediation guidance for Flux-related vulnerabilities
 - **Continuous Updates**: regular communication on Flux updates, patches, RFCs, and roadmap changes
 

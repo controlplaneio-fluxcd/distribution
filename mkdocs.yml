@@ -67,6 +67,7 @@ markdown_extensions:
   - admonition
   - meta
   - codehilite
+  - footnotes
   - pymdownx.tilde
   - pymdownx.progressbar
   - pymdownx.tasklist
