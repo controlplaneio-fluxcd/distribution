@@ -1,13 +1,16 @@
 # Deploy Flux from AWS Marketplace
 
-AWS users can deploy the ControlPlane enterprise distribution of Flux CD
-on Amazon EKS from the AWS Marketplace. 
+AWS users can deploy the ControlPlane Enterprise Distribution of Flux CD
+on Amazon EKS from the [AWS Marketplace](https://aws.amazon.com/marketplace/pp/prodview-ndm54wno7tayg). 
+
+[![ControlPlane AWS](../images/AWSMP_NewLogo_RGB_BLK.svg#only-light){ width="400" }](https://aws.amazon.com/marketplace/pp/prodview-ndm54wno7tayg)
+[![ControlPlane AWS](../images/AWSMP_NewLogo_RGB_WHT.svg#only-dark){ width="400" }](https://aws.amazon.com/marketplace/pp/prodview-ndm54wno7tayg)
 
 ## Prerequisites
 
-After subscribing to the ControlPlane product on the AWS Marketplace, chose the
-Helm chart option and install it on your EKS cluster in the `flux-system` namespace
-using the following Helm values:
+After subscribing to the [ControlPlane product](https://aws.amazon.com/marketplace/pp/prodview-ndm54wno7tayg)
+on the AWS Marketplace[^1], chose the Helm chart option and install it on your EKS cluster
+in the `flux-system` namespace using the following Helm values:
 
 ```yaml
 image:
@@ -84,3 +87,5 @@ kubectl apply -f flux-instance.yaml
 ```
 
 For more information, see the Flux Operator [documentation](../operator/index.md).
+
+[^1]: AWS Marketplace and the AWS Marketplace logo are trademarks of Amazon.com, Inc. or its affiliates.
