@@ -2,6 +2,14 @@
 # either because the vulnerable code paths are not used in Flux
 # or because the CVEs have been dismissed by upstream maintainers.
 
+# Alpine CVEs
+# status: not_affected
+# justification: vulnerable_code_not_in_execute_path
+CVE-2024-4741
+CVE-2023-42365
+CVE-2023-42364
+
 # This CVE has been dismissed by the Helm team.
 # https://helm.sh/blog/response-cve-2019-25210/
 CVE-2019-25210
+
