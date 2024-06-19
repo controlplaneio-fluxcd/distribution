@@ -21,6 +21,7 @@ spec:
   distribution:
     version: "2.3.x"
     registry: "ghcr.io/fluxcd"
+    artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
   cluster:
     type: kubernetes
 ```
@@ -33,12 +34,18 @@ kubectl apply -f flux-instance.yaml
 
 The operator will reconcile the `FluxInstance` resource and install
 the latest upstream Flux version in the `2.3` range with the specified components.
-Every hour, the operator will check for Flux patch releases and apply them if available.
-
 To verify the installation status:
 
 ```shell
 kubectl -n flux-system get fluxinstance flux
+```
+
+Every hour, the operator will check for Flux patch releases and apply them if available.
+To make the operator check for updates immediately:
+
+```shell
+kubectl -n flux-system annotate --overwrite \
+  fluxinstance flux reconcile.fluxcd.io/requestedAt="$(date +%s)"
 ```
 
 To uninstall the Flux instance:
@@ -62,12 +69,13 @@ spec:
     version: "2.3.x"
     registry: "ghcr.io/controlplaneio-fluxcd/distroless"
     imagePullSecret: "flux-enterprise-auth"
+    artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
 ```
 
 !!! tip "Automated CVE patching"
 
-    The operator will check for updates in the ControlPlane
-    [distribution repository](https://github.com/controlplaneio-fluxcd/distribution) at regular intervals.
+    The operator will check for updates to the ControlPlane distribution by pulling
+    the OCI artifact from `ghcr.io/controlplaneio-fluxcd` registry every hour.
     If a new patch version is available, the operator will update the Flux components by pinning the
     container images to the latest digest published in the ControlPlane registry.
 
@@ -103,6 +111,7 @@ spec:
   distribution:
     version: "2.x"
     registry: "ghcr.io/fluxcd"
+    artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
   components:
     - source-controller
     - kustomize-controller

@@ -15,6 +15,8 @@ in the `flux-system` namespace using the following Helm values:
 ```yaml
 image:
   repository: 709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd/flux-operator
+marketplace:
+  type: aws
 ```
 
 ## Installation options
@@ -72,7 +74,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.x"
+    version: "2.3.x"
     registry: "709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd"
   cluster:
     type: aws
@@ -84,6 +86,32 @@ Apply the manifest with `kubectl`:
 
 ```shell
 kubectl apply -f flux-instance.yaml
+```
+
+On EKS clusters with access to GitHub Container Registry, the operator can check for updates
+and automatically update the Flux controllers to the latest patch version without having to 
+upgrade the Flux Operator Helm chart from the AWS Marketplace.
+
+To enable the automatic upgrade feature, configure the Flux instance as follows:
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+metadata:
+  name: flux
+  namespace: flux-system
+  annotations:
+    fluxcd.controlplane.io/reconcileEvery: "1h"
+    fluxcd.controlplane.io/reconcileTimeout: "5m"
+spec:
+  distribution:
+    version: "2.3.x"
+    registry: "709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd"
+    artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
+  cluster:
+    type: aws
+    multitenant: false
+    networkPolicy: true
 ```
 
 For more information, see the Flux Operator [documentation](../operator/index.md).
