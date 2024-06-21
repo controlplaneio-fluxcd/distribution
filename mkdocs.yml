@@ -88,7 +88,8 @@ nav:
   - Flux Distribution:
     - Introduction: distribution/index.md
     - Installation: distribution/install.md
-    - Security: distribution/security.md
+    - Support Policy: distribution/support.md
+    - Supply Chain Security: distribution/security.md
     - Guides:
         - Flux Architecture Overview: guides/flux-architecture.md
         - D1 Reference Architecture: guides/d1-architecture-reference.md

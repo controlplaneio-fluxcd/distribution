@@ -50,7 +50,7 @@ the issue on the customer's business operations.
 ControlPlane continuously monitors the Flux controllers for vulnerabilities and provides
 remediation guidance for CVEs affecting Flux functionality.
 
-The security team is responsible for assessing the exploit ability of the vulnerabilities
+The security team is responsible for assessing the exploitability of the vulnerabilities
 and producing patches. CVE exceptions are issued in the OpenVEX format for vulnerabilities
 that are not exploitable in the context of the Flux controllers.
 
