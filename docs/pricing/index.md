@@ -70,12 +70,11 @@ includes enterprise-grade support services for running Flux in production.
 ControlPlane offers a range of support services to help you get the most out of
 Enterprise for Flux CD. The support services included in the subscription plans are:
 
-- **Around-the-Clock Support**: dedicated 24/7/365 on-call assistance for Flux-related production outages
-- **Vulnerability Management**: disclosures and remediation guidance for Flux-related vulnerabilities
-- **Continuous Updates**: regular communication on Flux updates, patches, RFCs, and roadmap changes
+- **Around-the-Clock Support**: dedicated on-call assistance for Flux-related issues and inquiries.
+- **Vulnerability Management**: disclosures and remediation guidance for Flux-related vulnerabilities.
+- **Product Updates**: regular communication on Flux updates, patches, RFCs, and roadmap changes.
 
-Additional support services such as training, consulting, architectural reviews,
-and custom development are available upon request.
+For more information, see the [Technical Support Policy](../distribution/support.md).
 
 ## Custom Plans
 

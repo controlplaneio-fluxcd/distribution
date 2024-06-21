@@ -5,7 +5,7 @@ Enterprise for Flux CD. The support services included in the [subscription plans
 
 - **Around-the-Clock Support**: dedicated on-call assistance for Flux-related issues and inquiries.
 - **Vulnerability Management**: disclosures and remediation guidance for Flux-related vulnerabilities.
-- **Continuous Updates**: regular communication on Flux updates, patches, RFCs, and roadmap changes.
+- **Product Updates**: regular communication on Flux updates, patches, RFCs, and roadmap changes.
 
 ## Support Channels
 
@@ -45,8 +45,45 @@ the issue on the customer's business operations.
 
 **Business Hour** means an hour during Monday through Friday from 9:00 AM to 6:00 PM, excluding public holidays.
 
+## Vulnerability Management
+
+ControlPlane continuously monitors the Flux controllers for vulnerabilities and provides
+remediation guidance for CVEs affecting Flux functionality.
+
+The security team is responsible for assessing the exploit ability of the vulnerabilities
+and producing patches. CVE exceptions are issued in the OpenVEX format for vulnerabilities
+that are not exploitable in the context of the Flux controllers.
+
+### Security Bulletins
+
+The support team issues security bulletins to customers containing the CVEs details,
+VEX documents for CVE exceptions, and the container images digests with fixes.
+The security bulletins are sent via email to the primary contact person of the customer
+and are also available in the support portal.
+
+Customers are responsible for applying the patches provided in the security bulletins
+to their Flux controllers in a timely manner. The support team is available to assist
+with the patching process and to answer any questions related to the security bulletins.
+
+!!! tip "Security Embargoes"
+
+    The security bulletins are issued under embargo until the vulnerabilities are publicly disclosed.
+    During the embargo period, customers are required to keep the information confidential.
+
+## Product Updates
+
+ControlPlane provides customers with regular communication over email on the following topics:
+
+- Feature releases and updates for the enterprise distribution of Flux CD.
+- Security bulletins for vulnerabilities affecting Flux functionality.
+- Patches and hotfixes for the Flux controllers and the Flux Operator.
+- Request for Comments (RFCs) and Roadmap changes for the CNCF Flux project.
+- Best practices and recommendations for operating Flux in production environments.
+
 ## Additional Support Services
 
 Additional support services such as training, consulting, architectural reviews,
 and custom development are available upon request and are subject to additional costs
 based on the scope of the service.
+
+[Contact us](https://control-plane.io/contact/?inquiry=fluxcd) for more information.
