@@ -8,18 +8,41 @@ on Amazon EKS from the [AWS Marketplace](https://aws.amazon.com/marketplace/pp/p
 
 ## Prerequisites
 
-After subscribing to the [ControlPlane product](https://aws.amazon.com/marketplace/pp/prodview-ndm54wno7tayg)
-on the AWS Marketplace[^1], chose the Helm chart option and install it on your EKS cluster
-in the `flux-system` namespace using the following Helm values:
+After subscribing to the [ControlPlane product](https://aws.amazon.com/marketplace/pp/prodview-ndm54wno7tayg),
+you need grant the `flux-operator` service account from the `flux-system` namespace the necessary permissions
+to access the AWS Marketplace metering API. You can use the AWS managed policy 
+`arn:aws:iam::aws:policy/AWSMarketplaceMeteringRegisterUsage` for this purpose.
 
-```yaml
-image:
-  repository: 709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd/flux-operator
-marketplace:
-  type: aws
+Example using `eksctl` with [IAM Roles for Service Accounts](https://eksctl.io/usage/iamserviceaccounts/):
+
+```shell
+eksctl create iamserviceaccount --cluster=<clusterName> \
+  --name=flux-operator \
+  --namespace=flux-system \
+  --attach-policy-arn=arn:aws:iam::aws:policy/AWSMarketplaceMeteringRegisterUsage \
+  --approve
 ```
 
-## Installation options
+Deploy the `flux-operator` Helm chart on your EKS cluster in the `flux-system` namespace using
+the following values:
+
+```yaml
+helm upgrade -i flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator \
+  --namespace flux-system \
+  --set serviceAccount.create=false \
+  --set image.repository=709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd/flux-operator \
+  --set marketplace.type=aws
+```
+
+To verify that the AWS Marketplace entitlement is valid,
+check the logs of the `flux-operator` pod:
+
+```console
+$ kubectl -n flux-system logs -l app.kubernetes.io/name=flux-operator
+{"level":"info","msg":"Entitlement verified","vendor":"controlplane-aws"}
+```
+
+## Flux Installation Options
 
 <div class="grid cards" markdown>
 
@@ -31,7 +54,7 @@ marketplace:
 ### Flux Bootstrap
 
 Customers can bootstrap Flux with the enterprise distribution using the Flux CLI or the Flux Terraform provider.
-To access the ControlPlane images from the AWS Marketplace, use the following registry URL:
+To access the ControlPlane images from the AWS Marketplace[^1], use the following registry URL:
 
 ```shell
 709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd
@@ -64,7 +87,8 @@ an in-place upgrade of the Flux controllers to the ControlPlane distribution.
 ### Flux Operator
 
 To deploy the enterprise distribution with Flux Operator from the AWS Marketplace,
-create a `FluxInstance` resource:
+create a `FluxInstance` resource named `flux` in the `flux-system` namespace
+with the following configuration:
 
 ```yaml
 apiVersion: fluxcd.controlplane.io/v1
