@@ -104,8 +104,11 @@ nav:
           - Flux Controllers: operator/flux-config.md
           - Flux Cluster Sync: operator/flux-sync.md
           - Flux Customization: operator/flux-kustomize.md
+      - Guides:
           - Bootstrap Migration: operator/flux-bootstrap-migration.md
+          - Monitoring and Reporting: operator/monitoring.md
       - API Reference:
           - Flux Instance: operator/fluxinstance.md
+          - Flux Report: operator/fluxreport.md
   - Pricing: pricing/index.md
   - Contact: https://control-plane.io/contact/?inquiry=fluxcd

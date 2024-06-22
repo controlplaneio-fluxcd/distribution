@@ -47,7 +47,7 @@ The ControlPlane distribution comes with enterprise-hardened Flux controllers in
 !!! tip "Flux Operator"
 
     To streamline the deployment of the enterprise distribution, the ControlPlane team
-    created the [Flux Operator](../operator). The operator manages the lifecycle of the
+    created the [Flux Operator](../operator/index.md). The operator manages the lifecycle of the
     Flux controllers and automates the upgrade process, including the patching of hotfixes
     and CVEs affecting Flux functionality.
 
@@ -82,3 +82,20 @@ images fully compatible with the upstream Flux feature set.
 The major difference between the Flux upstream images and the ControlPlane
 mainline images is the continuous scanning and CVE patching for the
 container base images, OS packages, and Go dependencies.
+
+## Distribution Components
+
+The Controlplane distribution comprises Open Source components such as the CNCF
+[Flux controllers](../guides/flux-architecture.md#flux-controllers) (Apache 2.0 License)
+and the [Flux Operator](../operator/index.md) (AGPL-3.0 License).
+
+!!! note "Delivery Pipeline"
+
+    The build, test and release pipeline developed by [ControlPlane](https://control-plane.io)
+    is compliant with the [SLSA](security.md) security framework.
+ 
+    The ControlPlane build system produces FIPS-compliant binaries,
+    multi-arch container images, generates SBOMs, applies CVE patches
+    & hotfixes to the Open Source components, and runs conformance tests.
+    The resulting container images and SBOMs are hosted on private registries
+    that are only available to customers with a valid subscription.

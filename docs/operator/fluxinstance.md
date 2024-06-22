@@ -11,7 +11,7 @@ where the flux-operator is deployed.
 
 The following example shows a FluxInstance custom resource that
 installs the upstream Flux distribution with all available components,
-and configures the flux-operator to automatically upgrade Flux
+and configures the flux-operator to automatically upgrade Flux 
 to the latest stable version:
 
 ```yaml
@@ -640,7 +640,7 @@ Status:
 `.status.lastAppliedRevision` is the last revision of the Flux distribution
 that was successfully applied to the cluster.
 
-The revision is in the format `<version>@sha256:<digest>`.
+The revision is in the format `<version>@sha256:<digest>`. 
 
 The version is the Flux distribution exact semver version that was applied to the cluster.
 
