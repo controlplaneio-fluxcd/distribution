@@ -7,7 +7,7 @@ installation. The report provides information about the installed components and
 the Flux distribution details, reconcilers statistics, cluster sync status and more.
 
 The report is generated as a custom resource of kind `FluxReport`, named `flux`,
-located in the same namespace where the operator the running.
+located in the same namespace where the operator is running.
 
 To view the report in YAML format run:
 
@@ -16,7 +16,7 @@ kubectl -n flux-system get fluxreport/flux -o yaml
 ```
 
 The operator updates the report at regular intervals, by default every 10 minutes.
-To manually trigger a reconciliation of the report, run:
+To manually trigger the reconciliation of the report, run:
 
 ```shell
 kubectl -n flux-system annotate --overwrite fluxreport/flux \
