@@ -9,9 +9,13 @@ on Amazon EKS from the [AWS Marketplace](https://aws.amazon.com/marketplace/pp/p
 ## Prerequisites
 
 After subscribing to the [ControlPlane product](https://aws.amazon.com/marketplace/pp/prodview-ndm54wno7tayg),
-you need grant the `flux-operator` service account from the `flux-system` namespace the necessary permissions
-to access the AWS Marketplace metering API. You can use the AWS managed policy 
-`arn:aws:iam::aws:policy/AWSMarketplaceMeteringRegisterUsage` for this purpose.
+deploy the Flux Operator on your EKS cluster using the Helm chart provided in the AWS Marketplace.
+
+### IAM Permissions
+
+First you need grant the `flux-operator` service account from the `flux-system` namespace the
+necessary permissions to access the AWS Marketplace metering API. You can use the AWS managed
+policy `arn:aws:iam::aws:policy/AWSMarketplaceMeteringRegisterUsage` for this purpose.
 
 Example using `eksctl` with [IAM Roles for Service Accounts](https://eksctl.io/usage/iamserviceaccounts/):
 
@@ -22,6 +26,8 @@ eksctl create iamserviceaccount --cluster=<clusterName> \
   --attach-policy-arn=arn:aws:iam::aws:policy/AWSMarketplaceMeteringRegisterUsage \
   --approve
 ```
+
+### Helm Chart Installation
 
 Deploy the `flux-operator` Helm chart on your EKS cluster in the `flux-system` namespace using
 the following values:
@@ -34,12 +40,15 @@ helm upgrade -i flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-op
   --set marketplace.type=aws
 ```
 
-To verify that the AWS Marketplace entitlement is valid,
-check the logs of the `flux-operator` pod:
+### Entitlements Verification
+
+To verify that the AWS Marketplace entitlements are valid,
+check the report generated in the `flux-system` namespace:
 
 ```console
-$ kubectl -n flux-system logs -l app.kubernetes.io/name=flux-operator
-{"level":"info","msg":"Entitlement verified","vendor":"controlplane-aws"}
+$ kubectl -n flux-system get fluxreport/flux -o wide
+NAME   ENTITLEMENT                  AGE   READY   STATUS
+flux   Issued by controlplane-aws   1m    True    Reporting finished in 34ms
 ```
 
 ## Flux Installation Options
