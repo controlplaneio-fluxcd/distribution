@@ -41,7 +41,7 @@ data:
 ```
 
 The `sources` list contains the allowed URL prefixes separated by a new line for
-tenant-owned Flux sources e.g. `GitRepository`, `OCIRepository` and `HelmRepository`. 
+tenant-owned Flux sources e.g. `GitRepository`, `OCIRepository` and `HelmRepository`.
 
 ### Define the Admission Policy
 
@@ -53,6 +53,10 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
   name: "source.policy.fluxcd.controlplane.io"
+  annotations:
+    policy.fluxcd.controlplane.io/role: |
+      Restrict Flux access to Git repositories, OCI registries and Helm repositories,
+      based on an allowlist defined in a ConfigMap stored in the flux-system namespace.
 spec:
   failurePolicy: Fail
   matchConstraints:
@@ -61,6 +65,10 @@ spec:
         apiVersions: [ "*" ]
         operations: [ "CREATE", "UPDATE" ]
         resources: [ "gitrepositories", "ocirepositories", "helmrepositories" ]
+  matchConditions:
+    - name: "exclude-source-controller-finalizer"
+      expression: >
+        request.userInfo.username != "system:serviceaccount:flux-system:source-controller"
   paramKind:
     apiVersion: v1
     kind: ConfigMap
@@ -107,31 +115,78 @@ spec:
 With the above policy in place, any tenant trying to create or update a Flux source that is not
 listed in the allow list will receive a validation error and the operation will be denied.
 
+### Applying the Policies
+
+The cluster admins can apply the policies using a dedicated Flux `Kustomization` that gets reconciled
+before the tenant's resources.
+
+Repository structure:
+
+```text
+├── clusters
+│   └── production
+│       ├── policies-sync.yaml
+│       └── tenants-sync.yaml
+├── policies
+│   ├── allowlist.yaml
+│   └── policies.yaml
+└── tenants
+    ├── team1
+    └── team2
+```
+
+The `policies-sync.yaml` manifest configures Flux to reconcile the policies resources first:
+
+```yaml
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: policies
+  namespace: flux-system
+spec:
+  path: "./policies"
+  prune: true
+  wait: true
+```
+
+The `tenants-sync.yaml` manifest configures Flux to reconcile the tenants resources after the policies:
+
+```yaml
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: tenants
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: policies
+  path: "./tenants"
+  prune: true
+```
+
 ### Testing the Policy
 
-If a tenant adds an `OCIRepository` manifest to their repository that tries to
+If a tenant adds an `HelmRepository` manifest to their repository that tries to
 pull Helm charts from a registry that is not in the allow list, for example:
 
 ```yaml
-apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: OCIRepository
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
 metadata:
   name: podinfo
   namespace: apps
 spec:
-  interval: 10m
-  url: oci://ghcr.io/stefanprodan/charts/podinfo
-  ref:
-    tag: 6.x
+  type: oci
+  url: oci://ghcr.io/stefanprodan/charts/
 ```
 
-The admission controller will deny the creation of the `OCIRepository` and the tenant will receive
+The admission controller will deny the creation of the `HelmRepository` and the tenant will receive
 an alert from Flux about the policy violation:
 
 ```
-The ocirepositories "podinfo" is invalid:
+The helmrepository "podinfo" is invalid:
 ValidatingAdmissionPolicy 'source.policy.fluxcd.controlplane.io' with binding 'tenant-sources' denied request:
-Source oci://ghcr.io/stefanprodan/charts/podinfo is not allowed, must be one of oci://ghcr.io/controlplaneio-fluxcd/charts/, https://github.com/controlplaneio-fluxcd/, ssh://git@github.com/controlplaneio-fluxcd/
+Source oci://ghcr.io/stefanprodan/charts/ is not allowed, must be one of oci://ghcr.io/controlplaneio-fluxcd/charts/, https://github.com/controlplaneio-fluxcd/, ssh://git@github.com/controlplaneio-fluxcd/
 ```
 
 ## Restricting Access to Container Registries
@@ -153,7 +208,8 @@ data:
   registries: >-
     ghcr.io/controlplaneio-fluxcd/
     709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/
-  sources: "omitted for brevity"
+  sources: >-
+    omitted for brevity
 ```
 
 Next, the cluster admins need to define a `ValidatingAdmissionPolicy` resource that
@@ -236,7 +292,7 @@ ValidatingAdmissionPolicy 'registry.policy.fluxcd.controlplane.io' with binding 
 Init container image is not allowed, must be one of ghcr.io/controlplaneio-fluxcd/, 709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/
 ```
 
-## Conclusion
+## Conclusions
 
 In this guide we've shown how to use the Kubernetes native validating admission policies
 to enforce policies on multi-tenant clusters managed by Flux. Extending the examples above,
