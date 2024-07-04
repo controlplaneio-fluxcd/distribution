@@ -3,7 +3,10 @@
 The [Flux Operator](https://github.com/controlplaneio-fluxcd/flux-operator)
 is a Kubernetes CRD controller that manages
 the lifecycle of CNCF Flux and the ControlPlane enterprise distribution.
-The operator provides first-class support for running Flux in production
+
+The operator offers an alternative to the Flux Bootstrap procedure, it
+removes the operational burden of managing Flux across fleets of clusters
+and provides first-class support for running Flux in production
 on OpenShift, Amazon EKS, Azure AKS and Google GKE.
 
 ## Features

@@ -106,8 +106,8 @@ nav:
           - Flux Cluster Sync: operator/flux-sync.md
           - Flux Customization: operator/flux-kustomize.md
       - Guides:
+          - Flux Monitoring: operator/monitoring.md
           - Bootstrap Migration: operator/flux-bootstrap-migration.md
-          - Monitoring and Reporting: operator/monitoring.md
       - API Reference:
           - Flux Instance: operator/fluxinstance.md
           - Flux Report: operator/fluxreport.md
