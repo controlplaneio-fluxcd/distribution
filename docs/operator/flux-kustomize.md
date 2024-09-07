@@ -172,4 +172,23 @@ spec:
           kind: OCIRepository
 ```
 
+### Cluster sync SOPS decryption
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+spec:
+  kustomize:
+    patches:
+      - patch: |
+          - op: add
+            path: /spec/decryption
+            value:
+              provider: sops
+              secretRef:
+                name: flux-sops
+        target:
+          kind: Kustomization
+```
+
 For more examples, refer to the [Flux bootstrap documentation](https://fluxcd.io/flux/installation/configuration/).
