@@ -52,9 +52,6 @@ extra:
       link: https://x.com/controlplaneio
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/company/controlplane/mycompany/
-  analytics:
-    provider: google
-    property: G-366254752
 
 docs_dir: docs
 
@@ -105,6 +102,7 @@ nav:
           - Flux Controllers: operator/flux-config.md
           - Flux Cluster Sync: operator/flux-sync.md
           - Flux Customization: operator/flux-kustomize.md
+          - Flux Sharding: operator/flux-sharding.md
       - Guides:
           - Flux Monitoring: operator/monitoring.md
           - Bootstrap Migration: operator/flux-bootstrap-migration.md
