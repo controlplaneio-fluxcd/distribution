@@ -89,14 +89,17 @@ spec:
     type: kubernetes
     # Enable Flux multi-tenancy lockdown
     multitenant: true
+    tenantDefaultServiceAccount: default
     # Cluster internal domain name
     domain: cluster.local
     # Restrict network access to the Flux namespace
     networkPolicy: true
   # Configure Flux sharding and horizontal scaling
-  shards:
-    - shard1
-    - shard2
+  sharding:
+    key: "sharding.fluxcd.io/key"
+    shards:
+      - "shard1"
+      - "shard2"
   # Persistent storage for Flux internal artifacts
   storage:
     class: standard
@@ -234,3 +237,12 @@ to allow transitioning a bootstrapped cluster to a `FluxInstance` managed one.
   - OLM integration and OperatorHub listing at [operatorhub.io/operator/flux-operator](https://operatorhub.io/operator/flux-operator).
 - 2024-06-17: Additional features released in flux-operator [v0.5.0](https://github.com/controlplaneio-fluxcd/flux-operator/releases/tag/v0.5.0)
   - Support for the `distribution.artifact ` spec field to configure automated updates from OCI artifacts.
+- 2024-06-22: Additional features released in flux-operator [v0.6.0](https://github.com/controlplaneio-fluxcd/flux-operator/releases/tag/v0.6.0)
+  - Introduced new resource `FluxReport` to aid in monitoring and troubleshooting Flux by providing information about the installed components and their readiness, the distribution details, reconcilers statistics, cluster sync status.
+- 2024-07-04: Additional features released in flux-operator [v0.7.0](https://github.com/controlplaneio-fluxcd/flux-operator/releases/tag/v0.7.0)
+  - Support for `cluster.tenantDefaultServiceAccount ` field to configure the default service account for tenant workloads.
+- 2024-08-16: Additional features released in flux-operator [v0.8.0](https://github.com/controlplaneio-fluxcd/flux-operator/releases/tag/v0.8.0)
+  - Add Red Hat UBI variant to OLM manifests and OperatorHub listing.
+- 2024-09-16: Additional features released in flux-operator [v0.9.0](https://github.com/controlplaneio-fluxcd/flux-operator/releases/tag/v0.9.0)
+  - Support for the `sharding ` spec field to configure horizontal scaling of the Flux controllers.
+  - Support for migrating the Flux custom resources stored version to the latest CRD schema.

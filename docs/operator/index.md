@@ -22,7 +22,7 @@ on OpenShift, Amazon EKS, Azure AKS and Google GKE.
 -   :octicons-checklist-24:{ .lg .middle } __Advanced Configuration__
 
     ---
-    The operator allows the configuration of Flux multi-tenancy lockdown, vertical scaling, persistent storage,
+    The operator allows the configuration of Flux multi-tenancy lockdown, sharding, vertical scaling, persistent storage,
     and the syncing of the cluster state from Git repositories, OCI artifacts and S3-compatible storage.
 
 -   :octicons-pulse-24:{ .lg .middle } __Deep Insights__

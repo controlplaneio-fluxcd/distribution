@@ -11,50 +11,50 @@ where the flux-operator is deployed.
 
 The following example shows a FluxInstance custom resource that
 installs the upstream Flux distribution with all available components,
-and configures the flux-operator to automatically upgrade Flux 
+and configures the flux-operator to automatically upgrade Flux
 to the latest stable version:
 
 ```yaml
 apiVersion: fluxcd.controlplane.io/v1
 kind: FluxInstance
 metadata:
-  name: flux
-  namespace: flux-system
-  annotations:
-    fluxcd.controlplane.io/reconcile: "enabled"
-    fluxcd.controlplane.io/reconcileEvery: "1h"
-    fluxcd.controlplane.io/reconcileTimeout: "3m"
+   name: flux
+   namespace: flux-system
+   annotations:
+      fluxcd.controlplane.io/reconcile: "enabled"
+      fluxcd.controlplane.io/reconcileEvery: "1h"
+      fluxcd.controlplane.io/reconcileTimeout: "3m"
 spec:
-  distribution:
-    version: "2.x"
-    registry: "ghcr.io/fluxcd"
-  components:
-    - source-controller
-    - kustomize-controller
-    - helm-controller
-    - notification-controller
-    - image-reflector-controller
-    - image-automation-controller
-  cluster:
-    type: kubernetes
-    multitenant: false
-    networkPolicy: true
-    domain: "cluster.local"
-  storage:
-    class: "standard"
-    size: "10Gi"
-  kustomize:
-    patches:
-      - target:
-          kind: Deployment
-          name: "(kustomize-controller|helm-controller)"
-        patch: |
-          - op: add
-            path: /spec/template/spec/containers/0/args/-
-            value: --concurrent=10
-          - op: add
-            path: /spec/template/spec/containers/0/args/-
-            value: --requeue-dependency=5s
+   distribution:
+      version: "2.x"
+      registry: "ghcr.io/fluxcd"
+   components:
+      - source-controller
+      - kustomize-controller
+      - helm-controller
+      - notification-controller
+      - image-reflector-controller
+      - image-automation-controller
+   cluster:
+      type: kubernetes
+      multitenant: false
+      networkPolicy: true
+      domain: "cluster.local"
+   storage:
+      class: "standard"
+      size: "10Gi"
+   kustomize:
+      patches:
+         - target:
+              kind: Deployment
+              name: "(kustomize-controller|helm-controller)"
+           patch: |
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --concurrent=10
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --requeue-dependency=5s
 ```
 
 You can run this example by saving the manifest into `fluxinstance.yaml`.
@@ -155,9 +155,9 @@ Example using the upstream Flux distribution:
 
 ```yaml
 spec:
-  distribution:
-    version: "2.x"
-    registry: "ghcr.io/fluxcd"
+   distribution:
+      version: "2.x"
+      registry: "ghcr.io/fluxcd"
 ```
 
 #### Distribution version
@@ -170,8 +170,8 @@ to the latest Flux minor version:
 
 ```yaml
 spec:
-  distribution:
-    version: "2.x"
+   distribution:
+      version: "2.x"
 ```
 
 Example using a semver range to configure the automatic upgrade
@@ -179,16 +179,16 @@ to the latest Flux patch version of the `2.3` series:
 
 ```yaml
 spec:
-  distribution:
-    version: "2.3.x"
+   distribution:
+      version: "2.3.x"
 ```
 
 Example using an exact version to install a specific Flux version:
 
 ```yaml
 spec:
-  distribution:
-    version: "2.3.0"
+   distribution:
+      version: "2.3.0"
 ```
 
 #### Distribution registry
@@ -200,9 +200,9 @@ Example using the upstream Flux distribution registry:
 
 ```yaml
 spec:
-  distribution:
-    version: "2.x"
-    registry: "ghcr.io/fluxcd"
+   distribution:
+      version: "2.x"
+      registry: "ghcr.io/fluxcd"
 ```
 
 #### Distribution image pull secret
@@ -214,10 +214,10 @@ Example using the ControlPlane enterprise registry:
 
 ```yaml
 spec:
-  distribution:
-    version: "2.3.x"
-    registry: "ghcr.io/controlplaneio-fluxcd/distroless"
-    imagePullSecret: "flux-enterprise-auth"
+   distribution:
+      version: "2.3.x"
+      registry: "ghcr.io/controlplaneio-fluxcd/distroless"
+      imagePullSecret: "flux-enterprise-auth"
 ```
 
 The image pull secret must be created in the same namespace where the FluxInstance is deployed
@@ -244,10 +244,10 @@ Example using the official distribution artifact:
 
 ```yaml
 spec:
-  distribution:
-    version: "2.x"
-    registry: "ghcr.io/fluxcd"
-    artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
+   distribution:
+      version: "2.x"
+      registry: "ghcr.io/fluxcd"
+      artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
 ```
 
 ### Components configuration
@@ -258,11 +258,11 @@ When not specified, the operator will install the default set of components for 
 
 ```yaml
 spec:
-  components:
-    - source-controller
-    - kustomize-controller
-    - helm-controller
-    - notification-controller
+   components:
+      - source-controller
+      - kustomize-controller
+      - helm-controller
+      - notification-controller
 ```
 
 ### Cluster configuration
@@ -273,12 +273,12 @@ Example using the OpenShift cluster configuration:
 
 ```yaml
 spec:
-  cluster:
-    type: openshift
-    multitenant: true
-    tenantDefaultServiceAccount: "flux"
-    networkPolicy: true
-    domain: "cluster.local"
+   cluster:
+      type: openshift
+      multitenant: true
+      tenantDefaultServiceAccount: "flux"
+      networkPolicy: true
+      domain: "cluster.local"
 ```
 
 #### Cluster type
@@ -321,14 +321,60 @@ Example using the standard storage class:
 
 ```yaml
 spec:
-  storage:
-    class: "standard"
-    size: "10Gi"
+   storage:
+      class: "standard"
+      size: "10Gi"
 ```
 
 #### Storage size
 
 The `.spec.storage.size` field is required and specifies the size of the persistent volume claim.
+
+### Sharding configuration
+
+The `.spec.sharding` field is optional and specifies the sharding configuration for the Flux controllers.
+
+Example:
+
+```yaml
+spec:
+  sharding:
+    key: "sharding.fluxcd.io/key"
+    shards:
+      - "shard1"
+      - "shard2"
+```
+
+For each shard, the operator will create a separate set of controllers, e.g.:
+
+```console
+$ kubectl -n flux-system get deployments -l app.kubernetes.io/part-of=flux
+NAME
+source-controller
+source-controller-shard1
+source-controller-shard2
+kustomize-controller
+kustomize-controller-shard1
+kustomize-controller-shard2
+helm-controller
+helm-controller-shard1
+helm-controller-shard2
+```
+
+Note that only the `source-controller`, `kustomize-controller` and `helm-controller` controllers
+support sharding.
+
+To assign a resource to a specific shard, add the `sharding.fluxcd.io/key` label with the shard value,
+e.g.: `sharding.fluxcd.io/key: shard1`.
+
+#### Sharding key
+
+The `.spec.sharding.key` field is optional and specifies the sharding key label to use for the Flux controllers.
+By default, the key is set to `sharding.fluxcd.io/key`.
+
+#### Shards
+
+The `.spec.sharding.shards` field is required and specifies the list of sharding values to use for the Flux controllers.
 
 ### Kustomize patches
 
@@ -528,6 +574,16 @@ stringData:
   secretkey: "my-secretkey"
 ```
 
+### Resources migration configuration
+
+The `.spec.migrateResources` field is optional and instructs the operator to migrate
+the Flux custom resources stored in Kubernetes etcd to the latest API version as
+specified in the Flux CRDs. The migration runs after the Flux distribution is upgraded
+from a minor version to another and only when a new API version is introduced.
+
+By default, the field value is set to `true`. Note that disabling the migration may
+result in upgrade failures due to deprecated API versions being removed in future Flux releases.
+
 ## FluxInstance Status
 
 ### Conditions
@@ -645,7 +701,7 @@ Status:
 `.status.lastAppliedRevision` is the last revision of the Flux distribution
 that was successfully applied to the cluster.
 
-The revision is in the format `<version>@sha256:<digest>`. 
+The revision is in the format `<version>@sha256:<digest>`.
 
 The version is the Flux distribution exact semver version that was applied to the cluster.
 
