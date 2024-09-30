@@ -93,6 +93,7 @@ nav:
     - Marketplaces:
         - AWS Marketplace: marketplace/aws.md
     - Versions:
+        - Release v2.4: releases/release-v2.4.md
         - Release v2.3: releases/release-v2.3.md
         - Release v2.2: releases/release-v2.2.md
   - Flux Operator:
