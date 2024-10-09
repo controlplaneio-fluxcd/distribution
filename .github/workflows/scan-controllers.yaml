@@ -29,7 +29,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
       - name: Login to GitHub Container Registry
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
         with:
@@ -56,7 +56,7 @@ jobs:
       - name: Scan source-controller
         id: sc
         continue-on-error: true
-        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8 # v0.24.0
+        uses: aquasecurity/trivy-action@a20de5420d57c4102486cdd9578b45609c99d7eb # v0.26.0
         with:
           image-ref: ${{ steps.images.outputs.sc }}
           format: 'table'
@@ -70,7 +70,7 @@ jobs:
       - name: Scan kustomize-controller
         id: kc
         continue-on-error: true
-        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8 # v0.24.0
+        uses: aquasecurity/trivy-action@a20de5420d57c4102486cdd9578b45609c99d7eb # v0.26.0
         with:
           image-ref: ${{ steps.images.outputs.kc }}
           format: 'table'
@@ -84,7 +84,7 @@ jobs:
       - name: Scan helm-controller
         id: hc
         continue-on-error: true
-        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8 # v0.24.0
+        uses: aquasecurity/trivy-action@a20de5420d57c4102486cdd9578b45609c99d7eb # v0.26.0
         with:
           image-ref: ${{ steps.images.outputs.hc }}
           format: 'table'
@@ -98,7 +98,7 @@ jobs:
       - name: Scan notification-controller
         id: nc
         continue-on-error: true
-        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8 # v0.24.0
+        uses: aquasecurity/trivy-action@a20de5420d57c4102486cdd9578b45609c99d7eb # v0.26.0
         with:
           image-ref: ${{ steps.images.outputs.nc }}
           format: 'table'
@@ -112,7 +112,7 @@ jobs:
       - name: Scan image-reflector-controller
         id: irc
         continue-on-error: true
-        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8 # v0.24.0
+        uses: aquasecurity/trivy-action@a20de5420d57c4102486cdd9578b45609c99d7eb # v0.26.0
         with:
           image-ref: ${{ steps.images.outputs.irc }}
           format: 'table'
@@ -126,7 +126,7 @@ jobs:
       - name: Scan image-automation-controller
         id: iac
         continue-on-error: true
-        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8 # v0.24.0
+        uses: aquasecurity/trivy-action@a20de5420d57c4102486cdd9578b45609c99d7eb # v0.26.0
         with:
           image-ref: ${{ steps.images.outputs.iac }}
           format: 'table'
