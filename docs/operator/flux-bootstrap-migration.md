@@ -94,3 +94,35 @@ To finalize the migration, remove the Flux manifests from the Git repository:
 2. Delete the `flux-system` directory from the repository `clusters/my-cluster` directory.
 3. Optionally, place the `FluxInstance` YAML manifest in the `clusters/my-cluster` directory.
 4. Commit and push the changes to the Flux repository.
+
+## Automating Flux Operator upgrades
+
+If the Flux Operator is installed with Helm, you can automate the upgrade process using a Flux `HelmRelease`:
+
+```yaml
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: flux-operator
+  namespace: flux-system
+spec:
+  interval: 10m
+  url: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
+  ref:
+    semver: '*'
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: flux-operator
+  namespace: flux-system
+spec:
+  interval: 10m
+  releaseName: flux-operator
+  chartRef:
+    kind: OCIRepository
+    name: flux-operator
+```
+
+Commit and push the manifest to the Flux repository, and the operator will be automatically upgraded
+when a new Helm chart version is released.
