@@ -7,5 +7,22 @@
   "last_updated": "2024-09-30T17:26:04.422544+03:00",
   "version": 2,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2024-47534"
+      },
+      "timestamp": "2024-10-10T09:15:06.353901+03:00",
+      "products": [
+        {
+          "@id": "pkg:golang/github.com/theupdateframework/go-tuf@v0.7.0"
+        },
+        {
+          "@id": "pkg:golang/github.com/theupdateframework/go-tuf"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The vulnerable code is not executed by Flux"
+    }
   ]
 }
