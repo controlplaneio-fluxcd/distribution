@@ -107,7 +107,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m
-  url: oci://ghcr.io/controlplaneio-fluxcd/charts
+  url: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
   ref:
     semver: '*'
 ---
