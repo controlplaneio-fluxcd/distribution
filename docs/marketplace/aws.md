@@ -13,7 +13,7 @@ deploy the Flux Operator on your EKS cluster using the Helm chart provided in th
 
 ### IAM Permissions
 
-First you need grant the `flux-operator` service account from the `flux-system` namespace the
+First you need to grant the `flux-operator` service account from the `flux-system` namespace the
 necessary permissions to access the AWS Marketplace metering API. You can use the AWS managed
 policy `arn:aws:iam::aws:policy/AWSMarketplaceMeteringRegisterUsage` for this purpose.
 
@@ -107,12 +107,13 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.3.x"
+    version: "2.4.x"
     registry: "709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd"
   cluster:
     type: aws
     multitenant: false
     networkPolicy: true
+    domain: "cluster.local"
 ```
 
 Apply the manifest with `kubectl`:
@@ -138,13 +139,14 @@ metadata:
     fluxcd.controlplane.io/reconcileTimeout: "5m"
 spec:
   distribution:
-    version: "2.3.x"
+    version: "2.4.x"
     registry: "709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd"
     artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
   cluster:
     type: aws
     multitenant: false
     networkPolicy: true
+    domain: "cluster.local"
 ```
 
 For more information, see the Flux Operator [documentation](../operator/index.md).
