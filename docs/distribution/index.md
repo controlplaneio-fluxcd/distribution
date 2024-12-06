@@ -85,7 +85,7 @@ container base images, OS packages, and Go dependencies.
 
 ## Distribution Components
 
-The Controlplane distribution comprises Open Source components such as the CNCF
+The ControlPlane distribution comprises Open Source components such as the CNCF
 [Flux controllers](../guides/flux-architecture.md#flux-controllers) (Apache 2.0 License)
 and the [Flux Operator](../operator/index.md) (AGPL-3.0 License).
 
