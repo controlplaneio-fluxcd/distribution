@@ -24,3 +24,43 @@ jobs:
       registry: ghcr.io/controlplaneio-fluxcd/${{ matrix.variant }}
     secrets:
       pull-token: ${{ secrets.GHCR_READONLY }}
+
+  scan-operator:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - name: Latest release
+      id: release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        VERSION=$(gh release view --repo controlplaneio-fluxcd/flux-operator --json tagName -q .tagName)
+        echo version=${VERSION} >> $GITHUB_OUTPUT
+    - name: Export image
+      id: image
+      run: echo fo=${REGISTRY}:${VERSION} >> $GITHUB_OUTPUT
+      env:
+        REGISTRY: ghcr.io/controlplaneio-fluxcd/flux-operator
+        VERSION: ${{ steps.release.outputs.version }}
+    - name: Scan flux-operator
+      id: fo
+      continue-on-error: true
+      uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0 # v0.29.0
+      with:
+        image-ref: ${{ steps.image.outputs.fo }}
+        format: table
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: os,library
+        severity: CRITICAL,HIGH,MEDIUM
+    - name: Scan result
+      run: |
+        echo "flux-operator: ${{ steps.fo.outcome }}"
+        echo "image: ${{ steps.image.outputs.fo }}"
+    - name: Check result
+      shell: bash
+      if : steps.fo.outcome == 'failure'
+      run: |
+        echo "One or more controllers have vulnerabilities"
+        exit 1
