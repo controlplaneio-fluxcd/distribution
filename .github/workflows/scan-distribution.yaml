@@ -55,9 +55,12 @@ jobs:
         vuln-type: os,library
         severity: CRITICAL,HIGH,MEDIUM
     - name: Scan result
+      env:
+        OUTCOME: ${{ steps.fo.outcome }}
+        IMAGE: ${{ steps.image.outputs.fo }}
       run: |
-        echo "flux-operator: ${{ steps.fo.outcome }}"
-        echo "image: ${{ steps.image.outputs.fo }}"
+        echo "flux-operator: ${OUTCOME}"
+        echo "image: ${IMAGE}"
     - name: Check result
       shell: bash
       if : steps.fo.outcome == 'failure'
