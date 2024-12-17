@@ -18,43 +18,46 @@ to the latest stable version:
 apiVersion: fluxcd.controlplane.io/v1
 kind: FluxInstance
 metadata:
-   name: flux
-   namespace: flux-system
-   annotations:
-      fluxcd.controlplane.io/reconcile: "enabled"
-      fluxcd.controlplane.io/reconcileEvery: "1h"
-      fluxcd.controlplane.io/reconcileTimeout: "3m"
+  name: flux
+  namespace: flux-system
+  annotations:
+    fluxcd.controlplane.io/reconcile: "enabled"
+    fluxcd.controlplane.io/reconcileEvery: "1h"
+    fluxcd.controlplane.io/reconcileTimeout: "3m"
 spec:
-   distribution:
-      version: "2.x"
-      registry: "ghcr.io/fluxcd"
-   components:
-      - source-controller
-      - kustomize-controller
-      - helm-controller
-      - notification-controller
-      - image-reflector-controller
-      - image-automation-controller
-   cluster:
-      type: kubernetes
-      multitenant: false
-      networkPolicy: true
-      domain: "cluster.local"
-   storage:
-      class: "standard"
-      size: "10Gi"
-   kustomize:
-      patches:
-         - target:
-              kind: Deployment
-              name: "(kustomize-controller|helm-controller)"
-           patch: |
-              - op: add
-                path: /spec/template/spec/containers/0/args/-
-                value: --concurrent=10
-              - op: add
-                path: /spec/template/spec/containers/0/args/-
-                value: --requeue-dependency=5s
+  distribution:
+    version: "2.x"
+    registry: "ghcr.io/fluxcd"
+  components:
+    - source-controller
+    - kustomize-controller
+    - helm-controller
+    - notification-controller
+    - image-reflector-controller
+    - image-automation-controller
+  cluster:
+    type: kubernetes
+    multitenant: false
+    networkPolicy: true
+    domain: "cluster.local"
+  storage:
+    class: "standard"
+    size: "10Gi"
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: flux
+  kustomize:
+    patches:
+      - target:
+          kind: Deployment
+          name: "(kustomize-controller|helm-controller)"
+        patch: |
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --concurrent=10
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --requeue-dependency=5s
 ```
 
 You can run this example by saving the manifest into `fluxinstance.yaml`.
@@ -155,9 +158,9 @@ Example using the upstream Flux distribution:
 
 ```yaml
 spec:
-   distribution:
-      version: "2.x"
-      registry: "ghcr.io/fluxcd"
+  distribution:
+    version: "2.x"
+    registry: "ghcr.io/fluxcd"
 ```
 
 #### Distribution version
@@ -170,8 +173,8 @@ to the latest Flux minor version:
 
 ```yaml
 spec:
-   distribution:
-      version: "2.x"
+  distribution:
+    version: "2.x"
 ```
 
 Example using a semver range to configure the automatic upgrade
@@ -179,16 +182,16 @@ to the latest Flux patch version of the `2.3` series:
 
 ```yaml
 spec:
-   distribution:
-      version: "2.3.x"
+  distribution:
+    version: "2.3.x"
 ```
 
 Example using an exact version to install a specific Flux version:
 
 ```yaml
 spec:
-   distribution:
-      version: "2.3.0"
+  distribution:
+    version: "2.3.0"
 ```
 
 #### Distribution registry
@@ -200,9 +203,9 @@ Example using the upstream Flux distribution registry:
 
 ```yaml
 spec:
-   distribution:
-      version: "2.x"
-      registry: "ghcr.io/fluxcd"
+  distribution:
+    version: "2.x"
+    registry: "ghcr.io/fluxcd"
 ```
 
 #### Distribution image pull secret
@@ -214,10 +217,10 @@ Example using the ControlPlane enterprise registry:
 
 ```yaml
 spec:
-   distribution:
-      version: "2.3.x"
-      registry: "ghcr.io/controlplaneio-fluxcd/distroless"
-      imagePullSecret: "flux-enterprise-auth"
+  distribution:
+    version: "2.3.x"
+    registry: "ghcr.io/controlplaneio-fluxcd/distroless"
+    imagePullSecret: "flux-enterprise-auth"
 ```
 
 The image pull secret must be created in the same namespace where the FluxInstance is deployed
@@ -244,10 +247,10 @@ Example using the official distribution artifact:
 
 ```yaml
 spec:
-   distribution:
-      version: "2.x"
-      registry: "ghcr.io/fluxcd"
-      artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
+  distribution:
+    version: "2.x"
+    registry: "ghcr.io/fluxcd"
+    artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
 ```
 
 ### Components configuration
@@ -258,11 +261,11 @@ When not specified, the operator will install the default set of components for 
 
 ```yaml
 spec:
-   components:
-      - source-controller
-      - kustomize-controller
-      - helm-controller
-      - notification-controller
+  components:
+    - source-controller
+    - kustomize-controller
+    - helm-controller
+    - notification-controller
 ```
 
 ### Cluster configuration
@@ -273,12 +276,12 @@ Example using the OpenShift cluster configuration:
 
 ```yaml
 spec:
-   cluster:
-      type: openshift
-      multitenant: true
-      tenantDefaultServiceAccount: "flux"
-      networkPolicy: true
-      domain: "cluster.local"
+  cluster:
+    type: openshift
+    multitenant: true
+    tenantDefaultServiceAccount: "flux"
+    networkPolicy: true
+    domain: "cluster.local"
 ```
 
 #### Cluster type
@@ -321,9 +324,9 @@ Example using the standard storage class:
 
 ```yaml
 spec:
-   storage:
-      class: "standard"
-      size: "10Gi"
+  storage:
+    class: "standard"
+    size: "10Gi"
 ```
 
 #### Storage size
@@ -376,6 +379,31 @@ By default, the key is set to `sharding.fluxcd.io/key`.
 
 The `.spec.sharding.shards` field is required and specifies the list of sharding values to use for the Flux controllers.
 
+### Common metadata
+
+The `.spec.commonMetadata` field is optional and specifies common metadata to be applied to all Kubernetes resources
+part of the Flux instance.
+
+It has two optional fields:
+
+- `labels`: A map used for setting [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+  on an object. Any existing label will be overridden if it matches with a key in
+  this map.
+- `annotations`: A map used for setting [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+  on an object. Any existing annotation will be overridden if it matches with a key
+  in this map.
+
+Example common metadata:
+
+```yaml
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: flux
+    annotations:
+      toolkit.fluxcd.io/tenant: sre-team
+```
+
 ### Kustomize patches
 
 The `.spec.kustomize.patches` field is optional and specifies the Kustomize patches to apply to the Flux controllers.
@@ -425,6 +453,9 @@ Sync fields:
 - `path`: The path to the source directory containing the kustomize overlay or plain Kubernetes manifests to sync from.
 - `pullSecret`: The name of the Kubernetes secret that contains the credentials to pull the source repository. This field is optional.
 - `interval`: The sync interval. This field is optional, when not set the default is `1m`.
+- `name`: The name of the generated Flux source and Kustomization objects.
+  This field is optional, when not set the default is the FluxInstance namespace name.
+  Note that this field is considered immutable, and cannot be changed after the FluxInstance is created.
 
 #### Sync from Git over HTTP/S
 
