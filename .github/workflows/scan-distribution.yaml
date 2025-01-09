@@ -61,9 +61,31 @@ jobs:
       run: |
         echo "flux-operator: ${OUTCOME}"
         echo "image: ${IMAGE}"
+    - name: Get Job URL
+      if: steps.fo.outcome == 'failure'
+      id: job-url
+      run: |
+        url=$(gh run view ${GITHUB_RUN_ID} --repo ${GITHUB_REPO} --json jobs --jq ".jobs[] | select(.name == \"${GITHUB_JOB}\") | .url")
+        echo "url: $url"
+        echo url=$url >> $GITHUB_OUTPUT
+      env:
+        GITHUB_JOB: ${{ github.job }}
+        GITHUB_RUN_ID: ${{ github.run_id }}
+        GITHUB_REPO: ${{ github.repository }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: zulip/github-actions-zulip/send-message@e4c8f27c732ba9bd98ac6be0583096dea82feea5 # v1.0.2
+      if: steps.fo.outcome == 'failure'
+      with:
+        email: ${{ secrets.ZULIP_EMAIL }}
+        api-key: ${{ secrets.ZULIP_API_KEY }}
+        organization-url: ${{ secrets.ZULIP_ORGANIZATION_URL }}
+        type: stream
+        to: team-flux
+        topic: cve-alerts
+        content: 'Flux Enterprise ${{ github.job }} CVE alert: ${{ steps.job-url.outputs.url }}'
     - name: Check result
       shell: bash
-      if : steps.fo.outcome == 'failure'
+      if: steps.fo.outcome == 'failure'
       run: |
         echo "One or more controllers have vulnerabilities"
         exit 1
