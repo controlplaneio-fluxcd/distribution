@@ -49,6 +49,39 @@ To list the events related to the Flux instance, run:
 kubectl -n flux-system events --for fluxinstance/flux
 ```
 
+The Flux Operator integrates with notification-controller. To receive notifications with the
+events issued by the operator, you can configure alerting as follows:
+
+```yaml
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Provider
+metadata:
+  name: slack-bot
+  namespace: flux-system
+spec:
+  type: slack
+  channel: general
+  address: https://slack.com/api/chat.postMessage
+  secretRef:
+    name: slack-bot-token
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: flux-operator
+  namespace: flux-system
+spec:
+  providerRef:
+    name: slack-bot
+  eventSeverity: info
+  eventSources:
+    - kind: FluxInstance
+      name: flux
+```
+
+Besides Slack, the notification-controller supports other providers like Microsoft Teams, Datadog, Grafana, etc.,
+for more information see the [alert provider documentation](https://fluxcd.io/flux/components/notification/providers/).
+
 ## Prometheus Metrics
 
 The Flux Operator exports metrics in the Prometheus format for monitoring
