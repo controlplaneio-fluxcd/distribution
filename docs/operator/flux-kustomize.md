@@ -191,4 +191,43 @@ spec:
           kind: Kustomization
 ```
 
+### Cluster sync GitRepository verification
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+spec:
+  kustomize:
+    patches:
+      - patch: |
+          - op: add
+            path: /spec/verify
+            value:
+              mode: HEAD
+              secretRef:
+                name: pgp-public-keys
+        target:
+          kind: GitRepository
+```
+
+### Cluster sync OCIRepository keyless verification
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+spec:
+  kustomize:
+    patches:
+      - patch: |
+          - op: add
+            path: /spec/verify
+            value:
+              provider: cosign
+              matchOIDCIdentity:
+              - issuer: ^https://token\.actions\.githubusercontent\.com$
+                subject: ^https://github\.com/<owner>/<repo>/\.github/workflows/push-flux-system\.yml@refs/heads/main$
+        target:
+          kind: OCIRepository
+```
+
 For more examples, refer to the [Flux bootstrap documentation](https://fluxcd.io/flux/installation/configuration/).
