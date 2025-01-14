@@ -22,8 +22,13 @@ jobs:
     with:
       check-scan-error: true
       registry: ghcr.io/controlplaneio-fluxcd/${{ matrix.variant }}
+      caller-job: scan (${{ matrix.variant }})
+      variant: ${{ matrix.variant }}
     secrets:
       pull-token: ${{ secrets.GHCR_READONLY }}
+      zulip-email: ${{ secrets.ZULIP_EMAIL }}
+      zulip-api-key: ${{ secrets.ZULIP_API_KEY }}
+      zulip-organization-url: ${{ secrets.ZULIP_ORGANIZATION_URL }}
 
   scan-operator:
     runs-on: ubuntu-latest
@@ -82,7 +87,7 @@ jobs:
         type: stream
         to: team-flux
         topic: cve-alerts
-        content: 'Flux Enterprise ${{ github.job }} CVE alert: ${{ steps.job-url.outputs.url }}'
+        content: 'Flux Operator CVE alert: ${{ steps.job-url.outputs.url }}'
     - name: Check result
       shell: bash
       if: steps.fo.outcome == 'failure'
