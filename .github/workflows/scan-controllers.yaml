@@ -17,27 +17,10 @@ on:
         required: false
         type: boolean
         default: true
-      caller-job:
-        description: 'job that called this workflow'
-        required: false
-        type: string
-      variant:
-        description: 'controller variant'
-        type: string
-        required: false
     secrets:
       pull-token:
         description: 'GitHub Container Registry read-only token'
         required: true
-      zulip-email:
-        description: 'Zulip email'
-        required: false
-      zulip-api-key:
-        description: 'Zulip API key'
-        required: false
-      zulip-organization-url:
-        description: 'Zulip organization URL'
-        required: false
 
 jobs:
   trivy:
@@ -168,28 +151,6 @@ jobs:
           echo "image: ${{ steps.images.outputs.irc }}"
           echo "image-automation-controller: ${{ steps.iac.outcome }}"
           echo "image: ${{ steps.images.outputs.iac }}"
-      - name: Get Job URL
-        if: inputs.check-scan-error && (steps.sc.outcome == 'failure' || steps.kc.outcome == 'failure' || steps.hc.outcome == 'failure' || steps.nc.outcome == 'failure' || steps.irc.outcome == 'failure' || steps.iac.outcome == 'failure')
-        id: job-url
-        run: |
-          url=$(gh run view ${GITHUB_RUN_ID} --repo ${GITHUB_REPO} --json jobs --jq ".jobs[] | select(.name == \"${GITHUB_JOB}\") | .url")
-          echo "url: $url"
-          echo url=$url >> $GITHUB_OUTPUT
-        env:
-          GITHUB_JOB: ${{ inputs.caller-job }} / ${{ github.job }}
-          GITHUB_RUN_ID: ${{ github.run_id }}
-          GITHUB_REPO: ${{ github.repository }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: zulip/github-actions-zulip/send-message@e4c8f27c732ba9bd98ac6be0583096dea82feea5 # v1.0.2
-        if: inputs.check-scan-error && (steps.sc.outcome == 'failure' || steps.kc.outcome == 'failure' || steps.hc.outcome == 'failure' || steps.nc.outcome == 'failure' || steps.irc.outcome == 'failure' || steps.iac.outcome == 'failure')
-        with:
-          email: ${{ secrets.zulip-email }}
-          api-key: ${{ secrets.zulip-api-key }}
-          organization-url: ${{ secrets.zulip-organization-url }}
-          type: stream
-          to: team-flux
-          topic: cve-alerts
-          content: 'Flux Enterprise ${{ inputs.variant }} CVE alert: ${{ steps.job-url.outputs.url }}'
       - name: Check result
         shell: bash
         if: inputs.check-scan-error && (steps.sc.outcome == 'failure' || steps.kc.outcome == 'failure' || steps.hc.outcome == 'failure' || steps.nc.outcome == 'failure' || steps.irc.outcome == 'failure' || steps.iac.outcome == 'failure')
