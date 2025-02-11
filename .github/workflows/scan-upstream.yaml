@@ -1,12 +1,9 @@
-name: Upstream vulnerability scan
+name: Vulnerability scan - Upstream
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '00 3 * * 1-5'
-
-permissions:
-  contents: read
+  - cron: '00 3 * * 1-5'
 
 jobs:
   scan:
