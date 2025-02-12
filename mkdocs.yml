@@ -7,7 +7,7 @@ site_url: https://fluxcd.control-plane.io
 repo_name: distribution
 repo_url: https://github.com/controlplaneio-fluxcd/distribution
 edit_uri: ""
-copyright: Copyright © 2024 ControlPlane Ltd.
+copyright: Copyright © 2025 ControlPlane Ltd.
 
 home:
   image: images/flux-ee-white.png
@@ -100,16 +100,17 @@ nav:
   - Flux Operator:
       - Introduction: operator/index.md
       - Installation: operator/install.md
-      - Configuration:
+      - Instance Configuration:
           - Flux Controllers: operator/flux-config.md
           - Flux Cluster Sync: operator/flux-sync.md
           - Flux Customization: operator/flux-kustomize.md
           - Flux Sharding: operator/flux-sharding.md
-      - Guides:
           - Flux Monitoring: operator/monitoring.md
           - Bootstrap Migration: operator/flux-bootstrap-migration.md
       - API Reference:
-          - Flux Instance: operator/fluxinstance.md
-          - Flux Report: operator/fluxreport.md
+          - FluxInstance: operator/fluxinstance.md
+          - FluxReport: operator/fluxreport.md
+          - ResourceSet: operator/resourceset.md
+          - ResourceSetInputProvider: operator/resourcesetinputprovider.md
   - Pricing: pricing/index.md
   - Contact: https://control-plane.io/contact/?inquiry=fluxcd

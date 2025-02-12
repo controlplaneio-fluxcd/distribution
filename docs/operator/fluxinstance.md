@@ -11,7 +11,7 @@ where the flux-operator is deployed.
 
 The following example shows a FluxInstance custom resource that
 installs the upstream Flux distribution with all available components,
-and configures the flux-operator to automatically upgrade Flux
+and configures the flux-operator to automatically upgrade Flux 
 to the latest stable version:
 
 ```yaml
@@ -62,84 +62,84 @@ spec:
 
 You can run this example by saving the manifest into `fluxinstance.yaml`.
 
-1. Apply the resource on the cluster:
+**1.** Apply the resource on the cluster:
 
-   ```shell
-   kubectl apply -f fluxinstance.yaml
-   ```
+```shell
+kubectl apply -f fluxinstance.yaml
+```
 
-2. Run `kubectl get fluxinstance` to see the status of the resource:
+**2.** Run `kubectl get fluxinstance` to see the status of the resource:
 
-   ```console
-    $ kubectl -n flux-system get fluxinstance
-    NAME   AGE   READY   STATUS                           REVISION
-    flux   59s   True    Reconciliation finished in 52s   v2.3.0@sha256:4cc5babdb1279ad0177bf513292deadbfa3f7b7c3da0be7fa53b39ab434f7219
-   ```
+```console
+$ kubectl -n flux-system get fluxinstance
+NAME   AGE   READY   STATUS                           REVISION
+flux   59s   True    Reconciliation finished in 52s   v2.3.0@sha256:4cc5babdb1279ad0177bf513292deadbfa3f7b7c3da0be7fa53b39ab434f7219
+```
 
-3. Run `kubectl describe fluxinstance` to see the reconciliation status components, conditions and events:
+**3.** Run `kubectl describe fluxinstance` to see the reconciliation status components, conditions and events:
 
-    ```console
-    $ kubectl -n flux-system describe fluxinstance flux
-    Status:
-      Components:
-        Digest:      sha256:161da425b16b64dda4b3cec2ba0f8d7442973aba29bb446db3b340626181a0bc
-        Name:        source-controller
-        Repository:  ghcr.io/fluxcd/source-controller
-        Tag:         v1.3.0
-        Digest:      sha256:48a032574dd45c39750ba0f1488e6f1ae36756a38f40976a6b7a588d83acefc1
-        Name:        kustomize-controller
-        Repository:  ghcr.io/fluxcd/kustomize-controller
-        Tag:         v1.3.0
-        Digest:      sha256:a67a037faa850220ff94d8090253732079589ad9ff10b6ddf294f3b7cd0f3424
-        Name:        helm-controller
-        Repository:  ghcr.io/fluxcd/helm-controller
-        Tag:         v1.0.1
-        Digest:      sha256:c0fab940c7e578ea519097d36c040238b0cc039ce366fdb753947428bbf0c3d6
-        Name:        notification-controller
-        Repository:  ghcr.io/fluxcd/notification-controller
-        Tag:         v1.3.0
-        Digest:      sha256:aed795c7a8b85bca93f6d199d5a14bbefaf925ad5aa5316b32a716cfa4070d0b
-        Name:        image-reflector-controller
-        Repository:  ghcr.io/fluxcd/image-reflector-controller
-        Tag:         v0.32.0
-        Digest:      sha256:ab5097213194f3cd9f0e68d8a937d94c4fc7e821f6544453211e94815b282aa2
-        Name:        image-automation-controller
-        Repository:  ghcr.io/fluxcd/image-automation-controller
-        Tag:         v0.38.0
-      Conditions:
-        Last Transition Time:  2024-06-03T12:20:57Z
-        Message:               Reconciliation finished in 52s
-        Observed Generation:   1
-        Reason:                ReconciliationSucceeded
-        Status:                True
-        Type:                  Ready
-      Last Applied Revision:    v2.3.0@sha256:4cc5babdb1279ad0177bf513292deadbfa3f7b7c3da0be7fa53b39ab434f7219
-      Last Attempted Revision:  v2.3.0@sha256:4cc5babdb1279ad0177bf513292deadbfa3f7b7c3da0be7fa53b39ab434f7219
-    Events:
-      Type    Reason                   Age    From             Message
-      ----    ------                   ----   ----             -------
-      Normal  Progressing              6m20s  flux-controller  Installing revision v2.3.0@sha256:4cc5babdb1279ad0177bf513292deadbfa3f7b7c3da0be7fa53b39ab434f7219
-      Normal  ReconciliationSucceeded  5m9s   flux-controller  Reconciliation finished in 52s
-    ```
+```console
+$ kubectl -n flux-system describe fluxinstance flux
+Status:
+  Components:
+    Digest:      sha256:161da425b16b64dda4b3cec2ba0f8d7442973aba29bb446db3b340626181a0bc
+    Name:        source-controller
+    Repository:  ghcr.io/fluxcd/source-controller
+    Tag:         v1.3.0
+    Digest:      sha256:48a032574dd45c39750ba0f1488e6f1ae36756a38f40976a6b7a588d83acefc1
+    Name:        kustomize-controller
+    Repository:  ghcr.io/fluxcd/kustomize-controller
+    Tag:         v1.3.0
+    Digest:      sha256:a67a037faa850220ff94d8090253732079589ad9ff10b6ddf294f3b7cd0f3424
+    Name:        helm-controller
+    Repository:  ghcr.io/fluxcd/helm-controller
+    Tag:         v1.0.1
+    Digest:      sha256:c0fab940c7e578ea519097d36c040238b0cc039ce366fdb753947428bbf0c3d6
+    Name:        notification-controller
+    Repository:  ghcr.io/fluxcd/notification-controller
+    Tag:         v1.3.0
+    Digest:      sha256:aed795c7a8b85bca93f6d199d5a14bbefaf925ad5aa5316b32a716cfa4070d0b
+    Name:        image-reflector-controller
+    Repository:  ghcr.io/fluxcd/image-reflector-controller
+    Tag:         v0.32.0
+    Digest:      sha256:ab5097213194f3cd9f0e68d8a937d94c4fc7e821f6544453211e94815b282aa2
+    Name:        image-automation-controller
+    Repository:  ghcr.io/fluxcd/image-automation-controller
+    Tag:         v0.38.0
+  Conditions:
+    Last Transition Time:  2024-06-03T12:20:57Z
+    Message:               Reconciliation finished in 52s
+    Observed Generation:   1
+    Reason:                ReconciliationSucceeded
+    Status:                True
+    Type:                  Ready
+  Last Applied Revision:    v2.3.0@sha256:4cc5babdb1279ad0177bf513292deadbfa3f7b7c3da0be7fa53b39ab434f7219
+  Last Attempted Revision:  v2.3.0@sha256:4cc5babdb1279ad0177bf513292deadbfa3f7b7c3da0be7fa53b39ab434f7219
+Events:
+  Type    Reason                   Age    From             Message
+  ----    ------                   ----   ----             -------
+  Normal  Progressing              6m20s  flux-controller  Installing revision v2.3.0@sha256:4cc5babdb1279ad0177bf513292deadbfa3f7b7c3da0be7fa53b39ab434f7219
+  Normal  ReconciliationSucceeded  5m9s   flux-controller  Reconciliation finished in 52s
+```
 
-4. Run `kubectl logs` on the flux-operator pod to see the reconciliation logs:
+**4.** Run `kubectl logs` on the flux-operator pod to see the reconciliation logs:
 
-    ```shell
-    kubectl -n flux-system logs deployment/flux-operator
-    ```
+```shell
+kubectl -n flux-system logs deployment/flux-operator
+```
 
-5. Run `kubectl events` to see the events generated by the flux-operator:
+**5.** Run `kubectl events` to see the events generated by the flux-operator:
 
-    ```shell
-    kubectl -n flux-system events --for FluxInstance/flux
-    ```
+```shell
+kubectl -n flux-system events --for FluxInstance/flux
+```
 
-6. Run `kubectl delete` to remove the FluxInstance resource and
+**6.** Run `kubectl delete` to remove the FluxInstance resource and
    to uninstall Flux without affecting any Flux-managed workloads:
 
-    ```shell
-    kubectl -n flux-system delete FluxInstance/flux
-    ```
+```shell
+kubectl -n flux-system delete FluxInstance/flux
+```
 
 ## Writing a FluxInstance spec
 
@@ -252,6 +252,25 @@ spec:
     registry: "ghcr.io/fluxcd"
     artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
 ```
+
+#### Distribution artifact pull secret
+
+The `.spec.distribution.artifactPullSecret` field is optional and specifies the name of the Kubernetes secret
+that contains the credentials to pull the Flux distribution manifests from a private registry.
+
+Example using a private registry:
+
+```yaml
+spec:
+  distribution:
+    version: "2.3.x"
+    registry: "ghcr.io/controlplaneio-fluxcd/distroless"
+    artifact: "oci://private.registry.com/controlplaneio-fluxcd/flux-operator-manifests"
+    artifactPullSecret: "flux-private-auth"
+```
+
+The manifest pull secret must be created in the same namespace where the FluxInstance is deployed
+and must be of type `kubernetes.io/dockerconfigjson`.
 
 ### Components configuration
 
@@ -455,8 +474,8 @@ Sync fields:
 - `pullSecret`: The name of the Kubernetes secret that contains the credentials to pull the source repository. This field is optional.
 - `interval`: The sync interval. This field is optional, when not set the default is `1m`.
 - `name`: The name of the generated Flux source and Kustomization objects.
-  This field is optional, when not set the default is the FluxInstance namespace name.
-  Note that this field is considered immutable, and cannot be changed after the FluxInstance is created.
+   This field is optional, when not set the default is the FluxInstance namespace name.
+   Note that this field is considered immutable, and cannot be changed after the FluxInstance is created.
 
 #### Sync from Git over HTTP/S
 
@@ -733,7 +752,7 @@ Status:
 `.status.lastAppliedRevision` is the last revision of the Flux distribution
 that was successfully applied to the cluster.
 
-The revision is in the format `<version>@sha256:<digest>`.
+The revision is in the format `<version>@sha256:<digest>`. 
 
 The version is the Flux distribution exact semver version that was applied to the cluster.
 
