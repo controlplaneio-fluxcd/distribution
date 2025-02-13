@@ -107,6 +107,9 @@ nav:
           - Flux Sharding: operator/flux-sharding.md
           - Flux Monitoring: operator/monitoring.md
           - Bootstrap Migration: operator/flux-bootstrap-migration.md
+      - ResourceSet Guides:
+          - Introduction: operator/resourcesets/introduction.md
+          - App Definitions: operator/resourcesets/app-definition.md
       - API Reference:
           - FluxInstance: operator/fluxinstance.md
           - FluxReport: operator/fluxreport.md
