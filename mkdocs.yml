@@ -109,7 +109,9 @@ nav:
           - Bootstrap Migration: operator/flux-bootstrap-migration.md
       - ResourceSet Guides:
           - Introduction: operator/resourcesets/introduction.md
-          - App Definitions: operator/resourcesets/app-definition.md
+          - Application Definitions: operator/resourcesets/app-definition.md
+          - Self-Service Environments:
+            -  Ephemeral Environments for GitHub Pull Requests: operator/resourcesets/github-pull-requests.md
       - API Reference:
           - FluxInstance: operator/fluxinstance.md
           - FluxReport: operator/fluxreport.md

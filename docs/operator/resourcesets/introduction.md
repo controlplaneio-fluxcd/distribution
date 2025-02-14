@@ -3,13 +3,13 @@
 The Flux Operator ResourceSet API offers a high-level abstraction for defining
 and managing Flux resources and related Kubernetes objects as a single unit.
 The ResourceSet API is designed to reduce the complexity of GitOps workflows
-and to enable self-service operations for developers and platform teams.
+and to enable self-service for developers and platform teams.
 
 ## Features
 
 ### Application definitions
 
-The CNCF Flux project does not enforce a specific application definition format or structure,
+The CNCF Flux project does not impose a specific application definition format or structure,
 instead it provides a set of APIs that can be used as building blocks to define and manage the
 continuous delivery of applications in a GitOps manner.
 
@@ -29,6 +29,9 @@ One such use-case is deploying app code and/or config changes made in a GitHub P
 or GitLab Merge Request to an ephemeral environment for testing and validation.
 The Flux Operator has the ability to create, update and delete application instances on-demand
 based on the ResourceSet definitions and Pull/Merge Requests state.
+
+To get started with self-service environments see
+the [Ephemeral Environments for GitHub Pull Requests](./github-pull-requests.md) guide.
 
 Another use-case is to automate the provisioning of new environments for feature branches,
 and for long-lived branches to deploy to dedicated namespaces and/or clusters, effectively

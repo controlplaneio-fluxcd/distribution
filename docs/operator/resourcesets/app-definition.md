@@ -13,18 +13,16 @@ in a cluster with different configurations.
 each target cluster that are deployed by Flux from a management cluster.
 
 **Multi-tenancy provisioning** - Generate a set of resources
-(Namespace, ServiceAccount, RoleBinding) for each tenant with specific roles and permissions
-to simplify the onboarding of new tenants and their applications on a shared cluster.
+(Namespace, ServiceAccount, RoleBinding, Flux GitRepository, Kustomization) for each tenant
+with specific roles and permissions to simplify the onboarding of new tenants
+and their applications on a shared cluster.
 
 **Dependency management** - Define dependencies between apps to ensure that the resources
 are applied in the correct order. The dependencies are more flexible  than in Flux,
 they can be for other ResourceSets, CRDs, or any other Kubernetes object.
-When defining dependencies, these can be for checking the existence of a resource,
+When defining dependencies, these can be for checking the existence of a resource
 or for waiting for a resource to be ready. To evaluate the readiness of a dependent resource,
 users can specify a CEL expression that is evaluated against the resource status.
-
-To learn more about the ResourceSet API, its templating capabilities and dependency management,
-see the [ResourceSet API reference](../resourceset.md).
 
 ## Multi-instance example
 
@@ -80,7 +78,7 @@ spec:
         namespace: apps
       spec:
         interval: 10m
-        url: oci://ghcr.io/org/charts/app1
+        url: oci://my.registry/org/charts/app1
         ref:
           semver: << inputs.app.version | quote >>
     - apiVersion: helm.toolkit.fluxcd.io/v2
@@ -101,7 +99,7 @@ spec:
 ## Multi-cluster example
 
 When deploying applications across multiple environments from a management cluster, the ResourceSet API
-can simplify the definition of the application and its configuration for each target cluster.
+can simplify the definition of the application and its customization for each target cluster.
 
 With Kustomize overlays the following structure is needed to deploy an app instance
 per environment:
@@ -149,8 +147,8 @@ spec:
         name: app1-<< inputs.cluster >>
         namespace: apps
       spec:
-        interval: 10m
-        url: https://github.com/org/app1-deploy
+        interval: 5m
+        url: https://my.git/org/app1-deploy
         ref:
           branch: << inputs.branch >>
     - apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -159,7 +157,9 @@ spec:
         name: app1-<< inputs.cluster >>
         namespace: apps
       spec:
-        interval: 1h
+        interval: 10m
+        prune: true
+        path: "./deploy"
         sourceRef:
           kind: GitRepository
           name: app1-<< inputs.cluster >>
@@ -209,3 +209,8 @@ flux-operator -n apps suspend rset podinfo
 # Resume a ResourceSet 
 flux-operator -n apps resume rset podinfo
 ```
+
+## Further reading
+
+To learn more about the ResourceSet API, its templating capabilities and dependency management,
+see the [ResourceSet API reference](../resourceset.md).
