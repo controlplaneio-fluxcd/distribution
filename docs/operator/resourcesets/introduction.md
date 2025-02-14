@@ -30,8 +30,10 @@ or GitLab Merge Request to an ephemeral environment for testing and validation.
 The Flux Operator has the ability to create, update and delete application instances on-demand
 based on the ResourceSet definitions and Pull/Merge Requests state.
 
-To get started with self-service environments see
-the [Ephemeral Environments for GitHub Pull Requests](./github-pull-requests.md) guide.
+To get started with self-service environments see the following guides:
+
+- [Ephemeral Environments for GitHub Pull Requests](./github-pull-requests.md)
+- [Ephemeral Environments for GitLab Merge Requests](./gitlab-merge-requests.md)
 
 Another use-case is to automate the provisioning of new environments for feature branches,
 and for long-lived branches to deploy to dedicated namespaces and/or clusters, effectively
