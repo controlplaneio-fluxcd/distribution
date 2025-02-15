@@ -171,6 +171,84 @@ spec:
             name: << inputs.cluster >>-kubeconfig
 ```
 
+## Monorepo example
+
+When an application is composed of multiple microservices, the ResourceSet API can be used
+to define the deployment of each component and the rollout order based on dependencies.
+
+Assuming the following directory structure in a monorepo where the Kubernetes resources
+are templated using Flux variables:
+
+```text
+deploy/
+├── frontend
+│   ├── deployment.yaml
+│   ├── ingress.yaml
+│   └── service.yaml
+├── backend
+│   ├── deployment.yaml
+│   └── service.yaml
+└── database
+    ├── deployment.yaml
+    ├── pvc.yaml
+    └── service.yaml
+```
+
+Using a ResourceSet, we can generate one GitRepository that points to the monorepo,
+and a set of Flux Kustomizations one for each component that depends on the previous one:
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: app1
+  namespace: apps
+spec:
+  inputs:
+    - service: "frontend"
+      dependsOn: "backend"
+    - service: "backend"
+      dependsOn: "database"
+    - service: "database"
+      dependsOn: ""
+  resourcesTemplate: |
+    ---
+    apiVersion: source.toolkit.fluxcd.io/v1
+    kind: GitRepository
+    metadata:
+      name: app1
+      namespace: apps
+    spec:
+      interval: 5m
+      url: https://my.git/org/app1-deploy
+      ref:
+        branch: main
+    ---
+    apiVersion: kustomize.toolkit.fluxcd.io/v1
+    kind: Kustomization
+    metadata:
+      name: app1-<< inputs.service >>
+      namespace: apps
+    spec:
+      << if inputs.dependsOn >>
+      dependsOn:
+        - name: app1-<< inputs.dependsOn >>
+      << end >>
+      path: "./deploy/<< inputs.service >>"
+      interval: 30m
+      retryInterval: 5m
+      prune: true
+      wait: true
+      timeout: 5m
+      sourceRef:
+        kind: GitRepository
+        name: app1
+      postBuild:
+        substituteFrom:
+          - kind: ConfigMap
+            name: app1-vars
+```
+
 ## Working with ResourceSets
 
 When working with ResourceSets, you can use the Flux Operator CLI for building ResourceSet
