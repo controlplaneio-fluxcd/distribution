@@ -13,7 +13,7 @@ applications changes made in GitHub Pull Requests to ephemeral environments for 
 - The app is accessible at a preview URL composed of the PR number and the app name.
 - The developers iterate over changes, with each push to the PR branch triggering a Helm release upgrade in the cluster.
 - The developers are notified of the Helm release status in the Slack channel.
-- Once the PR is approved and merged, the Flux Operator uninstalls the Helm release form the cluster.
+- Once the PR is approved and merged, the Flux Operator uninstalls the Helm release from the cluster.
 
 ## GitOps workflow
 
@@ -24,7 +24,37 @@ manifests part of the GitOps workflow should be stored in the Git repository use
 ### Preview namespace
 
 First we'll create a dedicated namespace called `app-preview` where all the app instances generated
-from GitHub Pull Requests will be deployed. In this namespace, we'll create a Kubernetes Secret
+from GitHub Pull Requests will be deployed. We'll also create a service account for Flux that limits
+the permissions to the `app-preview` namespace.
+
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app-preview
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flux
+  namespace: app-preview
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: flux
+  namespace: app-preview
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admin
+subjects:
+  - kind: ServiceAccount
+    name: flux
+    namespace: app-preview
+```
+
+In this namespace, we'll create a Kubernetes Secret
 containing a GitHub PAT that grants read access to the app repository and PRs.
 
 ```shell
@@ -92,6 +122,7 @@ metadata:
   name: app
   namespace: app-preview
 spec:
+  serviceAccountName: flux
   inputsFrom:
     - apiVersion: fluxcd.controlplane.io/v1
       kind: ResourceSetInputProvider
@@ -119,6 +150,7 @@ spec:
           event.toolkit.fluxcd.io/branch: << inputs.branch | quote >>
           event.toolkit.fluxcd.io/author: << inputs.author | quote >>
       spec:
+        serviceAccountName: flux
         interval: 10m
         releaseName: app-<< inputs.id >>
         chart:
