@@ -54,15 +54,28 @@ subjects:
     namespace: app-preview
 ```
 
-In this namespace, we'll create a Kubernetes Secret
+### GitHub authentication
+
+In the `app-preview` namespace, we'll create a Kubernetes Secret
 containing a GitHub PAT that grants read access to the app repository and PRs.
 
 ```shell
-flux -n app-preview create secret git github-token-readonly \
+flux -n app-preview create secret git github-auth \
   --url=https://github.com/org/app \
   --username=flux \
   --password=${GITHUB_TOKEN}
 ```
+
+Alternatively, we can use a GitHub App token for authentication:
+
+```shell
+flux create secret githubapp github-auth \
+  --app-id="1" \
+  --app-installation-id="2" \
+  --app-private-key=./private-key-file.pem
+```
+
+Note that GitHub App support was added in Flux v2.5 and Flux Operator v0.15.
 
 ### ResourceSet input provider
 
@@ -81,7 +94,7 @@ spec:
   type: GitHubPullRequest
   url: https://github.com/org/app
   secretRef:
-    name: github-token-readonly
+    name: github-auth
   filter:
     labels:
       - "deploy/flux-preview"
@@ -134,12 +147,13 @@ spec:
         name: app-<< inputs.id >>
         namespace: app-preview
       spec:
+        provider: generic # or 'github' if using GitHub App
         interval: 1h
         url: https://github.com/org/app
         ref:
           commit: << inputs.sha >>
         secretRef:
-          name: github-token-readonly
+          name: github-auth
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
       metadata:
