@@ -66,12 +66,10 @@ We offer the following distribution channels for the Flux controllers:
 
 The ControlPlane distribution offers hardened
 [Google Distroless](https://github.com/GoogleContainerTools/distroless)-based Flux images
-to organizations that must comply with NIST FIPS-140-2 standards.
+to organizations that must comply with NIST FIPS-140-3 standards.
 
-The Flux controller binaries are statically linked against the
-[Google BoringSSL](https://boringssl.googlesource.com/boringssl/) libraries,
-and the Go runtime restricts all TLS configuration to FIPS-approved settings
-by importing the `crypto/tls/fipsonly` package.
+The Flux controller binaries are built using the [FIPS 140-3 mode](https://go.dev/doc/security/fips140),
+and the Go runtime is configured to restrict all TLS configuration to FIPS-approved settings.
 
 ### Mainline
 

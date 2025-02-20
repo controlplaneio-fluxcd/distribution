@@ -107,7 +107,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.4.x"
+    version: "2.5.x"
     registry: "709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd"
   cluster:
     type: aws

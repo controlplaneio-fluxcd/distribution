@@ -24,7 +24,7 @@ inputs:
     description: "Name of the Kubernetes image pull secret for accessing the distribution registry"
     required: false
   version:
-    description: "Distribution version e.g. v2.2.0 (defaults to latest stable release)"
+    description: "Distribution version e.g. v2.5.0 (defaults to latest stable release)"
     required: false
   bindir:
     description: "Alternative location for the Flux binary, defaults to path relative to $RUNNER_TOOL_CACHE."
