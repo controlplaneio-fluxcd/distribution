@@ -106,6 +106,7 @@ spec:
     imagePullSecret: "flux-enterprise-auth"
   cluster:
     type: kubernetes
+    domain: "cluster.local"
     multitenant: true
     networkPolicy: true
 ```
