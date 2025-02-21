@@ -24,7 +24,7 @@ manifests part of the GitOps workflow should be stored in the GitLab project use
 ### Preview namespace
 
 First we'll create a dedicated namespace called `app-preview` where all the app instances generated
-from GitHub Pull Requests will be deployed. We'll also create a service account for Flux that limits
+from GitLab Merge Requests will be deployed. We'll also create a service account for Flux that limits
 the permissions to the `app-preview` namespace.
 
 ```yaml
