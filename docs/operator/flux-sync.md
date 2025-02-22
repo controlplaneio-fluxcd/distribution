@@ -25,7 +25,7 @@ spec:
     registry: "ghcr.io/fluxcd"
   sync:
     kind: GitRepository
-    url: "https://github.com/my-org/my-fleet.git"
+    url: "https://gitlab.com/my-org/my-fleet.git"
     ref: "refs/heads/main"
     path: "clusters/my-cluster"
     pullSecret: "flux-system"
@@ -36,10 +36,63 @@ and should contain the credentials to clone the repository:
 
 ```shell
 flux create secret git flux-system \
-  --url=https://github.com/my-org/my-fleet.git \
+  --url=https://gitlab.com/my-org/my-fleet.git \
   --username=git \
-  --password=$GITHUB_TOKEN
+  --password=$GITLAB_TOKEN
 ```
+
+## Sync from a Git Repository using GitHub App auth
+
+To sync the cluster state from a GitHub repository using GitHub App authentication:
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+metadata:
+  name: flux
+  namespace: flux-system
+spec:
+  distribution:
+    version: "2.x"
+    registry: "ghcr.io/fluxcd"
+  components:
+    - source-controller
+    - kustomize-controller
+    - helm-controller
+    - notification-controller
+    - image-reflector-controller
+    - image-automation-controller
+  sync:
+    kind: GitRepository
+    url: "https://github.com/my-org/my-fleet.git"
+    ref: "refs/heads/main"
+    path: "clusters/my-cluster"
+    pullSecret: "flux-system"
+  kustomize:
+    patches:
+      - patch: |
+          - op: add
+            path: /spec/provider
+            value: github
+        target:
+          kind: GitRepository
+```
+
+The Kubernetes secret must be created in the `flux-system` namespace
+and should contain the GitHub App private key:
+
+```shell
+flux create secret githubapp flux-system \
+  --app-id=1 \
+  --app-installation-id=2 \
+  --app-private-key=./path/to/private-key-file.pem
+```
+
+!!! tip "GitHub App Support"
+
+    Note that GitHub App support was added in Flux v2.5.0 and Flux Operator v0.15.0.
+    For more information on how to create a GitHub App see the
+    Flux [GitRepository API reference](https://fluxcd.io/flux/components/source/gitrepositories/#github). 
 
 ## Sync from a Container Registry
 
