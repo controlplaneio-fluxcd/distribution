@@ -249,6 +249,53 @@ spec:
     region: "us-east-1"
 ```
 
+## GitHub Workflow
+
+To automate the build and push of the app container image to GitHub Container Registry,
+the GitHub Actions workflow should include the following steps:
+
+```yaml
+name: push-image-preview
+on:
+  pull_request:
+    branches: ['main']
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/${{ github.repository }}
+          tags: |
+            type=raw,value=${{ github.event.pull_request.head.sha }}
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          context: .
+          file: ./Dockerfile
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+```
+
+Note that we tag the container image with `${{ github.event.pull_request.head.sha }}`.
+This ensures that the image tag matches the commit SHA of the PR HEAD that the ResourceSet
+uses to deploy the app.
+
 ## Further reading
 
 To learn more about ResourceSets and the various configuration options, see the following docs:
