@@ -64,18 +64,11 @@ spec:
     - image-automation-controller
   sync:
     kind: GitRepository
+    provider: github
     url: "https://github.com/my-org/my-fleet.git"
     ref: "refs/heads/main"
     path: "clusters/my-cluster"
     pullSecret: "flux-system"
-  kustomize:
-    patches:
-      - patch: |
-          - op: add
-            path: /spec/provider
-            value: github
-        target:
-          kind: GitRepository
 ```
 
 The Kubernetes secret must be created in the `flux-system` namespace
@@ -90,7 +83,7 @@ flux create secret githubapp flux-system \
 
 !!! tip "GitHub App Support"
 
-    Note that GitHub App support was added in Flux v2.5.0 and Flux Operator v0.15.0.
+    Note that GitHub App support was added in Flux v2.5.0 and Flux Operator v0.16.0.
     For more information on how to create a GitHub App see the
     Flux [GitRepository API reference](https://fluxcd.io/flux/components/source/gitrepositories/#github). 
 
