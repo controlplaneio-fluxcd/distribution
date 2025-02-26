@@ -58,7 +58,7 @@ We offer the following distribution channels for the Flux controllers:
 <div class="grid cards" markdown>
 
 - :octicons-verified-24: __[FIPS-compliant](#fips-compliant)__
-- :octicons-commit-24: __[Mainline](#mainline)__
+- :octicons-check-circle-24: __[Mainline](#mainline)__
 
 </div>
 

@@ -13,7 +13,7 @@ It is recommended to install the operator in a dedicated namespace, such as `flu
 
 The Flux Operator can be installed using the
 [Helm chart](https://github.com/controlplaneio-fluxcd/charts/tree/main/charts/flux-operator)
-available in the ControlPlane registry:
+available in GitHub Container Registry:
 
 ```shell
 helm install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator \
@@ -71,7 +71,14 @@ spec:
   name: flux-operator
   source: operatorhubio-catalog
   sourceNamespace: olm
+  config:
+    env:
+      - name: DEFAULT_SERVICE_ACCOUNT
+        value: "flux-operator"
 ```
+
+The Flux Operator is also available in the Openshift and OKD
+[production-ready catalog](https://github.com/redhat-openshift-ecosystem/community-operators-prod).
 
 ### Kubectl
 
