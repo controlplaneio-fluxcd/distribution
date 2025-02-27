@@ -29,8 +29,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup Flux
+        id: setup
+        uses: controlplaneio-fluxcd/distribution/actions/setup@main
       - name: Update manifests
-        id: update
         uses: controlplaneio-fluxcd/distribution/actions/update@main
         with:
           path: clusters/production/flux-system
@@ -41,12 +43,12 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: update-flux-${{ steps.update.outputs.version }}
+          branch: update-flux-${{ steps.setup.outputs.version }}
           commit-message: |
-            Update manifests and image digests for Flux ${{ steps.update.outputs.version }}
-          title: Update Flux to ${{ steps.update.outputs.version }}
+            Update manifests and image digests for Flux ${{ steps.setup.outputs.version }}
+          title: Update Flux to ${{ steps.setup.outputs.version }}
           body: |
-            Update manifests and image digests for Flux ${{ steps.update.outputs.version }}
+            Update manifests and image digests for Flux ${{ steps.setup.outputs.version }}
 ```
 
 The above example will run the workflow every Monday to Friday at 7am UTC,
@@ -62,4 +64,3 @@ when new versions of the Enterprise Distribution are available.
 | `variant`           | Base image OS e.g. `alpine` or `distroless`                         | `alpine`                                                                                                                                |
 | `image-pull-secret` | Name of the Kubernetes image pull secret                            | `flux-enterprise-auth`                                                                                                                  |
 | `components`        | Flux components comma separated list                                | `source-controller,kustomize-controller,helm-controller,notification-controller,image-reflector-controller,image-automation-controller` |
-| `bindir`            | Alternative location for the Flux CLI binary                        | `$RUNNER_TOOL_CACHE`                                                                                                                    |
