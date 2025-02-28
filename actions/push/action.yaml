@@ -1,0 +1,209 @@
+name: Push Flux Artifact
+description: A GitHub Action for pushing OCI artifacs through the Flux CLI command 'flux push artifact'.
+author: Stefan Prodan
+branding:
+  color: blue
+  icon: command
+inputs:
+  repository:
+    description: >
+      The OCI repository without the oci:// prefix and without a tag or a digest.
+      For example, ghcr.io/owner/repo.
+    required: true
+  path:
+    description: >
+      The path to the local directory containing the files that must be pushed into the OCI artifact.
+      Defaults to '.'.
+    required: false
+    default: '.'
+  diff-tag:
+    description: >
+      If specified, the Flux CLI command 'flux diff artifact' will be used against this tag,
+      and the artifact will only be pushed if the diff is not empty. For example, 'latest'.
+      Additionally, if this tag is specified, the push will be only for this tag, while the
+      tags specified in the tags input will be simply copied from the resulting digest. If
+      this tag is up-to-date i.e. the diff is empty, tags from the tags input will be copied
+      from this tag.
+    required: false
+  tags:
+    description: >
+      A new-line-separated list of tags for tagging the pushed
+      OCI artifact. If empty, the Flux CLI default is used.
+      If this input is specified and the diff-tag input is not, the first tag in
+      the list will be used as the tag to push to, and the remaining tags will be
+      copied from this tag. This will produce a single digest.
+    required: false
+  ignore-paths:
+    description: >
+      A new-line-separated list of paths to ignore in the OCI
+      artifact. If empty, the Flux CLI default is used.
+      The paths are relative to the path input e.g. if path is 'clusters'
+      and ignore-paths is 'staging', then 'clusters/staging' will be ignored.
+    required: false
+  annotations:
+    description: >
+      A new-line-separated list of annotations in the
+      format key=value to add to the OCI artifact.
+    required: false
+outputs:
+  pushed:
+    description: A boolean indicating whether the OCI artifact was pushed or not.
+    value: ${{ steps.diff.outputs.pushed }}
+  digest:
+    description: The digest of the OCI artifact. Empty if the artifact was not pushed.
+    value: ${{ steps.push.outputs.digest }}
+  digest-url:
+    description: >
+      The digest URL of the OCI artifact, i.e. including the repository URL.
+      Empty if the artifact was not pushed.
+    value: ${{ steps.push.outputs.digest-url }}
+runs:
+  using: composite
+  steps:
+  - name: Check if the Flux CLI is installed
+    shell: bash
+    run: |
+      set -euo pipefail
+
+      if ! flux version --client > /dev/null 2>&1; then
+        echo ""
+        echo "The Flux CLI is not installed. Please install it first using this GitHub Action:"
+        echo ""
+        echo "  https://github.com/controlplaneio-fluxcd/distribution/tree/main/actions/setup"
+        echo ""
+        exit 1
+      fi
+
+  - name: Check if the repository is valid
+    shell: bash
+    env:
+      REPOSITORY: ${{ inputs.repository }}
+    run: |
+      set -euo pipefail
+
+      if [ "$REPOSITORY" != "$(echo $REPOSITORY | awk '{print tolower($1)}')" ]; then
+        echo ""
+        echo "The repository $REPOSITORY contains uppercase letters."
+        echo "OCI repositories must be lowercase, all the OCI tooling fails if they're not."
+        echo ""
+        exit 1
+      fi
+
+  - name: Pre-process inputs
+    id: inputs
+    shell: bash
+    env:
+      SOURCE: ${{ github.repositoryUrl }}
+      REVISION: ${{ github.ref }}@sha1:${{ github.sha }}
+      TAGS: ${{ inputs.tags }}
+      IGNORE_PATHS: ${{ inputs.ignore-paths }}
+      ANNOTATIONS: ${{ inputs.annotations }}
+    run: |
+      set -euo pipefail
+
+      source=$(echo $SOURCE | sed -e 's|^git://|https://|' -e 's/\.git$//')
+      echo "source=$source" >> $GITHUB_OUTPUT
+
+      echo "revision=$REVISION" >> $GITHUB_OUTPUT
+
+      if [ -n "$TAGS" ]; then
+        tags=$(echo "$TAGS" | xargs | sed 's/ /,/g')
+        echo "tags=$tags" >> $GITHUB_OUTPUT
+      fi
+
+      if [ -n "$IGNORE_PATHS" ]; then
+        ignore_paths=$(echo "$IGNORE_PATHS" | xargs | sed 's/ /,/g')
+        echo "ignore-paths-flag=--ignore-paths=$ignore_paths" >> $GITHUB_OUTPUT
+      fi
+
+      annotations_flag=""
+      for annotation in `echo "$ANNOTATIONS" | xargs`; do
+        annotations_flag="$annotations_flag --annotations=$annotation"
+      done
+      echo "annotations-flag=$annotations_flag" >> $GITHUB_OUTPUT
+
+  - name: Diff the OCI artifact
+    id: diff
+    shell: bash
+    env:
+      REPOSITORY: ${{ inputs.repository }}
+      INPUT_PATH: ${{ inputs.path }}
+      DIFF_TAG: ${{ inputs.diff-tag }}
+      IGNORE_PATHS_FLAG: ${{ steps.inputs.outputs.ignore-paths-flag }}
+    run: |
+      set -euo pipefail
+
+      pushed=true
+      if [ -n "$DIFF_TAG" ]; then
+        artifact_url=${REPOSITORY}:${DIFF_TAG}
+        if flux diff artifact oci://$artifact_url --path=$INPUT_PATH $IGNORE_PATHS_FLAG; then
+          pushed=false
+        fi
+      fi
+
+      echo "pushed=$pushed" >> $GITHUB_OUTPUT
+
+  - name: Push the OCI artifact
+    id: push
+    if: steps.diff.outputs.pushed == 'true'
+    shell: bash
+    env:
+      REPOSITORY: ${{ inputs.repository }}
+      INPUT_PATH: ${{ inputs.path }}
+      SOURCE: ${{ steps.inputs.outputs.source }}
+      REVISION: ${{ steps.inputs.outputs.revision }}
+      TAGS: ${{ steps.inputs.outputs.tags }}
+      DIFF_TAG: ${{ inputs.diff-tag }}
+      IGNORE_PATHS_FLAG: ${{ steps.inputs.outputs.ignore-paths-flag }}
+      ANNOTATIONS_FLAG: ${{ steps.inputs.outputs.annotations-flag }}
+    run: |
+      set -euo pipefail
+
+      artifact_url=$REPOSITORY
+      if [ -n "$DIFF_TAG" ]; then
+        artifact_url=${REPOSITORY}:${DIFF_TAG}
+      elif [ -n "$TAGS" ]; then
+        IFS=',' read -ra tag_list <<< $TAGS
+        artifact_url=${REPOSITORY}:${tag_list[0]}
+      fi
+
+      echo "Pushing $INPUT_PATH to ${artifact_url}..."
+
+      push_output=$(flux push artifact oci://$artifact_url \
+        --path="$INPUT_PATH" \
+        --source="$SOURCE" \
+        --revision="$REVISION" \
+        $IGNORE_PATHS_FLAG \
+        $ANNOTATIONS_FLAG \
+        --output json)
+
+      digest=$(echo $push_output | jq -r .digest)
+      digest_url=$(echo $push_output | jq -r '. | .repository + "@" + .digest')
+
+      echo "Digest: $digest"
+      echo "Digest URL: $digest_url"
+
+      echo "digest=$digest" >> $GITHUB_OUTPUT
+      echo "digest-url=$digest_url" >> $GITHUB_OUTPUT
+
+  - name: Copy tags
+    shell: bash
+    if: steps.inputs.outputs.tags != ''
+    env:
+      DIGEST_URL: ${{ steps.push.outputs.digest-url }}
+      DIFF_TAG_URL: ${{ inputs.repository }}:${{ inputs.diff-tag }}
+      TAGS: ${{ steps.inputs.outputs.tags }}
+    run: |
+      set -euo pipefail
+
+      source_artifact_url=$DIGEST_URL
+      if [ "$source_artifact_url" == "" ]; then
+        # In this case a diff tag was specified and the diff was empty,
+        # so a new artifact was not pushed. We then use the diff tag to
+        # copy the tags from it.
+        source_artifact_url=$DIFF_TAG_URL
+      fi
+
+      echo "Tagging $source_artifact_url with ${TAGS}..."
+
+      flux tag artifact oci://$source_artifact_url --tag=$TAGS
