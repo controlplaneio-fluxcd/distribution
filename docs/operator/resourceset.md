@@ -287,6 +287,50 @@ spec:
 In the above example, the `OCIRepository` resource is created only once
 and referred by all `HelmRelease` resources.
 
+#### Copying data from existing ConfigMaps and Secrets
+
+To generate resources with data copied from existing ConfigMaps and Secrets,
+the `fluxcd.toolkit.fluxcd.io/copyFrom: namespace/name` annotation must be
+set in the ConfigMap or Secret template.
+
+Example of copying data from an existing ConfigMap and Secret:
+
+```yaml
+spec:
+  inputs:
+    - tenant: "team1"
+    - tenant: "team2"
+  resources:
+    - apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: << inputs.tenant >>
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: runtime-info
+        namespace: << inputs.tenant >>
+        annotations:
+          fluxcd.controlplane.io/copyFrom: "flux-system/runtime-info"
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: docker-auth
+        namespace: << inputs.tenant >>
+        annotations:
+          fluxcd.controlplane.io/copyFrom: "flux-system/docker-auth"
+```
+
+In the above example, a ConfigMap and a Secret are generated for each tenant
+with the data copied from the `runtime-info` and `docker-auth` ConfigMap and Secret
+from the `flux-system` namespace. If the source data changes, the operator will
+update the generated resources accordingly on the next
+[reconciliation interval](#reconciliation-configuration).
+
+Note that on [multi-tenant clusters](#role-based-access-control), the service account
+used by the ResourceSet must have the necessary permissions to read the ConfigMaps
+and Secrets from the source namespace.
+
 #### Conditionally resource exclusion
 
 To exclude a resource based on input values, the `fluxcd.controlplane.io/reconcile` annotation can be set
@@ -631,3 +675,25 @@ Status:
       Id: default_podinfo_apps_Deployment
       V:  v1
 ```
+
+## ResourceSet Metrics
+
+The Flux Operator exports Prometheus metrics for the ResourceSet objects
+that can be used to monitor the reconciliation status.
+
+Metrics:
+
+```text
+flux_resourceset_info{uid, kind, name, exported_namespace, ready, suspended, revision}
+```
+
+Labels:
+
+- `uid`: The Kubernetes unique identifier of the resource.
+- `kind`: The kind of the resource (e.g. `ResourceSet`).
+- `name`: The name of the resource (e.g. `podinfo`).
+- `exported_namespace`: The namespace where the resource is deployed (e.g. `apps`).
+- `ready`: The readiness status of the resource (e.g. `True`, `False` or `Unkown`).
+- `reason`: The reason for the readiness status (e.g. `ReconciliationSucceeded`, `BuildFailed`, `HealthCheckFailed`, etc.).
+- `suspended`: The suspended status of the resource (e.g. `True` or `False`).
+- `revision`: The revision last applied on the cluster (e.g. `sha256:75aa209c6a...`).
