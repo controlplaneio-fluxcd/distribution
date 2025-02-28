@@ -144,6 +144,28 @@ Labels:
 - `registry`: The container registry used by the instance (e.g. `ghcr.io/fluxcd`).
 - `revision`: The Flux revision installed by the instance (e.g. `v2.3.0@sha256:75aa209c6a...`).
 
+### Flux ResourceSet Metrics
+
+The Flux Operator exports metrics for the [ResourceSet APIs](resourcesets/introduction.md)
+that can be used to monitor the reconciliation status.
+
+Metrics:
+
+```text
+flux_resourceset_info{uid, kind, name, exported_namespace, ready, suspended, revision}
+flux_resourcesetinputprovider_info{uid, kind, name, exported_namespace, ready, suspended, url}
+```
+
+Labels:
+
+- `uid`: The Kubernetes unique identifier of the resource.
+- `kind`: The kind of the resource (e.g. `ResourceSet`).
+- `name`: The name of the resource (e.g. `podinfo`).
+- `exported_namespace`: The namespace where the resource is deployed (e.g. `apps`).
+- `ready`: The readiness status of the resource (e.g. `True`, `False` or `Unkown`).
+- `reason`: The reason for the readiness status (e.g. `ReconciliationSucceeded`, `BuildFailed`, `HealthCheckFailed`, etc.).
+- `suspended`: The suspended status of the resource (e.g. `True` or `False`).
+
 ### Flux Resource Metrics
 
 The Flux Operator exports metrics for all Flux resources found in the cluster.
