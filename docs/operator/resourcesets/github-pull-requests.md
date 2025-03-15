@@ -12,7 +12,7 @@ applications changes made in GitHub Pull Requests to ephemeral environments for 
 - Flux Operator installs a Helm release using the PR number and the commit SHA inputs to deploy the app and chart changes in the cluster.
 - The app is accessible at a preview URL composed of the PR number and the app name.
 - The developers iterate over changes, with each push to the PR branch triggering a Helm release upgrade in the cluster.
-- The developers are notified of the Helm release status in the Slack channel.
+- The developers are notified of the Helm release status in the Slack channel and on the PR page.
 - Once the PR is approved and merged, the Flux Operator uninstalls the Helm release from the cluster.
 
 ## GitOps workflow
@@ -161,6 +161,7 @@ spec:
         namespace: app-preview
         annotations:
           event.toolkit.fluxcd.io/preview-url: "https://app-<< inputs.id >>.example.com"
+          event.toolkit.fluxcd.io/pr-number: << inputs.id | quote >>
           event.toolkit.fluxcd.io/branch: << inputs.branch | quote >>
           event.toolkit.fluxcd.io/author: << inputs.author | quote >>
       spec:
@@ -189,7 +190,7 @@ and is also used to compose the Ingress host name where the app can be accessed.
 The latest commit SHA pushed to the PR HEAD is passed as `<< inputs.sha >>`,
 the SHA is used to set the app image tag in the Helm release values.
 
-The preview URL, branch name and author are set as annotations on the HelmRelease
+The preview URL, PR number, branch name and author are set as annotations on the HelmRelease
 object to enrich the Flux [notifications](#notifications) that the dev team receives.
 
 To verify the ResourceSet templates are valid, we can use the
@@ -248,6 +249,78 @@ spec:
     cluster: "preview-cluster-1"
     region: "us-east-1"
 ```
+
+### Status reporting on Pull Requests
+
+To notify the developers of the preview deployment status, we can use the
+Flux [GitHub Dispatch Provider](https://fluxcd.io/flux/components/notification/providers/#github-dispatch)
+to post a comment on the PR page with the preview URL and the latest Helm release status.
+
+First we create a Flux Provider and Alert in the `app-preview` namespace:
+
+```yaml
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Provider
+metadata:
+  name: github-dispatch
+  namespace: app-preview
+spec:
+  type: githubdispatch
+  address: https://github.com/org/app
+  secretRef:
+    name: github-auth
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: github-pr-comment
+  namespace: app-preview
+spec:
+  providerRef:
+    name: github-dispatch
+  eventSources:
+    - kind: HelmRelease
+      name: '*'
+```
+
+Then in the GitHub repository, we need to define a GitHub Workflow that parses the Flux event
+metadata and posts a comment on the PR page:
+
+```yaml
+name: flux-preview-comment
+on:
+  repository_dispatch:
+jobs:
+  comment:
+    if: github.event.client_payload.metadata.pr-number != ''
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Compose Comment
+        run: |
+          tee comment.md <<'EOF'
+          Flux deployment ${{ github.event.client_payload.severity }}:
+          - Preview URL: ${{ github.event.client_payload.metadata.preview-url }}
+          - Revision: ${{ github.event.client_payload.metadata.revision }}
+          - Status: ${{ github.event.client_payload.message }}
+          EOF
+      - name: Post Comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.client_payload.metadata.pr-number }}
+        run: |
+          gh pr comment $PR_NUMBER \
+          --repo $GITHUB_REPO \
+          --body-file comment.md \
+          --create-if-none \
+          --edit-last
+```
+
+Every time a commit is pushed to the PR branch, the Flux Operator will upgrade the Helm release
+and will update the PR comment with the latest deployment status and the preview URL.
 
 ## GitHub Workflow
 
