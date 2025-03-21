@@ -87,6 +87,66 @@ flux create secret githubapp flux-system \
     For more information on how to create a GitHub App see the
     Flux [GitRepository API reference](https://fluxcd.io/flux/components/source/gitrepositories/#github). 
 
+
+## Sync from an Azure DevOps Repository using AKS Workload Identity
+
+To sync the cluster state from Azure DevOps using AKS Workload Identity:
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+metadata:
+  name: flux
+  namespace: flux-system
+spec:
+  distribution:
+    version: "2.x"
+    registry: "ghcr.io/fluxcd"
+  components:
+    - source-controller
+    - kustomize-controller
+    - helm-controller
+    - notification-controller
+  sync:
+    kind: GitRepository
+    provider: azure
+    url: "https://dev.azure.com/my-org/_git/my-fleet"
+    ref: "refs/heads/main"
+    path: "clusters/my-cluster"
+  kustomize:
+    patches:
+    - patch: |-
+        apiVersion: v1
+        kind: ServiceAccount
+        metadata:
+          name: source-controller
+          annotations:
+            azure.workload.identity/client-id: <AZURE_CLIENT_ID>
+            azure.workload.identity/tenant-id: <AZURE_TENANT_ID>
+      target:
+        kind: ServiceAccount
+        name: source-controller
+    - patch: |-
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: source-controller
+        spec:
+          template:
+            metadata:
+              labels:
+                azure.workload.identity/use: "true" 
+      target:
+        kind: Deployment
+        name: source-controller
+```
+
+!!! tip "Workload Identity Support"
+
+    Note that Azure DevOps Workload Identity support was added in Flux v2.5.0 and Flux Operator v0.18.0.
+    For more information on how to configure Azure DevOps Workload Identity see the
+    Flux [GitRepository API reference](https://fluxcd.io/flux/components/source/gitrepositories/#azure). 
+
 ## Sync from a Container Registry
 
 To sync the cluster state from a container registry where the Kubernetes manifests
