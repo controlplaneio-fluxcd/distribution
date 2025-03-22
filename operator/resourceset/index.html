@@ -1,0 +1,2741 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="ControlPlane offers a hardened, enterprise-grade distribution and
+support services for the CNCF-graduated Flux project.
+">
+      
+      
+        <meta name="author" content="ControlPLane">
+      
+      
+        <link rel="canonical" href="https://fluxcd.control-plane.io/operator/resourceset/">
+      
+      
+        <link rel="prev" href="../fluxreport/">
+      
+      
+        <link rel="next" href="../resourcesetinputprovider/">
+      
+      
+      <link rel="icon" href="../../images/cp-logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.9">
+    
+    
+      
+        <title>ResourceSet - ControlPlane Enterprise for Flux CD</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.4af4bdda.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+
+<meta property="og:url" content="https://fluxcd.control-plane.io/operator/resourceset/">
+<meta property="og:image" content="https://fluxcd.control-plane.io/images/logo-card.png">
+<meta property="og:image:alt" content="fluxcd.control-plane.io">
+<meta property="og:image:type" content="image/png">
+
+<meta property="og:title" content="ResourceSet">
+<meta property="og:description" content="ControlPlane offers a hardened, enterprise-grade distribution and
+support services for the CNCF-graduated Flux project.
+">
+
+
+<meta name="twitter:site" content="@controlplaneio">
+<meta name="twitter:creator" content="@controlplaneio">
+<meta name="twitter:image:alt" content="fluxcd.control-plane.io">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fluxcd.control-plane.io/images/images/cp-logo.png">
+<meta property="twitter:title" content="ResourceSet">
+<meta property="twitter:description" content="ControlPlane offers a hardened, enterprise-grade distribution and
+support services for the CNCF-graduated Flux project.
+">
+
+
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#resourceset-crd" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="ControlPlane Enterprise for Flux CD" class="md-header__button md-logo" aria-label="ControlPlane Enterprise for Flux CD" data-md-component="logo">
+      
+  <img src="../../images/cp-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ControlPlane Enterprise for Flux CD
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ResourceSet
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/controlplaneio-fluxcd/distribution" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    distribution
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../distribution/" class="md-tabs__link">
+          
+  
+  Flux Distribution
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  Flux Operator
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../pricing/" class="md-tabs__link">
+        
+  
+    
+  
+  Pricing
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://control-plane.io/contact/?inquiry=fluxcd" class="md-tabs__link">
+        
+  
+    
+  
+  Contact
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="ControlPlane Enterprise for Flux CD" class="md-nav__button md-logo" aria-label="ControlPlane Enterprise for Flux CD" data-md-component="logo">
+      
+  <img src="../../images/cp-logo.png" alt="logo">
+
+    </a>
+    ControlPlane Enterprise for Flux CD
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/controlplaneio-fluxcd/distribution" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    distribution
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Flux Distribution
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Flux Distribution
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../distribution/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../distribution/install/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../distribution/security/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Security
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Guides
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/flux-architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Flux Architecture Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/d1-architecture-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D1 Reference Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/flux-policies/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Flux Multitenant Policies
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/flux-generic-helm-chart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generic Helm Chart Pattern
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/flux-cli-quick-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Flux CLI Quick Reference
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Marketplaces
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            Marketplaces
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../marketplace/aws/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS Marketplace
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Versions
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6">
+            <span class="md-nav__icon md-icon"></span>
+            Versions
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/release-v2.5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Release v2.5
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/release-v2.4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Release v2.4
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/release-v2.3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Release v2.3
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/release-v2.2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Release v2.2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Flux Operator
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Flux Operator
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../install/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Instance Configuration
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Instance Configuration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flux-config/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Flux Controllers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flux-sync/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Flux Cluster Sync
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flux-kustomize/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Flux Customization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flux-sharding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Flux Sharding
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monitoring/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Flux Monitoring
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flux-bootstrap-migration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bootstrap Migration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    ResourceSet Guides
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            ResourceSet Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resourcesets/introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resourcesets/app-definition/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Application Definitions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4_3" id="__nav_3_4_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Self-Service Environments
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            Self-Service Environments
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resourcesets/github-pull-requests/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ephemeral Environments for GitHub Pull Requests
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resourcesets/gitlab-merge-requests/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ephemeral Environments for GitLab Merge Requests
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fluxinstance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FluxInstance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fluxreport/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FluxReport
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    ResourceSet
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    ResourceSet
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing-a-resourceset-spec" class="md-nav__link">
+    <span class="md-ellipsis">
+      Writing a ResourceSet spec
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Writing a ResourceSet spec">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inputs-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inputs configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resources-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resources configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Resources configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#templating-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Templating functions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resource-deduplication" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resource deduplication
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#copying-data-from-existing-configmaps-and-secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Copying data from existing ConfigMaps and Secrets
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conditionally-resource-exclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conditionally resource exclusion
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resources-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resources template
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common metadata
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependency-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependency management
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dependency management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cel-readiness-expressions" class="md-nav__link">
+    <span class="md-ellipsis">
+      CEL readiness expressions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reconciliation-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reconciliation configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#health-check-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Health check configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#role-based-access-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Role-based access control
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#garbage-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Garbage collection
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resourceset-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      ResourceSet Status
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ResourceSet Status">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conditions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conditions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Conditions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reconciling-resourceset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reconciling ResourceSet
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ready-resourceset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ready ResourceSet
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failed-resourceset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Failed ResourceSet
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inventory-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inventory status
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resourceset-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      ResourceSet Metrics
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resourcesetinputprovider/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ResourceSetInputProvider
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pricing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pricing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://control-plane.io/contact/?inquiry=fluxcd" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contact
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing-a-resourceset-spec" class="md-nav__link">
+    <span class="md-ellipsis">
+      Writing a ResourceSet spec
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Writing a ResourceSet spec">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inputs-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inputs configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resources-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resources configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Resources configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#templating-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Templating functions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resource-deduplication" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resource deduplication
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#copying-data-from-existing-configmaps-and-secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Copying data from existing ConfigMaps and Secrets
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conditionally-resource-exclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conditionally resource exclusion
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resources-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resources template
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common metadata
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependency-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependency management
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dependency management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cel-readiness-expressions" class="md-nav__link">
+    <span class="md-ellipsis">
+      CEL readiness expressions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reconciliation-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reconciliation configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#health-check-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Health check configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#role-based-access-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Role-based access control
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#garbage-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Garbage collection
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resourceset-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      ResourceSet Status
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ResourceSet Status">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conditions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conditions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Conditions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reconciling-resourceset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reconciling ResourceSet
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ready-resourceset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ready ResourceSet
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failed-resourceset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Failed ResourceSet
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inventory-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inventory status
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resourceset-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      ResourceSet Metrics
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="resourceset-crd">ResourceSet CRD</h1>
+<p><strong>ResourceSet</strong> is a declarative API for generating a group of Kubernetes objects
+based on a matrix of input values and a set of templated resources.</p>
+<h2 id="example">Example</h2>
+<p>The following example shows a ResourceSet that generates an application instance consisting of a
+Flux HelmRelease and OCIRepository for each tenant with a specific version and replica count.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fluxcd.controlplane.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ResourceSet</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">podinfo</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">fluxcd.controlplane.io/reconcile</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;enabled&quot;</span>
+<span class="w">    </span><span class="nt">fluxcd.controlplane.io/reconcileEvery</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;30m&quot;</span>
+<span class="w">    </span><span class="nt">fluxcd.controlplane.io/reconcileTimeout</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;5m&quot;</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">commonMetadata</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">podinfo</span>
+<span class="w">  </span><span class="nt">inputs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tenant</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;team1&quot;</span>
+<span class="w">      </span><span class="nt">app</span><span class="p">:</span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;6.7.x&quot;</span>
+<span class="w">       </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tenant</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;team2&quot;</span>
+<span class="w">      </span><span class="nt">app</span><span class="p">:</span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;6.6.x&quot;</span>
+<span class="w">       </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">  </span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source.toolkit.fluxcd.io/v1beta2</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OCIRepository</span>
+<span class="w">      </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">podinfo-&lt;&lt; inputs.tenant &gt;&gt;</span>
+<span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="w">      </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10m</span>
+<span class="w">        </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oci://ghcr.io/stefanprodan/charts/podinfo</span>
+<span class="w">        </span><span class="nt">ref</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">semver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;&lt; inputs.app.version | quote &gt;&gt;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">helm.toolkit.fluxcd.io/v2</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HelmRelease</span>
+<span class="w">      </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">podinfo-&lt;&lt; inputs.tenant &gt;&gt;</span>
+<span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="w">      </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1h</span>
+<span class="w">        </span><span class="nt">releaseName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">podinfo-&lt;&lt; inputs.tenant &gt;&gt;</span>
+<span class="w">        </span><span class="nt">chartRef</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OCIRepository</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">podinfo-&lt;&lt; inputs.tenant &gt;&gt;</span>
+<span class="w">        </span><span class="nt">values</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">replicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;&lt; inputs.app.replicas | int &gt;&gt;</span>
+</code></pre></div>
+<p>You can run this example by saving the manifest into <code>podinfo.yaml</code>.</p>
+<p><strong>1.</strong> Apply the ResourceSet on the cluster:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>podinfo.yaml
+</code></pre></div>
+<p><strong>2.</strong> Wait for the ResourceSet to reconcile the generated resources:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">wait</span><span class="w"> </span>resourceset/podinfo<span class="w"> </span>--for<span class="o">=</span><span class="nv">condition</span><span class="o">=</span>ready<span class="w"> </span>--timeout<span class="o">=</span>5m
+</code></pre></div>
+<p><strong>3.</strong> Run <code>kubectl get resourceset</code> to see the status of the resource:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>kubectl<span class="w"> </span>get<span class="w"> </span>resourceset
+<span class="go">NAME      AGE   READY   STATUS</span>
+<span class="go">podinfo   59s   True    Reconciliation finished in 52s</span>
+</code></pre></div>
+<p><strong>4.</strong> Run <code>kubectl describe resourceset</code> to see the reconciliation status conditions and events:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>kubectl<span class="w"> </span>describe<span class="w"> </span>resourceset<span class="w"> </span>podinfo
+<span class="go">Status:</span>
+<span class="go">  Conditions:</span>
+<span class="go">    Last Transition Time:  2024-09-24T09:58:53Z</span>
+<span class="go">    Message:               Reconciliation finished in 52s</span>
+<span class="go">    Observed Generation:   1</span>
+<span class="go">    Reason:                ReconciliationSucceeded</span>
+<span class="go">    Status:                True</span>
+<span class="go">    Type:                  Ready</span>
+<span class="go">Events:</span>
+<span class="go">  Type    Reason          Age   From           Message</span>
+<span class="go">  ----    ------          ----  ----           -------</span>
+<span class="go">  Normal  ApplySucceeded  72s   flux-operator  HelmRelease/default/podinfo-team1 created</span>
+<span class="go">                                               HelmRelease/default/podinfo-team2 created</span>
+<span class="go">                                               OCIRepository/default/podinfo-team1 created</span>
+<span class="go">                                               OCIRepository/default/podinfo-team2 created</span>
+<span class="go">  Normal  ReconciliationSucceeded  72s  flux-operator  Reconciliation finished in 52s</span>
+</code></pre></div>
+<p><strong>5.</strong> Run <code>kubectl events</code> to see the events generated by the flux-operator:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>events<span class="w"> </span>--for<span class="w"> </span>resourceset/podinfo
+</code></pre></div>
+<p><strong>6.</strong> Run <code>kubectl delete</code> to remove the ResourceSet and its generated resources:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>resourceset<span class="w"> </span>podinfo
+</code></pre></div>
+<h2 id="writing-a-resourceset-spec">Writing a ResourceSet spec</h2>
+<p>As with all other Kubernetes config, a ResourceSet needs <code>apiVersion</code>,
+<code>kind</code>, <code>metadata.name</code> and <code>metadata.namespace</code> fields.
+The name of a ResourceSet object must be a valid <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/names#dns-subdomain-names">DNS subdomain name</a>.
+A ResourceSet also needs a <a href="https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"><code>.spec</code> section</a>.</p>
+<h3 id="inputs-configuration">Inputs configuration</h3>
+<p>The <code>.spec.inputs</code> field is optional and specifies a list of input values
+to be used in the resources templates.</p>
+<p>An input value is a key-value pair of strings and structs, where the key is the input name
+which can be referenced in the resource templates using the <code>&lt;&lt; inputs.name &gt;&gt;</code> syntax.</p>
+<p>Example of static inputs:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">inputs</span><span class="p">:</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tenant</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">team1</span>
+<span class="w">     </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restricted</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tenant</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">team2</span>
+<span class="w">     </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">privileged</span>
+</code></pre></div>
+<p>The <code>.spec.inputsFrom</code> field is optional and specifies a list of <a href="../resourcesetinputprovider/">ResourceSetInputProvider</a>
+objects that provide dynamic input values to the ResourceSet.</p>
+<p>Example of dynamic inputs generated from GitHub Pull Requests:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">inputsFrom</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fluxcd.controlplane.io/v1</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ResourceSetInputsProvider</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">podinfo-pull-requests</span>
+</code></pre></div>
+<p>At runtime, the operator will fetch the input values every time the <code>ResourceSetInputProvider</code>
+reconciler detects a change in the upstream source.</p>
+<p>When both <code>.spec.inputs</code> and <code>.spec.inputsFrom</code> are set, the resulting inputs are the union of the two.</p>
+<h3 id="resources-configuration">Resources configuration</h3>
+<p>The <code>.spec.resources</code> field is optional and specifies the list of Kubernetes resource
+to be generated and reconciled on the cluster.</p>
+<p>The resources can be templated using the <code>&lt;&lt; inputs.name &gt;&gt;</code> syntax. The templating engine
+is based on Go text template. The <code>&lt;&lt;  &gt;&gt;</code> delimiters are used instead of <code>{{  }}</code> to avoid
+conflicts with Helm templating and allow ResourceSets to be included in Helm charts.</p>
+<p>Example of templated resources:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">inputs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tenant</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">team1</span>
+<span class="w">      </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tenant</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">team2</span>
+<span class="w">      </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster-admin</span>
+<span class="w">  </span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Namespace</span>
+<span class="w">      </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;&lt; inputs.tenant &gt;&gt;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceAccount</span>
+<span class="w">      </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux</span>
+<span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;&lt; inputs.tenant &gt;&gt;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoleBinding</span>
+<span class="w">      </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux</span>
+<span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;&lt; inputs.tenant &gt;&gt;</span>
+<span class="w">      </span><span class="nt">subjects</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceAccount</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux</span>
+<span class="w">          </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;&lt; inputs.tenant &gt;&gt;</span>
+<span class="w">          </span><span class="nt">roleRef</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRole</span>
+<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;&lt; inputs.role &gt;&gt;</span>
+<span class="w">            </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
+</code></pre></div>
+<p>The above example will generate a <code>Namespace</code>, <code>ServiceAccount</code> and <code>RoleBinding</code> for each tenant
+with the specified role.</p>
+<h4 id="templating-functions">Templating functions</h4>
+<p>The templating engine supports <a href="https://go-task.github.io/slim-sprig/">slim-sprig</a> functions.</p>
+<p>It is recommended to use the <code>quote</code> function when templating strings to avoid issues with
+special characters e.g. <code>&lt;&lt; inputs.version | quote &gt;&gt;</code>.</p>
+<p>When templating integers, use the <code>int</code> function to convert the string to an integer
+e.g. <code>&lt;&lt; inputs.replicas | int &gt;&gt;</code>.</p>
+<p>When templating booleans, use the <code>bool</code> function to convert the string to a boolean
+e.g. <code>&lt;&lt; inputs.enabled | bool &gt;&gt;</code>.</p>
+<p>When using integer or boolean inputs as metadata label values, use the <code>quote</code> function to convert
+the value to a string e.g. <code>&lt;&lt; inputs.enabled | quote &gt;&gt;</code>.</p>
+<p>When templating nested fields, use the <code>toYaml</code>  and <code>nindent</code> functions
+to properly format the string e.g.:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">inputs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tenant</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">team1</span>
+<span class="w">      </span><span class="nt">layerSelector</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">mediaType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;application/vnd.cncf.helm.chart.content.v1.tar+gzip&quot;</span>
+<span class="w">        </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">copy</span>
+<span class="w">  </span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source.toolkit.fluxcd.io/v1beta2</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OCIRepository</span>
+<span class="w">      </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;&lt; inputs.tenant &gt;&gt;</span>
+<span class="w">      </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">layerSelector</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;&lt; inputs.layerSelector | toYaml | nindent 4 &gt;&gt;</span>
+</code></pre></div>
+<p>In addition to the slim-sprig functions, a <code>slugify</code> function is available to normalize a string for use in a Kubernetes
+<a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#syntax-and-character-set">label value</a>
+e.g. <code>&lt;&lt; inputs.tenant | slugify &gt;&gt;</code>.</p>
+<h4 id="resource-deduplication">Resource deduplication</h4>
+<p>The flux-operator deduplicates resources based on the
+<code>apiVersion</code>, <code>kind</code>, <code>metadata.name</code> and <code>metadata.namespace</code> fields.</p>
+<p>This allows defining shared resources that are applied only once, regardless of the number of inputs.</p>
+<p>Example of a shared Flux source:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">inputs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tenant</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;team1&quot;</span>
+<span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tenant</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;team2&quot;</span>
+<span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3&quot;</span>
+<span class="w">  </span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source.toolkit.fluxcd.io/v1beta2</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OCIRepository</span>
+<span class="w">      </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">podinfo</span>
+<span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="w">      </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10m</span>
+<span class="w">        </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oci://ghcr.io/stefanprodan/charts/podinfo</span>
+<span class="w">        </span><span class="nt">ref</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">semver</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;*&#39;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">helm.toolkit.fluxcd.io/v2</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HelmRelease</span>
+<span class="w">      </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">podinfo-&lt;&lt; inputs.tenant &gt;&gt;</span>
+<span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="w">      </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1h</span>
+<span class="w">        </span><span class="nt">releaseName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">podinfo-&lt;&lt; inputs.tenant &gt;&gt;</span>
+<span class="w">        </span><span class="nt">chartRef</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OCIRepository</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">podinfo</span>
+<span class="w">        </span><span class="nt">values</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">replicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;&lt; inputs.replicas | int &gt;&gt;</span>
+</code></pre></div>
+<p>In the above example, the <code>OCIRepository</code> resource is created only once
+and referred by all <code>HelmRelease</code> resources.</p>
+<h4 id="copying-data-from-existing-configmaps-and-secrets">Copying data from existing ConfigMaps and Secrets</h4>
+<p>To generate resources with data copied from existing ConfigMaps and Secrets,
+the <code>fluxcd.toolkit.fluxcd.io/copyFrom: namespace/name</code> annotation must be
+set in the ConfigMap or Secret template.</p>
+<p>Example of copying data from an existing ConfigMap and Secret:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">inputs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tenant</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;team1&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tenant</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;team2&quot;</span>
+<span class="w">  </span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Namespace</span>
+<span class="w">      </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;&lt; inputs.tenant &gt;&gt;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+<span class="w">      </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">runtime-info</span>
+<span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;&lt; inputs.tenant &gt;&gt;</span>
+<span class="w">        </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">fluxcd.controlplane.io/copyFrom</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;flux-system/runtime-info&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="w">      </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker-auth</span>
+<span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;&lt; inputs.tenant &gt;&gt;</span>
+<span class="w">        </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">fluxcd.controlplane.io/copyFrom</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;flux-system/docker-auth&quot;</span>
+</code></pre></div>
+<p>In the above example, a ConfigMap and a Secret are generated for each tenant
+with the data copied from the <code>runtime-info</code> and <code>docker-auth</code> ConfigMap and Secret
+from the <code>flux-system</code> namespace. If the source data changes, the operator will
+update the generated resources accordingly on the next
+<a href="#reconciliation-configuration">reconciliation interval</a>.</p>
+<p>Note that on <a href="#role-based-access-control">multi-tenant clusters</a>, the service account
+used by the ResourceSet must have the necessary permissions to read the ConfigMaps
+and Secrets from the source namespace.</p>
+<h4 id="conditionally-resource-exclusion">Conditionally resource exclusion</h4>
+<p>To exclude a resource based on input values, the <code>fluxcd.controlplane.io/reconcile</code> annotation can be set
+to <code>disabled</code> on the resource metadata. This will prevent the resource from being reconciled by the operator.</p>
+<p>Example of excluding a resource based on an input value:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">inputs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tenant</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;team1&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tenant</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;team2&quot;</span>
+<span class="w">  </span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Namespace</span>
+<span class="w">      </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;&lt; inputs.tenant &gt;&gt;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceAccount</span>
+<span class="w">      </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux</span>
+<span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;&lt; inputs.tenant &gt;&gt;</span>
+<span class="w">        </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">fluxcd.controlplane.io/reconcile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;&lt; if eq inputs.tenant &quot;team1&quot; &gt;&gt;enabled&lt;&lt; else &gt;&gt;disabled&lt;&lt; end &gt;&gt;</span>
+</code></pre></div>
+<p>In the above example, the <code>ServiceAccount</code> resource is generated only for the <code>team1</code> tenant.</p>
+<h3 id="resources-template">Resources template</h3>
+<p>The <code>.spec.resourcesTemplate</code> field is optional and offers an alternative to the <code>.spec.resources</code>.
+The <code>.spec.resourcesTemplate</code> is a single string that contains the multi-document YAML of the resources
+definitions. This field can be used for complex templating scenarios with the trade-off of reduced readability.</p>
+<p>Note that when both <code>.spec.resources</code> and <code>.spec.resourcesTemplate</code> are set, the resulting resources
+are the union of the two. If duplicate resources are defined in both fields, the resources from
+<code>.spec.resources</code> take precedence.</p>
+<p>Example of a template containing conditional and repeated blocks:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">inputs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">bundle</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">addons</span>
+<span class="w">      </span><span class="nt">decryption</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">      </span><span class="nt">components</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ingress-nginx</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cert-manager</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">bundle</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps</span>
+<span class="w">      </span><span class="nt">decryption</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">components</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">frontend</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backend</span>
+<span class="w">  </span><span class="nt">resourcesTemplate</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">---</span>
+<span class="w">    </span><span class="no">apiVersion: source.toolkit.fluxcd.io/v1beta2</span>
+<span class="w">    </span><span class="no">kind: OCIRepository</span>
+<span class="w">    </span><span class="no">metadata:</span>
+<span class="w">      </span><span class="no">name: &lt;&lt; inputs.bundle &gt;&gt;</span>
+<span class="w">      </span><span class="no">namespace: flux-system</span>
+<span class="w">    </span><span class="no">spec:</span>
+<span class="w">      </span><span class="no">interval: 10m</span>
+<span class="w">      </span><span class="no">url: oci://registry.example.com/&lt;&lt; inputs.bundle &gt;&gt;</span>
+<span class="w">    </span><span class="no">&lt;&lt;- range $component := inputs.components &gt;&gt;</span>
+<span class="w">    </span><span class="no">---</span>
+<span class="w">    </span><span class="no">apiVersion: kustomize.toolkit.fluxcd.io/v1</span>
+<span class="w">    </span><span class="no">kind: Kustomization</span>
+<span class="w">    </span><span class="no">metadata:</span>
+<span class="w">      </span><span class="no">name: &lt;&lt; $component &gt;&gt;</span>
+<span class="w">      </span><span class="no">namespace: flux-system</span>
+<span class="w">    </span><span class="no">spec:</span>
+<span class="w">      </span><span class="no">interval: 1h</span>
+<span class="w">      </span><span class="no">prune: true</span>
+<span class="w">      </span><span class="no">&lt;&lt;- if inputs.decryption &gt;&gt;</span>
+<span class="w">      </span><span class="no">decryption:</span>
+<span class="w">        </span><span class="no">provider: sops</span>
+<span class="w">        </span><span class="no">secretRef:</span>
+<span class="w">          </span><span class="no">name: &lt;&lt; inputs.bundle &gt;&gt;-sops</span>
+<span class="w">      </span><span class="no">&lt;&lt;- end &gt;&gt;</span>
+<span class="w">      </span><span class="no">sourceRef:</span>
+<span class="w">        </span><span class="no">kind: OCIRepository</span>
+<span class="w">        </span><span class="no">name: &lt;&lt; inputs.bundle &gt;&gt;</span>
+<span class="w">      </span><span class="no">path: ./&lt;&lt; $component &gt;&gt;</span>
+<span class="w">    </span><span class="no">&lt;&lt;- end &gt;&gt;</span>
+</code></pre></div>
+<p>The above example generates two <code>OCIRepository</code> resources (one for each bundle) and four
+<code>Kustomization</code> resources (one for each component in each bundle).</p>
+<h3 id="common-metadata">Common metadata</h3>
+<p>The <code>.spec.commonMetadata</code> field is optional and specifies common metadata to be applied to all resources.</p>
+<p>It has two optional fields:</p>
+<ul>
+<li><code>labels</code>: A map used for setting <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">labels</a>
+  on an object. Any existing label will be overridden if it matches with a key in
+  this map.</li>
+<li><code>annotations</code>: A map used for setting <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">annotations</a>
+  on an object. Any existing annotation will be overridden if it matches with a key
+  in this map.</li>
+</ul>
+<p>Example common metadata:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">commonMetadata</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">podinfo</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">fluxcd.controlplane.io/prune</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">disabled</span>
+</code></pre></div>
+<p>In the above example, all resources generated by the ResourceSet
+will not be pruned by the <a href="#garbage-collection">garbage collection</a> process as
+the <code>fluxcd.controlplane.io/prune</code> annotation is set to <code>disabled</code>.</p>
+<h3 id="dependency-management">Dependency management</h3>
+<p><code>.spec.dependsOn</code> is an optional list used to refer to Kubernetes
+objects that the ResourceSet depends on. If specified, then the ResourceSet
+is reconciled after the referred objects exist in the cluster.</p>
+<p>A dependency is a reference to a Kubernetes object with the following fields:</p>
+<ul>
+<li><code>apiVersion</code>: The API version of the referred object (required).</li>
+<li><code>kind</code>: The kind of the referred object (required).</li>
+<li><code>name</code>: The name of the referred object (required).</li>
+<li><code>namespace</code>: The namespace of the referred object (optional).</li>
+<li><code>ready</code>: A boolean indicating if the referred object must have the <code>Ready</code> status condition set to <code>True</code> (optional, default is <code>false</code>).</li>
+<li><code>readyExpr</code>: A <a href="#cel-readiness-expressions">CEL expression</a> that evaluates to a boolean indicating if the referred object is ready (optional).</li>
+</ul>
+<p>Example of conditional reconciliation based on the existence of CustomResourceDefinitions
+and the readiness of a ResourceSet:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">dependsOn</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apiextensions.k8s.io/v1</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CustomResourceDefinition</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">helmreleases.helm.toolkit.fluxcd.io</span>
+<span class="w">      </span><span class="nt">ready</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apiextensions.k8s.io/v1</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CustomResourceDefinition</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">servicemonitors.monitoring.coreos.com</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fluxcd.controlplane.io/v1</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ResourceSet</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster-addons</span>
+<span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux-system</span>
+<span class="w">      </span><span class="nt">ready</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+<p>Note that is recommended to define dependencies on CustomResourceDefinitions if the ResourceSet
+deploys Flux HelmReleases which contain custom resources.</p>
+<p>When the dependencies are not met, the flux-operator will reevaluate the requirements
+every five seconds and reconcile the ResourceSet when the dependencies are satisfied.
+Failed dependencies are reported in the ResourceSet <code>Ready</code> <a href="#ResourceSet-Status">status condition</a>,
+in log messages and Kubernetes events.</p>
+<h4 id="cel-readiness-expressions">CEL readiness expressions</h4>
+<p>The <code>readyExpr</code> field allows for more complex readiness checks and
+can be used for gating the reconciliation of a ResourceSet based on the evaluation
+of the <a href="https://cel.dev">CEL</a> expression.</p>
+<p>The expression is evaluated in the context of the referred object and has access to all the fields of the object,
+including the status conditions and the status subfields. The expression must evaluate to a boolean value, any syntax
+or runtime errors will be reported in the ResourceSet status conditions.</p>
+<p>Example readiness expression:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">dependsOn</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.x-k8s.io/v1beta1</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cluster</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-cluster</span>
+<span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+<span class="w">      </span><span class="nt">ready</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">readyExpr</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">metadata.generation == status.observedGeneration &amp;&amp;</span>
+<span class="w">        </span><span class="no">status.controlPlaneReady == true</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-gate</span>
+<span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+<span class="w">      </span><span class="nt">ready</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">readyExpr</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">string(base64.decode(data.gate)) == &#39;opened&#39;</span>
+</code></pre></div>
+<p>For testing the CEL expressions, you can use the <a href="https://playcel.undistro.io/">CEL playground</a>.</p>
+<h3 id="reconciliation-configuration">Reconciliation configuration</h3>
+<p>The reconciliation of behaviour of a ResourceSet can be configured using the following annotations:</p>
+<ul>
+<li><code>fluxcd.controlplane.io/reconcile</code>: Enable or disable the reconciliation loop. Default is <code>enabled</code>, set to <code>disabled</code> to pause the reconciliation.</li>
+<li><code>fluxcd.controlplane.io/reconcileEvery</code>: Set the reconciliation interval used for drift detection and correction. Default is <code>1h</code>.</li>
+<li><code>fluxcd.controlplane.io/reconcileTimeout</code>: Set the reconciliation timeout including health checks. Default is <code>5m</code>.</li>
+</ul>
+<h3 id="health-check-configuration">Health check configuration</h3>
+<p>The <code>.spec.wait</code> field is optional and instructs the flux-operator to perform
+a health check on all applied resources and waits for them to become ready. The health
+check is disabled by default and can be enabled by setting the <code>.spec.wait</code> field to <code>true</code>.</p>
+<p>The health check is performed for the following resources types:</p>
+<ul>
+<li>Kubernetes built-in kinds: Deployment, DaemonSet, StatefulSet,
+  PersistentVolumeClaim, Service, Ingress, CustomResourceDefinition.</li>
+<li>Flux kinds: HelmRelease, OCIRepository, Kustomization, GitRepository, etc.</li>
+<li>Custom resources that are compatible with <a href="https://github.com/kubernetes-sigs/cli-utils/tree/master/pkg/kstatus">kstatus</a>.</li>
+</ul>
+<p>By default, the wait timeout is <code>5m</code> and can be changed with the
+<code>fluxcd.controlplane.io/reconcileTimeout</code> annotation, set on the ResourceSet object.</p>
+<h3 id="role-based-access-control">Role-based access control</h3>
+<p>The <code>.spec.serviceAccountName</code> field is optional and specifies the name of the
+Kubernetes ServiceAccount used by the flux-operator to reconcile the ResourceSet.
+The ServiceAccount must exist in the same namespace as the ResourceSet
+and must have the necessary permissions to create, update and delete
+the resources defined in the ResourceSet.</p>
+<p>On multi-tenant clusters, it is recommended to use a dedicated ServiceAccount per tenant namespace
+with the minimum required permissions. To enforce a ServiceAccount for all ResourceSets,
+the <code>--default-service-account=flux-operator</code>flag can be set in the flux-operator container arguments.
+With this flag set, only the ResourceSets created in the same namespace as the flux-operator
+will run with cluster-admin permissions.</p>
+<h3 id="garbage-collection">Garbage collection</h3>
+<p>The operator performs garbage collection of the resources previously generated by a ResourceSet
+that are no longer present in the current revision. Garbage collection is also performed
+when a ResourceSet object is deleted, triggering a removal of all Kubernetes
+objects previously applied on the cluster.</p>
+<p>The garbage collection process removes stale resources in stages, first it deletes the Flux
+custom resources and waits for the Flux Kustomizations and HelmReleases to be finalized by
+the controllers. After the Flux resources are removed (max wait is one minute), the operator
+proceeds with the deletion of the remaining Kubernetes objects. This ensures that the
+Flux controllers have a chance to clean up the resources they manage before the operator
+deletes the Kubernetes ServiceAccount and RoleBinding used by Flux impersonation.</p>
+<p>After the garbage collection process is completed, the operator issues a Kubernetes event
+containing the list of removed resources and the duration of the cleanup.</p>
+<p>The garbage collection is enabled by default and can be disabled for certain resources
+by setting the <code>fluxcd.controlplane.io/prune</code> annotation to <code>disabled</code>. To fully disable
+the garbage collection for a ResourceSet, the annotation must be set on all resources
+using the <a href="#common-metadata"><code>.spec.commonMetadata</code></a> field.</p>
+<h2 id="resourceset-status">ResourceSet Status</h2>
+<h3 id="conditions">Conditions</h3>
+<p>A ResourceSet enters various states during its lifecycle, reflected as Kubernetes Conditions.
+It can be <a href="#reconciling-fluxinstance">reconciling</a> while applying the
+resources on the cluster, it can be <a href="#ready-fluxinstance">ready</a>, or it can <a href="#failed-fluxinstance">fail during
+reconciliation</a>.</p>
+<p>The ResourceSet API is compatible with the <strong>kstatus</strong> specification,
+and reports <code>Reconciling</code> and <code>Stalled</code> conditions where applicable to
+provide better (timeout) support to solutions polling the ResourceSet to
+become <code>Ready</code>.</p>
+<h4 id="reconciling-resourceset">Reconciling ResourceSet</h4>
+<p>The flux-operator marks a ResourceSet as <em>reconciling</em> when it starts
+the reconciliation of the same. The Condition added to the ResourceSet's
+<code>.status.conditions</code> has the following attributes:</p>
+<ul>
+<li><code>type: Reconciling</code></li>
+<li><code>status: "True"</code></li>
+<li><code>reason: Progressing</code> | <code>reason: ProgressingWithRetry</code></li>
+</ul>
+<p>The Condition <code>message</code> is updated during the course of the reconciliation to
+report the action being performed at any particular moment such as
+building manifests, detecting drift, etc.</p>
+<p>The <code>Ready</code> Condition's <code>status</code> is also marked as <code>Unknown</code>.</p>
+<h4 id="ready-resourceset">Ready ResourceSet</h4>
+<p>The flux-operator marks a ResourceSet as <em>ready</em> when the resources were
+built and applied on the cluster and all health checks are observed to be passing.</p>
+<p>When the ResourceSet is "ready", the flux-operator sets a Condition with the
+following attributes in the ResourceSet’s <code>.status.conditions</code>:</p>
+<ul>
+<li><code>type: Ready</code></li>
+<li><code>status: "True"</code></li>
+<li><code>reason: ReconciliationSucceeded</code></li>
+</ul>
+<h4 id="failed-resourceset">Failed ResourceSet</h4>
+<p>The flux-operator may get stuck trying to reconcile and apply a
+ResourceSet without completing. This can occur due to some of the following factors:</p>
+<ul>
+<li>The dependencies are not ready.</li>
+<li>The templating of the resources fails.</li>
+<li>The resources are invalid and cannot be applied.</li>
+<li>Garbage collection fails.</li>
+<li>Running health checks fails.</li>
+</ul>
+<p>When this happens, the flux-operator sets the <code>Ready</code> Condition status to False
+and adds a Condition with the following attributes to the ResourceSet’s
+<code>.status.conditions</code>:</p>
+<ul>
+<li><code>type: Ready</code></li>
+<li><code>status: "False"</code></li>
+<li><code>reason: DependencyNotReady | BuildFailed | ReconciliationFailed | HealthCheckFailed</code></li>
+</ul>
+<p>The <code>message</code> field of the Condition will contain more information about why
+the reconciliation failed.</p>
+<p>While the ResourceSet has one or more of these Conditions, the flux-operator
+will continue to attempt a reconciliation with an
+exponential backoff, until it succeeds and the ResourceSet is marked as <a href="#ready-fluxinstance">ready</a>.</p>
+<h3 id="inventory-status">Inventory status</h3>
+<p>In order to perform operations such as drift detection, garbage collection, upgrades, etc.,
+the flux-operator needs to keep track of all Kubernetes objects that are
+reconciled as part of a ResourceSet. To do this, it maintains an inventory
+containing the list of Kubernetes resource object references that have been
+successfully applied and records it in <code>.status.inventory</code>. The inventory
+records are in the format <code>Id: &lt;namespace&gt;_&lt;name&gt;_&lt;group&gt;_&lt;kind&gt;, V: &lt;version&gt;</code>.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code>Status:
+  Inventory:
+    Entries:
+      Id: default_podinfo__ServiceAccount
+      V:  v1
+      Id: default_podinfo__Service
+      V:  v1
+      Id: default_podinfo_apps_Deployment
+      V:  v1
+</code></pre></div>
+<h2 id="resourceset-metrics">ResourceSet Metrics</h2>
+<p>The Flux Operator exports Prometheus metrics for the ResourceSet objects
+that can be used to monitor the reconciliation status.</p>
+<p>Metrics:</p>
+<div class="highlight"><pre><span></span><code>flux_resourceset_info{uid, kind, name, exported_namespace, ready, suspended, revision}
+</code></pre></div>
+<p>Labels:</p>
+<ul>
+<li><code>uid</code>: The Kubernetes unique identifier of the resource.</li>
+<li><code>kind</code>: The kind of the resource (e.g. <code>ResourceSet</code>).</li>
+<li><code>name</code>: The name of the resource (e.g. <code>podinfo</code>).</li>
+<li><code>exported_namespace</code>: The namespace where the resource is deployed (e.g. <code>apps</code>).</li>
+<li><code>ready</code>: The readiness status of the resource (e.g. <code>True</code>, <code>False</code> or <code>Unkown</code>).</li>
+<li><code>reason</code>: The reason for the readiness status (e.g. <code>ReconciliationSucceeded</code>, <code>BuildFailed</code>, <code>HealthCheckFailed</code>, etc.).</li>
+<li><code>suspended</code>: The suspended status of the resource (e.g. <code>True</code> or <code>False</code>).</li>
+<li><code>revision</code>: The revision last applied on the cluster (e.g. <code>sha256:75aa209c6a...</code>).</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2025 ControlPlane Ltd.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://x.com/controlplaneio" target="_blank" rel="noopener" title="x.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M64 32C28.7 32 0 60.7 0 96v320c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64zm297.1 84L257.3 234.6 379.4 396h-95.6L209 298.1 123.3 396H75.8l111-126.9L69.7 116h98l67.7 89.5 78.2-89.5zm-37.8 251.6L153.4 142.9h-28.3l171.8 224.7h26.3z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/company/controlplane/mycompany/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5m282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "navigation.sections", "navigation.top", "navigation.tabs"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+    
+  </body>
+</html>
