@@ -91,6 +91,7 @@ nav:
         - D1 Reference Architecture: guides/d1-architecture-reference.md
         - Flux Multitenant Policies: guides/flux-policies.md
         - Generic Helm Chart Pattern: guides/flux-generic-helm-chart.md
+        - Flux CLI Quick Reference: guides/flux-cli-quick-reference.md
     - Marketplaces:
         - AWS Marketplace: marketplace/aws.md
     - Versions:
