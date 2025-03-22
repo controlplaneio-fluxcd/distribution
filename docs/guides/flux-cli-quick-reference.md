@@ -23,7 +23,7 @@ For Windows users, the Flux CLI can be installed using [winget](https://winstall
 winget install --id=FluxCD.Flux  -e
 ```
 
-## Shell autocompletion
+### Shell autocompletion
 
 The Flux CLI supports shell completion for Bash, Zsh and Fish and PowerShell.
 
@@ -261,3 +261,75 @@ Display the logs of source-controller for a specific Helm chart source:
 ```shell
 flux -n apps logs --kind OCIRepository --name podinfo
 ```
+
+## Read-only mode
+
+To prevent users from altering the clusters state with commands such as
+`flux delete` or `flux reconciler` and only allow read operations,
+the following ClusterRole can be assigned to the Flux CLI users:
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: flux-cli-readonly
+rules:
+- apiGroups:
+  - source.toolkit.fluxcd.io
+  - kustomize.toolkit.fluxcd.io
+  - helm.toolkit.fluxcd.io
+  - notification.toolkit.fluxcd.io
+  - image.toolkit.fluxcd.io
+  resources:
+  - '*'
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  - replicasets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - pods/log
+  - events
+  - namespaces
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+```
+
+The following commands can be used in read-only mode:
+
+- `flux build`
+- `flux check`
+- `flux debug`
+- `flux events`
+- `flux export`
+- `flux get`
+- `flux logs`
+- `flux stats`
+- `flux trace`
+- `flux tree`
+- `flux version`
+
+Note that the `flux build` and `flux debug` commands may require get permissions for Kubernetes Secrets,
+which are not included in the ClusterRole above.
