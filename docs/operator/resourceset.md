@@ -238,7 +238,8 @@ spec:
         layerSelector: << inputs.layerSelector | toYaml | nindent 4 >>
 ```
 
-To use one input field as a default for another, use `get` and `default` e.g.:
+To assign a default value when an input field is not specified, use `get` combined with `default`.
+E.g. using the namespace input as a default value for name:
 
 ```yaml
 spec:
