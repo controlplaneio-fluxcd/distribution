@@ -11,7 +11,7 @@ where the flux-operator is deployed.
 
 The following example shows a FluxInstance custom resource that
 installs the upstream Flux distribution with all available components,
-and configures the flux-operator to automatically upgrade Flux
+and configures the flux-operator to automatically upgrade Flux 
 to the latest stable version:
 
 ```yaml
@@ -135,7 +135,7 @@ kubectl -n flux-system events --for FluxInstance/flux
 ```
 
 **6.** Run `kubectl delete` to remove the FluxInstance resource and
-to uninstall Flux without affecting any Flux-managed workloads:
+   to uninstall Flux without affecting any Flux-managed workloads:
 
 ```shell
 kubectl -n flux-system delete FluxInstance/flux
@@ -473,12 +473,12 @@ Sync fields:
 - `path`: The path to the source directory containing the kustomize overlay or plain Kubernetes manifests to sync from.
 - `pullSecret`: The name of the Kubernetes secret that contains the credentials to pull the source repository. This field is optional.
 - `provider`: The provider name used for OIDC-based authentication.
-  Supported values are `aws`, `azure` and `gcp` for `OCIRepository`/`Bucket`,
-  and `azure` or `github` for `GitRepository`. This field is optional.
+   Supported values are `aws`, `azure` and `gcp` for `OCIRepository`/`Bucket`,
+   and `azure` or `github` for `GitRepository`. This field is optional.
 - `interval`: The sync interval. This field is optional, when not set the default is `1m`.
 - `name`: The name of the generated Flux source and Kustomization objects.
-  This field is optional, when not set the default is the FluxInstance namespace name.
-  Note that this field is considered immutable, and cannot be changed after the FluxInstance is created.
+   This field is optional, when not set the default is the FluxInstance namespace name.
+   Note that this field is considered immutable, and cannot be changed after the FluxInstance is created.
 
 #### Sync from Git over HTTP/S
 
@@ -755,7 +755,7 @@ Status:
 `.status.lastAppliedRevision` is the last revision of the Flux distribution
 that was successfully applied to the cluster.
 
-The revision is in the format `<version>@sha256:<digest>`.
+The revision is in the format `<version>@sha256:<digest>`. 
 
 The version is the Flux distribution exact semver version that was applied to the cluster.
 
