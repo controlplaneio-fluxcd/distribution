@@ -137,6 +137,28 @@ spec:
     excludeBranch: "^feat/not-this-one$"
 ```
 
+### Skip
+
+The `.spec.skip` field is optional and specifies the skip criteria for skipping input updates.
+This field can be used to wait until certain PR/MR is ready.
+
+The following skips are supported:
+
+- `labels`: skip input update by labels if one of the label matched. When the label starts with `!` it will skip if the label is not present.
+
+Example of a skip configuration:
+
+```yaml
+spec:
+  filter:
+    labels:
+      - "deploy:flux-preview"
+  skip:
+    labels:
+      - "deploy/flux-preview-pause"
+      - "!test-build-push/passed"
+```
+
 ### Default values
 
 The `.spec.defaultValues` field is optional and specifies the default values for the exported inputs.
@@ -334,21 +356,21 @@ Example:
 ```yaml
 status:
   exportedInputs:
-    - author: stefanprodan
-      branch: kubernetes/helm-set-limits
-      id: "4"
-      sha: bf5d6e01cf802734853f6f3417b237e3ad0ba35d
-      title: 'kubernetes(helm): Add default resources limits'
-    - author: stefanprodan
-      branch: feat/ui-footer
-      id: "3"
-      sha: 8492c0b5b2094fe720776c8ace1b9690ff258f53
-      title: 'feat(ui): Add footer'
-    - author: stefanprodan
-      branch: feat/ui-color-scheme
-      id: "2"
-      sha: 8166bdecd6b078b9e5dd14fa3b7b67a847f76893
-      title: 'feat(ui): Default color scheme'
+  - author: stefanprodan
+    branch: kubernetes/helm-set-limits
+    id: "4"
+    sha: bf5d6e01cf802734853f6f3417b237e3ad0ba35d
+    title: 'kubernetes(helm): Add default resources limits'
+  - author: stefanprodan
+    branch: feat/ui-footer
+    id: "3"
+    sha: 8492c0b5b2094fe720776c8ace1b9690ff258f53
+    title: 'feat(ui): Add footer'
+  - author: stefanprodan
+    branch: feat/ui-color-scheme
+    id: "2"
+    sha: 8166bdecd6b078b9e5dd14fa3b7b67a847f76893
+    title: 'feat(ui): Default color scheme'
 ```
 
 ## ResourceSetInputProvider Metrics

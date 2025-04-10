@@ -3,6 +3,20 @@
 **ResourceSet** is a declarative API for generating a group of Kubernetes objects
 based on a matrix of input values and a set of templated resources.
 
+The ResourceSet API offers a high-level abstraction for defining and managing
+Flux resources and related Kubernetes objects as a single unit. It is designed
+to reduce the complexity of Kustomize overlays by providing a compact way
+of defining different configurations for a set of workloads per tenant and/or environment.
+
+Use cases:
+
+- Application definition: Bundle a set of Kubernetes resources (Flux HelmRelease, OCIRepository, Alert, Provider, Receiver, ImagePolicy) into a single deployable unit.
+- Preview environments: Generate a set of Kubernetes resources for each opened pull/merge request that are removed when PRs are closed.
+- Dependency management: Define dependencies between apps to ensure that the resources are applied in the correct order. The dependencies are more flexible  than in Flux, they can be for other ResourceSets, CRDs, or any other Kubernetes object.
+- Multi-instance provisioning: Generate multiple instances of the same application with different configurations.
+- Multi-cluster provisioning: Generate multiple instances of the same application for each target cluster that are deployed by Flux from a management cluster.
+- Multi-tenancy provisioning: Generate a set of resources (Namespace, ServiceAccount, RoleBinding) for each tenant with specific roles and permissions.
+
 ## Example
 
 The following example shows a ResourceSet that generates an application instance consisting of a
@@ -574,9 +588,24 @@ the resources defined in the ResourceSet.
 
 On multi-tenant clusters, it is recommended to use a dedicated ServiceAccount per tenant namespace
 with the minimum required permissions. To enforce a ServiceAccount for all ResourceSets,
-the `--default-service-account=flux-operator`flag can be set in the flux-operator container arguments.
+the `--default-service-account=flux-operator` flag can be set in the flux-operator container arguments.
 With this flag set, only the ResourceSets created in the same namespace as the flux-operator
 will run with cluster-admin permissions.
+
+When installing the Flux Operator with Helm, you can change the default service account name with:
+
+```shell
+helm install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator \
+  --namespace flux-system \
+  --create-namespace \
+  --set multitenancy.enabled=true \
+  --set multitenancy.defaultServiceAccount=flux-operator
+```
+
+When installing the Flux Operator on OpenShift from OperatorHub, the default service account name
+can be changed by setting the `DEFAULT_SERVICE_ACCOUNT` environment variable using the OLM
+[Subscription](https://github.com/operator-framework/operator-lifecycle-manager/blob/master/doc/design/subscription-config.md)
+`.spec.config.env` field.
 
 ### Garbage collection
 
