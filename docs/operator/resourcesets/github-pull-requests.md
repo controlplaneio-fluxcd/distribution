@@ -369,6 +369,82 @@ Note that we tag the container image with `${{ github.event.pull_request.head.sh
 This ensures that the image tag matches the commit SHA of the PR HEAD that the ResourceSet
 uses to deploy the app.
 
+### Delay updates if the build takes too long
+
+If your GitHub Workflow takes too long to build artifacts, e.g. more than 10 minutes,
+you may want to keep the previous commit SHA in the ResourceSet until the new SHA is
+completely built by your workflow. In order to do that you can use a Flux `Receiver`
+of the type `generic` instead of `github` to trigger the reconciliation of the
+`ResourceSetInputProvider`:
+
+```yaml
+apiVersion: notification.toolkit.fluxcd.io/v1
+kind: Receiver
+metadata:
+  name: github-receiver
+  namespace: app-preview
+spec:
+  type: generic
+  secretRef:
+    name: receiver-token
+  resources:
+    - apiVersion: fluxcd.controlplane.io/v1
+      kind: ResourceSetInputProvider
+      name: app-pull-requests
+```
+
+This is necessary because the Flux webhook must be called only at the end of the
+GitHub Workflow, so make sure to store the webhook URL as a secret in your GitHub
+repository, e.g. `FLUX_RECEIVER_WEBHOOK`.
+
+You also need to create a label in your GitHub repository to tell the
+`ResourceSetInputProvider` to skip updating the exported inputs for the
+pull request when this label is present, e.g. `deploy/flux-preview-pause`.
+This label will be dynamically added and removed by the GitHub Workflow
+that builds the artifacts. In your `ResourceSetInputProvider` add the
+following configuration:
+
+```yaml
+...
+spec:
+  skip:
+    labels:
+      - "deploy/flux-preview-pause"
+...
+```
+
+Finally, add the following parts to the job of your [GitHub Workflow](#github-workflow):
+
+```yaml
+...
+    permissions:
+      pull-requests: write # for adding/removing labels to the pull request
+...
+      # Add the following immediately after the checkout step (checkout must always be the first):
+      - name: Add label to prevent ResourceSetInputProvider from updating
+        run: gh pr edit $PR_NUMBER --add-label deploy/flux-preview-pause
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+...
+      # Add the following at the end of the job:
+      - name: Remove label to allow ResourceSetInputProvider to update
+        run: gh pr edit $PR_NUMBER --remove-label deploy/flux-preview-pause
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+      - name: Trigger Flux Receiver
+        run: curl -X POST $FLUX_RECEIVER_WEBHOOK
+        env:
+          FLUX_RECEIVER_WEBHOOK: ${{ secrets.FLUX_RECEIVER_WEBHOOK }}
+```
+
+There's still a chance that Flux Operator will reconcile your `ResourceSetInputProvider`
+between the moment when you make a Git push and the moment when the GitHub Workflow adds
+the pause label, this will cause your ephemeral environment to be updated with the new
+SHA before the artifacts are built, but this is unlikely to happen if your GitHub Workflows
+are quickly scheduled on runners.
+
 ## Further reading
 
 To learn more about ResourceSets and the various configuration options, see the following docs:
