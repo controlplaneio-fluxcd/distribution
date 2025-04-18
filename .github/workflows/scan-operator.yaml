@@ -62,7 +62,7 @@ jobs:
         type: stream
         to: team-flux
         topic: cve-alerts
-        content: 'Flux Operator CVE alert: ${{ steps.job-url.outputs.url }}'
+        content: 'Flux Operator CVE alert (not part of CP SLA): ${{ steps.job-url.outputs.url }}'
     - name: Check result
       shell: bash
       if: steps.fo.outcome == 'failure'
