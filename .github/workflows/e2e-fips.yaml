@@ -34,6 +34,7 @@ jobs:
           - v1.30.2
           - v1.31.0
           - v1.32.0
+          - v1.33.0
     runs-on: ubuntu-latest
     permissions:
       contents: read
