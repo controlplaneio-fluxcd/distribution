@@ -121,5 +121,13 @@ nav:
           - FluxReport: operator/fluxreport.md
           - ResourceSet: operator/resourceset.md
           - ResourceSetInputProvider: operator/resourcesetinputprovider.md
+  - Flux MCP Server:
+      - Introduction: mcp/index.md
+      - Installation: mcp/install.md
+      - Guides:
+          - Effective Prompts: mcp/prompts.md
+          - AI Instructions: mcp/instructions.md
+      - API Reference:
+          - MCP Tools: mcp/tools.md
   - Pricing: pricing/index.md
   - Contact: https://control-plane.io/contact/?inquiry=fluxcd
