@@ -72,7 +72,7 @@ The Flux MCP Server is designed with security in mind:
 - Access to the local file system is read-only and restricted to the kubeconfig file
 
 For a detailed overview of configuring the Flux MCP Server, including security settings,
-see the [Installation Guide](install.md).
+see the [Configuration Guide](config.md).
 
 ## License
 
