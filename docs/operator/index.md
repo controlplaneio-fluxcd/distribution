@@ -1,13 +1,14 @@
 # Flux Operator Introduction
 
 The [Flux Operator](https://github.com/controlplaneio-fluxcd/flux-operator)
-is a Kubernetes CRD controller that manages
-the lifecycle of CNCF Flux and the ControlPlane enterprise distribution.
+is a Kubernetes CRD controller that manages the lifecycle of CNCF Flux and the ControlPlane enterprise distribution.
+The operator extends Flux with self-service capabilities and preview environments
+for GitLab and GitHub pull requests testing.
 
-The operator offers an alternative to the Flux Bootstrap procedure, it
-removes the operational burden of managing Flux across fleets of clusters
-and provides first-class support for running Flux in production
-on OpenShift, Amazon EKS, Azure AKS and Google GKE.
+!!! tip "Flux MCP Server"
+
+    The Flux Operator project includes an experimental Model Context Protocol Server for AI-assisted GitOps.
+    Check the [Flux MCP Server](../mcp/index.md) documentation for more details.
 
 ## Features
 

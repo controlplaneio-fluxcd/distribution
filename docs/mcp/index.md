@@ -49,6 +49,8 @@ providing them with purpose-built [tools](tools.md) to interact with your cluste
 When you ask a question or make a request, the AI uses these tools to gather information,
 analyze configurations, and perform operations based on your instructions.
 
+![Flux MCP Server Architecture](../images/flux-mcp-diagram-wht.svg)
+
 The AI assistants leveraging the Flux MCP Server can trace issues from high-level GitOps resources
 like ResourceSets, HelmReleases, and Kustomizations all the way down to individual pod logs.
 This comprehensive visibility means you can quickly identify where problems originate in your
