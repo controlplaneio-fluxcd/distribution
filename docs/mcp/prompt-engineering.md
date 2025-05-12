@@ -1,21 +1,26 @@
 # Flux MCP Server Prompting Guide
 
-This guide provides recommendations for configuring your AI assistants
+This guide provides recommendations for configuring your AI assistants with instructions
 and offers effective prompting strategies to get the most out of the Flux MCP Server.
 
 ## AI Instructions
 
 Providing instructions is crucial for guiding the behavior of your AI assistant
-when interacting with the Flux MCP Server. We've created a set of [instructions](instructions.md)
-that you can use as a starting point. Feel free to modify them to suit your needs.
+when interacting with the Flux MCP Server. We've created a set of [instructions](instructions.md) (1400 tokens)
+that you can use as a starting point.
 
-To configure your AI assistant, copy the instructions from the `instructions.md` file
-and place them into the appropriate settings for your assistant as follows:
+Copy the rules from the
+[instructions.md](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/mcp/instructions.md)
+file and place them into the appropriate settings for your assistant as follows:
 
-- **Claude**: Use the "Project Instructions" section in Claude Desktop
+- **Claude**: Use the `Project Instructions` section in Claude Desktop
 - **Cursor**: Use the `.cursor/rules` dir in your Git repository
 - **Windsurf**: Use the `.windsurf/rules` dir in your Git repository
 - **GitHub Copilot**: Use the `.github/copilot-instructions.md` file in your Git repository
+
+It is recommended to enhance the instructions with relevant information about your clusters to help the
+AI assistant understand your context better. For example, Kubernetes distribution, Cloud provider,
+what type of applications are deployed, how secrets are managed.
 
 ## Prompting Strategies
 
@@ -44,6 +49,8 @@ specifications are available to the model along with guides and examples.
 
 ## Example Prompts
 
+Reporting and troubleshooting:
+
 - Analyze the Flux installation in my current cluster and report the status of all components.
 - List the clusters in my kubeconfig and compare the Flux instances across them.
 - Are there any reconciliation errors in the Flux-managed resources?
@@ -53,10 +60,23 @@ specifications are available to the model along with guides and examples.
 - What is the Git source and revision of the Flux OCI repositories?
 - Which Kubernetes deployments are managed by Flux in the current cluster?
 - Which images are deployed by Flux in the monitoring namespace?
-- Reconcile all the Flux sources in the depends-on order, then verify their status.
+- Perform a root cause analysis of the last failed deployment in the frontend namespace.
+
+Actions:
+
+- Reconcile the flux-system kustomization with its source in the current cluster.
+- Reconcile all the Flux Kustomization from flux-system namespace in the depends-on order, then verify their status.
 - Suspend all failing Helm releases in the test namespace, then delete them from the cluster.
-- Search for all the suspended Flux resources in the cluster and resume them.
+- Search for all the suspended Flux Kustomizations in the cluster and resume them.
+- Generate a namespace called test and apply it on my current cluster.
+- Copy the flux service account and its RBAC from the frontend namespace into test (remove the fluxcd labels).
+- Delete the test namespace from my current cluster.
+
+Learning:
+
 - How to configure mutual TLS for Git? Answer using the latest Flux docs.
+- What is the role of the interval setting in a Flux Kustomization?  Search the latest docs.
+- How to trigger a Flux reconciliation with a webhook? Search the latest docs.
 
 ## Predefined Prompts
 

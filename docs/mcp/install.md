@@ -97,7 +97,13 @@ When using GitHub Copilot Chat, enable Agent mode to access the Flux MCP tools.
 
 ## Testing Your Installation
 
-After configuring the MCP Server with your AI assistant, you can test the installation with the following prompts:
+Before using the Flux MCP Server, it is important to set up the AI instructions
+for your assistant. Copy the rules from the
+[instructions.md](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/mcp/instructions.md)
+file and place them into the appropriate settings for your assistant, for more details on how to do this
+see the [AI Instructions](prompt-engineering.md#ai-instructions) section.
+
+After the instructions are in place, you can test the installation with the following prompts:
 
 - "Which cluster contexts are available in my kubeconfig?"
 - "What version of Flux is running in my current cluster?"

@@ -10,28 +10,28 @@ You will be using the `flux-operator-mcp` tools to connect to clusters and fetch
 Flux consists of the following Kubernetes controllers and custom resource definitions (CRDs):
 
 - Flux Operator
-  - **FluxInstance**: Manages the Flux controllers installation and configuration
-  - **FluxReport**: Reflects the state of a Flux installation
-  - **ResourceSet**: Manages groups of Kubernetes resources based on input matrices
-  - **ResourceSetInputProvider**: Fetches input values from external services (GitHub, GitLab)
+    - **FluxInstance**: Manages the Flux controllers installation and configuration
+    - **FluxReport**: Reflects the state of a Flux installation
+    - **ResourceSet**: Manages groups of Kubernetes resources based on input matrices
+    - **ResourceSetInputProvider**: Fetches input values from external services (GitHub, GitLab)
 - Source Controller
-  - **GitRepository**: Points to a Git repository containing Kubernetes manifests or Helm charts
-  - **OCIRepository**: Points to a container registry containing OCI artifacts (manifests or Helm charts)
-  - **Bucket**: Points to an S3-compatible bucket containing manifests
-  - **HelmRepository**: Points to a Helm chart repository
-  - **HelmChart**: References a chart from a HelmRepository or a GitRepository
+    - **GitRepository**: Points to a Git repository containing Kubernetes manifests or Helm charts
+    - **OCIRepository**: Points to a container registry containing OCI artifacts (manifests or Helm charts)
+    - **Bucket**: Points to an S3-compatible bucket containing manifests
+    - **HelmRepository**: Points to a Helm chart repository
+    - **HelmChart**: References a chart from a HelmRepository or a GitRepository
 - Kustomize Controller
-  - **Kustomization**: Builds and applies Kubernetes manifests from sources
+    - **Kustomization**: Builds and applies Kubernetes manifests from sources
 - Helm Controller
-  - **HelmRelease**: Manages Helm chart releases from sources
+    - **HelmRelease**: Manages Helm chart releases from sources
 - Notification Controller
-  - **Provider**: Represents a notification service (Slack, MS Teams, etc.)
-  - **Alert**: Configures events to be forwarded to providers
-  - **Receiver**: Defines webhooks for triggering reconciliations
+    - **Provider**: Represents a notification service (Slack, MS Teams, etc.)
+    - **Alert**: Configures events to be forwarded to providers
+    - **Receiver**: Defines webhooks for triggering reconciliations
 - Image Automation Controllers
-  - **ImageRepository**: Scans container registries for new tags
-  - **ImagePolicy**: Selects the latest image tag based on policy
-  - **ImageUpdateAutomation**: Updates Git repository with new image tags
+    - **ImageRepository**: Scans container registries for new tags
+    - **ImagePolicy**: Selects the latest image tag based on policy
+    - **ImageUpdateAutomation**: Updates Git repository with new image tags
 
 For a deep understanding of the Flux CRDs, call the `search_flux_docs` tool for each resource kind.
 

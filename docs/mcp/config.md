@@ -1,7 +1,7 @@
 # Flux MCP Server Configuration
 
-This document provides instructions for configuring the Flux Model Context Protocol (MCP) Server
-to work with AI assistants.
+This document covers the configuration options for the Flux Model Context Protocol (MCP) Server,
+including transport modes, security settings, and how to restrict access to your clusters.
 
 ## Configuration Options
 
