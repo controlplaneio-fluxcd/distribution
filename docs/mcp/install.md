@@ -12,6 +12,14 @@ Before installing the Flux MCP Server, ensure you have:
 
 ## Installation Options
 
+### Install with Homebrew
+
+If you are using macOS or Linux, you can install the Flux MCP Server using Homebrew:
+
+```shell
+brew install controlplaneio-fluxcd/tap/flux-operator-mcp
+```
+
 ### Download Pre-built Binaries
 
 The Flux MCP Server is available as a binary executable for Linux, macOS, and Windows.
