@@ -22,8 +22,10 @@ jobs:
         path: flux-operator
         repository: controlplaneio-fluxcd/flux-operator
         token: ${{ secrets.GITHUB_TOKEN }}
-    - name: Copy API Docs
-      run: cp flux-operator/docs/api/v1/* distribution/docs/operator/
+    - name: Copy Docs
+      run: |
+        cp flux-operator/docs/api/v1/* distribution/docs/operator/
+        cp flux-operator/docs/mcp/* distribution/docs/mcp/
     - name: Find Latest Flux Operator Release
       id: release
       env:

@@ -6,6 +6,11 @@ enabling seamless interaction through natural language. It serves as a bridge be
 and your GitOps pipelines, allowing you to analyze the cluster state, troubleshoot deployment issues,
 and perform operations using conversational prompts.
 
+!!! warning "Experimental Feature"
+
+    Please note that the Flux MCP Server is an experimental feature provided as-is without
+    warranty or support guarantees. Enterprise customers should use this feature at their own discretion.
+
 ## Features
 
 <div class="grid cards" markdown>
