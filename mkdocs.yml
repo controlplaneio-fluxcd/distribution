@@ -14,9 +14,10 @@ home:
   tagline: Assured Flux CD
   description: |
     ControlPlane Enterprise enhances the security and stability of
-    Kubernetes GitOps delivery through comprehensive security assurance, including
-    rigorous bitstream remediation and compliance with required regulatory
-    standards for Flux CD.
+    Kubernetes GitOps delivery through comprehensive security assurance
+    and compliance with required regulatory standards for Flux CD.
+    The enterprise distribution extends Flux with self-service features
+    and AI-assisted GitOps capabilities.
   features: true
 
 theme:
