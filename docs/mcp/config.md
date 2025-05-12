@@ -132,3 +132,13 @@ For tighter security control, you can configure the server to impersonate a spec
 
 This limits the server's permissions to those granted to the specified service account.
 Note that your user set in the kubeconfig must have permission to impersonate service accounts.
+
+## Docker Container
+
+While it is possible to run the Flux MCP Server in a Docker container and mount the kubeconfig file,
+this could work only when the kubeconfig contains static credentials. If you connect to a
+managed Kubernetes cluster, the authentication implies shelling out to the cloud provider CLI
+with access to the other config files.
+
+At the moment, we do not provide a Docker image for the Flux MCP Server, but you can build one
+using the binaries available on the [release page](https://github.com/controlplaneio-fluxcd/flux-operator/releases).

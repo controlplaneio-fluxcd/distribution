@@ -65,7 +65,7 @@ Flux configurations, or application runtime issues.
 !!! tip "AI Instructions"
 
     For the best experience, we recommend configuring your AI assistants with
-    [custom instructions](prompts.md#ai-instructions) that guide them on how to
+    [custom instructions](prompt-engineering.md#ai-instructions) that guide them on how to
     interact with Kubernetes and the Flux MCP Server.
 
 ## Security Considerations
