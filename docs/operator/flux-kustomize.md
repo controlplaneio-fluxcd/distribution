@@ -33,6 +33,11 @@ spec:
           name: "source-controller"
 ```
 
+!!! warning "Target namespace"
+
+    Note that the `patch.target` **must not contain** a `namespace` field, all patches are
+    applied to the instance namespace.
+
 ## Examples
 
 The following examples demonstrate how to customize the Flux manifests.
@@ -155,9 +160,9 @@ spec:
           apiVersion: v1
           kind: ServiceAccount
           metadata:
-            name: controller
-          annotations:
-            eks.amazonaws.com/role-arn: <ROLE ARN>
+            name: all
+            annotations:
+              eks.amazonaws.com/role-arn: <ROLE ARN>
         target:
           kind: ServiceAccount
           name: "(source-controller|image-reflector-controller)"
@@ -165,7 +170,7 @@ spec:
           apiVersion: source.toolkit.fluxcd.io/v1beta2
           kind: OCIRepository
           metadata:
-            name: flux-system
+            name: all
           spec:
             provider: aws
         target:
