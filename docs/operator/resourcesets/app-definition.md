@@ -100,9 +100,10 @@ spec:
 
 You may want to separate the inputs from the `ResourceSet` manifest to allow,
 for example, different teams to manage the inputs independently, and also
-without requiring every instance to be listed in `ResourceSet` manifest.
-This can done by declaring the inputs in `Static` separate
-`ResourceSetInputProvider` resources and referencing them dynamically through
+without requiring every instance to be listed in the `ResourceSet` manifest.
+This can be done by declaring the inputs in separate `ResourceSetInputProvider`
+resources with the `spec.type` field set to `Static` and referencing them
+dynamically through
 [Label Selectors](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors)
 in the `ResourceSet`:
 
