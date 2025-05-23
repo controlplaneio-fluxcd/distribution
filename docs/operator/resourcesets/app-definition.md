@@ -96,6 +96,99 @@ spec:
           replicaCount: << inputs.app.replicas | int >>
 ```
 
+### Decoupled example
+
+You may want to separate the inputs from the `ResourceSet` manifest to allow,
+for example, different teams to manage the inputs independently, and also
+without requiring every instance to be listed in `ResourceSet` manifest.
+This can done by declaring the inputs in `Static` separate
+`ResourceSetInputProvider` resources and referencing them dynamically through
+[Label Selectors](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors)
+in the `ResourceSet`:
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: app1
+  namespace: apps
+spec:
+  inputsFrom:
+    - kind: ResourceSetInputProvider
+      selector:
+        matchLabels:
+          some: label
+        matchExpressions:
+          - key: anotherLabel
+            operator: In
+            values:
+              - value1
+              - value2
+  resources:
+    - apiVersion: source.toolkit.fluxcd.io/v1beta2
+      kind: OCIRepository
+      metadata:
+        name: app1-<< inputs.tenant >>
+        namespace: apps
+      spec:
+        interval: 10m
+        url: oci://my.registry/org/charts/app1
+        ref:
+          semver: << inputs.app.version | quote >>
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      metadata:
+        name: app1-<< inputs.tenant >>
+        namespace: apps
+      spec:
+        interval: 1h
+        releaseName: app1-<< inputs.tenant >>
+        chartRef:
+          kind: OCIRepository
+          name: app1-<< inputs.tenant >>
+        values:
+          replicaCount: << inputs.app.replicas | int >>
+```
+
+Then you can create the `ResourceSetInputProvider` resources with the
+`Static` input provider type and labels matching the `ResourceSet` selector:
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: app1-tenant1
+  namespace: apps
+  labels:
+    some: label
+    anotherLabel: value1
+spec:
+  type: Static
+  defaultValues:
+    tenant: "tenant1"
+    app:
+      version: "6.7.x"
+      replicas: 2
+---
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: app1-tenant2
+  namespace: apps
+  labels:
+    some: label
+    anotherLabel: value2
+spec:
+  type: Static
+  defaultValues:
+    tenant: "tenant2"
+    app:
+      version: "6.6.x"
+      replicas: 3
+```
+
+> **Note:** The `ResourceSet` and `ResourceSetInputProvider` resources must be in the same namespace.
+
 ## Multi-cluster example
 
 When deploying applications across multiple environments from a management cluster, the ResourceSet API
