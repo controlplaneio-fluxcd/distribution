@@ -1,0 +1,74 @@
+# Flux CD Enterprise by ControlPlane
+
+ControlPlane offers a hardened, enterprise-grade distribution for the CNCF-graduated Flux project including 24/7 support, security patches, and expert guidance for production deployments.
+The enterprise distribution bundles the Flux Operator and the Flux MCP Server, which are designed to automate the management of Flux controllers at-scale and provide AI-assisted GitOps capabilities.
+
+## Flux Operator Overview
+
+Flux Operator offers a production-ready solution for managing the delivery of application and infrastructure workloads on multi-tenant Kubernetes clusters using GitOps principles.
+The operator is designed to automate the installation, configuration, and upgrade of the Flux controllers as well as to provide advanced features such as preview environments for testing pull requests, and self-service capabilities for developers.
+The Flux Operator is an open-source project licensed under AGPL-3.0 and is developed by the CNCF Flux core maintainers part of the ControlPlane team.
+
+### Flux Operator Documentation
+
+- Installation
+    - [Flux operator installation](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/install.md)
+    - [Migration of bootstrapped clusters](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/flux-bootstrap-migration.md)
+- Flux Instance Configuration
+    - [Flux controllers configuration](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/flux-config.md)
+    - [Flux instance customization](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/flux-kustomize.md)
+    - [Cluster sync configuration](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/flux-sync.md)
+    - [Flux controllers sharding](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/flux-sharding.md)
+    - [Flux monitoring and reporting](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/monitoring.md)
+- Application Definitions and Self-Service Environments
+    - [Using ResourceSets for Application Definitions](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/resourcesets/app-definition.md)
+    - [Ephemeral Environments for GitHub Pull Requests](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/resourcesets/github-pull-requests.md)
+    - [Ephemeral Environments for GitLab Merge Requests](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/resourcesets/gitlab-merge-requests.md)
+- API References
+    - [FluxInstance CRD](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/fluxinstance.md)
+    - [FluxReport CRD](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/fluxreport.md)
+    - [ResourceSet CRD](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/resourceset.md)
+    - [ResourceSetInputProvider CRD](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/resourcesetinputprovider.md)
+
+## Flux MCP Server Overview
+
+The Flux Model Context Protocol (MCP) Server connects AI assistants directly to your Kubernetes clusters running Flux Operator, enabling seamless interaction through natural language.
+It serves as a bridge between AI tools and your GitOps pipelines, allowing you to analyze the cluster state, troubleshoot deployment issues, and perform operations using conversational prompts.
+The MCP Server is a subproject of the Flux Operator licensed under AGPL-3.0.
+
+### Flux MCP Server Documentation
+
+- [Flux MCP Server Installation](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/mcp/install.md)
+- [Flux MCP Server Configuration](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/mcp/config.md)
+- [Flux MCP Server Prompting Guide](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/mcp/prompt-engineering.md)
+- [Flux MCP Server Tools](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/mcp/tools.md)
+
+## CNCF Flux CD Overview
+
+Flux is a leading GitOps Continuous Delivery tool used to streamline and automate application deployments on Kubernetes.
+Flux enables teams to achieve a reliable and auditable delivery process while promoting collaboration and traceability across different environments.
+Flux is powered by the GitOps Toolkit, a set of composable APIs and specialized tools that enable a wide range of continuous delivery use-cases, from simple Kubernetes deployment pipelines to multi-tenant and multi-cluster progressive delivery rollouts.
+Flux is a Cloud Native Computing Foundation (CNCF) graduated project, licensed under the Apache License 2.0.
+
+### Flux API Documentation
+
+- [GitRepository CRD](https://raw.githubusercontent.com/fluxcd/source-controller/refs/heads/main/docs/spec/v1/gitrepositories.md)
+- [OCIRepository CRD](https://raw.githubusercontent.com/fluxcd/source-controller/refs/heads/main/docs/spec/v1/ocirepositories.md)
+- [Bucket CRD](https://raw.githubusercontent.com/fluxcd/source-controller/refs/heads/main/docs/spec/v1/buckets.md)
+- [Kustomization CRD](https://raw.githubusercontent.com/fluxcd/kustomize-controller/refs/heads/main/docs/spec/v1/kustomizations.md)
+- [HelmRelease CRD](https://raw.githubusercontent.com/fluxcd/helm-controller/refs/heads/main/docs/spec/v2/helmreleases.md)
+- [Webhook Receiver CRD](https://raw.githubusercontent.com/fluxcd/notification-controller/refs/heads/main/docs/spec/v1/receivers.md)
+- [Alert Provider CRD](https://raw.githubusercontent.com/fluxcd/notification-controller/refs/heads/main/docs/spec/v1beta3/providers.md)
+- [Alert CRD](https://raw.githubusercontent.com/fluxcd/notification-controller/refs/heads/main/docs/spec/v1beta3/alerts.md)
+- [ImageRepository CRD](https://raw.githubusercontent.com/fluxcd/image-reflector-controller/refs/heads/main/docs/spec/v1beta2/imagerpositories.md)
+- [ImagePolicy CRD](https://raw.githubusercontent.com/fluxcd/image-reflector-controller/refs/heads/main/docs/spec/v1beta2/imagepolicies.md)
+- [ImageUpdateAutomation CRD](https://raw.githubusercontent.com/fluxcd/image-automation-controller/refs/heads/main/docs/spec/v1beta2/imageupdateautomations.md)
+
+## About ControlPlane Group Limited
+
+ControlPlane is a cybersecurity consultancy firm based in London, New York, and Auckland with a focus on Kubernetes supply chain security, MLOps, and AI.
+ControlPlane is the main sponsor of the Flux CD project and employs core maintainers who contribute full-time to CNCF Flux and its ecosystem.
+
+For more information about ControlPlane, visit [control-plane.io](https://control-plane.io).
+
+For more information about the ControlPlane Enterprise for Flux CD offering, visit [fluxcd.control-plane.io](https://fluxcd.control-plane.io/).
