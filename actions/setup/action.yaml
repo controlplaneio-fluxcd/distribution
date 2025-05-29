@@ -6,7 +6,7 @@ branding:
   icon: command
 inputs:
   version:
-    description: Distribution version e.g. v2.5.0 (defaults to latest stable release)
+    description: Distribution version e.g. v2.6.0 (defaults to latest stable release)
     required: false
   bindir:
     description: Alternative location for the Flux CLI, defaults to path relative to $RUNNER_TOOL_CACHE.

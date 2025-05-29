@@ -19,7 +19,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.5.x"
+    version: "2.6.x"
     registry: "ghcr.io/fluxcd"
     artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
   cluster:
@@ -66,7 +66,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.5.x"
+    version: "2.6.x"
     registry: "ghcr.io/controlplaneio-fluxcd/distroless"
     imagePullSecret: "flux-enterprise-auth"
     artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
