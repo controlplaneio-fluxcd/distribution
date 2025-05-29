@@ -38,6 +38,26 @@ spec:
     Note that the `patch.target` **must not contain** a `namespace` field, all patches are
     applied to the instance namespace.
 
+### Verifying patches
+
+To verify the patches, you can use The Flux Operator CLI to build the `FluxInstance`
+locally and print the generated manifests.
+
+```bash
+# Build a FluxInstance and print the generated manifests
+flux-operator build instance -f flux.yaml
+
+# Build a FluxInstance and print a diff of the generated manifests
+flux-operator build instance -f flux.yaml | \
+  kubectl diff --server-side --field-manager=flux-operator -f -
+```
+
+!!! tip "Flux Operator CLI"
+    
+    The Flux Operator CLI is available as a binary executable for Linux, macOS and Windows.
+    The AMD64 and ARM64 binaries can be downloaded from
+    GitHub [releases page](https://github.com/controlplaneio-fluxcd/flux-operator/releases).
+
 ## Examples
 
 The following examples demonstrate how to customize the Flux manifests.

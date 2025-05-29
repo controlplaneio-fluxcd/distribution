@@ -133,12 +133,108 @@ For tighter security control, you can configure the server to impersonate a spec
 This limits the server's permissions to those granted to the specified service account.
 Note that your user set in the kubeconfig must have permission to impersonate service accounts.
 
-## Docker Container
+## Deploy on Kubernetes
 
-While it is possible to run the Flux MCP Server in a Docker container and mount the kubeconfig file,
-this could work only when the kubeconfig contains static credentials. If you connect to a
-managed Kubernetes cluster, the authentication implies shelling out to the cloud provider CLI
-with access to the other config files.
+To deploy the Flux MCP Server in a Kubernetes cluster, you can create a
+[ResourceSet](../operator/resourcesets/app-definition.md) with the following configuration:
 
-At the moment, we do not provide a Docker image for the Flux MCP Server, but you can build one
-using the binaries available on the [release page](https://github.com/controlplaneio-fluxcd/flux-operator/releases).
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: flux-operator-mcp
+  namespace: flux-system
+spec:
+  inputs:
+    - version: latest
+      readonly: false
+      accessFrom: flux-system
+  resources:
+    - apiVersion: source.toolkit.fluxcd.io/v1beta2
+      kind: OCIRepository
+      metadata:
+        name: flux-operator-manifests
+        namespace: flux-system
+      spec:
+        interval: 120m
+        url: oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests
+        ref:
+          tag: << inputs.version >>
+    - apiVersion: kustomize.toolkit.fluxcd.io/v1
+      kind: Kustomization
+      metadata:
+        name: flux-operator-mcp
+        namespace: flux-system
+      spec:
+        serviceAccountName: flux-operator
+        interval: 60m
+        wait: true
+        timeout: 5m
+        retryInterval: 5m
+        prune: true
+        sourceRef:
+          kind: OCIRepository
+          name: flux-operator-manifests
+        path: ./flux-operator-mcp
+        patches:
+          - patch: |
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --read-only=<< inputs.readonly >>
+            target:
+              kind: Deployment
+    - kind: NetworkPolicy
+      apiVersion: networking.k8s.io/v1
+      metadata:
+        name: flux-operator-mcp
+        namespace: flux-system
+      spec:
+        policyTypes:
+          - Ingress
+        podSelector:
+          matchLabels:
+            app.kubernetes.io/name: flux-operator-mcp
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    kubernetes.io/metadata.name: << inputs.accessFrom >>
+            ports:
+              - protocol: TCP
+                port: 9090
+```
+
+This ResourceSet will create a Kubernetes Deployment for the Flux MCP Server
+with cluster-admin permissions. It is recommended to set the `readonly` input to `true`
+in production environments to prevent modifications to the cluster state.
+
+The server is exposed via a Kubernetes Service named `flux-operator-mcp`
+in the `flux-system` namespace, listening on port `9090`. If the MCP client
+is running in-cluster, the `accessFrom` input should be set to the name of the
+namespace where the MCP client is deployed.
+
+To connect to the server, start port forwarding with:
+
+```shell
+kubectl port-forward -n flux-system svc/flux-operator-mcp 9090:9090
+```
+
+Then, in your VS Code settings, add:
+
+```json
+{
+ "mcp": {
+   "servers": {
+     "flux-operator-mcp": {
+       "type": "sse",
+       "url": "http://localhost:9090/sse"
+     }
+   }
+ }
+}
+```
+
+!!! warning "Warning"
+
+    Note that when running in-cluster, the kubeconfig context switching tools are disabled,
+    so comparing deployments across clusters is not possible.
