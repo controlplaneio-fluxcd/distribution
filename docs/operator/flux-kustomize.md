@@ -1,3 +1,7 @@
+---
+description: Flux Operator customization guide for FluxCD controllers and sources
+---
+
 # Flux Instance Customization
 
 The [FluxInstance](fluxinstance.md) allows for the customization of the

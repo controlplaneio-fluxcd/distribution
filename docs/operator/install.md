@@ -1,3 +1,7 @@
+---
+description: Flux Operator installation guide for Kubernetes and OpenShift clusters
+---
+
 # Flux Operator Installation
 
 The Flux Operator is designed to run in a Kubernetes cluster on Linux nodes (AMD64 or ARM64)

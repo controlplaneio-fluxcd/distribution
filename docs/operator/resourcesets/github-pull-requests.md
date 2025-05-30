@@ -1,3 +1,7 @@
+---
+description: Flux Operator preview environments guide for GitHub Pull Requests
+---
+
 # Ephemeral Environments for GitHub Pull Requests
 
 This guide demonstrates how to use the Flux Operator ResourceSet API to automate the deployment of

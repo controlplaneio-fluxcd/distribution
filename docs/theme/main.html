@@ -11,7 +11,7 @@
 <meta property="og:description" content="{{ config.site_description }}">
 {% else %}
 <meta property="og:title" content="{{ page.title }}">
-<meta property="og:description" content="{{ config.site_description }}">
+<meta property="og:description" content="{{ page.description }}">
 {% endif %}
 
 <meta name="twitter:site" content="@controlplaneio">
@@ -26,7 +26,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://fluxcd.control-plane.io/images/images/cp-logo.png">
 <meta property="twitter:title" content="{{ page.title }}">
-<meta property="twitter:description" content="{{ config.site_description }}">
+<meta property="twitter:description" content="{{ page.description }}">
 {% endif %}
 
 {% endblock %}

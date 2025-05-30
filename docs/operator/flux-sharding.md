@@ -1,3 +1,7 @@
+---
+description: Flux Operator horizontal scaling and sharding guide
+---
+
 # Flux Sharding Configuration
 
 The Flux Operator supports sharding the workload across multiple instances

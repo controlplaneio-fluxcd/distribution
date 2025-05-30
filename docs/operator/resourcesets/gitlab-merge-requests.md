@@ -1,3 +1,7 @@
+---
+description: Flux Operator preview environments guide for GitLab Merge Requests
+---
+
 # Ephemeral Environments for GitLab Merge Requests
 
 This guide demonstrates how to use the Flux Operator ResourceSet API to automate the deployment of

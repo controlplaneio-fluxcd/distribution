@@ -1,3 +1,7 @@
+---
+description: Flux Operator migration guide for FluxCD bootstrapped clusters
+---
+
 # Flux Bootstrap Migration
 
 Assuming you have a cluster bootstrapped with the Flux CLI or the Terraform Provider,

@@ -1,3 +1,7 @@
+---
+description: Flux Operator configuration guide for cluster synchronization
+---
+
 # Flux Cluster Sync Configuration
 
 The `FluxInstance` resource can be configured to instruct the operator to generate

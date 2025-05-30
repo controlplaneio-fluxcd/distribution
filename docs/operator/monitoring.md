@@ -1,3 +1,7 @@
+---
+description: Flux Operator monitoring guide for Kubernetes and OpenShift clusters
+---
+
 # Flux Monitoring and Reporting
 
 The Flux Operator supervises the Flux controllers and provides a unified view

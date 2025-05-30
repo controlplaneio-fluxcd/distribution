@@ -1,3 +1,7 @@
+---
+description: Flux Operator ResourceSets guide for application definitions
+---
+
 # Using ResourceSets for Application Definitions
 
 The ResourceSet API allows bundling a set of Kubernetes resources
