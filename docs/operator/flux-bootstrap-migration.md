@@ -100,7 +100,7 @@ To finalize the migration, remove the Flux manifests from the Git repository:
 If the Flux Operator is installed with Helm, you can automate the upgrade process using a Flux `HelmRelease`:
 
 ```yaml
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: flux-operator

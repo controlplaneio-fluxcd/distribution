@@ -107,7 +107,7 @@ To assign a Flux HelmRelease and its OCIRepository source to the `shard2` contro
 
 ```yaml
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: podinfo

@@ -105,7 +105,7 @@ spec:
         failing: 0
         running: 0
         suspended: 0
-    - apiVersion: source.toolkit.fluxcd.io/v1beta2
+    - apiVersion: source.toolkit.fluxcd.io/v1
       kind: OCIRepository
       stats:
         failing: 0

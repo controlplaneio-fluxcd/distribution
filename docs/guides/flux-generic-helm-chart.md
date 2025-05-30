@@ -128,7 +128,7 @@ resources, which is useful when deploying multiple microservices using the gener
 Here is an example of an `OCIRepository` resource that pulls a Helm chart from an OCI registry:
 
 ```yaml
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: my-jvm-chart

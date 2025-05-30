@@ -187,7 +187,7 @@ spec:
           kind: ServiceAccount
           name: "(source-controller|image-reflector-controller)"
       - patch: |
-          apiVersion: source.toolkit.fluxcd.io/v1beta2
+          apiVersion: source.toolkit.fluxcd.io/v1
           kind: OCIRepository
           metadata:
             name: all
