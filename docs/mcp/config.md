@@ -146,62 +146,38 @@ metadata:
   namespace: flux-system
 spec:
   inputs:
-    - version: latest
-      readonly: false
+    - readonly: false
       accessFrom: flux-system
   resources:
-    - apiVersion: source.toolkit.fluxcd.io/v1beta2
+    - apiVersion: source.toolkit.fluxcd.io/v1
       kind: OCIRepository
       metadata:
-        name: flux-operator-manifests
-        namespace: flux-system
+        name: << inputs.provider.name >>
+        namespace: << inputs.provider.namespace >>
       spec:
-        interval: 120m
-        url: oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests
+        interval: 60m
+        url: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator-mcp
+        layerSelector:
+          mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
+          operation: copy
         ref:
-          tag: << inputs.version >>
-    - apiVersion: kustomize.toolkit.fluxcd.io/v1
-      kind: Kustomization
+          semver: "*"
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
       metadata:
-        name: flux-operator-mcp
-        namespace: flux-system
+        name: << inputs.provider.name >>
+        namespace: << inputs.provider.namespace >>
       spec:
         serviceAccountName: flux-operator
-        interval: 60m
-        wait: true
-        timeout: 5m
-        retryInterval: 5m
-        prune: true
-        sourceRef:
+        chartRef:
           kind: OCIRepository
-          name: flux-operator-manifests
-        path: ./flux-operator-mcp
-        patches:
-          - patch: |
-              - op: add
-                path: /spec/template/spec/containers/0/args/-
-                value: --read-only=<< inputs.readonly >>
-            target:
-              kind: Deployment
-    - kind: NetworkPolicy
-      apiVersion: networking.k8s.io/v1
-      metadata:
-        name: flux-operator-mcp
-        namespace: flux-system
-      spec:
-        policyTypes:
-          - Ingress
-        podSelector:
-          matchLabels:
-            app.kubernetes.io/name: flux-operator-mcp
-        ingress:
-          - from:
-              - namespaceSelector:
-                  matchLabels:
-                    kubernetes.io/metadata.name: << inputs.accessFrom >>
-            ports:
-              - protocol: TCP
-                port: 9090
+          name: << inputs.provider.name >>
+        interval: 30m
+        values:
+          readonly: << inputs.readonly >>
+          networkPolicy:
+            ingress:
+              namespaces: [<< inputs.accessFrom >>]
 ```
 
 This ResourceSet will create a Kubernetes Deployment for the Flux MCP Server
