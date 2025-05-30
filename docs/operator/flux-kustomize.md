@@ -168,35 +168,6 @@ spec:
           kind: (GitRepository|OCIRepository)
 ```
 
-### Cluster sync AWS workload identity
-
-```yaml
-apiVersion: fluxcd.controlplane.io/v1
-kind: FluxInstance
-spec:
-  kustomize:
-    patches:
-      - patch: |
-          apiVersion: v1
-          kind: ServiceAccount
-          metadata:
-            name: all
-            annotations:
-              eks.amazonaws.com/role-arn: <ROLE ARN>
-        target:
-          kind: ServiceAccount
-          name: "(source-controller|image-reflector-controller)"
-      - patch: |
-          apiVersion: source.toolkit.fluxcd.io/v1beta2
-          kind: OCIRepository
-          metadata:
-            name: all
-          spec:
-            provider: aws
-        target:
-          kind: OCIRepository
-```
-
 ### Cluster sync SOPS decryption
 
 ```yaml

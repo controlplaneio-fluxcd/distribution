@@ -182,6 +182,31 @@ flux create secret oci flux-system \
   --password=$GITHUB_TOKEN
 ```
 
+## Sync from a Container Registry using Workload Identity
+
+To sync the cluster state from a managed container registry, for example, AWS ECR:
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+metadata:
+  name: flux
+  namespace: flux-system
+spec:
+  distribution:
+    version: "2.x"
+    registry: "ghcr.io/fluxcd"
+  sync:
+    kind: OCIRepository
+    provider: aws
+    url: "oci://<account>.dkr.ecr.<region>.amazonaws.com/fleet-manifests"
+    ref: "latest"
+    path: "clusters/my-cluster"
+```
+
+Note that you need to create an EKS Pod Identity association for the `source-controller`
+Service Account to allow it to pull images from the ECR repository.
+
 ## Sync from a Bucket
 
 To sync the cluster state from an S3 bucket where the Kubernetes manifests
