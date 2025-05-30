@@ -1,4 +1,5 @@
 ---
+title: Flux Instance Customization
 description: Flux Operator customization guide for FluxCD controllers and sources
 ---
 

@@ -1,5 +1,6 @@
 ---
-description: FluxCD Enterprise Distribution on AWS Marketplace
+title: Deploy Flux from AWS Marketplace
+description: FluxCD Enterprise installation guide from AWS Marketplace
 ---
 
 # Deploy Flux from AWS Marketplace

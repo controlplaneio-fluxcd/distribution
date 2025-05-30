@@ -1,4 +1,5 @@
 ---
+title: Using ResourceSets for Application Definitions
 description: Flux Operator ResourceSets guide for application definitions
 ---
 

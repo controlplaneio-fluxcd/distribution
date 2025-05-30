@@ -1,4 +1,5 @@
 ---
+title: Flux Architecture Overview
 description: FluxCD architecture and deployment strategies for multi-cluster GitOps
 ---
 

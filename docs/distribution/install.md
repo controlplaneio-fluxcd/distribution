@@ -1,4 +1,5 @@
 ---
+title: Flux Distribution Installation
 description: FluxCD Enterprise installation and upgrade guide
 ---
 

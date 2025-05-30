@@ -1,4 +1,5 @@
 ---
+title: ResourceSets Introduction
 description: Flux Operator ResourceSets overview and features
 ---
 

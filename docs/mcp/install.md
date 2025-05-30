@@ -1,4 +1,5 @@
 ---
+title: Flux MCP Server Installation
 description: FluxCD MCP Server installation guide
 ---
 

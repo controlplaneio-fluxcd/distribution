@@ -1,5 +1,6 @@
 ---
-description: Flux Operator preview environments guide for GitHub Pull Requests
+title: Ephemeral Environments for GitHub Pull Requests
+description: Flux Operator preview environments integration with GitHub
 ---
 
 # Ephemeral Environments for GitHub Pull Requests

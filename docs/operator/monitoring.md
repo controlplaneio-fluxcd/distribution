@@ -1,4 +1,5 @@
 ---
+title: Flux Monitoring and Reporting
 description: Flux Operator monitoring guide for Kubernetes and OpenShift clusters
 ---
 

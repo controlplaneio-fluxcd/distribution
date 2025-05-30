@@ -1,5 +1,6 @@
 ---
-description: Flux Operator preview environments guide for GitLab Merge Requests
+title: Ephemeral Environments for GitLab Merge Requests
+description: Flux Operator preview environments integration with GitLab
 ---
 
 # Ephemeral Environments for GitLab Merge Requests

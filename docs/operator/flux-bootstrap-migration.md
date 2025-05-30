@@ -1,4 +1,5 @@
 ---
+title: Flux Bootstrap Migration
 description: Flux Operator migration guide for FluxCD bootstrapped clusters
 ---
 

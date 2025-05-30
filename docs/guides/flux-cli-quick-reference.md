@@ -1,4 +1,5 @@
 ---
+title: Flux CLI Quick Reference
 description: FluxCD CLI cheatsheet for monitoring and troubleshooting
 ---
 

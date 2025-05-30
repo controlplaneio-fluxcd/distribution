@@ -1,4 +1,5 @@
 ---
+title: Supply Chain Security
 description: FluxCD Enterprise supply chain security and vulnerability management
 ---
 

@@ -1,4 +1,5 @@
 ---
+title: Flux Multitenant Policies
 description: FluxCD validating admission policies for multi-tenant clusters
 ---
 

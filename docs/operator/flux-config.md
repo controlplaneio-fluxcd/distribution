@@ -1,4 +1,5 @@
 ---
+title: Flux Controllers Configuration
 description: Flux Operator configuration guide for FluxCD controllers
 ---
 

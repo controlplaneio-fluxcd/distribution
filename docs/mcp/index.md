@@ -1,4 +1,5 @@
 ---
+title: Flux MCP Server Introduction
 description: FluxCD MCP Server overview and features
 ---
 

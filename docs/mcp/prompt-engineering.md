@@ -1,4 +1,5 @@
 ---
+title: Flux MCP Server Prompting Guide
 description: FluxCD MCP Server prompt engineering guide
 ---
 

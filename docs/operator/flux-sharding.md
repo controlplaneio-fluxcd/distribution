@@ -1,4 +1,5 @@
 ---
+title: Flux Sharding Configuration
 description: Flux Operator horizontal scaling and sharding guide
 ---
 

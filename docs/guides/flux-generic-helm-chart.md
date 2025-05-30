@@ -1,4 +1,5 @@
 ---
+title: Generic Helm Chart Pattern
 description: FluxCD GitOps with Generic Helm Charts reference guide
 ---
 

@@ -1,4 +1,5 @@
 ---
+title: Flux Cluster Sync Configuration
 description: Flux Operator configuration guide for cluster synchronization
 ---
 

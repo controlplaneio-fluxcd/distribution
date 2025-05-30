@@ -1,4 +1,5 @@
 ---
+title: Flux Distribution Introduction
 description: FluxCD Enterprise Distribution overview and features
 ---
 
