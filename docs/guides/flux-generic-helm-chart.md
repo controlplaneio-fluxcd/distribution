@@ -1,3 +1,7 @@
+---
+description: FluxCD GitOps with Generic Helm Charts reference guide
+---
+
 # Standardizing App Delivery with Flux and Generic Helm Charts
 
 In this guide we will explore how Flux can be used to standardize the lifecycle management

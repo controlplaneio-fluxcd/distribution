@@ -1,3 +1,7 @@
+---
+description: FluxCD AI rules and guidelines
+---
+
 # AI Chat Guidelines for Flux MCP Server
 
 ## Purpose

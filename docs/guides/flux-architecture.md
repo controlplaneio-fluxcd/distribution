@@ -1,3 +1,7 @@
+---
+description: FluxCD architecture and deployment strategies for multi-cluster GitOps
+---
+
 # Flux Architecture
 
 In this guide we will explore the architecture of **Flux CD**, and we will compare the deployment strategies

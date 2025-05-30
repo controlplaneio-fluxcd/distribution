@@ -1,3 +1,7 @@
+---
+description: FluxCD Enterprise Distribution on AWS Marketplace
+---
+
 # Deploy Flux from AWS Marketplace
 
 AWS users can deploy the ControlPlane Enterprise Distribution of Flux CD

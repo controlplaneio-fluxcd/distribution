@@ -1,3 +1,7 @@
+---
+description: FluxCD MCP Server prompt engineering guide
+---
+
 # Flux MCP Server Prompting Guide
 
 This guide provides recommendations for configuring your AI assistants with instructions

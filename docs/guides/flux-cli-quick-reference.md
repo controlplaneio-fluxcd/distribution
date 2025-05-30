@@ -1,3 +1,7 @@
+---
+description: FluxCD CLI cheatsheet for monitoring and troubleshooting
+---
+
 # Flux CLI Quick Reference
 
 This guide contains a list of commonly used `flux` commands

@@ -1,3 +1,7 @@
+---
+description: FluxCD Enterprise Distribution overview and features
+---
+
 # Flux Distribution Introduction
 
 ControlPlane Enterprise for Flux CD is a comprehensive solution for organizations seeking
@@ -9,7 +13,7 @@ for managing the delivery of application and infrastructure workloads on
 multi-tenant Kubernetes clusters.
 
 The ControlPlane distribution comes with enterprise-hardened Flux controllers including
-[support services](../pricing) for running Flux in production.
+[support services](../pricing/index.md) for running Flux in production.
 
 ## Highlights
 

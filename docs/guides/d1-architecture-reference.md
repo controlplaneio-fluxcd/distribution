@@ -1,4 +1,5 @@
 ---
+description: FluxCD GitOps Design 1 Reference Architecture Guide
 hide:
   - toc
 ---

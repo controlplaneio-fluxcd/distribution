@@ -1,4 +1,5 @@
 ---
+description: FluxCD GitLess GitOps Design 2 Reference Architecture Guide
 hide:
   - toc
 ---
