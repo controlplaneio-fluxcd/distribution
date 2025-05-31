@@ -1,3 +1,8 @@
+---
+title: Flux MCP Server Installation
+description: FluxCD MCP Server installation guide
+---
+
 # Flux MCP Server Installation
 
 This guide walks you through installing, configuring, and using the Flux MCP Server with various AI assistants.

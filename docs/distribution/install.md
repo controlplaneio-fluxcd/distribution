@@ -1,3 +1,8 @@
+---
+title: Flux Distribution Installation
+description: FluxCD Enterprise installation and upgrade guide
+---
+
 # Flux Distribution Installation
 
 ControlPlane offers a seamless transition from CNCF Flux to the enterprise distribution with no

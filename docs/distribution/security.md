@@ -1,3 +1,8 @@
+---
+title: Supply Chain Security
+description: FluxCD Enterprise supply chain security and vulnerability management
+---
+
 # Supply Chain Security
 
 The build, release and provenance portions of the ControlPlane distribution supply chain meet

@@ -1,3 +1,8 @@
+---
+title: Flux MCP Server Introduction
+description: FluxCD MCP Server overview and features
+---
+
 # Flux MCP Server Introduction
 
 The Flux Model Context Protocol (MCP) Server connects AI assistants like Claude, Cursor,

@@ -1,3 +1,7 @@
+---
+description: Flux Operator overview and features
+---
+
 # Flux Operator Introduction
 
 The [Flux Operator](https://github.com/controlplaneio-fluxcd/flux-operator)

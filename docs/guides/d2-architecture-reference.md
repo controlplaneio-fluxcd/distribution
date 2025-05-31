@@ -1,4 +1,6 @@
 ---
+title: Flux D2 Architectural Reference
+description: FluxCD GitLess GitOps Design 2 Reference Architecture Guide
 hide:
   - toc
 ---

@@ -1,3 +1,8 @@
+---
+title: Deploy Flux from AWS Marketplace
+description: FluxCD Enterprise installation guide from AWS Marketplace
+---
+
 # Deploy Flux from AWS Marketplace
 
 AWS users can deploy the ControlPlane Enterprise Distribution of Flux CD

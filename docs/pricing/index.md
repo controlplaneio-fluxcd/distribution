@@ -1,4 +1,6 @@
 ---
+title: Pricing
+description: FluxCD Enterprise pricing and support services
 hide:
   - navigation
 ---

@@ -1,3 +1,8 @@
+---
+title: Flux Sharding Configuration
+description: Flux Operator horizontal scaling and sharding guide
+---
+
 # Flux Sharding Configuration
 
 The Flux Operator supports sharding the workload across multiple instances
@@ -107,7 +112,7 @@ To assign a Flux HelmRelease and its OCIRepository source to the `shard2` contro
 
 ```yaml
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: podinfo
@@ -117,6 +122,9 @@ metadata:
 spec:
   interval: 10m
   url: oci://ghcr.io/stefanprodan/charts/podinfo
+  layerSelector:
+    mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
+    operation: copy
   ref:
     semver: ">6.0.0"
 ---

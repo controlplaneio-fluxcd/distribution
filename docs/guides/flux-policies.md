@@ -1,3 +1,8 @@
+---
+title: Flux Multitenant Policies
+description: FluxCD validating admission policies for multi-tenant clusters
+---
+
 # Flux Multitenant Policies
 
 In this guide we will cover how to use the Kubernetes built-in validating admission engine

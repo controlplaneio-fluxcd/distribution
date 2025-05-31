@@ -1,3 +1,8 @@
+---
+title: Flux Controllers Configuration
+description: Flux Operator configuration guide for FluxCD controllers
+---
+
 # Flux Controllers Configuration
 
 The Flux Operator comes with a Kubernetes CRD called [FluxInstance](fluxinstance.md).

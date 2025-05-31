@@ -1,3 +1,8 @@
+---
+title: ResourceSets Introduction
+description: Flux Operator ResourceSets overview and features
+---
+
 # ResourceSets Introduction
 
 The Flux Operator ResourceSet API offers a high-level abstraction for defining

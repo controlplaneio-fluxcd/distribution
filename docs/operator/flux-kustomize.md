@@ -1,3 +1,8 @@
+---
+title: Flux Instance Customization
+description: Flux Operator customization guide for FluxCD controllers and sources
+---
+
 # Flux Instance Customization
 
 The [FluxInstance](fluxinstance.md) allows for the customization of the
@@ -166,35 +171,6 @@ spec:
               semver: ">=1.0.0-0"
         target:
           kind: (GitRepository|OCIRepository)
-```
-
-### Cluster sync AWS workload identity
-
-```yaml
-apiVersion: fluxcd.controlplane.io/v1
-kind: FluxInstance
-spec:
-  kustomize:
-    patches:
-      - patch: |
-          apiVersion: v1
-          kind: ServiceAccount
-          metadata:
-            name: all
-            annotations:
-              eks.amazonaws.com/role-arn: <ROLE ARN>
-        target:
-          kind: ServiceAccount
-          name: "(source-controller|image-reflector-controller)"
-      - patch: |
-          apiVersion: source.toolkit.fluxcd.io/v1beta2
-          kind: OCIRepository
-          metadata:
-            name: all
-          spec:
-            provider: aws
-        target:
-          kind: OCIRepository
 ```
 
 ### Cluster sync SOPS decryption

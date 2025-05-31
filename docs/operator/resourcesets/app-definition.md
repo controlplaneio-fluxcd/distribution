@@ -1,3 +1,8 @@
+---
+title: Using ResourceSets for Application Definitions
+description: Flux Operator ResourceSets guide for application definitions
+---
+
 # Using ResourceSets for Application Definitions
 
 The ResourceSet API allows bundling a set of Kubernetes resources
@@ -71,7 +76,7 @@ spec:
        version: "6.6.x"
        replicas: 3
   resources:
-    - apiVersion: source.toolkit.fluxcd.io/v1beta2
+    - apiVersion: source.toolkit.fluxcd.io/v1
       kind: OCIRepository
       metadata:
         name: app1-<< inputs.tenant >>
@@ -126,7 +131,7 @@ spec:
               - value1
               - value2
   resources:
-    - apiVersion: source.toolkit.fluxcd.io/v1beta2
+    - apiVersion: source.toolkit.fluxcd.io/v1
       kind: OCIRepository
       metadata:
         name: app1-<< inputs.tenant >>

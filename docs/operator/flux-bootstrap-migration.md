@@ -1,3 +1,8 @@
+---
+title: Flux Bootstrap Migration
+description: Flux Operator migration guide for FluxCD bootstrapped clusters
+---
+
 # Flux Bootstrap Migration
 
 Assuming you have a cluster bootstrapped with the Flux CLI or the Terraform Provider,
@@ -100,14 +105,17 @@ To finalize the migration, remove the Flux manifests from the Git repository:
 If the Flux Operator is installed with Helm, you can automate the upgrade process using a Flux `HelmRelease`:
 
 ```yaml
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: flux-operator
   namespace: flux-system
 spec:
-  interval: 10m
+  interval: 30m
   url: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
+  layerSelector:
+    mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
+    operation: copy
   ref:
     semver: '*'
 ---
@@ -117,7 +125,8 @@ metadata:
   name: flux-operator
   namespace: flux-system
 spec:
-  interval: 10m
+  interval: 12h
+  serviceAccountName: flux-operator
   releaseName: flux-operator
   chartRef:
     kind: OCIRepository
@@ -136,7 +145,7 @@ for the cluster desired state, the following procedure can be followed:
 2. Create a repository in a container registry that both the CI tooling and Flux can access.
 3. Create a CI workflow that reacts to changes in the Git repository and publishes the Kubernetes manifests
    to the OCI repository.
-4. Configure the `FluxInstance` to use the OCI repository as the source of the cluster desired state.
+4. Configure the `FluxInstance` to use the OCI repository as the source of the cluster's desired state.
 
 To exemplify the migration, we will use GitHub but the same procedure can be applied to GitLab,
 Azure DevOps and other providers.

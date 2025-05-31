@@ -1,3 +1,8 @@
+---
+title: Flux MCP Server Configuration
+description: FluxCD MCP Server configuration guide
+---
+
 # Flux MCP Server Configuration
 
 This document covers the configuration options for the Flux Model Context Protocol (MCP) Server,

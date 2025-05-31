@@ -1,3 +1,8 @@
+---
+title: Generic Helm Chart Pattern
+description: FluxCD GitOps with Generic Helm Charts reference guide
+---
+
 # Standardizing App Delivery with Flux and Generic Helm Charts
 
 In this guide we will explore how Flux can be used to standardize the lifecycle management
@@ -128,17 +133,17 @@ resources, which is useful when deploying multiple microservices using the gener
 Here is an example of an `OCIRepository` resource that pulls a Helm chart from an OCI registry:
 
 ```yaml
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: my-jvm-chart
   namespace: my-java-apps
 spec:
   interval: 10m
+  url: oci://my-registry.io/charts/my-jvm-chart
   layerSelector:
     mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
     operation: copy
-  url: oci://my-registry.io/charts/my-jvm-chart
   ref:
     semver: "1.x"
 ```
