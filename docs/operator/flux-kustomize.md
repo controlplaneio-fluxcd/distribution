@@ -49,19 +49,10 @@ To verify the patches, you can use The Flux Operator CLI to build the `FluxInsta
 locally and print the generated manifests.
 
 ```bash
-# Build a FluxInstance and print the generated manifests
 flux-operator build instance -f flux.yaml
-
-# Build a FluxInstance and print a diff of the generated manifests
-flux-operator build instance -f flux.yaml | \
-  kubectl diff --server-side --field-manager=flux-operator -f -
 ```
 
-!!! tip "Flux Operator CLI"
-    
-    The Flux Operator CLI is available as a binary executable for Linux, macOS and Windows.
-    The AMD64 and ARM64 binaries can be downloaded from
-    GitHub [releases page](https://github.com/controlplaneio-fluxcd/flux-operator/releases).
+See the [Flux Operator CLI documentation](cli.md) for more details on how to use the CLI.
 
 ## Examples
 

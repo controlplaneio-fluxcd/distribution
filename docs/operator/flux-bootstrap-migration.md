@@ -105,32 +105,40 @@ To finalize the migration, remove the Flux manifests from the Git repository:
 If the Flux Operator is installed with Helm, you can automate the upgrade process using a Flux `HelmRelease`:
 
 ```yaml
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: OCIRepository
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
 metadata:
   name: flux-operator
   namespace: flux-system
 spec:
-  interval: 30m
-  url: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-  layerSelector:
-    mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
-    operation: copy
-  ref:
-    semver: '*'
----
-apiVersion: helm.toolkit.fluxcd.io/v2
-kind: HelmRelease
-metadata:
-  name: flux-operator
-  namespace: flux-system
-spec:
-  interval: 12h
-  serviceAccountName: flux-operator
-  releaseName: flux-operator
-  chartRef:
-    kind: OCIRepository
-    name: flux-operator
+  inputs:
+    - version: "*"
+  resources:
+   - apiVersion: source.toolkit.fluxcd.io/v1
+     kind: OCIRepository
+     metadata:
+      name: << inputs.provider.name >>
+      namespace: << inputs.provider.namespace >>
+     spec:
+      interval: 30m
+      url: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
+      layerSelector:
+        mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
+        operation: copy
+      ref:
+        semver: << inputs.version | quote >>
+   - apiVersion: helm.toolkit.fluxcd.io/v2
+     kind: HelmRelease
+     metadata:
+        name: << inputs.provider.name >>
+        namespace: << inputs.provider.namespace >>
+     spec:
+      interval: 30m
+      releaseName: << inputs.provider.name >>
+      serviceAccountName: << inputs.provider.name >>
+      chartRef:
+        kind: OCIRepository
+        name: << inputs.provider.name >>
 ```
 
 Commit and push the manifest to the Flux repository, and the operator will be automatically upgraded

@@ -124,6 +124,7 @@ nav:
           - FluxReport: operator/fluxreport.md
           - ResourceSet: operator/resourceset.md
           - ResourceSetInputProvider: operator/resourcesetinputprovider.md
+      - CLI Reference: operator/cli.md
   - Flux MCP Server:
       - Introduction: mcp/index.md
       - Installation: mcp/install.md

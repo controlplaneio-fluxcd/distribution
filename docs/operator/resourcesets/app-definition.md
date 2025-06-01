@@ -353,26 +353,11 @@ spec:
 When working with ResourceSets, you can use the Flux Operator CLI for building ResourceSet
 templates locally and for listing, reconciling, suspending and resuming ResourceSets in-cluster.
 
-The Flux Operator CLI is available as a binary executable for Linux, macOS and Windows.
-The AMD64 and ARM64 binaries can be downloaded from
-GitHub [releases page](https://github.com/controlplaneio-fluxcd/flux-operator/releases).
-
 The following commands are available:
 
 ```shell
 # Build the given ResourceSet and print the generated objects
-flux-operator build resourceset -f my-resourceset.yaml
-
-# Build a ResourceSet by providing the inputs from a file
-flux-operator build resourceset -f my-resourceset.yaml \
-  --inputs-from my-resourceset-inputs.yaml
-
-# Pipe the ResourceSet manifest to the build command
-cat my-resourceset.yaml | flux-operator build rset -f -
-
-# Build a ResourceSet and print a diff of the generated objects
-flux-operator build resourceset -f my-resourceset.yaml | \
-  kubectl diff --server-side --field-manager=flux-operator -f -
+flux-operator build rset -f my-resourceset.yaml
 
 # List all ResourceSets in the cluster
 flux-operator get rset --all-namespaces
@@ -386,6 +371,8 @@ flux-operator -n apps suspend rset podinfo
 # Resume a ResourceSet 
 flux-operator -n apps resume rset podinfo
 ```
+
+See the [Flux Operator CLI documentation](../cli.md) for more details on how to use the CLI.
 
 ## Further reading
 
