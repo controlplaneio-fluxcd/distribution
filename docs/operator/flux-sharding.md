@@ -64,6 +64,46 @@ support sharding.
 It is recommended to use the main controller instances to reconcile the cluster add-ons and
 the sharded controllers to reconcile the application workloads belonging to tenants.
 
+## Sharding with Persistent Storage
+
+Enabling persistent storage for source-controller can speed up startup time and
+reduce the network traffic after a restart, as the controller will not need to
+re-download all the artifacts from the source repositories.
+
+To enable persistent storage for the source-controller shards,
+you can add the following configuration to the `FluxInstance`:
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+metadata:
+  name: flux
+  namespace: flux-system
+spec:
+  distribution:
+    version: "2.x"
+    registry: "ghcr.io/fluxcd"
+  storage:
+    class: "standard"
+    size: "10Gi"
+  sharding:
+    key: "sharding.fluxcd.io/key"
+    shards:
+      - "shard1"
+      - "shard2"
+    storage: "persistent"
+```
+
+The operator will create a `PersistentVolumeClaim` for each shard including the main source-controller instance:
+
+```console
+$ kubectl -n flux-system get pvc
+NAME                          STATUS
+source-controller             Bound 
+source-controller-shard1      Bound
+source-controller-shard2      Bound
+```
+
 ## Distributing Resources Across Shards
 
 To assign a group of Flux resources to a particular shard, add the sharding key label to the resources,
