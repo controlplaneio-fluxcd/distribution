@@ -32,6 +32,59 @@
 | [ImageUpdateAutomation](https://v2-6.docs.fluxcd.io/flux/components/image/imageupdateautomations/) | `image.toolkit.fluxcd.io/v1beta2`        |
 | [Provider](https://v2-6.docs.fluxcd.io/flux/components/notification/providers/)                    | `notification.toolkit.fluxcd.io/v1beta3` |
 
+## v2.6.2
+
+Upstream changelog: [fluxcd/flux2 v2.6.2](https://github.com/fluxcd/flux2/releases/tag/v2.6.2)
+
+### Mainline v2.6.2
+
+#### Flux Controllers
+
+| Controller                                                         | Version | Architectures |
+|:-------------------------------------------------------------------|---------|---------------|
+| `ghcr.io/controlplaneio-fluxcd/alpine/source-controller`           | v1.6.1  | amd64 / arm64 |
+| `ghcr.io/controlplaneio-fluxcd/alpine/kustomize-controller`        | v1.6.0  | amd64 / arm64 |
+| `ghcr.io/controlplaneio-fluxcd/alpine/helm-controller`             | v1.3.0  | amd64 / arm64 |
+| `ghcr.io/controlplaneio-fluxcd/alpine/notification-controller`     | v1.6.0  | amd64 / arm64 |
+| `ghcr.io/controlplaneio-fluxcd/alpine/image-reflector-controller`  | v0.35.2 | amd64 / arm64 |
+| `ghcr.io/controlplaneio-fluxcd/alpine/image-automation-controller` | v0.41.1 | amd64 / arm64 |
+
+#### Flux Manifests
+
+| OCI Artifact                                          | Version |
+|:------------------------------------------------------|---------|
+| `ghcr.io/controlplaneio-fluxcd/alpine/flux-manifests` | v2.6.2  |
+
+### FIPS-compliant v2.6.2
+
+#### Flux Controllers
+
+| Controller                                                              | Version | Architectures |
+|:------------------------------------------------------------------------|---------|---------------|
+| `ghcr.io/controlplaneio-fluxcd/distroless/source-controller`            | v1.6.1  | amd64 / arm64 |
+| `ghcr.io/controlplaneio-fluxcd/distroless/kustomize-controller`         | v1.6.0  | amd64 / arm64 |
+| `ghcr.io/controlplaneio-fluxcd/distroless/helm-controller`              | v1.3.0  | amd64 / arm64 |
+| `ghcr.io/controlplaneio-fluxcd/distroless/notification-controller`      | v1.6.0  | amd64 / arm64 |
+| `ghcr.io/controlplaneio-fluxcd/distroless/image-reflector-controller`   | v0.35.2 | amd64 / arm64 |
+| `ghcr.io/controlplaneio-fluxcd/distroless/image-automation-controller`  | v0.41.1 | amd64 / arm64 |
+
+#### Flux Controllers for AWS Marketplace
+
+| Controller                                                                                     | Version | Architectures |
+|:-----------------------------------------------------------------------------------------------|---------|---------------|
+| `709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd/source-controller`           | v1.6.1  | amd64 / arm64 |
+| `709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd/kustomize-controller`        | v1.6.0  | amd64 / arm64 |
+| `709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd/helm-controller`             | v1.3.0  | amd64 / arm64 |
+| `709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd/notification-controller`     | v1.6.0  | amd64 / arm64 |
+| `709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd/image-reflector-controller`  | v0.35.2 | amd64 / arm64 |
+| `709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd/image-automation-controller` | v0.41.1 | amd64 / arm64 |
+
+#### Flux Manifests
+
+| OCI Artifact                                               | Version |
+|:-----------------------------------------------------------|---------|
+| `ghcr.io/controlplaneio-fluxcd/distroless/flux-manifests`  | v2.6.2  |
+
 ## v2.6.1
 
 Upstream changelog: [fluxcd/flux2 v2.6.1](https://github.com/fluxcd/flux2/releases/tag/v2.6.1)
