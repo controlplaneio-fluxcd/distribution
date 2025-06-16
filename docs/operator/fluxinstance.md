@@ -304,6 +304,7 @@ spec:
     type: openshift
     multitenant: true
     tenantDefaultServiceAccount: "flux"
+    objectLevelWorkloadIdentity: false
     networkPolicy: true
     domain: "cluster.local"
 ```
@@ -319,10 +320,14 @@ The supported values are `kubernetes` (default), `openshift`, `azure`, `aws` and
 
 The `.spec.cluster.multitenant` field is optional and specifies whether to enable Flux
 [multi-tenancy lockdown](https://fluxcd.io/flux/installation/configuration/multitenancy/).
+By default, it is `false` (disabled).
 
 The `.spec.cluster.tenantDefaultServiceAccount` is optional and specifies the default
 service account used by Flux when reconciling `Kustomization` and `HelmRelease`
 resources found in the tenant namespaces.
+
+The `.spec.cluster.objectLevelWorkloadIdentity` field is optional and specifies whether to
+enable the object-level workload identity feature gate and RBAC for the Flux controllers.
 
 #### Cluster network policy
 
@@ -370,6 +375,7 @@ spec:
     shards:
       - "shard1"
       - "shard2"
+    storage: persistent
 ```
 
 For each shard, the operator will create a separate set of controllers, e.g.:
@@ -402,6 +408,15 @@ By default, the key is set to `sharding.fluxcd.io/key`.
 #### Shards
 
 The `.spec.sharding.shards` field is required and specifies the list of sharding values to use for the Flux controllers.
+
+### Sharding storage
+
+The `.spec.sharding.storage` field is optional and specifies the storage type to use
+for the source-controller shards.
+
+The supported values are `ephemeral` (default) and `persistent`.
+When set to `persistent`, the operator will create a persistent volume claim for each shard using
+the storage class and size specified in the `.spec.storage` field.
 
 ### Common metadata
 
@@ -648,9 +663,10 @@ result in upgrade failures due to deprecated API versions being removed in futur
 ### Conditions
 
 A FluxInstance enters various states during its lifecycle, reflected as Kubernetes Conditions.
-It can be [reconciling](#reconciling-fluxinstance) while applying the
-resources on the cluster, it can be [ready](#ready-fluxinstance), or it can [fail during
-reconciliation](#failed-fluxinstance).
+It can be [reconciling](#reconciling-fluxinstance) while applying the resources on the cluster,
+it can be [ready](#ready-fluxinstance),
+it can [fail during reconciliation](#failed-fluxinstance),
+or it can [fail due to misconfiguration](#stalled-fluxinstance).
 
 The FluxInstance API is compatible with the **kstatus** specification,
 and reports `Reconciling` and `Stalled` conditions where applicable to
@@ -710,6 +726,23 @@ the reconciliation failed.
 While the FluxInstance has one or more of these Conditions, the flux-operator
 will continue to attempt a reconciliation with an
 exponential backoff, until it succeeds and the FluxInstance is marked as [ready](#ready-fluxinstance).
+
+#### Stalled FluxInstance
+
+The flux-operator may fail the reconciliation of a FluxInstance object terminally due
+to a misconfiguration. When this happens, the flux-operator adds the `Stalled` Condition
+to the FluxInstance’s `.status.conditions` with the following attributes:
+
+- `type: Stalled`
+- `status: "True"`
+- `reason: BuildFailed`
+
+Misconfigurations can include:
+
+- The build of the Flux manifests fails. In this case the condition reason is `BuildFailed`.
+
+When this happens, the flux-operator will not attempt to reconcile the FluxInstance
+until the misconfiguration is fixed. The `Ready` Condition status is also set to `False`.
 
 ### Components status
 
