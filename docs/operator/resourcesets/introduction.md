@@ -43,3 +43,10 @@ To get started with self-service environments see the following guides:
 Another use-case is to automate the provisioning of new environments for feature branches,
 and for long-lived branches to deploy to dedicated namespaces and/or clusters, effectively
 enabling Namespace-as-a-Service to developers securely in a GitOps manner.
+
+### Time-based Delivery
+
+The ResourceSet API also supports time-based delivery, allowing platform teams to define
+deployment windows for applications based on time intervals or specific dates.
+
+To get started with deployment windows, see the [Time-Based Delivery](time-based-delivery.md) guide.

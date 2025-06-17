@@ -6,7 +6,7 @@ The enterprise distribution bundles the Flux Operator and the Flux MCP Server, w
 ## Flux Operator Overview
 
 Flux Operator offers a production-ready solution for managing the delivery of application and infrastructure workloads on multi-tenant Kubernetes clusters using GitOps principles.
-The operator is designed to automate the installation, configuration, and upgrade of the Flux controllers as well as to provide advanced features such as preview environments for testing pull requests, and self-service capabilities for developers.
+The operator is designed to automate the installation, configuration, and upgrade of the Flux controllers as well as to provide advanced features such as preview environments for testing pull requests, deployment windows, and self-service capabilities for developers.
 The Flux Operator is an open-source project licensed under AGPL-3.0 and is developed by the CNCF Flux core maintainers part of the ControlPlane team.
 
 ### Flux Operator Documentation
@@ -22,6 +22,7 @@ The Flux Operator is an open-source project licensed under AGPL-3.0 and is devel
     - [Flux monitoring and reporting](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/monitoring.md)
 - Application Definitions and Self-Service Environments
     - [Using ResourceSets for Application Definitions](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/resourcesets/app-definition.md)
+    - [Using ResourceSets for Time-Based Delivery and Deployment Windows](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/resourcesets/time-based-delivery.md)
     - [Ephemeral Environments for GitHub Pull Requests](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/resourcesets/github-pull-requests.md)
     - [Ephemeral Environments for GitLab Merge Requests](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/resourcesets/gitlab-merge-requests.md)
 - API References
