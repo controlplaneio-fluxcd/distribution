@@ -102,6 +102,7 @@ The following commands are available:
 
 - `flux-operator get instance`: Retrieves the FluxInstance resource in the cluster.
 - `flux-operator get rset`: Retrieves the ResourceSet resources in the cluster.
+- `flux-operator get rsip`: Retrieves the ResourceSetInputProvider resources in the cluster.
 
 Arguments:
 
@@ -116,6 +117,7 @@ The following commands are available:
 
 - `flux-operator reconcile instance <name> -n <namespace>`: Reconciles the FluxInstance resource in the cluster.
 - `flux-operator reconcile rset <name> -n <namespace>`: Reconciles the ResourceSet resource in the cluster.
+- `flux-operator reconcile rsip <name> -n <namespace>`: Reconciles the ResourceSetInputProvider resource in the cluster.
 
 ### Suspend/Resume Commands
 
@@ -128,3 +130,5 @@ The following commands are available:
 - `flux-operator resume instance <name> -n <namespace>`: Resumes the reconciliation of the FluxInstance resource in the cluster.
 - `flux-operator suspend rset <name> -n <namespace>`: Suspends the reconciliation of the ResourceSet resource in the cluster.
 - `flux-operator resume rset <name> -n <namespace>`: Resumes the reconciliation of the ResourceSet resource in the cluster.
+- `flux-operator suspend rsip <name> -n <namespace>`: Suspends the reconciliation of the ResourceSetInputProvider resource in the cluster.
+- `flux-operator resume rsip <name> -n <namespace>`: Resumes the reconciliation of the ResourceSetInputProvider resource in the cluster.
