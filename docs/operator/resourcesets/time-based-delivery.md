@@ -66,7 +66,7 @@ spec:
     - cron: "0 8 * * 1-5"
       timeZone: "Europe/London"
       window: 8h
-  type: GitHubBranch # or GitLabBranch
+  type: GitHubBranch # or GitLabBranch / AzureDevOpsBranch
   url: https://github.com/my-org/my-app
   secretRef:
     name: gh-app-auth
@@ -95,7 +95,7 @@ spec:
     - cron: "0 8 * * 1-5"
       timeZone: "Europe/London"
       window: 8h
-  type: GitHubTag # or GitLabTag
+  type: GitHubTag # or GitLabTag / AzureDevOpsTag
   url: https://github.com/my-org/my-app
   secretRef:
     name: gh-auth
@@ -161,10 +161,9 @@ an application deployment for the new version.
 
 For applications packaged with Helm, you can use a similar approach to trigger a Helm release upgrade
 in a controlled manner when a new chart version is available.
-For this to work, the Helm chart version must match the Git tag versioning scheme.
+For this to work, the Helm chart must be stored in a container registry as an OCI artifact.
 
-Example `ResourceSetInputProvider` that scans a repository for Git tags in semver format
-and exports the latest stable version as an input:
+Example `ResourceSetInputProvider` that scans an OCI repository and exports the latest stable version as an input:
 
 ```yaml
 apiVersion: fluxcd.controlplane.io/v1
@@ -181,15 +180,15 @@ spec:
    schedule:
       - cron: "0 12 * * 1-5"
         timeZone: "UTC"
-   type: GitHubTag
-   url: https://github.com/stefanprodan/podinfo
+   type: OCIArtifactTag
+   url: oci://ghcr.io/stefanprodan/charts/podinfo
    filter:
       semver: ">=1.0.0"
       limit: 1
 ```
 
 Example `ResourceSet` that deploys a Flux HelmRelease using
-the Git tag exported by the input provider as the latest chart version:
+the artifact tag exported by the input provider as the latest chart version:
 
 ```yaml
 apiVersion: fluxcd.controlplane.io/v1
@@ -231,9 +230,8 @@ spec:
 
 !!! tip "OCI Artifacts Support"
 
-    Note that in a future release, Flux Operator will support
-    scanning container registries for OCI artifacts, allowing you to decouple
-    the Helm chart versioning from the Git repository.
+    Note that Flux Operator supports OIDC-based authentication for container registries such as Amazon ECR, Azure ACR and Google GAR.
+    For more details, see the [ResourceSetInputProvider API reference](../resourcesetinputprovider.md#secret-less).
 
 ## Scheduling Configuration
 
