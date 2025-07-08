@@ -52,7 +52,23 @@ spec:
     managedBy: flux-operator
     status: Installed
     version: v2.3.0
+  operator:
+    apiVersion: fluxcd.controlplane.io/v1
+    platform: linux/arm64
+    version: v0.24.0
   reconcilers:
+    - apiVersion: fluxcd.controlplane.io/v1
+      kind: ResourceSet
+      stats:
+        failing: 0
+        running: 5
+        suspended: 1
+    - apiVersion: fluxcd.controlplane.io/v1
+      kind: ResourceSetInputProvider
+      stats:
+        failing: 1
+        running: 5
+        suspended: 1
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
       stats:
@@ -217,6 +233,11 @@ spec:
       ready: true
       status: 'Current Deployment is available. Replicas: 1'
 ```
+
+### Operator information
+
+The `.spec.operator` field contains information about the Flux Operator,
+including the API version, platform, and version of the operator.
 
 ### Reconcilers statistics
 
