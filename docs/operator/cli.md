@@ -103,11 +103,22 @@ The following commands are available:
 - `flux-operator get instance`: Retrieves the FluxInstance resource in the cluster.
 - `flux-operator get rset`: Retrieves the ResourceSet resources in the cluster.
 - `flux-operator get rsip`: Retrieves the ResourceSetInputProvider resources in the cluster.
+- `flux-operator get resources`: Retrieves all Flux resources in the cluster.
 
 Arguments:
 
 - `-n, --namespace`: Specifies the namespace to filter the resources.
 - `-A, --all-namespaces`: Retrieves resources from all namespaces.
+
+### Export Commands
+
+The `flux-operator export` commands are used to export the Flux Operator resources in YAML format.
+The exported resources can be used for backup, migration, or inspection purposes.
+
+The following commands are available:
+
+- `flux-operator export report`: Exports the FluxReport resource containing the distribution status and version information.
+- `flux-operator export resource <kind>/<name> -n <namespace>`: Exports a Flux resource from the specified namespace.
 
 ### Reconcile Commands
 
@@ -118,6 +129,7 @@ The following commands are available:
 - `flux-operator reconcile instance <name> -n <namespace>`: Reconciles the FluxInstance resource in the cluster.
 - `flux-operator reconcile rset <name> -n <namespace>`: Reconciles the ResourceSet resource in the cluster.
 - `flux-operator reconcile rsip <name> -n <namespace>`: Reconciles the ResourceSetInputProvider resource in the cluster.
+- `flux-operator reconcile resource <kind>/<name> -n <namespace>`: Reconciles a Flux resource in the specified namespace.
 
 ### Suspend/Resume Commands
 
@@ -132,3 +144,19 @@ The following commands are available:
 - `flux-operator resume rset <name> -n <namespace>`: Resumes the reconciliation of the ResourceSet resource in the cluster.
 - `flux-operator suspend rsip <name> -n <namespace>`: Suspends the reconciliation of the ResourceSetInputProvider resource in the cluster.
 - `flux-operator resume rsip <name> -n <namespace>`: Resumes the reconciliation of the ResourceSetInputProvider resource in the cluster.
+- `flux-operator suspend resource <kind>/<name> -n <namespace>`: Suspends the reconciliation of the Flux resource in the cluster.
+- `flux-operator resume resource <kind>/<name> -n <namespace>`: Resumes the reconciliation of the Flux resource in the cluster.
+
+### Statistics Command
+
+The `flux-operator stats` command is used to retrieve statistics about the Flux resources
+including their reconciliation status and the amount of cumulative storage used for each source type.
+
+### Version Command
+
+The `flux-operator version` command is used to display the version of the CLI, of the Flux Operator
+and of the Flux distribution running in the cluster.
+
+Arguments:
+
+- `--client`: If true, shows the client version only (no server required).

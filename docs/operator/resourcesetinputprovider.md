@@ -98,6 +98,13 @@ The following types are supported:
 - `GitLabMergeRequest`: fetches input values from opened GitLab Merge Requests.
 - `GitLabBranch`: fetches input values from GitLab project branches.
 - `GitLabTag`: fetches input values from GitLab project tags.
+- `AzureDevOpsPullRequest`: fetches input values from opened Azure DevOps Pull Requests.
+- `AzureDevOpsBranch`: fetches input values from Azure DevOps repository branches.
+- `AzureDevOpsTag`: fetches input values from AzureDevOps project tags.
+- `OCIArtifactTag`: fetches input values from OCI artifact tags from generic container registries.
+- `ACRArtifactTag`: fetches input values from Azure Container Registry OCI artifact tags.
+- `ECRArtifactTag`: fetches input values from Elastic Container Registry OCI artifact tags.
+- `GARArtifactTag`: fetches input values from Google Artifact Registry OCI artifact tags.
 
 For the `Static` type, the flux-operator will export in `.status.exportedInputs` a
 single input map with the values from the field `.spec.defaultValues` and the
@@ -127,12 +134,25 @@ For Git Tags the [exported inputs](#exported-inputs-status) structure is:
 
 - `id`: the Adler-32 checksum of the tag name (type string).
 - `tag`: the tag name (type string).
-- `sha`: the commit SHA corresponding to the tag (type string).
+- `sha`: the commit SHA corresponding to the tag in the format `<hash>` (type string).
+
+For OCI Artifact Tags the [exported inputs](#exported-inputs-status) structure is:
+
+- `id`: the Adler-32 checksum of the tag name (type string).
+- `tag`: the tag name (type string).
+- `digest`: the SHA256 digest corresponding to the tag in the format `sha256:<hash>` (type string).
+
+The ACR, ECR and GAR Artifact Tag providers export the same inputs as the OCI Artifact Tag provider,
+with the difference on the authentication method used to connect to the registry. For these providers,
+[secret-less](#secret-less) authentication is used.
 
 ### URL
 
-The `.spec.url` field is required and specifies the HTTP/S URL of the provider.
-For Git services, the URL should contain the GitHub repository or the GitLab project address.
+The `.spec.url` field is required for external providers.
+For Git services, the URL should contain GitHub repository or the GitLab project address,
+including the HTTP/S scheme (`(http|https)://`).
+For OCI services, the URL should contain the OCI repository address,
+including the OCI scheme (`oci://`).
 
 ### Filter
 
@@ -144,6 +164,8 @@ The following filters are supported:
 - `labels`: filter GitHub Pull Requests or GitLab Merge Requests by labels.
 - `includeBranch`: regular expression to include branches by name.
 - `excludeBranch`: regular expression to exclude branches by name.
+- `includeTag`: regular expression to include tags by name.
+- `excludeTag`: regular expression to exclude tags by name.
 - `semver`: sematic version range to filter and sort tags.
 
 Example of a filter configuration for GitLab Merge Requests:
@@ -158,7 +180,16 @@ spec:
     excludeBranch: "^feat/not-this-one$"
 ```
 
-Example of a filter configuration for fetching only the latest Git tag according to semver:
+Example of a filter configuration for filtering tags by inclusion and exclusion:
+
+```yaml
+spec:
+  filter:
+    includeTag: "^v[0-9]+\\.[0-9]+\\.[0-9]+$" # include tags like v1.2.3
+    excludeTag: "^v0" # exclude tags like v0.1.0
+```
+
+Example of a filter configuration for fetching only the latest tag according to semver:
 
 ```yaml
 spec:
@@ -207,15 +238,31 @@ spec:
 
 ### Authentication configuration
 
+#### Secret-based
+
 The `.spec.secretRef` field is optional and specifies the Kubernetes Secret containing
 the authentication credentials used for connecting to the external service.
 Note that the secret must be created in the same namespace as the ResourceSetInputProvider.
+
+This field is not supported by the following provider [types](#type):
+
+- `Static`
+- `ACRArtifactTag`
+- `ECRArtifactTag`
+- `GARArtifactTag`
 
 For Git services, the secret should contain the `username` and `password` keys, with the password
 set to a personal access token that grants access for listing Pull Requests or Merge Requests
 and Git branches.
 
-Example secret:
+For the `OCIArtifactTag` provider [type](#type), the secret should contain a Kubernetes Docker
+config JSON secret, i.e. as if created by the `kubectl create secret docker-registry` command.
+If the `.spec.serviceAccountName` field is specified, all the image pull secrets configured on
+the ServiceAccount are also included in the registry keychain used for the reconciliation,
+alongside the secret specified in `.spec.secretRef`. All of them have to be on the format
+produced by the `kubectl create secret docker-registry` command.
+
+Example of Git secret:
 
 ```yaml
 apiVersion: v1
@@ -228,19 +275,95 @@ stringData:
   password: <GITHUB PAT>
 ```
 
+Example of `OCIArtifactTag` Docker config secret:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: docker-config
+  namespace: default
+type: kubernetes.io/dockerconfigjson
+stringData:
+  .dockerconfigjson: |
+    {
+      "auths": {
+        "<REGISTRY HOST>": {
+          "username": "flux",
+          "password": "<PASSWORD>"
+        }
+      }
+    }
+```
+
 Example secret reference:
 
 ```yaml
 spec:
+  serviceAccountName: oci-pull-secrets-sa # optional, for OCIArtifactTag provider type only
   secretRef:
-    name: github-pat
+    name: github-pat # or oci-pull-secret for OCIArtifactTag provider type
 ```
+
+#### Secret-less
+
+The `.spec.serviceAccountName` field is optional and specifies the name of the Kubernetes
+ServiceAccount in the same namespace configured with workload identity to access a cloud
+provider service (this is called *object-level workload identity*). This field can only
+be used with the following provider [types](#type) for workload identity:
+
+- `AzureDevOpsPullRequest`
+- `AzureDevOpsBranch`
+- `AzureDevOpsTag`
+- `ACRArtifactTag`
+- `ECRArtifactTag`
+- `GARArtifactTag`
+
+When this field is not present and one of the types above is specified (and in the case of Azure
+DevOps, [`.spec.secretRef`](#secret-reference) is also not specified), the operator will attempt
+to authenticate using the environment credentials, i.e. either the identity of the node or the
+operator ServiceAccount. This is called *controller-level workload identity*.
+
+For configuring a Kubernetes ServiceAccount with workload identity, see the following documentation:
+
+- [Azure](https://fluxcd.io/flux/integrations/azure/#with-workload-identity-federation)
+- [AWS (controller-level)](https://fluxcd.io/flux/integrations/aws/#with-eks-pod-identity)
+- [AWS (object-level)](https://fluxcd.io/flux/integrations/aws/#with-oidc-federation)
+- [GCP](https://fluxcd.io/flux/integrations/gcp/#with-workload-identity-federation)
+
+For configuring the required permissions to access the cloud services, see the following documentation:
+
+- [Azure DevOps](https://fluxcd.io/flux/integrations/azure/#for-azure-devops) (the `Readers` ADO group is sufficient)
+- [Azure Container Registry](https://fluxcd.io/flux/integrations/azure/#for-azure-container-registry)
+- [Amazon Elastic Container Registry](https://fluxcd.io/flux/integrations/aws/#for-amazon-elastic-container-registry)
+- [Amazon Elastic Container Registry Public](https://fluxcd.io/flux/integrations/aws/#for-amazon-public-elastic-container-registry)
+- [Google Artifact Registry](https://fluxcd.io/flux/integrations/gcp/#for-google-cloud-artifact-registry)
+
+For configuring the operator to use controller-level workload identity, patches like
+the ones described in the documentation below can be applied to the operator deployment:
+
+- [Azure](https://fluxcd.io/flux/integrations/azure/#at-the-controller-level)
+- [AWS](https://fluxcd.io/flux/integrations/aws/#at-the-controller-level)
+- [GCP](https://fluxcd.io/flux/integrations/gcp/#at-the-controller-level)
+
+For configuring the identity of your nodes to access container registry services, see the
+following documentation:
+
+- [Authenticate with ACR from AKS](https://learn.microsoft.com/en-us/azure/aks/cluster-container-registry-integration?tabs=azure-cli)
+- Authenticate with ECR from EKS:
+  - [Create IAM Roles for EKS worker nodes](https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html#create-worker-node-role)
+  - [Allow the EKS worker IAM Roles to pull images from ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/ECR_on_EKS.html)
+- [Authenticate with GAR from GKE](https://cloud.google.com/artifact-registry/docs/integrate-gke)
+
+See also the cross-cloud documentation:
+
+- [Cross-cloud support](https://fluxcd.io/flux/integrations/cross-cloud/)
 
 #### GitHub App authentication
 
 For GitHub, GitHub App authentication is also supported. Instead of adding the basic
-auth keys `username` and `password`, you can add the following GitHub App keys to the
-secret:
+auth keys `username` and `password` to the referenced Secret, you can add the following
+GitHub App keys:
 
 ```yaml
 apiVersion: v1
@@ -277,7 +400,18 @@ The `.spec.certSecretRef` field is optional and specifies the Kubernetes Secret 
 TLS certificate used for connecting to the external service.
 Note that the secret must be created in the same namespace as the ResourceSetInputProvider.
 
+This field is not supported by the following provider [types](#type):
+
+- `Static`
+- `ACRArtifactTag`
+- `ECRArtifactTag`
+- `GARArtifactTag`
+
 For Git services that use self-signed certificates, the secret should contain the `ca.crt` key.
+
+For the `OCIArtifactTag` provider [type](#type), the secret should contain either or both of
+the `ca.crt` key with a CA certificate, and the pair `tls.crt` and `tls.key` keys with an
+mTLS client certificate and key.
 
 Example secret:
 
@@ -285,14 +419,24 @@ Example secret:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: gitlab-ca
+  name: provider-certs
   namespace: default
 stringData:
-  ca.crt: |
+  ca.crt: | # supported for both Git and OCIArtifactTag providers
     -----BEGIN CERTIFICATE-----
     MIIDpDCCAoygAwIBAgIUI7z
     ...
     -----END CERTIFICATE-----
+  tls.crt: | # supported only for the OCIArtifactTag provider
+    -----BEGIN CERTIFICATE-----
+    MIIDpDCCAoygIUI7zgAwIBA
+    ...
+    -----END CERTIFICATE-----
+  tls.key: | # supported only for the OCIArtifactTag provider
+    -----BEGIN PRIVATE KEY-----
+    MIIEvQIBADABAQCv1qlHtnk
+    ...
+    -----END PRIVATE KEY-----
 ```
 
 Example certificate reference:
@@ -300,7 +444,7 @@ Example certificate reference:
 ```yaml
 spec:
   certSecretRef:
-    name: gitlab-ca
+    name: provider-certs
 ```
 
 ### Schedule
@@ -502,6 +646,16 @@ status:
   - id: "48955639"
     tag: "6.0.4"
     sha: 11cf36d83818e64aaa60d523ab6438258ebb6009
+```
+
+Example for OCI latest semver tag:
+
+```yaml
+status:
+  exportedInputs:
+  - id: "48955639"
+    tag: "6.0.4"
+    sha: sha256:d4ec9861522d4961b2acac5a070ef4f92d732480dff2062c2f3a1dcf9a5d1e91
 ```
 
 ### Schedule status
