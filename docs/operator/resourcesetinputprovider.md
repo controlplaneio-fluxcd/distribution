@@ -87,64 +87,40 @@ A ResourceSet also needs a [`.spec` section](https://github.com/kubernetes/commu
 
 ### Type
 
-The `.spec.type` field is required and specifies the type of the provider.
+The `.spec.type` field is required and specifies the type of the provider. The following types are supported:
 
-The following types are supported:
+| Type                     | Description                                                                     |
+|--------------------------|---------------------------------------------------------------------------------|
+| `Static`                 | exports a single input map with the values from the field `.spec.defaultValues` |
+| `GitHubPullRequest`      | fetches input values from opened GitHub Pull Requests                           |
+| `GitHubBranch`           | fetches input values from GitHub repository branches                            |
+| `GitHubTag`              | fetches input values from GitHub repository tags                                |
+| `GitLabMergeRequest`     | fetches input values from opened GitLab Merge Requests                          |
+| `GitLabBranch`           | fetches input values from GitLab project branches                               |
+| `GitLabTag`              | fetches input values from GitLab project tags                                   |
+| `AzureDevOpsPullRequest` | fetches input values from opened Azure DevOps Pull Requests                     |
+| `AzureDevOpsBranch`      | fetches input values from Azure DevOps repository branches                      |
+| `AzureDevOpsTag`         | fetches input values from AzureDevOps project tags                              |
+| `OCIArtifactTag`         | fetches input values from OCI artifact tags from generic container registries   |
+| `ACRArtifactTag`         | fetches input values from Azure Container Registry OCI artifact tags            |
+| `ECRArtifactTag`         | fetches input values from Elastic Container Registry OCI artifact tags          |
+| `GARArtifactTag`         | fetches input values from Google Artifact Registry OCI artifact tags            |
 
-- `Static`: exports a single input map with the values from the field `.spec.defaultValues`.
-- `GitHubPullRequest`: fetches input values from opened GitHub Pull Requests.
-- `GitHubBranch`: fetches input values from GitHub repository branches.
-- `GitHubTag`: fetches input values from GitHub repository tags.
-- `GitLabMergeRequest`: fetches input values from opened GitLab Merge Requests.
-- `GitLabBranch`: fetches input values from GitLab project branches.
-- `GitLabTag`: fetches input values from GitLab project tags.
-- `AzureDevOpsPullRequest`: fetches input values from opened Azure DevOps Pull Requests.
-- `AzureDevOpsBranch`: fetches input values from Azure DevOps repository branches.
-- `AzureDevOpsTag`: fetches input values from AzureDevOps project tags.
-- `OCIArtifactTag`: fetches input values from OCI artifact tags from generic container registries.
-- `ACRArtifactTag`: fetches input values from Azure Container Registry OCI artifact tags.
-- `ECRArtifactTag`: fetches input values from Elastic Container Registry OCI artifact tags.
-- `GARArtifactTag`: fetches input values from Google Artifact Registry OCI artifact tags.
+#### Exported Inputs Structure
 
-For the `Static` type, the flux-operator will export in `.status.exportedInputs` a
-single input map with the values from the field `.spec.defaultValues` and the
-additional value:
+The flux-operator exports different input structures based on the provider type:
 
-- `id`: the Adler-32 checksum of the ResourceSetInputProvider UID (type string).
+| Provider Type                                                                | Exported Fields                                  | Description                                                                                                                                                                      |
+|------------------------------------------------------------------------------|--------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Static`                                                                     | `id`                                             | Adler-32 checksum of the ResourceSetInputProvider UID (string)                                                                                                                   |
+| `GitHubPullRequest`<br>`GitLabMergeRequest`<br>`AzureDevOpsPullRequest`      | `id`<br>`sha`<br>`branch`<br>`author`<br>`title` | ID number of the PR/MR (string)<br>commit SHA of the PR/MR (string)<br>branch name of the PR/MR (string)<br>author username of the PR/MR (string)<br>title of the PR/MR (string) |
+| `GitHubBranch`<br>`GitLabBranch`<br>`AzureDevOpsBranch`                      | `id`<br>`branch`<br>`sha`                        | Adler-32 checksum of the branch name (string)<br>branch name (string)<br>commit SHA corresponding to the branch HEAD (string)                                                    |
+| `GitHubTag`<br>`GitLabTag`<br>`AzureDevOpsTag`                               | `id`<br>`tag`<br>`sha`                           | Adler-32 checksum of the tag name (string)<br>tag name (string)<br>commit SHA corresponding to the tag (string)                                                                  |
+| `OCIArtifactTag`<br>`ACRArtifactTag`<br>`ECRArtifactTag`<br>`GARArtifactTag` | `id`<br>`tag`<br>`digest`                        | Adler-32 checksum of the tag name (string)<br>tag name (string)<br>SHA256 digest corresponding to the tag in format `sha256:<hash>` (string)                                     |
 
-For all non-static types, the flux-operator will export in `.status.exportedInputs` a
-set of input values for each Pull/Merge Request or Branch
-that matches the [filter](#filter) criteria.
+For the `Static` type, the flux-operator exports a single input map with the values from `.spec.defaultValues` plus the additional `id` field.
 
-For Pull/Merge Requests the [exported inputs](#exported-inputs-status) structure is:
-
-- `id`: the ID number of the PR/MR (type string).
-- `sha`: the commit SHA of the PR/MR (type string).
-- `branch`: the branch name of the PR/MR (type string).
-- `author`: the author username of the PR/MR (type string).
-- `title`: the title of the PR/MR (type string).
-
-For Git Branches the [exported inputs](#exported-inputs-status) structure is:
-
-- `id`: the Adler-32 checksum of the branch name (type string).
-- `branch`: the branch name (type string).
-- `sha`: the commit SHA corresponding to the branch HEAD (type string).
-
-For Git Tags the [exported inputs](#exported-inputs-status) structure is:
-
-- `id`: the Adler-32 checksum of the tag name (type string).
-- `tag`: the tag name (type string).
-- `sha`: the commit SHA corresponding to the tag in the format `<hash>` (type string).
-
-For OCI Artifact Tags the [exported inputs](#exported-inputs-status) structure is:
-
-- `id`: the Adler-32 checksum of the tag name (type string).
-- `tag`: the tag name (type string).
-- `digest`: the SHA256 digest corresponding to the tag in the format `sha256:<hash>` (type string).
-
-The ACR, ECR and GAR Artifact Tag providers export the same inputs as the OCI Artifact Tag provider,
-with the difference on the authentication method used to connect to the registry. For these providers,
-[secret-less](#secret-less) authentication is used.
+For all other types, the flux-operator exports a set of input values for each Pull/Merge Request, Branch to Tag that matches the [filter](#filter) criteria.
 
 ### URL
 
@@ -238,29 +214,34 @@ spec:
 
 ### Authentication configuration
 
+The following table shows the supported authentication methods for each provider type:
+
+| Provider Type            | Secret-based | Secret-less | GitHub App |
+|--------------------------|--------------|-------------|------------|
+| `Static`                 | ❌            | ❌           | ❌          |
+| `GitHubPullRequest`      | ✅            | ❌           | ✅          |
+| `GitHubBranch`           | ✅            | ❌           | ✅          |
+| `GitHubTag`              | ✅            | ❌           | ✅          |
+| `GitLabMergeRequest`     | ✅            | ❌           | ❌          |
+| `GitLabBranch`           | ✅            | ❌           | ❌          |
+| `GitLabTag`              | ✅            | ❌           | ❌          |
+| `AzureDevOpsPullRequest` | ✅            | ✅           | ❌          |
+| `AzureDevOpsBranch`      | ✅            | ✅           | ❌          |
+| `AzureDevOpsTag`         | ✅            | ✅           | ❌          |
+| `OCIArtifactTag`         | ✅            | ❌           | ❌          |
+| `ACRArtifactTag`         | ❌            | ✅           | ❌          |
+| `ECRArtifactTag`         | ❌            | ✅           | ❌          |
+| `GARArtifactTag`         | ❌            | ✅           | ❌          |
+
 #### Secret-based
 
 The `.spec.secretRef` field is optional and specifies the Kubernetes Secret containing
 the authentication credentials used for connecting to the external service.
 Note that the secret must be created in the same namespace as the ResourceSetInputProvider.
 
-This field is not supported by the following provider [types](#type):
-
-- `Static`
-- `ACRArtifactTag`
-- `ECRArtifactTag`
-- `GARArtifactTag`
-
 For Git services, the secret should contain the `username` and `password` keys, with the password
 set to a personal access token that grants access for listing Pull Requests or Merge Requests
 and Git branches.
-
-For the `OCIArtifactTag` provider [type](#type), the secret should contain a Kubernetes Docker
-config JSON secret, i.e. as if created by the `kubectl create secret docker-registry` command.
-If the `.spec.serviceAccountName` field is specified, all the image pull secrets configured on
-the ServiceAccount are also included in the registry keychain used for the reconciliation,
-alongside the secret specified in `.spec.secretRef`. All of them have to be on the format
-produced by the `kubectl create secret docker-registry` command.
 
 Example of Git secret:
 
@@ -274,6 +255,12 @@ stringData:
   username: flux
   password: <GITHUB PAT>
 ```
+
+For the `OCIArtifactTag` provider [type](#type), the secret should contain a Kubernetes Docker
+config JSON secret. If the `.spec.serviceAccountName` field is specified, all the image pull
+secrets configured on the ServiceAccount are also included in the registry keychain used for
+the reconciliation, alongside the secret specified in `.spec.secretRef`. All of them have to
+be on the format produced by the `kubectl create secret docker-registry` command.
 
 Example of `OCIArtifactTag` Docker config secret:
 
@@ -351,8 +338,8 @@ following documentation:
 
 - [Authenticate with ACR from AKS](https://learn.microsoft.com/en-us/azure/aks/cluster-container-registry-integration?tabs=azure-cli)
 - Authenticate with ECR from EKS:
-  - [Create IAM Roles for EKS worker nodes](https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html#create-worker-node-role)
-  - [Allow the EKS worker IAM Roles to pull images from ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/ECR_on_EKS.html)
+    - [Create IAM Roles for EKS worker nodes](https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html#create-worker-node-role)
+    - [Allow the EKS worker IAM Roles to pull images from ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/ECR_on_EKS.html)
 - [Authenticate with GAR from GKE](https://cloud.google.com/artifact-registry/docs/integrate-gke)
 
 See also the cross-cloud documentation:
