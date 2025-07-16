@@ -8,7 +8,7 @@ hide:
 # Flux D2 Architectural Reference
 
 We present the Design 2 Reference Architecture Guide,
-which builds upon the [D1 architecture](d1-architecture-reference.md) with
+which builds on the [D1 architecture](d1-architecture-reference.md) with
 some notable enhancements and new features.
 
 In this iteration of our reference architecture, we introduce the concept of **Gitless GitOps**:
