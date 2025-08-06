@@ -79,6 +79,8 @@ spec:
     env:
       - name: DEFAULT_SERVICE_ACCOUNT
         value: "flux-operator"
+      - name: REPORTING_INTERVAL
+        value: "30s"
 ```
 
 The Flux Operator is also available in the Openshift and OKD

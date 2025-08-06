@@ -114,8 +114,16 @@ spec:
   endpoints:
     - targetPort: 8080
       path: /metrics
-      interval: 60s
-      scrapeTimeout: 30s
+      interval: 30s
+```
+
+It is recommended to change the reporting interval to `30s` when using the Prometheus metrics
+exported by the operator:
+
+```shell
+helm upgrade flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator \
+  --namespace flux-system \
+  --set reporting.interval=30s
 ```
 
 !!! tip "Helm Chart"
@@ -157,7 +165,7 @@ that can be used to monitor the reconciliation status.
 Metrics:
 
 ```text
-flux_resourceset_info{uid, kind, name, exported_namespace, ready, suspended, revision}
+flux_resourceset_info{uid, kind, name, exported_namespace, resources, ready, suspended, revision}
 flux_resourcesetinputprovider_info{uid, kind, name, exported_namespace, ready, suspended, url}
 ```
 

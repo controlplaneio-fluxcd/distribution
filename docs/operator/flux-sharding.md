@@ -27,6 +27,8 @@ spec:
   distribution:
     version: "2.x"
     registry: "ghcr.io/fluxcd"
+  cluster:
+    size: large
   sharding:
     key: "sharding.fluxcd.io/key"
     shards:
@@ -83,6 +85,8 @@ spec:
   distribution:
     version: "2.x"
     registry: "ghcr.io/fluxcd"
+  cluster:
+    size: large
   storage:
     class: "standard"
     size: "10Gi"

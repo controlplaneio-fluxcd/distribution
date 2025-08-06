@@ -29,6 +29,7 @@ spec:
     artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
   cluster:
     type: kubernetes
+    size: medium
 ```
 
 Save the above manifest to a file and apply it with `kubectl`:
@@ -126,6 +127,7 @@ spec:
     - image-automation-controller
   cluster:
     type: kubernetes
+    size: large
     multitenant: true
     networkPolicy: true
     domain: "cluster.local"
@@ -136,14 +138,16 @@ spec:
     patches:
       - target:
           kind: Deployment
-          name: "(kustomize-controller|helm-controller)"
         patch: |
+          - op: replace
+            path: /spec/template/spec/nodeSelector
+            value:
+              kubernetes.io/os: linux
           - op: add
-            path: /spec/template/spec/containers/0/args/-
-            value: --concurrent=10
-          - op: add
-            path: /spec/template/spec/containers/0/args/-
-            value: --requeue-dependency=5s
+            path: /spec/template/spec/tolerations
+            value:
+              - key: "CriticalAddonsOnly"
+                operator: "Exists"
 ```
 
 To find out more about the available configuration options, refer to the
