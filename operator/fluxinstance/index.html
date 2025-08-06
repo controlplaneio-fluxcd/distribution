@@ -1,0 +1,3737 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Flux Operator API for FluxCD lifecycle management">
+      
+      
+        <meta name="author" content="ControlPLane">
+      
+      
+        <link rel="canonical" href="https://fluxcd.control-plane.io/operator/fluxinstance/">
+      
+      
+        <link rel="prev" href="../resourcesets/gitlab-merge-requests/">
+      
+      
+        <link rel="next" href="../fluxreport/">
+      
+      
+      <link rel="icon" href="../../images/cp-logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
+    
+    
+      
+        <title>Flux Instance CRD - ControlPlane Enterprise for Flux CD</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="Flux Instance CRD - ControlPlane Enterprise for Flux CD" >
+      
+        <meta  property="og:description"  content="Flux Operator API for FluxCD lifecycle management" >
+      
+        <meta  property="og:image"  content="https://fluxcd.control-plane.io/assets/images/social/operator/fluxinstance.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="https://fluxcd.control-plane.io/operator/fluxinstance/" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="Flux Instance CRD - ControlPlane Enterprise for Flux CD" >
+      
+        <meta  name="twitter:description"  content="Flux Operator API for FluxCD lifecycle management" >
+      
+        <meta  name="twitter:image"  content="https://fluxcd.control-plane.io/assets/images/social/operator/fluxinstance.png" >
+      
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#flux-instance-crd" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="ControlPlane Enterprise for Flux CD" class="md-header__button md-logo" aria-label="ControlPlane Enterprise for Flux CD" data-md-component="logo">
+      
+  <img src="../../images/cp-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ControlPlane Enterprise for Flux CD
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Flux Instance CRD
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/controlplaneio-fluxcd/distribution" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    distribution
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../distribution/" class="md-tabs__link">
+          
+  
+  
+  Flux Distribution
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Flux Operator
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../mcp/" class="md-tabs__link">
+          
+  
+  
+  Flux MCP Server
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../pricing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Pricing
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://control-plane.io/contact/?inquiry=fluxcd" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Contact
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="ControlPlane Enterprise for Flux CD" class="md-nav__button md-logo" aria-label="ControlPlane Enterprise for Flux CD" data-md-component="logo">
+      
+  <img src="../../images/cp-logo.png" alt="logo">
+
+    </a>
+    ControlPlane Enterprise for Flux CD
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/controlplaneio-fluxcd/distribution" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    distribution
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Flux Distribution
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Flux Distribution
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../distribution/install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../distribution/security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Security
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Guides
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/flux-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Flux Architecture Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/d1-architecture-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    D1 Reference Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/d2-architecture-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    D2 Reference Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/flux-policies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Flux Multitenant Policies
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/flux-generic-helm-chart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Generic Helm Chart Pattern
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/flux-cli-quick-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Flux CLI Quick Reference
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Marketplaces
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            Marketplaces
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../marketplace/aws/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    AWS Marketplace
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Versions
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6">
+            <span class="md-nav__icon md-icon"></span>
+            Versions
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/release-v2.6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release v2.6
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/release-v2.5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release v2.5
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/release-v2.4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release v2.4
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/release-v2.3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release v2.3
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/release-v2.2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release v2.2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Flux Operator
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Flux Operator
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Instance Configuration
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Instance Configuration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flux-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Flux Controllers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flux-sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Flux Cluster Sync
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flux-kustomize/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Flux Customization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flux-sharding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Flux Sharding
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Flux Monitoring
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flux-bootstrap-migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bootstrap Migration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    ResourceSet Guides
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            ResourceSet Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resourcesets/introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resourcesets/app-definition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Application Definitions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resourcesets/time-based-delivery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Time-based App Delivery
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4_4" id="__nav_3_4_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Self-Service Environments
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Self-Service Environments
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resourcesets/github-pull-requests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ephemeral Environments for GitHub Pull Requests
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resourcesets/gitlab-merge-requests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ephemeral Environments for GitLab Merge Requests
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    FluxInstance
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    FluxInstance
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing-a-fluxinstance-spec" class="md-nav__link">
+    <span class="md-ellipsis">
+      Writing a FluxInstance spec
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Writing a FluxInstance spec">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#distribution-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Distribution configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#distribution-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution version
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distribution-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution registry
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distribution-image-pull-secret" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution image pull secret
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distribution-artifact" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution artifact
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distribution-artifact-pull-secret" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution artifact pull secret
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#components-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Components configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cluster configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cluster-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster size
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-multitenant" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster multitenant
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-network-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster network policy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster domain
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#storage-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Storage configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Storage configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#storage-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      Storage class
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#storage-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      Storage size
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sharding-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sharding configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sharding configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sharding-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sharding key
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shards" class="md-nav__link">
+    <span class="md-ellipsis">
+      Shards
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sharding-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sharding storage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common metadata
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kustomize-patches" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kustomize patches
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reconciliation-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reconciliation configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sync-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sync configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sync configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sync-from-git-over-https" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sync from Git over HTTP/S
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sync-from-git-over-ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sync from Git over SSH
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sync-from-oci-over-https" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sync from OCI over HTTP/S
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sync-from-s3-compatible-storage-over-https" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sync from S3-compatible storage over HTTP/S
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resources-migration-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resources migration configuration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fluxinstance-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      FluxInstance Status
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FluxInstance Status">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conditions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conditions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Conditions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reconciling-fluxinstance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reconciling FluxInstance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ready-fluxinstance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ready FluxInstance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failed-fluxinstance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Failed FluxInstance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stalled-fluxinstance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Stalled FluxInstance
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#components-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      Components status
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inventory-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inventory status
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#last-applied-revision" class="md-nav__link">
+    <span class="md-ellipsis">
+      Last applied revision
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#last-attempted-revision" class="md-nav__link">
+    <span class="md-ellipsis">
+      Last attempted revision
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fluxinstance-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      FluxInstance Metrics
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fluxreport/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    FluxReport
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resourceset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ResourceSet
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resourcesetinputprovider/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ResourceSetInputProvider
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CLI Reference
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Flux MCP Server
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Flux MCP Server
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mcp/install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mcp/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Guides
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mcp/prompt-engineering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Prompt Engineering
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mcp/instructions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    AI Instructions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mcp/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    MCP Tools
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mcp/prompts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    MCP Prompts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pricing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pricing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://control-plane.io/contact/?inquiry=fluxcd" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contact
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing-a-fluxinstance-spec" class="md-nav__link">
+    <span class="md-ellipsis">
+      Writing a FluxInstance spec
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Writing a FluxInstance spec">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#distribution-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Distribution configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#distribution-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution version
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distribution-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution registry
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distribution-image-pull-secret" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution image pull secret
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distribution-artifact" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution artifact
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distribution-artifact-pull-secret" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution artifact pull secret
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#components-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Components configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cluster configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cluster-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster size
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-multitenant" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster multitenant
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-network-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster network policy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster domain
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#storage-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Storage configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Storage configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#storage-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      Storage class
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#storage-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      Storage size
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sharding-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sharding configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sharding configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sharding-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sharding key
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shards" class="md-nav__link">
+    <span class="md-ellipsis">
+      Shards
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sharding-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sharding storage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common metadata
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kustomize-patches" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kustomize patches
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reconciliation-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reconciliation configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sync-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sync configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sync configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sync-from-git-over-https" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sync from Git over HTTP/S
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sync-from-git-over-ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sync from Git over SSH
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sync-from-oci-over-https" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sync from OCI over HTTP/S
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sync-from-s3-compatible-storage-over-https" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sync from S3-compatible storage over HTTP/S
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resources-migration-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resources migration configuration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fluxinstance-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      FluxInstance Status
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FluxInstance Status">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conditions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conditions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Conditions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reconciling-fluxinstance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reconciling FluxInstance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ready-fluxinstance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ready FluxInstance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failed-fluxinstance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Failed FluxInstance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stalled-fluxinstance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Stalled FluxInstance
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#components-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      Components status
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inventory-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inventory status
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#last-applied-revision" class="md-nav__link">
+    <span class="md-ellipsis">
+      Last applied revision
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#last-attempted-revision" class="md-nav__link">
+    <span class="md-ellipsis">
+      Last attempted revision
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fluxinstance-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      FluxInstance Metrics
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="flux-instance-crd">Flux Instance CRD</h1>
+<p><strong>FluxInstance</strong> is a declarative API for the installation, configuration
+and automatic upgrade of the Flux distribution.</p>
+<p>A single custom resource of this kind can exist in a Kubernetes cluster
+with the name <code>flux</code> that must be created in the same namespace
+where the flux-operator is deployed.</p>
+<h2 id="example">Example</h2>
+<p>The following example shows a FluxInstance custom resource that
+installs the upstream Flux distribution with all available components,
+and configures the flux-operator to automatically upgrade Flux 
+to the latest stable version:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fluxcd.controlplane.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FluxInstance</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux-system</span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">fluxcd.controlplane.io/reconcile</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;enabled&quot;</span>
+<span class="w">    </span><span class="nt">fluxcd.controlplane.io/reconcileEvery</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1h&quot;</span>
+<span class="w">    </span><span class="nt">fluxcd.controlplane.io/reconcileTimeout</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;5m&quot;</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">distribution</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2.x&quot;</span>
+<span class="w">    </span><span class="nt">registry</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ghcr.io/fluxcd&quot;</span>
+<span class="w">  </span><span class="nt">components</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source-controller</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kustomize-controller</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">helm-controller</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">notification-controller</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">image-reflector-controller</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">image-automation-controller</span>
+<span class="w">  </span><span class="nt">cluster</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubernetes</span>
+<span class="w">    </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">medium</span>
+<span class="w">    </span><span class="nt">multitenant</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">networkPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">domain</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster.local&quot;</span>
+<span class="w">  </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;standard&quot;</span>
+<span class="w">    </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10Gi&quot;</span>
+<span class="w">  </span><span class="nt">commonMetadata</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux</span>
+<span class="w">  </span><span class="nt">kustomize</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">patches</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+<span class="w">        </span><span class="nt">patch</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">- op: replace</span>
+<span class="w">            </span><span class="no">path: /spec/template/spec/nodeSelector</span>
+<span class="w">            </span><span class="no">value:</span>
+<span class="w">              </span><span class="no">kubernetes.io/os: linux</span>
+<span class="w">          </span><span class="no">- op: add</span>
+<span class="w">            </span><span class="no">path: /spec/template/spec/tolerations</span>
+<span class="w">            </span><span class="no">value:</span>
+<span class="w">              </span><span class="no">- key: &quot;CriticalAddonsOnly&quot;</span>
+<span class="w">                </span><span class="no">operator: &quot;Exists&quot;</span>
+</code></pre></div>
+<p>You can run this example by saving the manifest into <code>fluxinstance.yaml</code>.</p>
+<p><strong>1.</strong> Apply the resource on the cluster:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>fluxinstance.yaml
+</code></pre></div>
+<p><strong>2.</strong> Run <code>kubectl get fluxinstance</code> to see the status of the resource:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>kubectl<span class="w"> </span>-n<span class="w"> </span>flux-system<span class="w"> </span>get<span class="w"> </span>fluxinstance
+<span class="go">NAME   AGE   READY   STATUS                           REVISION</span>
+<span class="go">flux   59s   True    Reconciliation finished in 52s   v2.3.0@sha256:4cc5babdb1279ad0177bf513292deadbfa3f7b7c3da0be7fa53b39ab434f7219</span>
+</code></pre></div>
+<p><strong>3.</strong> Run <code>kubectl describe fluxinstance</code> to see the reconciliation status components, conditions and events:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>kubectl<span class="w"> </span>-n<span class="w"> </span>flux-system<span class="w"> </span>describe<span class="w"> </span>fluxinstance<span class="w"> </span>flux
+<span class="go">Status:</span>
+<span class="go">  Components:</span>
+<span class="go">    Digest:      sha256:161da425b16b64dda4b3cec2ba0f8d7442973aba29bb446db3b340626181a0bc</span>
+<span class="go">    Name:        source-controller</span>
+<span class="go">    Repository:  ghcr.io/fluxcd/source-controller</span>
+<span class="go">    Tag:         v1.3.0</span>
+<span class="go">    Digest:      sha256:48a032574dd45c39750ba0f1488e6f1ae36756a38f40976a6b7a588d83acefc1</span>
+<span class="go">    Name:        kustomize-controller</span>
+<span class="go">    Repository:  ghcr.io/fluxcd/kustomize-controller</span>
+<span class="go">    Tag:         v1.3.0</span>
+<span class="go">    Digest:      sha256:a67a037faa850220ff94d8090253732079589ad9ff10b6ddf294f3b7cd0f3424</span>
+<span class="go">    Name:        helm-controller</span>
+<span class="go">    Repository:  ghcr.io/fluxcd/helm-controller</span>
+<span class="go">    Tag:         v1.0.1</span>
+<span class="go">    Digest:      sha256:c0fab940c7e578ea519097d36c040238b0cc039ce366fdb753947428bbf0c3d6</span>
+<span class="go">    Name:        notification-controller</span>
+<span class="go">    Repository:  ghcr.io/fluxcd/notification-controller</span>
+<span class="go">    Tag:         v1.3.0</span>
+<span class="go">    Digest:      sha256:aed795c7a8b85bca93f6d199d5a14bbefaf925ad5aa5316b32a716cfa4070d0b</span>
+<span class="go">    Name:        image-reflector-controller</span>
+<span class="go">    Repository:  ghcr.io/fluxcd/image-reflector-controller</span>
+<span class="go">    Tag:         v0.32.0</span>
+<span class="go">    Digest:      sha256:ab5097213194f3cd9f0e68d8a937d94c4fc7e821f6544453211e94815b282aa2</span>
+<span class="go">    Name:        image-automation-controller</span>
+<span class="go">    Repository:  ghcr.io/fluxcd/image-automation-controller</span>
+<span class="go">    Tag:         v0.38.0</span>
+<span class="go">  Conditions:</span>
+<span class="go">    Last Transition Time:  2024-06-03T12:20:57Z</span>
+<span class="go">    Message:               Reconciliation finished in 52s</span>
+<span class="go">    Observed Generation:   1</span>
+<span class="go">    Reason:                ReconciliationSucceeded</span>
+<span class="go">    Status:                True</span>
+<span class="go">    Type:                  Ready</span>
+<span class="go">  Last Applied Revision:    v2.3.0@sha256:4cc5babdb1279ad0177bf513292deadbfa3f7b7c3da0be7fa53b39ab434f7219</span>
+<span class="go">  Last Attempted Revision:  v2.3.0@sha256:4cc5babdb1279ad0177bf513292deadbfa3f7b7c3da0be7fa53b39ab434f7219</span>
+<span class="go">Events:</span>
+<span class="go">  Type    Reason                   Age    From             Message</span>
+<span class="go">  ----    ------                   ----   ----             -------</span>
+<span class="go">  Normal  Progressing              6m20s  flux-controller  Installing revision v2.3.0@sha256:4cc5babdb1279ad0177bf513292deadbfa3f7b7c3da0be7fa53b39ab434f7219</span>
+<span class="go">  Normal  ReconciliationSucceeded  5m9s   flux-controller  Reconciliation finished in 52s</span>
+</code></pre></div>
+<p><strong>4.</strong> Run <code>kubectl logs</code> on the flux-operator pod to see the reconciliation logs:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>-n<span class="w"> </span>flux-system<span class="w"> </span>logs<span class="w"> </span>deployment/flux-operator
+</code></pre></div>
+<p><strong>5.</strong> Run <code>kubectl events</code> to see the events generated by the flux-operator:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>-n<span class="w"> </span>flux-system<span class="w"> </span>events<span class="w"> </span>--for<span class="w"> </span>FluxInstance/flux
+</code></pre></div>
+<p><strong>6.</strong> Run <code>kubectl delete</code> to remove the FluxInstance resource and
+   to uninstall Flux without affecting any Flux-managed workloads:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>-n<span class="w"> </span>flux-system<span class="w"> </span>delete<span class="w"> </span>FluxInstance/flux
+</code></pre></div>
+<h2 id="writing-a-fluxinstance-spec">Writing a FluxInstance spec</h2>
+<p>As with all other Kubernetes config, a FluxInstance needs <code>apiVersion</code>,
+<code>kind</code>, and <code>metadata</code> fields. The name of a FluxInstance object must be a
+valid <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/names#dns-subdomain-names">DNS subdomain name</a>.</p>
+<p>A FluxInstance also needs a
+<a href="https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"><code>.spec</code> section</a>.</p>
+<h3 id="distribution-configuration">Distribution configuration</h3>
+<p>The <code>.spec.distribution</code> field is required and specifies the Flux distribution to install.</p>
+<p>Example using the upstream Flux distribution:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">distribution</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2.x&quot;</span>
+<span class="w">    </span><span class="nt">registry</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ghcr.io/fluxcd&quot;</span>
+</code></pre></div>
+<h4 id="distribution-version">Distribution version</h4>
+<p>The <code>.spec.distribution.version</code> field is required and specifies the version of the Flux distribution to install.
+The version field value must be a valid <a href="https://semver.org/">semver</a> range or an exact version.</p>
+<p>Example using a semver range to configure the automatic upgrade
+to the latest Flux minor version:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">distribution</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2.x&quot;</span>
+</code></pre></div>
+<p>Example using a semver range to configure the automatic upgrade
+to the latest Flux patch version of the <code>2.3</code> series:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">distribution</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2.3.x&quot;</span>
+</code></pre></div>
+<p>Example using an exact version to install a specific Flux version:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">distribution</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2.3.0&quot;</span>
+</code></pre></div>
+<h4 id="distribution-registry">Distribution registry</h4>
+<p>The <code>.spec.distribution.registry</code> field is required and specifies the container registry
+where the Flux distribution images are pulled from.</p>
+<p>Example using the upstream Flux distribution registry:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">distribution</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2.x&quot;</span>
+<span class="w">    </span><span class="nt">registry</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ghcr.io/fluxcd&quot;</span>
+</code></pre></div>
+<h4 id="distribution-image-pull-secret">Distribution image pull secret</h4>
+<p>The <code>.spec.distribution.imagePullSecret</code> field is optional and specifies the name of the Kubernetes secret
+that contains the credentials to pull the Flux distribution images from a private registry.</p>
+<p>Example using the ControlPlane enterprise registry:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">distribution</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2.3.x&quot;</span>
+<span class="w">    </span><span class="nt">registry</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ghcr.io/controlplaneio-fluxcd/distroless&quot;</span>
+<span class="w">    </span><span class="nt">imagePullSecret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;flux-enterprise-auth&quot;</span>
+</code></pre></div>
+<p>The image pull secret must be created in the same namespace where the FluxInstance is deployed
+and must be of type <code>kubernetes.io/dockerconfigjson</code>.</p>
+<p>Example generating a secret for the ControlPlane enterprise registry:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>docker-registry<span class="w"> </span>flux-enterprise-auth<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--namespace<span class="w"> </span>flux-system<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--docker-server<span class="o">=</span>ghcr.io<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--docker-username<span class="o">=</span>flux<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--docker-password<span class="o">=</span><span class="nv">$ENTERPRISE_TOKEN</span>
+</code></pre></div>
+<h4 id="distribution-artifact">Distribution artifact</h4>
+<p>The <code>.spec.distribution.artifact</code> field is optional and specifies the OCI artifact URL
+containing the Flux distribution manifests. When specified, the operator will pull the
+artifact on a regular interval to determine the latest Flux version available
+including CVE patches and hotfixes.</p>
+<p>Example using the official distribution artifact:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">distribution</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2.x&quot;</span>
+<span class="w">    </span><span class="nt">registry</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ghcr.io/fluxcd&quot;</span>
+<span class="w">    </span><span class="nt">artifact</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests&quot;</span>
+</code></pre></div>
+<h4 id="distribution-artifact-pull-secret">Distribution artifact pull secret</h4>
+<p>The <code>.spec.distribution.artifactPullSecret</code> field is optional and specifies the name of the Kubernetes secret
+that contains the credentials to pull the Flux distribution manifests from a private registry.</p>
+<p>Example using a private registry:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">distribution</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2.3.x&quot;</span>
+<span class="w">    </span><span class="nt">registry</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ghcr.io/controlplaneio-fluxcd/distroless&quot;</span>
+<span class="w">    </span><span class="nt">artifact</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;oci://private.registry.com/controlplaneio-fluxcd/flux-operator-manifests&quot;</span>
+<span class="w">    </span><span class="nt">artifactPullSecret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;flux-private-auth&quot;</span>
+</code></pre></div>
+<p>The manifest pull secret must be created in the same namespace where the FluxInstance is deployed
+and must be of type <code>kubernetes.io/dockerconfigjson</code>.</p>
+<h3 id="components-configuration">Components configuration</h3>
+<p>The <code>.spec.components</code> field is optional and specifies the list of Flux components to install.</p>
+<p>When not specified, the operator will install the default set of components for the Flux distribution:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">components</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source-controller</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kustomize-controller</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">helm-controller</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">notification-controller</span>
+</code></pre></div>
+<h3 id="cluster-configuration">Cluster configuration</h3>
+<p>The <code>.spec.cluster</code> field is optional and specifies the Kubernetes cluster configuration.</p>
+<p>Example using the OpenShift cluster configuration:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">cluster</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openshift</span>
+<span class="w">    </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">medium</span>
+<span class="w">    </span><span class="nt">multitenant</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">tenantDefaultServiceAccount</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;flux&quot;</span>
+<span class="w">    </span><span class="nt">objectLevelWorkloadIdentity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">networkPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">domain</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster.local&quot;</span>
+</code></pre></div>
+<h4 id="cluster-type">Cluster type</h4>
+<p>The <code>.spec.cluster.type</code> field is optional and specifies the type of the Kubernetes cluster.
+This field is used to enable specific configuration for AKS, EKS, GKE and OpenShift clusters.</p>
+<p>The supported values are <code>kubernetes</code> (default), <code>openshift</code>, <code>azure</code>, <code>aws</code> and <code>gcp</code>.</p>
+<h4 id="cluster-size">Cluster size</h4>
+<p>The <code>.spec.cluster.size</code> field is optional and specifies the size of the Kubernetes cluster.
+The size is used to determine the vertical scaling profile for the Flux controllers based on
+the number of applications and the deployment frequency.</p>
+<p>The supported values are <code>small</code>, <code>medium</code> and <code>large</code> which correspond to the following
+configuration for Flux <code>kustomize-controller</code> and <code>helm-controller</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Size</th>
+<th>Concurrency</th>
+<th>CPU limit</th>
+<th>Memory limit</th>
+<th>Requeue deps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>small</strong></td>
+<td>5</td>
+<td>1000m</td>
+<td>512Mi</td>
+<td>10s</td>
+</tr>
+<tr>
+<td><strong>medium</strong></td>
+<td>10</td>
+<td>2000m</td>
+<td>1Gi</td>
+<td>5s</td>
+</tr>
+<tr>
+<td><strong>large</strong></td>
+<td>20</td>
+<td>3000m</td>
+<td>3Gi</td>
+<td>5s</td>
+</tr>
+</tbody>
+</table>
+<p>For all sizes, the <code>source-controller</code> is configured to cache artifacts
+and the concurrency is set between 2 and 10.</p>
+<p>The <code>small</code> size is suitable for edge clusters with limited resources (Raspberry Pi) or
+for clusters with tens of apps and moderate deployment frequency.</p>
+<p>The <code>medium</code> size is suitable for clusters with hundreds of apps, while the <code>large</code>
+size is for clusters with up to a thousand apps and high deployment frequency.</p>
+<p>When Flux manages thousands of apps,
+the recommended scaling strategy is to use <a href="#sharding-configuration">sharding</a>.</p>
+<h4 id="cluster-multitenant">Cluster multitenant</h4>
+<p>The <code>.spec.cluster.multitenant</code> field is optional and specifies whether to enable Flux
+<a href="https://fluxcd.io/flux/installation/configuration/multitenancy/">multi-tenancy lockdown</a>.
+By default, it is <code>false</code> (disabled).</p>
+<p>The <code>.spec.cluster.tenantDefaultServiceAccount</code> is optional and specifies the default
+service account used by Flux when reconciling <code>Kustomization</code> and <code>HelmRelease</code>
+resources found in the tenant namespaces.</p>
+<p>The <code>.spec.cluster.objectLevelWorkloadIdentity</code> field is optional and specifies whether to
+enable the object-level workload identity feature gate and RBAC for the Flux controllers.</p>
+<h4 id="cluster-network-policy">Cluster network policy</h4>
+<p>The <code>.spec.cluster.networkPolicy</code> field is optional and specifies whether to restrict network access
+to the Flux namespace from other namespaces. By default, network policy is enabled.</p>
+<h4 id="cluster-domain">Cluster domain</h4>
+<p>The <code>.spec.cluster.domain</code> field is optional and specifies the cluster internal domain name.
+By default, the domain is set to <code>cluster.local</code>.</p>
+<h3 id="storage-configuration">Storage configuration</h3>
+<p>The <code>.spec.storage</code> field is optional and specifies the persistent storage for Flux internal artifacts.
+When specified, the operator will create a persistent volume claim named <code>source-controller</code> with
+the specified storage class and size and mount it to the Flux source-controller <code>/data</code> volume.</p>
+<h4 id="storage-class">Storage class</h4>
+<p>The <code>.spec.storage.class</code> field is required and specifies the storage class to use for the persistent volume claim.</p>
+<p>Example using the standard storage class:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;standard&quot;</span>
+<span class="w">    </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10Gi&quot;</span>
+</code></pre></div>
+<h4 id="storage-size">Storage size</h4>
+<p>The <code>.spec.storage.size</code> field is required and specifies the size of the persistent volume claim.</p>
+<h3 id="sharding-configuration">Sharding configuration</h3>
+<p>The <code>.spec.sharding</code> field is optional and specifies the sharding configuration for the Flux controllers.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">sharding</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sharding.fluxcd.io/key&quot;</span>
+<span class="w">    </span><span class="nt">shards</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;shard1&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;shard2&quot;</span>
+<span class="w">    </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">persistent</span>
+</code></pre></div>
+<p>For each shard, the operator will create a separate set of controllers, e.g.:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>kubectl<span class="w"> </span>-n<span class="w"> </span>flux-system<span class="w"> </span>get<span class="w"> </span>deployments<span class="w"> </span>-l<span class="w"> </span>app.kubernetes.io/part-of<span class="o">=</span>flux
+<span class="go">NAME</span>
+<span class="go">source-controller</span>
+<span class="go">source-controller-shard1</span>
+<span class="go">source-controller-shard2</span>
+<span class="go">kustomize-controller</span>
+<span class="go">kustomize-controller-shard1</span>
+<span class="go">kustomize-controller-shard2</span>
+<span class="go">helm-controller</span>
+<span class="go">helm-controller-shard1</span>
+<span class="go">helm-controller-shard2</span>
+</code></pre></div>
+<p>Note that only the <code>source-controller</code>, <code>kustomize-controller</code> and <code>helm-controller</code> controllers
+support sharding.</p>
+<p>To assign a resource to a specific shard, add the <code>sharding.fluxcd.io/key</code> label with the shard value,
+e.g.: <code>sharding.fluxcd.io/key: shard1</code>.</p>
+<h4 id="sharding-key">Sharding key</h4>
+<p>The <code>.spec.sharding.key</code> field is optional and specifies the sharding key label to use for the Flux controllers.
+By default, the key is set to <code>sharding.fluxcd.io/key</code>.</p>
+<h4 id="shards">Shards</h4>
+<p>The <code>.spec.sharding.shards</code> field is required and specifies the list of sharding values to use for the Flux controllers.</p>
+<h3 id="sharding-storage">Sharding storage</h3>
+<p>The <code>.spec.sharding.storage</code> field is optional and specifies the storage type to use
+for the source-controller shards.</p>
+<p>The supported values are <code>ephemeral</code> (default) and <code>persistent</code>.
+When set to <code>persistent</code>, the operator will create a persistent volume claim for each shard using
+the storage class and size specified in the <code>.spec.storage</code> field.</p>
+<h3 id="common-metadata">Common metadata</h3>
+<p>The <code>.spec.commonMetadata</code> field is optional and specifies common metadata to be applied to all Kubernetes resources
+part of the Flux instance.</p>
+<p>It has two optional fields:</p>
+<ul>
+<li><code>labels</code>: A map used for setting <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">labels</a>
+  on an object. Any existing label will be overridden if it matches with a key in
+  this map.</li>
+<li><code>annotations</code>: A map used for setting <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">annotations</a>
+  on an object. Any existing annotation will be overridden if it matches with a key
+  in this map.</li>
+</ul>
+<p>Example common metadata:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">commonMetadata</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">toolkit.fluxcd.io/tenant</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sre-team</span>
+</code></pre></div>
+<h3 id="kustomize-patches">Kustomize patches</h3>
+<p>The <code>.spec.kustomize.patches</code> field is optional and specifies the Kustomize patches to apply to the Flux controllers.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">kustomize</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">patches</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;(kustomize-controller|helm-controller)&quot;</span>
+<span class="w">        </span><span class="nt">patch</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">- op: replace</span>
+<span class="w">            </span><span class="no">path: /spec/template/spec/volumes/0</span>
+<span class="w">            </span><span class="no">value:</span>
+<span class="w">              </span><span class="no">name: temp</span>
+<span class="w">              </span><span class="no">emptyDir:</span>
+<span class="w">                </span><span class="no">medium: Memory</span>
+</code></pre></div>
+<h3 id="reconciliation-configuration">Reconciliation configuration</h3>
+<p>The reconciliation behaviour can be configured using the following annotations:</p>
+<ul>
+<li><code>fluxcd.controlplane.io/reconcile</code>: Enable or disable the reconciliation loop. Default is <code>enabled</code>, set to <code>disabled</code> to pause the reconciliation.</li>
+<li><code>fluxcd.controlplane.io/reconcileEvery</code>: Set the reconciliation interval. Default is <code>1h</code>.</li>
+<li><code>fluxcd.controlplane.io/reconcileArtifactEvery</code>: Set the artifact reconciliation interval. Default is <code>10m</code>.</li>
+<li><code>fluxcd.controlplane.io/reconcileTimeout</code>: Set the reconciliation timeout. Default is <code>5m</code>.</li>
+</ul>
+<h3 id="sync-configuration">Sync configuration</h3>
+<p>The <code>.spec.sync</code> field is optional and specifies the Flux sync configuration.
+When set, a Flux source and a Flux Kustomization are generated to sync
+the cluster state with the source repository.</p>
+<p>The Flux objects are created in the same namespace where the FluxInstance is deployed
+using the namespace name as the Flux source and Kustomization name. The naming convention
+matches the one used by <code>flux bootstrap</code> to ensure compatibility with upstream, and
+to allow transitioning a bootstrapped cluster to a FluxInstance managed one.</p>
+<p>Sync fields:</p>
+<ul>
+<li><code>kind</code>: The source kind, supported values are <code>GitRepository</code>, <code>OCIRepository</code> and <code>Bucket</code>.</li>
+<li><code>url</code>: The URL of the source repository, can be a Git repository HTTP/S or SSH address, an OCI repository address or a Bucket endpoint.</li>
+<li><code>ref</code>: The source reference, can be a Git ref name e.g. <code>refs/heads/main</code>, an OCI tag e.g. <code>latest</code> or a Bucket name.</li>
+<li><code>path</code>: The path to the source directory containing the kustomize overlay or plain Kubernetes manifests to sync from.</li>
+<li><code>pullSecret</code>: The name of the Kubernetes secret that contains the credentials to pull the source repository. This field is optional.</li>
+<li><code>provider</code>: The provider name used for OIDC-based authentication.
+   Supported values are <code>aws</code>, <code>azure</code> and <code>gcp</code> for <code>OCIRepository</code>/<code>Bucket</code>,
+   and <code>azure</code> or <code>github</code> for <code>GitRepository</code>. This field is optional.</li>
+<li><code>interval</code>: The sync interval. This field is optional, when not set the default is <code>1m</code>.</li>
+<li><code>name</code>: The name of the generated Flux source and Kustomization objects.
+   This field is optional, when not set the default is the FluxInstance namespace name.
+   Note that this field is considered immutable, and cannot be changed after the FluxInstance is created.</li>
+</ul>
+<h4 id="sync-from-git-over-https">Sync from Git over HTTP/S</h4>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">sync</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GitRepository</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://gitlab.com/my-group/my-fleet.git&quot;</span>
+<span class="w">    </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;refs/heads/main&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;clusters/my-cluster&quot;</span>
+<span class="w">    </span><span class="nt">pullSecret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;git-token-auth&quot;</span>
+</code></pre></div>
+<p>If the source repository is private, the Kubernetes secret must be created
+in the same namespace where the FluxInstance is deployed, and have the following format:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">git-token-auth</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux-system</span>
+<span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Opaque</span>
+<span class="nt">stringData</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;git-username&quot;</span>
+<span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;git-token&quot;</span>
+</code></pre></div>
+<p>To generate the secret with the Flux CLI:</p>
+<div class="highlight"><pre><span></span><code>flux<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>git<span class="w"> </span>git-token-auth<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--namespace<span class="w"> </span>flux-system<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--url<span class="o">=</span>https://gitlab.com/my-group/my-fleet.git<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--username<span class="o">=</span>git-username<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--password<span class="o">=</span>git-token
+</code></pre></div>
+<h4 id="sync-from-git-over-ssh">Sync from Git over SSH</h4>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">sync</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GitRepository</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ssh://git@github.com/my-org/my-fleet.git&quot;</span>
+<span class="w">    </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;refs/heads/main&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;clusters/my-cluster&quot;</span>
+<span class="w">    </span><span class="nt">pullSecret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;git-ssh-auth&quot;</span>
+</code></pre></div>
+<p>If the source repository is private, the Kubernetes secret must be created
+in the same namespace where the FluxInstance is deployed, and have the following format:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">git-ssh-auth</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux-system</span>
+<span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Opaque</span>
+<span class="nt">stringData</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">identity</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">-----BEGIN OPENSSH PRIVATE KEY-----</span>
+<span class="w">    </span><span class="no">...</span>
+<span class="w">    </span><span class="no">-----END OPENSSH PRIVATE KEY-----    </span>
+<span class="w">  </span><span class="nt">known_hosts</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">github.com ecdsa-sha2-nistp256 AAAA...  </span>
+</code></pre></div>
+<p>To generate the secret with the Flux CLI:</p>
+<div class="highlight"><pre><span></span><code>flux<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>git<span class="w"> </span>git-ssh-auth<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--namespace<span class="w"> </span>flux-system<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--url<span class="o">=</span>ssh://git@github.com/my-org/my-fleet.git<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--private-key-file<span class="o">=</span>my-private.key
+</code></pre></div>
+<h4 id="sync-from-oci-over-https">Sync from OCI over HTTP/S</h4>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">sync</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OCIRepository</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;oci://ghcr.io/my-org/my-fleet-manifests&quot;</span>
+<span class="w">    </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;latest&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;clusters/my-cluster&quot;</span>
+<span class="w">    </span><span class="nt">pullSecret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;oci-token-auth&quot;</span>
+</code></pre></div>
+<p>If the container registry is private, the Kubernetes secret must be created
+in the same namespace where the FluxInstance is deployed, and be of type <code>kubernetes.io/dockerconfigjson</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oci-token-auth</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux-system</span>
+<span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubernetes.io/dockerconfigjson</span>
+<span class="nt">data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">.dockerconfigjson</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;base64-encoded-docker-config&quot;</span>
+</code></pre></div>
+<p>To generate the secret with the Flux CLI:</p>
+<div class="highlight"><pre><span></span><code>flux<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>oci<span class="w"> </span>oci-token-auth<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--namespace<span class="w"> </span>flux-system<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--url<span class="o">=</span>ghcr.io<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--username<span class="o">=</span>ghcr-username<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--password<span class="o">=</span>ghcr-token
+</code></pre></div>
+<h4 id="sync-from-s3-compatible-storage-over-https">Sync from S3-compatible storage over HTTP/S</h4>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">sync</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bucket</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;minio.my-org.com&quot;</span>
+<span class="w">    </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my-bucket-fleet&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;clusters/my-cluster&quot;</span>
+<span class="w">    </span><span class="nt">pullSecret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bucket-auth&quot;</span>
+</code></pre></div>
+<p>If the Bucket is private, the Kubernetes secret must be created
+in the same namespace where the FluxInstance is deployed, and have the following format:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bucket-auth</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux-system</span>
+<span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Opaque</span>
+<span class="nt">stringData</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">accesskey</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my-accesskey&quot;</span>
+<span class="w">  </span><span class="nt">secretkey</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my-secretkey&quot;</span>
+</code></pre></div>
+<h3 id="resources-migration-configuration">Resources migration configuration</h3>
+<p>The <code>.spec.migrateResources</code> field is optional and instructs the operator to migrate
+the Flux custom resources stored in Kubernetes etcd to the latest API version as
+specified in the Flux CRDs. The migration runs after the Flux distribution is upgraded
+from a minor version to another and only when a new API version is introduced.</p>
+<p>By default, the field value is set to <code>true</code>. Note that disabling the migration may
+result in upgrade failures due to deprecated API versions being removed in future Flux releases.</p>
+<h2 id="fluxinstance-status">FluxInstance Status</h2>
+<h3 id="conditions">Conditions</h3>
+<p>A FluxInstance enters various states during its lifecycle, reflected as Kubernetes Conditions.
+It can be <a href="#reconciling-fluxinstance">reconciling</a> while applying the resources on the cluster,
+it can be <a href="#ready-fluxinstance">ready</a>,
+it can <a href="#failed-fluxinstance">fail during reconciliation</a>,
+or it can <a href="#stalled-fluxinstance">fail due to misconfiguration</a>.</p>
+<p>The FluxInstance API is compatible with the <strong>kstatus</strong> specification,
+and reports <code>Reconciling</code> and <code>Stalled</code> conditions where applicable to
+provide better (timeout) support to solutions polling the Kustomization to
+become <code>Ready</code>.</p>
+<h4 id="reconciling-fluxinstance">Reconciling FluxInstance</h4>
+<p>The flux-operator marks a FluxInstance as <em>reconciling</em> when it starts
+the reconciliation of the same. The Condition added to the FluxInstance's
+<code>.status.conditions</code> has the following attributes:</p>
+<ul>
+<li><code>type: Reconciling</code></li>
+<li><code>status: "True"</code></li>
+<li><code>reason: Progressing</code> | <code>reason: ProgressingWithRetry</code></li>
+</ul>
+<p>The Condition <code>message</code> is updated during the course of the reconciliation to
+report the action being performed at any particular moment such as
+building manifests, detecting drift, etc.</p>
+<p>The <code>Ready</code> Condition's <code>status</code> is also marked as <code>Unknown</code>.</p>
+<h4 id="ready-fluxinstance">Ready FluxInstance</h4>
+<p>The flux-operator marks a FluxInstance as <em>ready</em> when the Flux configuration was
+built and applied on the cluster and all health checks are observed to be passing.</p>
+<p>When the FluxInstance is "ready", the flux-operator sets a Condition with the
+following attributes in the FluxInstance’s <code>.status.conditions</code>:</p>
+<ul>
+<li><code>type: Ready</code></li>
+<li><code>status: "True"</code></li>
+<li><code>reason: ReconciliationSucceeded</code></li>
+</ul>
+<h4 id="failed-fluxinstance">Failed FluxInstance</h4>
+<p>The flux-operator may get stuck trying to reconcile and apply a
+FluxInstance without completing. This can occur due to some of the following factors:</p>
+<ul>
+<li>The distribution artifact is not accessible.</li>
+<li>The distribution version is not available.</li>
+<li>The kustomization of the Flux components fails to build.</li>
+<li>Garbage collection fails.</li>
+<li>Running health checks fails.</li>
+</ul>
+<p>When this happens, the flux-operator sets the <code>Ready</code> Condition status to False
+and adds a Condition with the following attributes to the FluxInstance’s
+<code>.status.conditions</code>:</p>
+<ul>
+<li><code>type: Ready</code></li>
+<li><code>status: "False"</code></li>
+<li><code>reason: ArtifactFailed | BuildFailed | HealthCheckFailed | ReconciliationFailed</code></li>
+</ul>
+<p>The <code>message</code> field of the Condition will contain more information about why
+the reconciliation failed.</p>
+<p>While the FluxInstance has one or more of these Conditions, the flux-operator
+will continue to attempt a reconciliation with an
+exponential backoff, until it succeeds and the FluxInstance is marked as <a href="#ready-fluxinstance">ready</a>.</p>
+<h4 id="stalled-fluxinstance">Stalled FluxInstance</h4>
+<p>The flux-operator may fail the reconciliation of a FluxInstance object terminally due
+to a misconfiguration. When this happens, the flux-operator adds the <code>Stalled</code> Condition
+to the FluxInstance’s <code>.status.conditions</code> with the following attributes:</p>
+<ul>
+<li><code>type: Stalled</code></li>
+<li><code>status: "True"</code></li>
+<li><code>reason: BuildFailed</code></li>
+</ul>
+<p>Misconfigurations can include:</p>
+<ul>
+<li>The build of the Flux manifests fails. In this case the condition reason is <code>BuildFailed</code>.</li>
+</ul>
+<p>When this happens, the flux-operator will not attempt to reconcile the FluxInstance
+until the misconfiguration is fixed. The <code>Ready</code> Condition status is also set to <code>False</code>.</p>
+<h3 id="components-status">Components status</h3>
+<p>In order to provide visibility into the Flux components that are installed,
+the flux-operator records the status of each component in the <code>.status.components</code> field,
+including the image repository, tag and digest.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code>Status:
+  Components:
+    Digest:      sha256:161da425b16b64dda4b3cec2ba0f8d7442973aba29bb446db3b340626181a0bc
+    Name:        source-controller
+    Repository:  ghcr.io/fluxcd/source-controller
+    Tag:         v1.3.0
+    Digest:      sha256:48a032574dd45c39750ba0f1488e6f1ae36756a38f40976a6b7a588d83acefc1
+    Name:        kustomize-controller
+    Repository:  ghcr.io/fluxcd/kustomize-controller
+    Tag:         v1.3.0
+</code></pre></div>
+<h3 id="inventory-status">Inventory status</h3>
+<p>In order to perform operations such as drift detection, garbage collection, upgrades, etc.,
+the flux-operator needs to keep track of all Kubernetes objects that are
+reconciled as part of a FluxInstance. To do this, it maintains an inventory
+containing the list of Kubernetes resource object references that have been
+successfully applied and records it in <code>.status.inventory</code>. The inventory
+records are in the format <code>Id: &lt;namespace&gt;_&lt;name&gt;_&lt;group&gt;_&lt;kind&gt;, V: &lt;version&gt;</code>.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code>Status:
+  Inventory:
+    Entries:
+      Id: flux-system_source-controller__ServiceAccount
+      V:  v1
+      Id: flux-system_source-controller__Service
+      V:  v1
+      Id: flux-system_source-controller_apps_Deployment
+      V:  v1
+</code></pre></div>
+<h3 id="last-applied-revision">Last applied revision</h3>
+<p><code>.status.lastAppliedRevision</code> is the last revision of the Flux distribution
+that was successfully applied to the cluster.</p>
+<p>The revision is in the format <code>&lt;version&gt;@sha256:&lt;digest&gt;</code>. </p>
+<p>The version is the Flux distribution exact semver version that was applied to the cluster.</p>
+<p>The digest is the SHA256 hash of the Flux distribution manifests and customisations
+that was applied to the cluster.</p>
+<h3 id="last-attempted-revision">Last attempted revision</h3>
+<p><code>.status.lastAttemptedRevision</code> is the last revision of the Flux distribution
+that was attempted to be applied to the cluster.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code>Status:
+  Last Applied Revision:    v2.3.0@sha256:4cc5babdb1279ad0177bf513292deadbfa3f7b7c3da0be7fa53b39ab434f7219
+  Last Attempted Revision:  v2.3.0@sha256:4cc5babdb1279ad0177bf513292deadbfa3f7b7c3da0be7fa53b39ab434f7219
+</code></pre></div>
+<h2 id="fluxinstance-metrics">FluxInstance Metrics</h2>
+<p>The Flux Operator exports metrics for the FluxInstance resource.
+These metrics are refreshed every time the operator reconciles the instance.</p>
+<p>Metrics:</p>
+<div class="highlight"><pre><span></span><code>flux_instance_info{uid, kind, name, exported_namespace, ready, suspended, registry, revision}
+</code></pre></div>
+<p>Labels:</p>
+<ul>
+<li><code>uid</code>: The Kubernetes unique identifier of the resource.</li>
+<li><code>kind</code>: The kind of the resource (e.g. <code>FluxInstance</code>).</li>
+<li><code>name</code>: The name of the resource (e.g. <code>flux</code>).</li>
+<li><code>exported_namespace</code>: The namespace where the resource is deployed (e.g. <code>flux-system</code>).</li>
+<li><code>ready</code>: The readiness status of the resource (e.g. <code>True</code>, <code>False</code> or <code>Unkown</code>).</li>
+<li><code>reason</code>: The reason for the readiness status (e.g. <code>Progressing</code>, <code>BuildFailed</code>, <code>HealthCheckFailed</code>, etc.).</li>
+<li><code>suspended</code>: The suspended status of the resource (e.g. <code>True</code> or <code>False</code>).</li>
+<li><code>registry</code>: The container registry used by the instance (e.g. <code>ghcr.io/fluxcd</code>).</li>
+<li><code>revision</code>: The Flux revision installed by the instance (e.g. <code>v2.3.0@sha256:75aa209c6a...</code>).</li>
+</ul>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code>flux_instance_info{
+   exported_namespace=&quot;flux-system&quot;,
+   kind=&quot;FluxInstance&quot;,
+   name=&quot;flux&quot;,
+   ready=&quot;True&quot;,
+   reason=&quot;ReconciliationSucceeded&quot;,
+   registry=&quot;ghcr.io/fluxcd&quot;,
+   revision=&quot;v2.3.0@sha256:75aa209c6a2e25b97114ccf092246d02ab4363bc136edefc239d2a88da882b63&quot;,
+   suspended=&quot;False&quot;,
+   uid=&quot;16ca7202-9319-445b-99d0-617c25bda182&quot;
+}
+</code></pre></div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2025 ControlPlane Ltd.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://x.com/controlplaneio" target="_blank" rel="noopener" title="x.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M64 32C28.7 32 0 60.7 0 96v320c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64zm297.1 84L257.3 234.6 379.4 396h-95.6L209 298.1 123.3 396H75.8l111-126.9L69.7 116h98l67.7 89.5 78.2-89.5zm-37.8 251.6L153.4 142.9h-28.3l171.8 224.7z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/company/controlplane/mycompany/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "navigation.sections", "navigation.top", "navigation.tabs"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.50899def.min.js"></script>
+      
+    
+  </body>
+</html>
