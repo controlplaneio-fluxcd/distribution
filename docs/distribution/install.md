@@ -68,7 +68,7 @@ On air-gapped environments, customers can copy the ControlPlane container images
 OCI artifacts (SBOMs and signatures) to their private registry using
 the [crane](https://github.com/google/go-containerregistry/blob/main/cmd/crane/README.md) CLI.
 
-Example script for copying the ControlPlane images to a private registry:
+Example script for copying the ControlPlane FIPS-compliant images to a private registry:
 
 ```bash
 FLUX_CONTROLLERS=(
@@ -80,10 +80,10 @@ FLUX_CONTROLLERS=(
 "image-automation-controller"
 )
 
-crane auth login <control-plane-registry> -u flux -p $ENTERPRISE_TOKEN
+crane auth login ghcr.io -u flux -p $ENTERPRISE_TOKEN
 
 for controller in "${FLUX_CONTROLLERS[@]}"; do
- crane copy --all-tags <control-plane-registry>/$controller  <your-registry>/$controller
+ crane copy --all-tags ghcr.io/controlplaneio-fluxcd/distroless/$controller  <your-registry>/$controller
 done
 ```
 
