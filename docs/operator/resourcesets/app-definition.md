@@ -348,6 +348,86 @@ spec:
             name: app1-vars
 ```
 
+## Latest image automation example
+
+When deploying applications to a development cluster, you may want to automatically
+update the image of the application to the OCI digest corresponding to the `latest` tag
+available in the container registry.
+
+First you need to create a `ResourceSetInputProvider` resource that scans the container registry
+for the latest image tag and provides the tag and digest as inputs to the `ResourceSet`.
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: podinfo-latest
+  namespace: apps
+  annotations:
+    fluxcd.controlplane.io/reconcileEvery: "10m"
+spec:
+  type: OCIArtifactTag
+  url: oci://ghcr.io/stefanprodan/podinfo
+  filter:
+   includeTag: "latest"
+```
+
+Then you can create a `ResourceSet` that uses the `ResourceSetInputProvider`
+to deploy the application from the latest image tag and digest:
+
+```yaml
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: podinfo
+  namespace: apps
+spec:
+  serviceAccountName: flux
+  inputsFrom:
+    - kind: ResourceSetInputProvider
+      name: podinfo-latest
+  dependsOn:
+    - apiVersion: fluxcd.controlplane.io/v1
+      kind: ResourceSetInputProvider
+      name: podinfo-latest
+      namespace: apps
+      ready: true
+      readyExpr: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'True')
+  resources:
+    - apiVersion: v1
+      kind: Service
+      metadata:
+        name: podinfo
+        namespace: << inputs.provider.namespace >>
+      spec:
+        selector:
+          app: podinfo
+        ports:
+          - protocol: TCP
+            port: 9898
+            targetPort: 9898
+    - apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: podinfo
+        namespace: << inputs.provider.namespace >>
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: podinfo
+        template:
+          metadata:
+            labels:
+              app: podinfo
+          spec:
+            containers:
+              - name: podinfo
+                image: ghcr.io/stefanprodan/podinfo:<< inputs.tag >>@<< inputs.digest >>
+                ports:
+                  - containerPort: 9898
+```
+
 ## Working with ResourceSets
 
 When working with ResourceSets, you can use the Flux Operator CLI for building ResourceSet
