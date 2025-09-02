@@ -72,7 +72,7 @@ the `production` tag. The push will be to this tag.
 
 | Name         | Description                                                                                                                       |
 |--------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| `pushed`     | A boolean indicating whether or not an artifact was pushed e.g. `true` or `false`                                                 |
+| `pushed`     | A boolean string indicating whether or not an artifact was pushed e.g. `true` or `false`                                          |
 | `digest`     | The artifact digest in the format `<alg>:<digest>` e.g. `sha256:a327880e53f5efe87dcc18fdc88e8d37ed9c3c40ca4b3b50bf850c46d9db4b56` |
 | `digest-url` | The digest URL for signing e.g. `ghcr.io/owner/repo@sha256:a327880e53f5efe87dcc18fdc88e8d37ed9c3c40ca4b3b50bf850c46d9db4b56`      |
 
