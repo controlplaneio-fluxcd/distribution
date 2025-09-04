@@ -79,6 +79,8 @@ spec:
     env:
       - name: DEFAULT_SERVICE_ACCOUNT
         value: "flux-operator"
+      - name: DEFAULT_WORKLOAD_IDENTITY_SERVICE_ACCOUNT
+        value: "flux-operator"
       - name: REPORTING_INTERVAL
         value: "30s"
 ```

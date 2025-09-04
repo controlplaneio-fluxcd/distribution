@@ -12,17 +12,17 @@ including transport modes, security settings, and how to restrict access to your
 
 The `flux-operator-mcp serve` command accepts the following flags:
 
-| Flag             | Description                           | Default |
-|------------------|---------------------------------------|---------|
-| `--transport`    | The transport protocol (stdio or sse) | stdio   |
-| `--port`         | The port to listen on (for sse)       | 8080    |
-| `--read-only`    | Run in read-only mode                 | false   |
-| `--mask-secrets` | Mask secret values                    | true    |
-| `--kube-as`      | Kubernetes account to impersonate     | none    |
+| Flag             | Description                                 | Default |
+|------------------|---------------------------------------------|---------|
+| `--transport`    | The transport protocol (stdio, sse or http) | stdio   |
+| `--port`         | The port to listen on (for sse or http)     | 8080    |
+| `--read-only`    | Run in read-only mode                       | false   |
+| `--mask-secrets` | Mask secret values                          | true    |
+| `--kube-as`      | Kubernetes account to impersonate           | none    |
 
 ## Transport Modes
 
-### Standard Input/Output (stdio)
+### Standard Input/Output (`stdio`)
 
 The MCP Server uses standard input/output (stdio) by default, which is compatible with most AI assistants.
 
@@ -40,11 +40,38 @@ To start the server in this mode, use the following configuration:
 }
 ```
 
-### Server-Sent Events (SSE)
+### Streamable HTTP (`http`)
 
 Web-based transport that allows the server to push updates to the client.
 
-To use Server-Sent Events (SSE), start the server with:
+To use Streamable HTTP (`http`), start the server with:
+
+```shell
+export KUBECONFIG=$HOME/.kube/config
+flux-operator-mcp serve --transport http --port 8080
+```
+
+To connect to the server from VS Code, use the following configuration:
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "flux-operator-mcp": {
+        "type": "http",
+        "url": "http://localhost:8080/mcp"
+      }
+    }
+  }
+}
+```
+
+### Server-Sent Events (`sse`)
+
+Web-based transport that allows the server to push updates to the client, now considered
+legacy by the MCP specification, and superseded by [Streamable HTTP](#streamable-http-http).
+
+To use Server-Sent Events (`sse`), start the server with:
 
 ```shell
 export KUBECONFIG=$HOME/.kube/config
@@ -55,14 +82,14 @@ To connect to the server from VS Code, use the following configuration:
 
 ```json
 {
- "mcp": {
-   "servers": {
-     "flux-operator-mcp": {
-       "type": "sse",
-       "url": "http://localhost:8080/sse"
-     }
-   }
- }
+  "mcp": {
+    "servers": {
+      "flux-operator-mcp": {
+        "type": "sse",
+        "url": "http://localhost:8080/sse"
+      }
+    }
+  }
 }
 ```
 
@@ -179,14 +206,18 @@ spec:
           name: << inputs.provider.name >>
         interval: 30m
         values:
+          transport: http # defaults to the legacy 'sse' transport
           readonly: << inputs.readonly >>
           networkPolicy:
             ingress:
               namespaces: [<< inputs.accessFrom >>]
 ```
 
+See the full docs and values API for the Helm chart
+[here](https://github.com/controlplaneio-fluxcd/charts/tree/main/charts/flux-operator-mcp).
+
 This ResourceSet will create a Kubernetes Deployment for the Flux MCP Server
-with cluster-admin permissions. It is recommended to set the `readonly` input to `true`
+with `cluster-admin` permissions. It is recommended to set the `readonly` input to `true`
 in production environments to prevent modifications to the cluster state.
 
 The server is exposed via a Kubernetes Service named `flux-operator-mcp`
@@ -204,14 +235,29 @@ Then, in your VS Code settings, add:
 
 ```json
 {
- "mcp": {
-   "servers": {
-     "flux-operator-mcp": {
-       "type": "sse",
-       "url": "http://localhost:9090/sse"
-     }
-   }
- }
+  "mcp": {
+    "servers": {
+      "flux-operator-mcp": {
+        "type": "http",
+        "url": "http://localhost:9090/mcp"
+      }
+    }
+  }
+}
+```
+
+For the legacy `sse` transport, add:
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "flux-operator-mcp": {
+        "type": "sse",
+        "url": "http://localhost:9090/sse"
+      }
+    }
+  }
 }
 ```
 
