@@ -49,7 +49,11 @@ The `flux-operator-mcp` binary will be available in the `bin` directory relative
 ## Configuration with AI Assistants
 
 The Flux MCP Server is compatible with AI assistants that support the Model Context Protocol (MCP)
-either using standard input/output (stdio) or server-sent events (SSE).
+using any of the following transport modes:
+
+- Standard Input/Output (`stdio`)
+- Server-Sent Events (`sse`)
+- Streamable HTTP (`http`)
 
 See the [Configuration Options](config.md) for more details on how to set up the server
 in different modes.
