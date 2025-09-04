@@ -118,7 +118,7 @@ spec:
 ### ResourceSet template
 
 Finally, to deploy the app from MRs, we'll create a [ResourceSet](../resourceset.md)
- that uses the `ResourceSetInputProvider` as its input source:
+that uses the `ResourceSetInputProvider` as its input source:
 
 ```yaml
 apiVersion: fluxcd.controlplane.io/v1
