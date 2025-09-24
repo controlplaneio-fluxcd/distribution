@@ -26,7 +26,7 @@ jobs:
           - alpine
           - distroless
         kubernetes:
-          - v1.33.0
+          - v1.34.1
         runner:
           - ubuntu-24.04
           - ubuntu-24.04-arm
@@ -72,7 +72,7 @@ jobs:
       - name: Setup Kubernetes
         uses: helm/kind-action@ae94020eaf628e9b9b9f341a10cc0cdcf5c018fb # v1.11.0
         with:
-          version: v0.26.0
+          version: v0.30.0
           cluster_name: flux
           node_image: ghcr.io/fluxcd/kindest/node:${{ steps.release.outputs.kubernetes }}
       - name: Install Flux
