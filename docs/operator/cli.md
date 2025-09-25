@@ -75,7 +75,7 @@ The following commands are available:
 - `flux-operator get instance`: Retrieves the FluxInstance resource in the cluster.
 - `flux-operator get rset`: Retrieves the ResourceSet resources in the cluster.
 - `flux-operator get rsip`: Retrieves the ResourceSetInputProvider resources in the cluster.
-- `flux-operator get resources`: Retrieves all Flux resources in the cluster.
+- `flux-operator get all`: Retrieves all Flux resources in the cluster (supports filtering by ready status).
 
 Arguments:
 
@@ -106,6 +106,7 @@ The following commands are available:
 - `flux-operator reconcile rset <name>`: Reconciles the ResourceSet resource in the cluster.
 - `flux-operator reconcile rsip <name>`: Reconciles the ResourceSetInputProvider resource in the cluster.
 - `flux-operator reconcile resource <kind>/<name>`: Reconciles a Flux resource in the specified namespace.
+- `flux-operator reconcile all`: Reconciles all Flux resources in the cluster (supports filtering by ready status).
 
 Arguments:
 
