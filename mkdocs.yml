@@ -134,6 +134,7 @@ nav:
           - Prompt Engineering: mcp/prompt-engineering.md
           - AI Instructions: mcp/instructions.md
       - API Reference:
+          - Config API: mcp/config-api.md
           - MCP Tools: mcp/tools.md
           - MCP Prompts: mcp/prompts.md
   - Pricing: pricing/index.md
