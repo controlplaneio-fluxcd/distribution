@@ -21,11 +21,16 @@ if [ "${DISTRIBUTION}" == "upstream" ]; then
   FLUX_REGISTRY="${REGISTRY}"
 fi
 
+COMPONENTS="image-reflector-controller,image-automation-controller"
+MINOR_VERSION="$(echo "$VERSION" | cut -d'.' -f2)"
+if [ "$MINOR_VERSION" -ge 7 ]; then
+    COMPONENTS="${COMPONENTS},source-watcher"
+fi
+
 flux install --version ${VERSION} \
 --registry=${FLUX_REGISTRY} \
---components-extra=image-reflector-controller,image-automation-controller \
+--components-extra=${COMPONENTS} \
 --export | grep 'ghcr.io/' | awk '{print $2}' > "${FLUX_IMAGES}"
-
 
 sc=$(awk 'NR==1{print $1}' "${FLUX_IMAGES}")
 sc_digest=$(docker buildx imagetools inspect ${sc}  --format '{{json .}}' | jq -r .manifest.digest)
@@ -39,6 +44,10 @@ irc=$(awk 'NR==5{print $1}' "${FLUX_IMAGES}")
 irc_digest=$(docker buildx imagetools inspect ${irc}  --format '{{json .}}' | jq -r .manifest.digest)
 iac=$(awk 'NR==6{print $1}' "${FLUX_IMAGES}")
 iac_digest=$(docker buildx imagetools inspect ${iac}  --format '{{json .}}' | jq -r .manifest.digest)
+if [ "$MINOR_VERSION" -ge 7 ]; then
+    sw=$(awk 'NR==7{print $1}' "${FLUX_IMAGES}")
+    sw_digest=$(docker buildx imagetools inspect ${sw}  --format '{{json .}}' | jq -r .manifest.digest)
+fi
 
 cat >${FLUX_IMAGES} <<EOF
 images:
@@ -61,3 +70,10 @@ images:
     newTag: ${iac#*:}
     digest: ${iac_digest}
 EOF
+if [ "$MINOR_VERSION" -ge 7 ]; then
+cat >>${FLUX_IMAGES} <<EOF
+  - name: ${FLUX_REGISTRY}/source-watcher
+    newTag: ${sw#*:}
+    digest: ${sw_digest}
+EOF
+fi

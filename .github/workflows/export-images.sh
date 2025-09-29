@@ -14,9 +14,15 @@ cd "${WORK_DIR}"
 
 FLUX_IMAGES="${VERSION}.txt"
 
+COMPONENTS="image-reflector-controller,image-automation-controller"
+MINOR_VERSION="$(echo "$VERSION" | cut -d'.' -f2)"
+if [ "$MINOR_VERSION" -ge 7 ]; then
+    COMPONENTS="${COMPONENTS},source-watcher"
+fi
+
 flux install --version ${VERSION} \
 --registry=${REGISTRY} \
---components-extra=image-reflector-controller,image-automation-controller \
+--components-extra=${COMPONENTS} \
 --export | grep 'ghcr.io/' | awk '{print $2}' > "${FLUX_IMAGES}"
 
 sc=$(awk 'NR==1{print $1}' "${FLUX_IMAGES}")
@@ -25,6 +31,9 @@ hc=$(awk 'NR==3{print $1}' "${FLUX_IMAGES}")
 nc=$(awk 'NR==4{print $1}' "${FLUX_IMAGES}")
 irc=$(awk 'NR==5{print $1}' "${FLUX_IMAGES}")
 iac=$(awk 'NR==6{print $1}' "${FLUX_IMAGES}")
+if [ "$MINOR_VERSION" -ge 7 ]; then
+    sw=$(awk 'NR==7{print $1}' "${FLUX_IMAGES}")
+fi
 
 echo "sc=${sc}" >> $GITHUB_OUTPUT
 echo "kc=${kc}" >> $GITHUB_OUTPUT
@@ -32,3 +41,8 @@ echo "hc=${hc}" >> $GITHUB_OUTPUT
 echo "nc=${nc}" >> $GITHUB_OUTPUT
 echo "irc=${irc}" >> $GITHUB_OUTPUT
 echo "iac=${iac}" >> $GITHUB_OUTPUT
+if [ "$MINOR_VERSION" -ge 7 ]; then
+    echo "sw=${sw}" >> $GITHUB_OUTPUT
+else
+    echo "sw=" >> $GITHUB_OUTPUT
+fi

@@ -75,9 +75,15 @@ jobs:
           --url=ghcr.io \
           --username=${{ github.actor }} \
           --password=${{ secrets.GHCR_READONLY }}
-          
+
+          COMPONENTS="image-reflector-controller,image-automation-controller"
+          MINOR_VERSION=$(echo "${{ steps.release.outputs.version }}" | cut -d'.' -f2)
+          if [ "$MINOR_VERSION" -ge 7 ]; then
+            COMPONENTS="${COMPONENTS},source-watcher"
+          fi
+
           flux install \
-          --components-extra="image-reflector-controller,image-automation-controller" \
+          --components-extra="${COMPONENTS}" \
           --registry=ghcr.io/controlplaneio-fluxcd/${{ matrix.variant }} \
           --image-pull-secret=flux-enterprise-auth
       - name: Verify images
