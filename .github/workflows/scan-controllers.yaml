@@ -137,6 +137,21 @@ jobs:
         env:
           TRIVY_USERNAME: ${{ github.actor }}
           TRIVY_PASSWORD: ${{ secrets.pull-token }}
+      - name: Scan source-watcher
+        id: sw
+        if: steps.images.outputs.sw != ''
+        continue-on-error: true
+        uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0 # v0.29.0
+        with:
+          image-ref: ${{ steps.images.outputs.sw }}
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: ${{ inputs.severity }}
+        env:
+          TRIVY_USERNAME: ${{ github.actor }}
+          TRIVY_PASSWORD: ${{ secrets.pull-token }}
       - name: Scan result
         run: |
           echo "source-controller: ${{ steps.sc.outcome }}"
@@ -151,9 +166,13 @@ jobs:
           echo "image: ${{ steps.images.outputs.irc }}"
           echo "image-automation-controller: ${{ steps.iac.outcome }}"
           echo "image: ${{ steps.images.outputs.iac }}"
+          if [ "${{ steps.images.outputs.sw }}" != "" ]; then
+            echo "source-watcher: ${{ steps.sw.outcome }}"
+            echo "image: ${{ steps.images.outputs.sw }}"
+          fi
       - name: Check result
         shell: bash
-        if: inputs.check-scan-error && (steps.sc.outcome == 'failure' || steps.kc.outcome == 'failure' || steps.hc.outcome == 'failure' || steps.nc.outcome == 'failure' || steps.irc.outcome == 'failure' || steps.iac.outcome == 'failure')
+        if: inputs.check-scan-error && (steps.sc.outcome == 'failure' || steps.kc.outcome == 'failure' || steps.hc.outcome == 'failure' || steps.nc.outcome == 'failure' || steps.irc.outcome == 'failure' || steps.iac.outcome == 'failure' || (steps.images.outputs.sw != '' && steps.sw.outcome == 'failure'))
         run: |
           echo "One or more controllers have vulnerabilities"
           exit 1
