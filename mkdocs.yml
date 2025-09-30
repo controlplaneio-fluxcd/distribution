@@ -10,7 +10,7 @@ edit_uri: ""
 copyright: Copyright © 2025 ControlPlane Ltd.
 
 home:
-  image: images/flux-ee-white.png
+  image: images/logo/enterprise-for-flux-cd-icon-white.svg
   tagline: Assured Flux CD
   description: |
     ControlPlane Enterprise enhances the security and stability of
@@ -22,8 +22,8 @@ home:
 
 theme:
   name: material
-  logo: images/cp-logo.png
-  favicon: images/cp-logo.png
+  logo: images/logo/enterprise-for-flux-cd-icon-white.png
+  favicon: images/logo/enterprise-for-flux-cd-icon-colour.png
   language: en
   custom_dir: docs/theme/
   palette:
