@@ -25,7 +25,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.x"
+    version: "2.7.x"
     registry: "ghcr.io/fluxcd"
   cluster:
     size: large
@@ -83,7 +83,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.x"
+    version: "2.7.x"
     registry: "ghcr.io/fluxcd"
   cluster:
     size: large

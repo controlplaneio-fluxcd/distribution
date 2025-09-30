@@ -26,7 +26,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.x"
+    version: "2.7.x"
     registry: "ghcr.io/fluxcd"
   sync:
     kind: GitRepository
@@ -58,7 +58,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.x"
+    version: "2.7.x"
     registry: "ghcr.io/fluxcd"
   components:
     - source-controller
@@ -105,7 +105,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.x"
+    version: "2.7.x"
     registry: "ghcr.io/fluxcd"
   components:
     - source-controller
