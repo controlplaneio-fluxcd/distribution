@@ -23,7 +23,7 @@ home:
 theme:
   name: material
   logo: images/logo/enterprise-for-flux-cd-icon-white.png
-  favicon: images/logo/enterprise-for-flux-cd-icon-colour.png
+  favicon: images/logo/favicon.png
   language: en
   custom_dir: docs/theme/
   palette:
