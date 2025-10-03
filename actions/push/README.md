@@ -67,6 +67,7 @@ the `production` tag. The push will be to this tag.
 | `tags`         | A new-line-separated list of tags for tagging the pushed artifact. If `diff-tag` is not specified, we push to the first tag | The `flux` CLI default |
 | `ignore-paths` | A new-line-separated list of paths relatative to `path` to ignore                                                           | The `flux` CLI default |
 | `annotations`  | A new-line-separated list of key-value pairs in the format `key=value` to add as annotations to the OCI artifact            | (Optional)             |
+| `provider`     | The cloud provider to use, can be `aws`, `azure` or `gcp`                                                                   | (Optional)             |
 
 ## Action Outputs
 

@@ -1,5 +1,5 @@
 name: Push Flux Artifact
-description: A GitHub Action for pushing OCI artifacs through the Flux CLI command 'flux push artifact'.
+description: A GitHub Action for pushing OCI artifacts using the Flux CLI.
 author: Stefan Prodan
 branding:
   color: blue
@@ -44,6 +44,12 @@ inputs:
     description: >
       A new-line-separated list of annotations in the
       format key=value to add to the OCI artifact.
+    required: false
+  provider:
+    description: >
+      Used to specify the value of the --provider flag on the
+      'flux * artifact' commands. The flag is not set if this
+      input is not specified.
     required: false
 outputs:
   pushed:
@@ -98,6 +104,7 @@ runs:
       TAGS: ${{ inputs.tags }}
       IGNORE_PATHS: ${{ inputs.ignore-paths }}
       ANNOTATIONS: ${{ inputs.annotations }}
+      PROVIDER: ${{ inputs.provider }}
     run: |
       set -euo pipefail
 
@@ -122,6 +129,12 @@ runs:
       done
       echo "annotations-flag=$annotations_flag" >> $GITHUB_OUTPUT
 
+      provider_flag=""
+      if [ -n "$PROVIDER" ]; then
+        provider_flag="--provider=$PROVIDER"
+      fi
+      echo "provider-flag=$provider_flag" >> $GITHUB_OUTPUT
+
   - name: Diff the OCI artifact
     id: diff
     shell: bash
@@ -130,13 +143,14 @@ runs:
       INPUT_PATH: ${{ inputs.path }}
       DIFF_TAG: ${{ inputs.diff-tag }}
       IGNORE_PATHS_FLAG: ${{ steps.inputs.outputs.ignore-paths-flag }}
+      PROVIDER_FLAG: ${{ steps.inputs.outputs.provider-flag }}
     run: |
       set -euo pipefail
 
       pushed=true
       if [ -n "$DIFF_TAG" ]; then
         artifact_url=${REPOSITORY}:${DIFF_TAG}
-        if flux diff artifact oci://$artifact_url --path=$INPUT_PATH $IGNORE_PATHS_FLAG; then
+        if flux diff artifact oci://$artifact_url --path=$INPUT_PATH $IGNORE_PATHS_FLAG $PROVIDER_FLAG; then
           pushed=false
         fi
       fi
@@ -156,6 +170,7 @@ runs:
       DIFF_TAG: ${{ inputs.diff-tag }}
       IGNORE_PATHS_FLAG: ${{ steps.inputs.outputs.ignore-paths-flag }}
       ANNOTATIONS_FLAG: ${{ steps.inputs.outputs.annotations-flag }}
+      PROVIDER_FLAG: ${{ steps.inputs.outputs.provider-flag }}
     run: |
       set -euo pipefail
 
@@ -175,6 +190,7 @@ runs:
         --revision="$REVISION" \
         $IGNORE_PATHS_FLAG \
         $ANNOTATIONS_FLAG \
+        $PROVIDER_FLAG \
         --output json)
 
       digest=$(echo $push_output | jq -r .digest)
@@ -193,6 +209,7 @@ runs:
       DIGEST_URL: ${{ steps.push.outputs.digest-url }}
       DIFF_TAG_URL: ${{ inputs.repository }}:${{ inputs.diff-tag }}
       TAGS: ${{ steps.inputs.outputs.tags }}
+      PROVIDER_FLAG: ${{ steps.inputs.outputs.provider-flag }}
     run: |
       set -euo pipefail
 
@@ -206,4 +223,4 @@ runs:
 
       echo "Tagging $source_artifact_url with ${TAGS}..."
 
-      flux tag artifact oci://$source_artifact_url --tag=$TAGS
+      flux tag artifact oci://$source_artifact_url --tag=$TAGS $PROVIDER_FLAG
