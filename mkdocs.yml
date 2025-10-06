@@ -87,6 +87,7 @@ nav:
   - Flux Distribution:
     - Introduction: distribution/index.md
     - Installation: distribution/install.md
+    - Upgrade: distribution/upgrade.md
     - Security: distribution/security.md
     - Guides:
         - Flux Architecture Overview: guides/flux-architecture.md
