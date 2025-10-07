@@ -1,6 +1,6 @@
 ---
 title: Flux Distribution Installation
-description: FluxCD Enterprise installation and upgrade guide
+description: FluxCD Enterprise installation guide
 ---
 
 # Flux Distribution Installation
