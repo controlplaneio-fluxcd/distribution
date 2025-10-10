@@ -284,7 +284,10 @@ and must be of type `kubernetes.io/dockerconfigjson`.
 
 The `.spec.components` field is optional and specifies the list of Flux components to install.
 
-When not specified, the operator will install the default set of components for the Flux distribution:
+When not specified, the operator will install the default set of components: `source-controller`,
+`kustomize-controller`, `helm-controller` and `notification-controller`.
+
+The supported components are:
 
 ```yaml
 spec:
@@ -293,7 +296,12 @@ spec:
     - kustomize-controller
     - helm-controller
     - notification-controller
+    - image-reflector-controller
+    - image-automation-controller
+    - source-watcher
 ```
+
+Note that the `source-watcher` component requires Flux v2.7.0 or later.
 
 ### Cluster configuration
 
@@ -589,6 +597,17 @@ The reconciliation behaviour can be configured using the following annotations:
 - `fluxcd.controlplane.io/reconcileEvery`: Set the reconciliation interval. Default is `1h`.
 - `fluxcd.controlplane.io/reconcileArtifactEvery`: Set the artifact reconciliation interval. Default is `10m`.
 - `fluxcd.controlplane.io/reconcileTimeout`: Set the reconciliation timeout. Default is `5m`.
+
+To trigger an immediate reconciliation, the following annotation can be set to the current timestamp:
+
+- `reconcile.fluxcd.io/requestedAt`: Set to the current timestamp to trigger an immediate reconciliation.
+- `reconcile.fluxcd.io/forceAt`: Set to the current timestamp to trigger a forced reconciliation, migrating all Flux resources to their latest API version.
+
+To force a reconciliation with the Flux Operator CLI:
+
+```sh
+flux-operator -n flux-system reconcile instance flux --force
+```
 
 ### Sync configuration
 
