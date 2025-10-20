@@ -24,6 +24,8 @@ jobs:
     - uses: actions/checkout@v4
     - uses: controlplaneio-fluxcd/distribution/actions/setup@main
     - uses: sigstore/cosign-installer@v3
+      with:
+        cosign-release: v2.6.1 # TODO: remove after Flux 2.8 with support for cosign v3
     - uses: docker/login-action@v3
       with:
         registry: ghcr.io
