@@ -148,6 +148,22 @@ Arguments:
 - `-n, --namespace`: Specifies the namespace scope of the command.
 - `--wait`: On resume, waits for the reconciliation to complete before returning.
 
+### Delete Commands
+
+The `flux-operator delete` commands are used to delete the Flux Operator resources from the cluster.
+
+The following commands are available:
+
+- `flux-operator delete instance <name>`: Deletes the FluxInstance resource from the cluster.
+- `flux-operator delete rset <name>`: Deletes the ResourceSet resource from the cluster.
+- `flux-operator delete rsip <name>`: Deletes the ResourceSetInputProvider resource from the cluster.
+
+Arguments:
+
+- `-n, --namespace`: Specifies the namespace scope of the command.
+- `--wait`: Waits for the resource to be deleted before returning (enabled by default).
+- `--with-suspend`: Suspends the resource before deleting it (leaving the managed resources in-place).
+
 ### Statistics Command
 
 This command is used to retrieve statistics about the Flux resources
@@ -256,3 +272,56 @@ and of the Flux distribution running in the cluster.
 
 - `flux-operator version`: Displays the version information for the CLI and the Flux Operator.
     - `--client`:  If true, shows the client version only (no server required).
+
+### Install Command
+
+The `flux-operator install` command provides a quick way to bootstrap a Kubernetes cluster with the Flux Operator and a Flux instance.
+
+This command performs the following steps:
+
+1. Downloads the Flux Operator distribution artifact from `oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests`.
+2. Installs the Flux Operator in the `flux-system` namespace and waits for it to become ready.
+3. Installs the Flux instance in the `flux-system` namespace according to the provided configuration.
+4. Configures the pull secret for the instance sync source if credentials are provided.
+5. Configures Flux to bootstrap the cluster from a Git repository or OCI repository if a sync URL is provided.
+6. Configures automatic updates of the Flux Operator from the distribution artifact.
+
+This command is intended for development and testing purposes. On production environments,
+it is recommended to follow the [installation guide](https://fluxcd.control-plane.io/operator/install/).
+
+- `flux-operator install`: Installs the Flux Operator and a Flux instance in the cluster.
+    - `--instance-file, -f`: Path to FluxInstance YAML file (local file, OCI or HTTPS URL).
+    - `--instance-distribution-version`: Flux distribution version.
+    - `--instance-distribution-registry`: Container registry to pull Flux images from.
+    - `--instance-distribution-artifact`: OCI artifact containing the Flux distribution manifests.
+    - `--instance-components`: List of Flux components to install.
+    - `--instance-components-extra`: Additional Flux components to install on top of the default set.
+    - `--instance-cluster-type`: Cluster type (kubernetes, openshift, aws, azure, gcp).
+    - `--instance-cluster-size`: Cluster size profile for vertical scaling (small, medium, large).
+    - `--instance-cluster-domain`: Cluster domain used for generating the FQDN of services.
+    - `--instance-cluster-multitenant`: Enable multitenant lockdown for Flux controllers.
+    - `--instance-cluster-network-policy`: Restrict network access to the current namespace.
+    - `--instance-sync-url`: URL of the source for cluster sync (Git repository URL or OCI repository address).
+    - `--instance-sync-ref`: Source reference for cluster sync (Git ref name or OCI tag).
+    - `--instance-sync-path`: Path to the manifests directory in the source.
+    - `--instance-sync-creds`: Credentials for the source in the format `username:token`.
+    - `--auto-update`: Enable automatic updates of the Flux Operator from the distribution artifact.
+
+### Uninstall Command
+
+The `flux-operator uninstall` command safely removes the Flux Operator and Flux instance from the cluster.
+
+This command performs the following steps:
+
+1. Deletes the cluster role bindings of Flux Operator and Flux controllers.
+2. Deletes the deployments of Flux Operator and Flux controllers.
+3. Removes finalizers from Flux Operator and Flux custom resources.
+4. Deletes the CustomResourceDefinitions of Flux Operator and Flux.
+5. Deletes the namespace where Flux Operator is installed (unless `--keep-namespace` is specified).
+
+- `flux-operator -n flux-system uninstall`: Uninstalls the Flux Operator and Flux instance from the cluster.
+    - `--keep-namespace`: Keep the namespace after uninstalling Flux Operator and Flux instance.
+
+Note that the `uninstall` command will not delete any Kubernetes objects or Helm releases
+that were reconciled on the cluster by Flux. It is safe to run this command and re-install
+Flux Operator later to resume managing the existing resources.
