@@ -19,4 +19,4 @@ images:
     digest: sha256:1a482ff3457d5489f180a5aea958032ebb09c22709696a4be535fb4928a8a765
   - name: ghcr.io/controlplaneio-fluxcd/alpine/source-watcher
     newTag: v2.0.2
-    digest: sha256:578c80d01aba477c961b531299e5c6d98497f8c50fd8a0deda14c78543b754b1
+    digest: sha256:b8b18ff2aff3af0077afbef18fb7b3d38b23b3cdb9352c561e332ca28485c586

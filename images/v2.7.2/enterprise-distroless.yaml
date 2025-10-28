@@ -19,4 +19,4 @@ images:
     digest: sha256:1df274310a0fe7b5858ec737803c522e02935071b9aa69e0112f222d9e89858b
   - name: ghcr.io/controlplaneio-fluxcd/distroless/source-watcher
     newTag: v2.0.2
-    digest: sha256:0b115ba1f9979ca9fcdc0940f8ee5d317513dd1143f19651462f99aa6159111b
+    digest: sha256:89527799595d0e1b9db81c32c2d0ba6d3b6c2274f43870fd654c7adb5899c658
