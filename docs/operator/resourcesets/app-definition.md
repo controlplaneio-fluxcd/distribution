@@ -6,7 +6,7 @@ description: Flux Operator ResourceSets guide for application definitions
 # Using ResourceSets for Application Definitions
 
 The ResourceSet API allows bundling a set of Kubernetes resources
-(Flux HelmRelease, OCIRepository, Alert, Provider, Receiver, Kubernetes Namespace, ServiceAccount, etc)
+(Flux HelmRelease, Kustomization, OCIRepository, Alert, Provider, Receiver, Kubernetes Namespace, ServiceAccount, etc)
 into a single deployable unit that can be templated and parameterized.
 
 Use cases of ResourceSet include:
