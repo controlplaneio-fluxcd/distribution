@@ -1,0 +1,79 @@
+name: Vulnerability scan - Distroless Previous Versions
+
+on:
+  workflow_dispatch:
+  schedule:
+  - cron: '00 4 * * 1-5'
+
+jobs:
+  scan-1:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/scan-controllers.yaml
+    with:
+      check-scan-error: true
+      registry: ghcr.io/controlplaneio-fluxcd/distroless
+      minor-version-offset: '1'
+    secrets:
+      pull-token: ${{ secrets.GHCR_READONLY }}
+
+  notify-zulip-1:
+    needs: scan-1
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get Job URL
+      id: job-url
+      run: |
+        url=$(gh run view ${GITHUB_RUN_ID} --repo ${GITHUB_REPO} --json jobs --jq ".jobs[0].url")
+        echo "url: $url"
+        echo url=$url >> $GITHUB_OUTPUT
+      env:
+        GITHUB_RUN_ID: ${{ github.run_id }}
+        GITHUB_REPO: ${{ github.repository }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: zulip/github-actions-zulip/send-message@e4c8f27c732ba9bd98ac6be0583096dea82feea5 # v1.0.2
+      with:
+        email: ${{ secrets.ZULIP_EMAIL }}
+        api-key: ${{ secrets.ZULIP_API_KEY }}
+        organization-url: ${{ secrets.ZULIP_ORGANIZATION_URL }}
+        type: stream
+        to: team-flux
+        topic: cve-alerts
+        content: 'Flux Enterprise Distroless (N-1) CVE alert: ${{ steps.job-url.outputs.url }}'
+
+  scan-2:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/scan-controllers.yaml
+    with:
+      check-scan-error: true
+      registry: ghcr.io/controlplaneio-fluxcd/distroless
+      minor-version-offset: '2'
+    secrets:
+      pull-token: ${{ secrets.GHCR_READONLY }}
+
+  notify-zulip-2:
+    needs: scan-2
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get Job URL
+      id: job-url
+      run: |
+        url=$(gh run view ${GITHUB_RUN_ID} --repo ${GITHUB_REPO} --json jobs --jq ".jobs[0].url")
+        echo "url: $url"
+        echo url=$url >> $GITHUB_OUTPUT
+      env:
+        GITHUB_RUN_ID: ${{ github.run_id }}
+        GITHUB_REPO: ${{ github.repository }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: zulip/github-actions-zulip/send-message@e4c8f27c732ba9bd98ac6be0583096dea82feea5 # v1.0.2
+      with:
+        email: ${{ secrets.ZULIP_EMAIL }}
+        api-key: ${{ secrets.ZULIP_API_KEY }}
+        organization-url: ${{ secrets.ZULIP_ORGANIZATION_URL }}
+        type: stream
+        to: team-flux
+        topic: cve-alerts
+        content: 'Flux Enterprise Distroless (N-2) CVE alert: ${{ steps.job-url.outputs.url }}'
