@@ -17,6 +17,11 @@ on:
         required: false
         type: boolean
         default: true
+      minor-version-offset:
+        description: 'if non-zero, scan images of the latest minor version minus this offset'
+        required: false
+        type: string
+        default: '0'
     secrets:
       pull-token:
         description: 'GitHub Container Registry read-only token'
@@ -37,12 +42,45 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.pull-token }}
       - name: Latest release
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         id: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          VERSION=$(gh release view --json tagName -q '.tagName')
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          MINOR_VERSION_OFFSET: ${{ inputs.minor-version-offset }}
+        with:
+          script: |
+            // This script will get the latest release of the repo to figure out
+            // the latest minor version. Then, if a minor version offset is provided,
+            // it will find the latest patch release for the latest minor version minus the offset.
+            const minorVersionOffset = parseInt(process.env.MINOR_VERSION_OFFSET || '0', 10);
+            const releases = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            const semver = releases.data
+              .map(release => release.tag_name)
+              .filter(tag => /^v\d+\.\d+\.\d+$/.test(tag))
+              .map(tag => tag.slice(1)) // remove 'v' prefix
+              .map(tag => {
+                const [major, minor, patch] = tag.split('.').map(num => parseInt(num, 10));
+                return { major, minor, patch };
+              });
+            semver.sort((a, b) => {
+              if (a.major !== b.major) return b.major - a.major;
+              if (a.minor !== b.minor) return b.minor - a.minor;
+              return b.patch - a.patch;
+            });
+            let targetMinor = semver[0].minor - minorVersionOffset;
+            let latestPatch = semver
+              .filter(v => v.minor === targetMinor)
+              .sort((a, b) => b.patch - a.patch)[0];
+            if (!latestPatch) {
+              throw new Error(`No release found for minor version offset ${minorVersionOffset}`);
+            }
+            const version = `v${latestPatch.major}.${latestPatch.minor}.${latestPatch.patch}`;
+            const versionWithoutPatch = `v${latestPatch.major}.${latestPatch.minor}`;
+            core.setOutput('version', version);
+            core.setOutput('version-without-patch', versionWithoutPatch);
       - name: Setup Flux
         uses: fluxcd/flux2/action@5350425cdcd5fa015337e09fa502153c0275bd4b #v2.4.0
         with:
@@ -64,6 +102,7 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: ${{ inputs.severity }}
+          trivyignores: .trivyignore,releases/release-${{ steps.release.outputs.version-without-patch }}.trivyignore
         env:
           TRIVY_USERNAME: ${{ github.actor }}
           TRIVY_PASSWORD: ${{ secrets.pull-token }}
@@ -78,6 +117,7 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: ${{ inputs.severity }}
+          trivyignores: .trivyignore,releases/release-${{ steps.release.outputs.version-without-patch }}.trivyignore
         env:
           TRIVY_USERNAME: ${{ github.actor }}
           TRIVY_PASSWORD: ${{ secrets.pull-token }}
@@ -92,6 +132,7 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: ${{ inputs.severity }}
+          trivyignores: .trivyignore,releases/release-${{ steps.release.outputs.version-without-patch }}.trivyignore
         env:
           TRIVY_USERNAME: ${{ github.actor }}
           TRIVY_PASSWORD: ${{ secrets.pull-token }}
@@ -106,6 +147,7 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: ${{ inputs.severity }}
+          trivyignores: .trivyignore,releases/release-${{ steps.release.outputs.version-without-patch }}.trivyignore
         env:
           TRIVY_USERNAME: ${{ github.actor }}
           TRIVY_PASSWORD: ${{ secrets.pull-token }}
@@ -120,6 +162,7 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: ${{ inputs.severity }}
+          trivyignores: .trivyignore,releases/release-${{ steps.release.outputs.version-without-patch }}.trivyignore
         env:
           TRIVY_USERNAME: ${{ github.actor }}
           TRIVY_PASSWORD: ${{ secrets.pull-token }}
@@ -134,6 +177,7 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: ${{ inputs.severity }}
+          trivyignores: .trivyignore,releases/release-${{ steps.release.outputs.version-without-patch }}.trivyignore
         env:
           TRIVY_USERNAME: ${{ github.actor }}
           TRIVY_PASSWORD: ${{ secrets.pull-token }}
@@ -149,6 +193,7 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: ${{ inputs.severity }}
+          trivyignores: .trivyignore,releases/release-${{ steps.release.outputs.version-without-patch }}.trivyignore
         env:
           TRIVY_USERNAME: ${{ github.actor }}
           TRIVY_PASSWORD: ${{ secrets.pull-token }}
