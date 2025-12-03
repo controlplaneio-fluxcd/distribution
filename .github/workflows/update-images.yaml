@@ -14,7 +14,7 @@ permissions:
 
 env:
   ENTERPRISE_REGISTRY: ghcr.io/controlplaneio-fluxcd
-  ENTERPRISE_VARIANTS: alpine;distroless
+  ENTERPRISE_VARIANTS: alpine;distroless;distroless-fips
 
 jobs:
   generate:

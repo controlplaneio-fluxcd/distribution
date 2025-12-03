@@ -11,6 +11,7 @@ jobs:
     strategy:
       matrix:
         variant:
+          - distroless-fips
           - distroless
           - alpine
     runs-on: ubuntu-latest
@@ -70,7 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ENTERPRISE_REGISTRY: ghcr.io/controlplaneio-fluxcd
-      ENTERPRISE_VARIANTS: alpine;distroless
+      ENTERPRISE_VARIANTS: alpine;distroless;distroless-fips
       UPSTREAM_REGISTRY: ghcr.io/fluxcd
       UPSTREAM_VARIANT: alpine
     needs:

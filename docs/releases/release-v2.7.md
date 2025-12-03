@@ -57,7 +57,7 @@ Upstream changelog: [fluxcd/flux2 v2.7.5](https://github.com/fluxcd/flux2/releas
 |:------------------------------------------------------|---------|
 | `ghcr.io/controlplaneio-fluxcd/alpine/flux-manifests` | v2.7.5  |
 
-### FIPS-compliant v2.7.5
+### Distroless v2.7.5
 
 #### Flux Controllers
 
@@ -88,6 +88,26 @@ Upstream changelog: [fluxcd/flux2 v2.7.5](https://github.com/fluxcd/flux2/releas
 | OCI Artifact                                               | Version |
 |:-----------------------------------------------------------|---------|
 | `ghcr.io/controlplaneio-fluxcd/distroless/flux-manifests`  | v2.7.5  |
+
+### Distroless FIPS-compliant v2.7.5
+
+#### Flux Controllers
+
+| Controller                                                                  | Version | Architectures |
+|:----------------------------------------------------------------------------|---------|---------------|
+| `ghcr.io/controlplaneio-fluxcd/distroless-fips/source-controller`           | v1.7.4  | amd64 / arm64 |
+| `ghcr.io/controlplaneio-fluxcd/distroless-fips/source-watcher`              | v2.0.3  | amd64 / arm64 |
+| `ghcr.io/controlplaneio-fluxcd/distroless-fips/kustomize-controller`        | v1.7.4  | amd64 / arm64 |
+| `ghcr.io/controlplaneio-fluxcd/distroless-fips/helm-controller`             | v1.4.5  | amd64 / arm64 |
+| `ghcr.io/controlplaneio-fluxcd/distroless-fips/notification-controller`     | v1.7.5  | amd64 / arm64 |
+| `ghcr.io/controlplaneio-fluxcd/distroless-fips/image-reflector-controller`  | v1.0.4  | amd64 / arm64 |
+| `ghcr.io/controlplaneio-fluxcd/distroless-fips/image-automation-controller` | v1.0.4  | amd64 / arm64 |
+
+#### Flux Manifests
+
+| OCI Artifact                                                    | Version |
+|:----------------------------------------------------------------|---------|
+| `ghcr.io/controlplaneio-fluxcd/distroless-fips/flux-manifests`  | v2.7.5  |
 
 ## v2.7.4
 
