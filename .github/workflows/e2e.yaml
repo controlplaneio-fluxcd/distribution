@@ -25,6 +25,7 @@ jobs:
         variant:
           - alpine
           - distroless
+          - distroless-fips
         kubernetes:
           - v1.34.1
         runner:

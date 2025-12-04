@@ -10,7 +10,7 @@ inputs:
     default: "ghcr.io/controlplaneio-fluxcd"
     required: true
   variant:
-    description: "Base image variant e.g. alpine or distroless"
+    description: "Base image variant e.g. alpine, distroless or distroless-fips"
     default: "alpine"
     required: true
   components:
