@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         variant:
-          - distroless
+          - distroless-fips
         kubernetes:
           - v1.29.6
           - v1.30.2
@@ -31,6 +31,7 @@ jobs:
           - v1.32.0
           - v1.33.0
           - v1.34.1
+          - v1.35.0
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -64,7 +65,7 @@ jobs:
         uses: helm/kind-action@ae94020eaf628e9b9b9f341a10cc0cdcf5c018fb # v1.11.0
         with:
           cluster_name: flux
-          version: v0.30.0
+          version: v0.31.0
           node_image: ghcr.io/fluxcd/kindest/node:${{ matrix.kubernetes }}-amd64
       - name: Install Flux
         shell: bash

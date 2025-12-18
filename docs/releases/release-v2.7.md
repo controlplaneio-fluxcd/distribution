@@ -2,10 +2,10 @@
 
 ## Supported Kubernetes Versions
 
-| Distribution | Versions                                          |
-|:-------------|:--------------------------------------------------|
-| Kubernetes   | 1.29 <br>1.30 <br>1.31 <br>1.32 <br>1.33 <br>1.34 |
-| OpenShift    | 4.16 <br>4.17 <br>4.18 <br>4.19                   |
+| Distribution | Versions                                                   |
+|:-------------|:-----------------------------------------------------------|
+| Kubernetes   | 1.29 <br>1.30 <br>1.31 <br>1.32 <br>1.33 <br>1.34 <br>1.35 |
+| OpenShift    | 4.16 <br>4.17 <br>4.18 <br>4.19 <br>4.20                   |
 
 ## API Versions
 
