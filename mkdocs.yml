@@ -59,6 +59,37 @@ docs_dir: docs
 plugins:
   - search
   - social
+  - redirects:
+      redirect_maps:
+        # Flux Operator redirects
+        'operator/index.md': 'https://fluxoperator.dev/'
+        'operator/install.md': 'https://fluxoperator.dev/docs/guides/install/'
+        'operator/flux-config.md': 'https://fluxoperator.dev/docs/instance/controllers/'
+        'operator/flux-sync.md': 'https://fluxoperator.dev/docs/instance/sync/'
+        'operator/flux-kustomize.md': 'https://fluxoperator.dev/docs/instance/customization/'
+        'operator/flux-sharding.md': 'https://fluxoperator.dev/docs/instance/sharding/'
+        'operator/monitoring.md': 'https://fluxoperator.dev/docs/instance/monitoring/'
+        'operator/flux-bootstrap-migration.md': 'https://fluxoperator.dev/docs/guides/migration/'
+        'operator/fluxinstance.md': 'https://fluxoperator.dev/docs/crd/fluxinstance/'
+        'operator/fluxreport.md': 'https://fluxoperator.dev/docs/crd/fluxreport/'
+        'operator/resourceset.md': 'https://fluxoperator.dev/docs/crd/resourceset/'
+        'operator/resourcesetinputprovider.md': 'https://fluxoperator.dev/docs/crd/resourcesetinputprovider/'
+        'operator/cli.md': 'https://fluxoperator.dev/docs/guides/cli/'
+        'operator/resourcesets/introduction.md': 'https://fluxoperator.dev/docs/resourcesets/introduction/'
+        'operator/resourcesets/app-definition.md': 'https://fluxoperator.dev/docs/resourcesets/app-definition/'
+        'operator/resourcesets/time-based-delivery.md': 'https://fluxoperator.dev/docs/resourcesets/time-based-delivery/'
+        'operator/resourcesets/image-automation.md': 'https://fluxoperator.dev/docs/resourcesets/image-automation/'
+        'operator/resourcesets/github-pull-requests.md': 'https://fluxoperator.dev/docs/resourcesets/github-pull-requests/'
+        'operator/resourcesets/gitlab-merge-requests.md': 'https://fluxoperator.dev/docs/resourcesets/gitlab-merge-requests/'
+        # Flux MCP Server redirects
+        'mcp/index.md': 'https://fluxoperator.dev/mcp-server/'
+        'mcp/install.md': 'https://fluxoperator.dev/docs/mcp/install/'
+        'mcp/config.md': 'https://fluxoperator.dev/docs/mcp/config/'
+        'mcp/prompt-engineering.md': 'https://fluxoperator.dev/docs/mcp/prompting/'
+        'mcp/instructions.md': 'https://fluxoperator.dev/docs/mcp/instructions/'
+        'mcp/config-api.md': 'https://fluxoperator.dev/docs/mcp/config/'
+        'mcp/tools.md': 'https://fluxoperator.dev/docs/mcp/tools/'
+        'mcp/prompts.md': 'https://fluxoperator.dev/docs/mcp/prompts/'
 
 markdown_extensions:
   - attr_list
@@ -105,40 +136,7 @@ nav:
         - Release v2.4: releases/release-v2.4.md
         - Release v2.3: releases/release-v2.3.md
         - Release v2.2: releases/release-v2.2.md
-  - Flux Operator:
-      - Introduction: operator/index.md
-      - Installation: operator/install.md
-      - Instance Configuration:
-          - Flux Controllers: operator/flux-config.md
-          - Flux Cluster Sync: operator/flux-sync.md
-          - Flux Customization: operator/flux-kustomize.md
-          - Flux Sharding: operator/flux-sharding.md
-          - Flux Monitoring: operator/monitoring.md
-          - Bootstrap Migration: operator/flux-bootstrap-migration.md
-      - ResourceSet Guides:
-          - Introduction: operator/resourcesets/introduction.md
-          - Application Definitions: operator/resourcesets/app-definition.md
-          - Time-based App Delivery: operator/resourcesets/time-based-delivery.md
-          - Image Update Automation: operator/resourcesets/image-automation.md
-          - Self-Service Environments:
-            -  Ephemeral Environments for GitHub Pull Requests: operator/resourcesets/github-pull-requests.md
-            -  Ephemeral Environments for GitLab Merge Requests: operator/resourcesets/gitlab-merge-requests.md
-      - API Reference:
-          - FluxInstance: operator/fluxinstance.md
-          - FluxReport: operator/fluxreport.md
-          - ResourceSet: operator/resourceset.md
-          - ResourceSetInputProvider: operator/resourcesetinputprovider.md
-      - CLI Reference: operator/cli.md
-  - Flux MCP Server:
-      - Introduction: mcp/index.md
-      - Installation: mcp/install.md
-      - Configuration: mcp/config.md
-      - Guides:
-          - Prompt Engineering: mcp/prompt-engineering.md
-          - AI Instructions: mcp/instructions.md
-      - API Reference:
-          - Config API: mcp/config-api.md
-          - MCP Tools: mcp/tools.md
-          - MCP Prompts: mcp/prompts.md
+  - Flux Operator: https://fluxoperator.dev/
+  - Flux MCP Server: https://fluxoperator.dev/mcp-server/
   - Pricing: pricing/index.md
   - Contact: https://control-plane.io/contact/?inquiry=fluxcd
