@@ -1,7 +1,7 @@
 images:
   - name: ghcr.io/controlplaneio-fluxcd/distroless-fips/source-controller
     newTag: v1.6.2
-    digest: sha256:9c9133ea79aa6d27467866a018f92063028e97abdb38d0464d0b36470b6a60ed
+    digest: sha256:e140eced3eac06818d6b4e67022193de8066c2097b0d0a3f43f69beee230ae8b
   - name: ghcr.io/controlplaneio-fluxcd/distroless-fips/kustomize-controller
     newTag: v1.6.1
     digest: sha256:68b7d0c900bc6c48a000c8a6014867640a2e7ff9e2228c0338462a8f36659559
