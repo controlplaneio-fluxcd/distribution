@@ -24,7 +24,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.7.x"
+    version: "2.8.x"
     registry: "ghcr.io/fluxcd"
     artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
   cluster:
@@ -39,7 +39,7 @@ kubectl apply -f flux-instance.yaml
 ```
 
 The operator will reconcile the `FluxInstance` resource and install
-the latest upstream Flux version in the `2.7` range with the specified components.
+the latest upstream Flux version in the `2.8` range with the specified components.
 To verify the installation status:
 
 ```shell
@@ -72,7 +72,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.7.x"
+    version: "2.8.x"
     registry: "ghcr.io/controlplaneio-fluxcd/distroless"
     imagePullSecret: "flux-enterprise-auth"
     artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
@@ -115,7 +115,7 @@ metadata:
     fluxcd.controlplane.io/reconcileTimeout: "5m"
 spec:
   distribution:
-    version: "2.7.x"
+    version: "2.8.x"
     registry: "ghcr.io/fluxcd"
     artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
   components:

@@ -130,6 +130,7 @@ nav:
     - Marketplaces:
         - AWS Marketplace: marketplace/aws.md
     - Versions:
+        - Release v2.8: releases/release-v2.8.md
         - Release v2.7: releases/release-v2.7.md
         - Release v2.6: releases/release-v2.6.md
         - Release v2.5: releases/release-v2.5.md

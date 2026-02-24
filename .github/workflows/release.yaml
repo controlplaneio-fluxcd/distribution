@@ -61,8 +61,6 @@ jobs:
           img_url=${img_repository}:${{ github.ref_name }}
           echo "img_url=$img_url" >> $GITHUB_OUTPUT
       - uses: sigstore/cosign-installer@dc72c7d5c4d10cd6bcb8cf6e3fd625a9e5e537da # v3.7.0
-        with:
-          cosign-release: v2.6.1 # TODO: remove after Flux 2.8 with support for cosign v3
       - name: Sign manifests
         run: |
           cosign sign --yes ${{ steps.push.outputs.img_repository }}@${{ steps.push.outputs.img_digest }}
