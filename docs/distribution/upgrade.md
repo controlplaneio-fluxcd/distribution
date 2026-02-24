@@ -72,7 +72,7 @@ you can configure automatic upgrades by setting `Approval` to `Automatic` in Ope
 ## Upgrading the Flux Distribution
 
 It is recommended to set the Flux distribution version in the `FluxInstance` manifest
-to a specific minor version, such as `2.6.x`, to have more control over the upgrade process.
+to a specific minor version, such as `2.8.x`, to have more control over the upgrade process.
 
 ### Migrate to Flux stable APIs in Git
 
@@ -80,16 +80,16 @@ to a specific minor version, such as `2.6.x`, to have more control over the upgr
 
     In Flux v2.7, the deprecated **beta1** APIs have reached their end of life and are no longer supported.
 
-    In Flux v2.8, the deprecated **beta2** APIs will reach their end of life on Q1 2026.
+    In Flux v2.8, the deprecated **beta2** APIs have reached their end of life and are no longer supported.
 
-Before upgrading to Flux v2.7 or later, make sure to migrate all your manifests
-to the Flux v2.6 stable APIs in your Git repositories by using the `flux migrate -f` command:
+Before upgrading to Flux v2.8 or later, make sure to migrate all your manifests
+to the Flux v2.7 stable APIs in your Git repositories by using the `flux migrate -f` command:
 
 ```sh
 git clone <your-git-repo>
 cd <your-git-repo>
-flux migrate -v 2.6 -f .
-git commit -am "Migrate to Flux v2.6 stable APIs"
+flux migrate -v 2.7 -f .
+git commit -am "Migrate to Flux v2.7 stable APIs"
 git push
 ```
 
@@ -106,7 +106,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.7.x"
+    version: "2.8.x"
 ```
 
 The operator will automatically upgrade the Flux components and

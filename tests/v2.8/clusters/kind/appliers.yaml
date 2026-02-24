@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: appliers
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: sources
+  serviceAccountName: kustomize-controller
+  interval: 10m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./tests/v2.8/appliers
+  prune: true
+  wait: true
+  timeout: 5m
