@@ -103,12 +103,6 @@ Upstream changelog: [fluxcd/flux2 v2.7.5](https://github.com/fluxcd/flux2/releas
 | `ghcr.io/controlplaneio-fluxcd/distroless-fips/image-reflector-controller`  | v1.0.4  | amd64 / arm64 |
 | `ghcr.io/controlplaneio-fluxcd/distroless-fips/image-automation-controller` | v1.0.4  | amd64 / arm64 |
 
-#### Flux Manifests
-
-| OCI Artifact                                                    | Version |
-|:----------------------------------------------------------------|---------|
-| `ghcr.io/controlplaneio-fluxcd/distroless-fips/flux-manifests`  | v2.7.5  |
-
 ## v2.7.4
 
 Upstream changelog: [fluxcd/flux2 v2.7.4](https://github.com/fluxcd/flux2/releases/tag/v2.7.4)
