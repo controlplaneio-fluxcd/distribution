@@ -1,0 +1,2255 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="FluxCD GitOps with Generic Helm Charts reference guide">
+      
+      
+        <meta name="author" content="ControlPLane">
+      
+      
+        <link rel="canonical" href="https://fluxcd.control-plane.io/guides/flux-generic-helm-chart/">
+      
+      
+        <link rel="prev" href="../flux-policies/">
+      
+      
+        <link rel="next" href="../flux-cli-quick-reference/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../images/logo/enterprise-for-flux-cd-icon-colour.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
+    
+    
+      
+        <title>Generic Helm Chart Pattern - ControlPlane Enterprise for Flux CD</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Generic Helm Chart Pattern - ControlPlane Enterprise for Flux CD" />
+<meta property="og:description" content="FluxCD GitOps with Generic Helm Charts reference guide" />
+<meta property="og:image" content="https://fluxcd.control-plane.io/assets/images/social/guides/flux-generic-helm-chart.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://fluxcd.control-plane.io/guides/flux-generic-helm-chart/" />
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:title" content="Generic Helm Chart Pattern - ControlPlane Enterprise for Flux CD" />
+<meta property="twitter:description" content="FluxCD GitOps with Generic Helm Charts reference guide" />
+<meta property="twitter:image" content="https://fluxcd.control-plane.io/assets/images/social/guides/flux-generic-helm-chart.png" />
+</head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#standardizing-app-delivery-with-flux-and-generic-helm-charts" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="ControlPlane Enterprise for Flux CD" class="md-header__button md-logo" aria-label="ControlPlane Enterprise for Flux CD" data-md-component="logo">
+      
+  <img src="../../images/logo/enterprise-for-flux-cd-icon-white.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ControlPlane Enterprise for Flux CD
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Generic Helm Chart Pattern
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/controlplaneio-fluxcd/distribution" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    distribution
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../distribution/" class="md-tabs__link">
+          
+  
+  
+  Flux Distribution
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://fluxoperator.dev/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Flux Operator
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://fluxoperator.dev/mcp-server/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Flux MCP Server
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../pricing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Pricing
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://control-plane.io/contact/?inquiry=fluxcd" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Contact
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="ControlPlane Enterprise for Flux CD" class="md-nav__button md-logo" aria-label="ControlPlane Enterprise for Flux CD" data-md-component="logo">
+      
+  <img src="../../images/logo/enterprise-for-flux-cd-icon-white.png" alt="logo">
+
+    </a>
+    ControlPlane Enterprise for Flux CD
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/controlplaneio-fluxcd/distribution" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    distribution
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flux Distribution
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Flux Distribution
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../distribution/install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../distribution/upgrade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../distribution/security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flux-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flux Architecture Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../d1-architecture-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    D1 Reference Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../d2-architecture-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    D2 Reference Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flux-policies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flux Multitenant Policies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generic Helm Chart Pattern
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generic Helm Chart Pattern
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-generic-helm-chart-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Generic Helm Chart Pattern
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Generic Helm Chart Pattern">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#one-helm-chart-per-service-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One Helm Chart per Service Type
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#developing-generic-helm-charts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Developing Generic Helm Charts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pushing-helm-charts-to-oci-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pushing Helm Charts to OCI Registry
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pulling-helm-charts-from-oci-registry-with-flux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pulling Helm Charts from OCI Registry with Flux
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pulling Helm Charts from OCI Registry with Flux">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#testing-pre-release-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing pre-release versions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authenticating-to-the-oci-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authenticating to the OCI Registry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifying-the-helm-chart-signature" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verifying the Helm Chart Signature
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploying-apps-from-a-generic-helm-chart-with-flux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deploying Apps from a Generic Helm Chart with Flux
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deploying Apps from a Generic Helm Chart with Flux">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#passing-env-specific-values-to-helm-releases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passing env-specific values to Helm Releases
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passing-runtime-values-to-helm-releases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passing runtime values to Helm Releases
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploying-helm-chart-pre-releases-on-staging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deploying Helm chart pre-releases on staging
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automating-app-image-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automating App Image Updates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flux-cli-quick-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flux CLI Quick Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Marketplaces
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Marketplaces
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../marketplace/aws/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AWS Marketplace
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Versions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Versions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/release-v2.8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release v2.8
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/release-v2.7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release v2.7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/release-v2.6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release v2.6
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/release-v2.5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release v2.5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/release-v2.4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release v2.4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/release-v2.3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release v2.3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/release-v2.2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release v2.2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://fluxoperator.dev/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flux Operator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://fluxoperator.dev/mcp-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flux MCP Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pricing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pricing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://control-plane.io/contact/?inquiry=fluxcd" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contact
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-generic-helm-chart-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Generic Helm Chart Pattern
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Generic Helm Chart Pattern">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#one-helm-chart-per-service-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One Helm Chart per Service Type
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#developing-generic-helm-charts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Developing Generic Helm Charts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pushing-helm-charts-to-oci-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pushing Helm Charts to OCI Registry
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pulling-helm-charts-from-oci-registry-with-flux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pulling Helm Charts from OCI Registry with Flux
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pulling Helm Charts from OCI Registry with Flux">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#testing-pre-release-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing pre-release versions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authenticating-to-the-oci-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authenticating to the OCI Registry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifying-the-helm-chart-signature" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verifying the Helm Chart Signature
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploying-apps-from-a-generic-helm-chart-with-flux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deploying Apps from a Generic Helm Chart with Flux
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deploying Apps from a Generic Helm Chart with Flux">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#passing-env-specific-values-to-helm-releases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passing env-specific values to Helm Releases
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passing-runtime-values-to-helm-releases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passing runtime values to Helm Releases
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploying-helm-chart-pre-releases-on-staging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deploying Helm chart pre-releases on staging
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automating-app-image-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automating App Image Updates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="standardizing-app-delivery-with-flux-and-generic-helm-charts">Standardizing App Delivery with Flux and Generic Helm Charts</h1>
+<p>In this guide we will explore how Flux can be used to standardize the lifecycle management
+of applications by leveraging the Generic Helm Chart pattern.</p>
+<p>The big promise of this pattern is that it should reduce the cognitive load on developers,
+as they only need to focus on the service-specific configuration,
+while the Generic Helm Chart shields them from the complexity of the Kubernetes API.</p>
+<h2 id="the-generic-helm-chart-pattern">The Generic Helm Chart Pattern</h2>
+<p>We've seen the Generic Helm Chart popularity grow among the Flux community, especially in large organizations 
+as part of the platform team efforts to provide a consistent deployment experience to developers.
+After gathering feedback from the community, we've implemented a couple of features in Flux to make
+this pattern easier to implement at scale. Before we dive into the details, let's see why this pattern
+is so popular and what are the benefits and pitfalls of using it.</p>
+<p>A Generic Helm Chart can help ensure that all workloads are deployed in a consistent
+way, with the same configuration options and best practices. A major benefit of this approach
+is that it can considerably speed up the bootstrapping process for new services, as developers
+can reuse the Helm chart and only focus on the app configuration. Instead of spending
+time developing a new Helm chart, developers would only need to add a Flux <code>HelmRelease</code> resource
+and values files to the Git repository used by Flux to deploy applications across environments.</p>
+<p>Another benefit is that a common Helm chart can help implement security and compliance policies
+across all workloads. For example, we've seen organizations implementing restricted pod &amp; container
+security context, network policies and resource limits. A Generic Helm Chart that contains common
+sidecar containers, would speed up considerably the fix of security vulnerabilities across all
+services depending on these sidecars.</p>
+<h3 id="one-helm-chart-per-service-type">One Helm Chart per Service Type</h3>
+<p>One important aspect is that forcing all services to use the same Helm chart can drive
+the complexity of the configuration up, to avoid this, teams should consider creating a common
+Helm chart per service type. For example, one Helm chart for all web services developed with Node.js,
+one for all services developed with Java, etc. Some technologies might require sidecar containers to 
+function properly (e.g. NGINX with PHP-FPM), and this can be easily achieved by adding them to the
+common Helm chart dedicated to the PHP services without affecting the other services. Dedicated Helm
+charts can also improve the developer experience (DX), the chart values can expose technology-specific
+configuration options, such as JVM settings, while also providing sensible defaults specific
+to the technology stack.</p>
+<p>Having dedicated Helm charts for each service type can improve the maintainability of the charts
+and also limit the ownership to the team responsible for a particular technology stack.
+We've seen organizations adopting a co-ownership model where the platform team is involved in the
+maintenance of all Helm charts, while the development teams are responsible for the
+service-specific configuration for the generic Helm charts used by their services.</p>
+<h2 id="developing-generic-helm-charts">Developing Generic Helm Charts</h2>
+<p>When developing generic Helm charts, teams should consider having a dedicated Git repository for
+each chart. Changes to the Helm chart should be made with pull requests which are reviewed
+by people from the platform team and development teams.</p>
+<p>To ensure the changes are working as expected, teams should consider running unit tests
+and end-to-end tests as part of the CI/CD pipeline before merging PRs.
+Some popular tools are <a href="https://github.com/helm-unittest/helm-unittest">helm-unittest</a> and
+<a href="https://github.com/helm/chart-testing">chart-testing</a>, the latter being developed and maintained
+by the Helm community.</p>
+<p>When developing the Helm chart, teams should take in to consideration the following aspects:</p>
+<ul>
+<li>Changes to the Helm chart should be backward compatible, especially when the chart is used by multiple
+  services. When structural changes are required to the values file, teams should consider deprecating
+  the old values and providing a migration path for the services using the Helm chart. Both old and new
+  values should be supported for a certain period of time to allow services to migrate to the new values.</li>
+<li>One pitfall of Helm charts in general is that the configuration options can grow to a point where
+  you end up with the whole Kubernetes API mingled in the values file. To avoid this, teams should consider
+  using the Flux <code>HelmRelease</code> <a href="https://fluxcd.io/flux/components/helm/helmreleases/#post-renderers">post rendering feature</a>
+  to address configuration edge cases instead of adding more configuration options to the Helm chart values.</li>
+<li>A Helm release is a namespace-scoped resource, thus the chart should not contain cluster-scoped resources,
+  especially Kubernetes <code>Namespace</code> resources. The namespace should be created by the Flux <code>Kustomization</code> that
+  reconciles the <code>HelmRelease</code> resources.</li>
+<li>In general, applications are not consumers of the Kubernetes API, thus the Helm chart should not grant any
+  permissions to the application pods. A good practice is to include a dedicated <code>ServiceAccount</code> in the Helm chart
+  and no <code>RoleBinding</code>, and especially no <code>ClusterRoleBinding</code>. The dedicated <code>ServiceAccount</code> can be useful if the
+  application needs to access cloud provider APIs, by leveraging the Kubernetes Workload Identity feature.</li>
+<li>An important aspect is that the Helm chart versioning is completely decoupled from the
+  application versioning. This means that the Helm <code>appVersion</code> metadata field can no longer be used
+  to track the application version. Teams should consider using the application container image
+  tag for the <code>app.kubernetes.io/version</code> label or have a dedicated field in the Helm chart values
+  to track the application version. When implementing observability, teams should consider surfacing
+  both the chart version and the application version for each Helm release.</li>
+</ul>
+<h2 id="pushing-helm-charts-to-oci-registry">Pushing Helm Charts to OCI Registry</h2>
+<p>The release process for the Helm chart should be fully automated based on the Git repository tags in
+semver format. When publishing pre-release versions of the Helm chart, teams should consider using the
+<code>X.Y.Z-rc.N</code> format to indicate that the version is not stable. Note that for Flux to correctly
+determine the latest release candidate version, you need to use a dot separator between the <code>rc</code>
+and the revision number, e.g. <code>1.0.0-rc.1</code> and <code>1.0.0-rc.2</code>.</p>
+<p>The release pipeline involves pushing the Helm chart to a container registry that is 
+accessible by the Kubernetes clusters. The registry must support the OCI Artifacts specification
+to be able to store Helm charts. Nowadays, most container registries hosted by Cloud
+provides support OCI Artifacts, also DockerHub, GitHub, GitLab.
+For on-prem, you can choose between: Harbor, Zot, Artifactory, Quay and the Docker distribution.</p>
+<p>A typical Helm chart release process involves the following steps:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Package the Helm chart</span>
+helm<span class="w"> </span>package<span class="w"> </span>src/my-jmv-chart<span class="w"> </span>--version<span class="w"> </span><span class="si">${</span><span class="nv">GIT_TAG</span><span class="si">}</span>
+
+<span class="c1"># Login to the container registry</span>
+helm<span class="w"> </span>registry<span class="w"> </span>login<span class="w"> </span>my-registry.io
+
+<span class="c1"># Push the Helm chart to the container registry</span>
+helm<span class="w"> </span>push<span class="w"> </span>my-jvm-chart-<span class="si">${</span><span class="nv">GIT_TAG</span><span class="si">}</span>.tgz<span class="w"> </span>oci://my-registry.io/charts
+
+<span class="c1"># Sign the Helm chart</span>
+cosign<span class="w"> </span>sign<span class="w"> </span>my-registry.io/charts/my-jmv-chart:<span class="si">${</span><span class="nv">GIT_TAG</span><span class="si">}</span>
+</code></pre></div>
+<p>Note that signing the Helm chart is optional, but it's a good practice to ensure the integrity
+and provenance of the OCI artifact. Flux supports verifying the Helm chart signature during
+the reconciliation process using Sigstore cosign or Notary notation.</p>
+<h2 id="pulling-helm-charts-from-oci-registry-with-flux">Pulling Helm Charts from OCI Registry with Flux</h2>
+<p>Starting with Flux v2.3, you can use the <code>OCIRepository</code> resource to pull Helm charts from
+OCI registries inside the Kubernetes cluster. The <code>OCIRepository</code> resource can be referenced
+by <code>HelmRelease</code> resources to deploy applications.</p>
+<p>What's important to note is that the an <code>OCIRepository</code> can be reused across multiple <code>HelmRelease</code>
+resources, which is useful when deploying multiple microservices using the generic Helm chart.</p>
+<p>Here is an example of an <code>OCIRepository</code> resource that pulls a Helm chart from an OCI registry:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source.toolkit.fluxcd.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OCIRepository</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-jvm-chart</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-java-apps</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10m</span>
+<span class="w">  </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oci://my-registry.io/charts/my-jvm-chart</span>
+<span class="w">  </span><span class="nt">layerSelector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">mediaType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;application/vnd.cncf.helm.chart.content.v1.tar+gzip&quot;</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">copy</span>
+<span class="w">  </span><span class="nt">ref</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">semver</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.x&quot;</span>
+</code></pre></div>
+<p>With <code>.spec.ref.semver</code> we can specify a semver range to match the Helm chart version. This
+is useful when we want to automatically pull to the latest version of the Helm chart.
+The <code>.spec.interval</code> field instructs the controller to check for new chart versions
+at a regular interval. When a new version is found, the Flux source-controller
+will pull the latest OCI artifact from the registry, which will automatically trigger
+Flux helm-controller to perform an upgrade of all the Helm releases referencing the shared <code>OCIRepository</code>.</p>
+<p>Examples of semver range:</p>
+<ul>
+<li><code>*</code> - matches the latest stable version (pre-releases are excluded)</li>
+<li><code>1.0.x</code> - matches the latest stable patch version of the 1.0.x series</li>
+<li><code>1.x</code> - matches the latest stable minor version of the 1.x series</li>
+<li><code>&gt;= 1.0.1 &lt; 1.1.0</code> - matches the latest stable version greater or equal to 1.0.1 and less than 1.1.0</li>
+<li><code>&gt;= 1.0.0-rc.0</code> - matches the latest version including pre-releases greater or equal to 1.0.0-rc.0</li>
+<li><code>1.2.3</code> - matches the exact version 1.2.3</li>
+</ul>
+<h3 id="testing-pre-release-versions">Testing pre-release versions</h3>
+<p>When testing pre-release versions (<code>X.Y.Z-rc.N</code>) of the generic Helm chart on staging clusters,
+the <code>.spec.ref.semver</code> field can be set to a range that matches the pre-release and 
+the <code>.spec.ref.semverFilter</code> field can be used to filter out the stable versions.</p>
+<p>Example of pulling the latest pre-release while filtering out versions that don't contain <code>-rc</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OCIRepository</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ref</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">semver</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">0.0.0-0&quot;</span>
+<span class="w">    </span><span class="nt">semverFilter</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;.*-rc.*&quot;</span>
+</code></pre></div>
+<h3 id="authenticating-to-the-oci-registry">Authenticating to the OCI Registry</h3>
+<p>Flux supports the following authentication methods for OCI registries:</p>
+<ul>
+<li>Basic authentication with username and password or PAT (e.g. DockerHub, GitHub, Harbour)</li>
+<li>OIDC-based authentication using Kubernetes Workload Identity (e.g. ACR, GAR, ECR)</li>
+</ul>
+<p>When using static credentials, a Kubernetes Secret of type <code>kubernetes.io/dockerconfigjson</code> must
+be created in the same namespace as the <code>OCIRepository</code> containing the credentials.</p>
+<p>Example of generating a Secret containing GHCR credentials:</p>
+<div class="highlight"><pre><span></span><code>flux<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>oci<span class="w"> </span>ghcr-auth<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--namespace<span class="o">=</span>my-java-apps<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--url<span class="o">=</span>ghcr.io<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--username<span class="o">=</span>flux<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--password<span class="o">=</span><span class="si">${</span><span class="nv">GITHUB_PAT</span><span class="si">}</span>
+</code></pre></div>
+<p>The image pull secret can be referenced in the <code>OCIRepository</code> spec as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OCIRepository</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">generic</span>
+<span class="w">  </span><span class="nt">secretRef</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr-auth</span>
+</code></pre></div>
+<p>When running Flux on AKS, EKS, or GKE, you can use the OIDC-based authentication method
+by setting the <code>.spec.provider</code> field to <code>azure</code>, <code>aws</code> or <code>gcp</code>. For more details on how to
+configure Kubernetes Workload Identity, refer to the
+<a href="https://fluxcd.io/flux/components/source/ocirepositories/#provider">OCIRepository provider documentation</a>.</p>
+<h3 id="verifying-the-helm-chart-signature">Verifying the Helm Chart Signature</h3>
+<p>When using signed OCI Artifacts, Flux can verify the signature of the Helm chart
+using the following methods:</p>
+<ul>
+<li>Sigstore cosign with static key pair or OIDC-based signing</li>
+<li>Notary notation with static key pair</li>
+</ul>
+<p>Example of enabling signature verification for a Helm chart signed with cosign keyless and GitHub OIDC:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OCIRepository</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">verify</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cosign</span>
+<span class="w">    </span><span class="nt">matchOIDCIdentity</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">issuer</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;^https://token.actions.githubusercontent.com$&quot;</span>
+<span class="w">        </span><span class="nt">subject</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;^https://github.com/my-org/my-jvm-chart.*$&quot;</span>
+</code></pre></div>
+<p>For or more details on how to configure signature verification, refer to the
+<a href="https://fluxcd.io/flux/components/source/ocirepositories/#verification">OCIRepository verification documentation</a>.</p>
+<h2 id="deploying-apps-from-a-generic-helm-chart-with-flux">Deploying Apps from a Generic Helm Chart with Flux</h2>
+<p>Once the <code>OCIRepository</code> is in place, we can reference it in the <code>HelmRelease</code> resources
+to deploy applications using the common Helm chart.</p>
+<p>Here is an example of multiple <code>HelmRelease</code> resources that reference the same <code>OCIRepository</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">helm.toolkit.fluxcd.io/v2</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HelmRelease</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-java-app1</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-java-apps</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1h</span>
+<span class="w">  </span><span class="nt">releaseName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-java-app1</span>
+<span class="w">  </span><span class="nt">chartRef</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OCIRepository</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-jvm-chart</span>
+<span class="w">  </span><span class="nt">values</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-registry.io/my-java-app1</span>
+<span class="w">      </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">helm.toolkit.fluxcd.io/v2</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HelmRelease</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-java-app2</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-java-apps</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1h</span>
+<span class="w">  </span><span class="nt">releaseName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-java-app2</span>
+<span class="w">  </span><span class="nt">chartRef</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OCIRepository</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-jvm-chart</span>
+<span class="w">  </span><span class="nt">values</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-registry.io/my-java-app2</span>
+<span class="w">      </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.0.0</span>
+</code></pre></div>
+<p>It is recommended to reuse the <code>OCIRepository</code> across multiple <code>HelmRelease</code> resources
+in the same namespace. While Flux allows chart references to other namespaces, it's a good practice
+to enabled Flux <a href="https://fluxcd.io/flux/installation/configuration/multitenancy/">multi-tenancy lockdown</a>
+which disables cross-namespace access to sources.</p>
+<h3 id="passing-env-specific-values-to-helm-releases">Passing env-specific values to Helm Releases</h3>
+<p>Besides setting the image repository and tag values, application-specific values are usually
+needed to configure the application on a per-environment basis. To change the values of the
+a <code>HelmRelease</code> resource based on the target environment (e.g. dev, staging, production),
+teams should consider using Kustomize overlays together with Kustomize configmaps and secrets generators.</p>
+<p>It is recommended to split the environment-specific values into separate YAML files if sensitive data is involved.
+The non-sensitive data can be stored in a plain text <code>values.yaml</code> file and passed to the <code>HelmRelease</code> as
+Kubernetes ConfigMaps generated with Kustomize <code>configMapGenerator</code>.
+Values like database passwords, API keys, etc. should be stored encrypted in Git using the Flux SOPS integration,
+and passed to the <code>HelmRelease</code> resources as Kubernetes Secrets generated with Kustomize <code>secretGenerator</code>.</p>
+<p>Example of a directory structure for managing environment-specific values:</p>
+<div class="highlight"><pre><span></span><code>my-java-apps/
+├──<span class="w"> </span>base
+│<span class="w">   </span>├──<span class="w"> </span>namespace.yaml
+│<span class="w">   </span>├──<span class="w"> </span>oci-repository.yaml
+│<span class="w">   </span>├──<span class="w"> </span>app1-release.yaml
+│<span class="w">   </span>├──<span class="w"> </span>app2-release.yaml
+│<span class="w">   </span>└──<span class="w"> </span>kustomization.yaml
+├──<span class="w"> </span>production
+│<span class="w">   </span>├──<span class="w"> </span>app1
+│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>values.yaml
+│<span class="w">   </span>│<span class="w">   </span>└──<span class="w"> </span>values-secrets.yaml
+│<span class="w">   </span>├──<span class="w"> </span>app2
+│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>values.yaml
+│<span class="w">   </span>│<span class="w">   </span>└──<span class="w"> </span>values-secrets.yaml
+│<span class="w">   </span>├──<span class="w"> </span>kustomization.yaml
+│<span class="w">   </span>└──<span class="w"> </span>kustomizeconfig.yaml
+└──<span class="w"> </span>staging
+</code></pre></div>
+<p>In the <code>base</code> directory, the Flux resources are stored, such as the <code>OCIRepository</code>
+and <code>HelmRelease</code> YAML manifests. Passing values from ConfigMaps and Secrets to the
+<code>HelmRelease</code> resources can be done using the <code>.spec.valuesFrom</code> field,
+for example:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">helm.toolkit.fluxcd.io/v2</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HelmRelease</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-java-app1</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">valuesFrom</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app1-values</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app1-values-secrets</span>
+</code></pre></div>
+<p>In the overlay directories, the environment-specific values are stored. The <code>kustomization.yaml</code> file
+in the overlay directory should reference the base directory and should generate the ConfigMaps and Secrets
+from the values files, for example:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kustomize.config.k8s.io/v1beta1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Kustomization</span>
+<span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-java-apps</span>
+<span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../base</span>
+<span class="nt">configMapGenerator</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app1-values</span>
+<span class="w">    </span><span class="nt">files</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">values.yaml=app1/values.yaml</span>
+<span class="nt">secretGenerator</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app1-values-secrets</span>
+<span class="w">    </span><span class="nt">files</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">values.yaml=app1/values-secrets.yaml</span>
+<span class="nt">configurations</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kustomizeconfig.yaml</span>
+</code></pre></div>
+<p>The <code>kustomizeconfig.yaml</code> tells Kustomize how to patch the <code>HelmRelease</code> resources with the generated ConfigMaps
+and Secrets by appending a unique hash to their names. This ensures that every time a values file changes, the
+<code>HelmRelease</code> resource is also updated, triggering a new app deployment.</p>
+<p>The <code>kustomizeconfig.yaml</code> file should look like this:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">nameReference</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">    </span><span class="nt">fieldSpecs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spec/valuesFrom/name</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HelmRelease</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">    </span><span class="nt">fieldSpecs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spec/valuesFrom/name</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HelmRelease</span>
+</code></pre></div>
+<p>To deploy the apps on the production cluster, the platform team would
+add a Flux Kustomization at <code>clusters/production/my-java-apps.yaml</code> with the following content:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kustomize.toolkit.fluxcd.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Kustomization</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-java-apps</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux-system</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10m</span>
+<span class="w">  </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span>
+<span class="w">  </span><span class="nt">prune</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">sourceRef</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GitRepository</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux-system</span>
+<span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-java-apps/production</span>
+<span class="w">  </span><span class="nt">targetNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-java-apps</span>
+</code></pre></div>
+<p>If the <code>values-secrets.yaml</code> files are encrypted with SOPS, the platform team should
+ensure that SOPS decryption is enabled in the Flux Kustomization. For more details on how to
+configure decryption, refer to the
+<a href="https://fluxcd.io/flux/components/kustomize/kustomizations/#decryption">Flux Kustomization decryption documentation</a>.</p>
+<h3 id="passing-runtime-values-to-helm-releases">Passing runtime values to Helm Releases</h3>
+<p>In some cases, teams might need to pass values known only at runtime to the <code>HelmRelease</code> resources.
+For example, an application might need to connect to a hosted service in the same region as the cluster.</p>
+<p>Assuming that the account ID and region are stored in a Kubernetes ConfigMap created by an IaC
+tool like Terraform when provisioning the cluster, for example:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster-info</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux-system</span>
+<span class="nt">data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">account_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;123456789012&quot;</span>
+<span class="w">  </span><span class="nt">cluster_region</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;us-west-2&quot;</span>
+</code></pre></div>
+<p>The account ID and region values can be passed to the <code>HelmRelease</code> resources using
+the Flux <a href="https://fluxcd.io/flux/components/kustomize/kustomizations/#post-build-variable-substitution">variable substitution</a>
+feature.</p>
+<p>In the <code>HelmRelease</code> manifests, the account ID and region values can be referenced using the
+<code>${account_id}</code> and <code>${cluster_region}</code> variables, for example:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">helm.toolkit.fluxcd.io/v2</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HelmRelease</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-java-app1</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">values</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">database</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;mydb.${account_id}.${cluster_region}.rds.amazonaws.com&quot;</span>
+</code></pre></div>
+<p>The platform team must ensure that the Flux Kustomization that deploys the <code>HelmRelease</code> resources
+has the <code>cluster-info</code> ConfigMap configured as a source of variables, for example:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kustomize.toolkit.fluxcd.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Kustomization</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-java-apps</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flux-system</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">postBuild</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">substituteFrom</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster-info</span>
+</code></pre></div>
+<h3 id="deploying-helm-chart-pre-releases-on-staging">Deploying Helm chart pre-releases on staging</h3>
+<p>To limit the blast radius of changes to the generic Helm chart, teams should consider deploying
+pre-release versions on staging clusters before promoting them to production.</p>
+<p>In the staging overlay directory, the <code>kustomization.yaml</code> file should contain a patch that
+overrides the <code>.spec.ref</code> field of the <code>OCIRepository</code> to match only pre-release versions:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kustomize.config.k8s.io/v1beta1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Kustomization</span>
+<span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-java-apps</span>
+<span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../base</span>
+<span class="nt">patches</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">patch</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"> </span>
+<span class="w">      </span><span class="no">- op: replace</span>
+<span class="w">        </span><span class="no">path: /spec/ref</span>
+<span class="w">        </span><span class="no">value:</span>
+<span class="w">          </span><span class="no">semver: &quot;&gt;= 0.0.0-0&quot;</span>
+<span class="w">          </span><span class="no">semverFilter: &quot;.*-rc.*&quot;</span>
+<span class="w">    </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OCIRepository</span>
+</code></pre></div>
+<h2 id="automating-app-image-updates">Automating App Image Updates</h2>
+<p>One of the downsides of using a common Helm chart is that the application version is no longer
+specified in the Helm chart. When a new version of the application is released, to upgrade
+the Helm release, an update to the image tag in the <code>HelmRelease</code> values is required.</p>
+<p>To automate the application upgrades, teams should consider using the Flux Image Automation
+feature to automatically update the image tag in the <code>HelmRelease</code> YAML manifest stored in the Git repository.</p>
+<p>For Flux to update the application image tag, the <code>HelmRelease</code> manifests must be annotated with
+an image policy marker, for example:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">helm.toolkit.fluxcd.io/v2</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HelmRelease</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-java-app1</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">values</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-registry.io/my-java-app1</span>
+<span class="w">      </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0.0</span><span class="w"> </span><span class="c1"># {&quot;$imagepolicy&quot;: &quot;my-apps-automation:my-java-app1:tag&quot;}</span>
+</code></pre></div>
+<p>When a new image tag is pushed to the container registry, Flux will automatically update the image tag
+by committing the change to the Git repository, which will trigger a new deployment of the application
+since the desired state has changed.</p>
+<p>For each application, an <code>ImageRepository</code> and <code>ImagePolicy</code> resources should be created to track the image tags.
+These resources can be created in a dedicated namespace used for image automation. In that namespace, besides the
+<code>ImageRepository</code> and <code>ImagePolicy</code> of each app, a single <code>ImageUpdateAutomation</code> and <code>GitRepository</code> resource
+should be created for Flux to commit the image tag updates to Git. Note that the token or SSH key used to access
+the Git repository should have write access.</p>
+<p>Note that the Flux Image Automation controllers don't need to be installed on production clusters. These
+controllers and the <code>ImageRepository</code>, <code>ImagePolicy</code>, <code>ImageUpdateAutomation</code> and <code>GitRepository</code>
+custom resources can be deployed on a management cluster used for automation purposes. One misconception
+is that the Flux Image Automation needs to run on the same cluster as the applications, but this is not the case.
+The role of these controllers is to scan the container registry for new image tags and update the Git repository,
+which can be done from a separate cluster regardless of where the applications are running.</p>
+<p>For more details on how to automate image updates to Git, refer to the
+<a href="https://fluxcd.io/flux/guides/image-update/">Flux Image Automation documentation</a>.</p>
+<h2 id="conclusions">Conclusions</h2>
+<p>In this guide, we've seen how the Generic Helm Chart pattern can be used in a GitOps workflow
+leveraging Flux's Helm and OCI Artifacts features. While this pattern can help standardize
+the continuous delivery process across multiple teams within large organizations, it's important
+to consider the complexity it introduces especially around ownership, versioning and the challenges
+of maintaining backward compatibility across multiple services.</p>
+<p>Adopting the Generic Helm Chart pattern can be beneficial for organizations that have a large number
+of microservices with similar deployment requirements. Applying this pattern to small organization 
+with a few services might introduce unnecessary complexity. In this case, teams should consider
+using dedicated Helm charts for each service and only share common configuration using Helm libraries.
+Having the Helm chart in the same repository as the application code, having a single version for both the
+chart and the application, and a unified release process, makes the continuous delivery process more
+straightforward and easier to manage.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2025 ControlPlane Ltd.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://x.com/controlplaneio" target="_blank" rel="noopener" title="x.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M64 32C28.7 32 0 60.7 0 96v320c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64zm297.1 84L257.3 234.6 379.4 396h-95.6L209 298.1 123.3 396H75.8l111-126.9L69.7 116h98l67.7 89.5 78.2-89.5zm-37.8 251.6L153.4 142.9h-28.3l171.8 224.7z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/company/controlplane/mycompany/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "navigation.sections", "navigation.top", "navigation.tabs"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
