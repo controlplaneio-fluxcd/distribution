@@ -11,7 +11,7 @@ on:
         description: 'vulnerability severity'
         required: false
         type: string
-        default: 'CRITICAL,HIGH,MEDIUM'
+        default: 'CRITICAL,HIGH,MEDIUM,LOW'
       check-scan-error:
         description: 'check for scan errors'
         required: false
