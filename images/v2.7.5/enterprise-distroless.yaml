@@ -1,22 +1,22 @@
 images:
   - name: ghcr.io/controlplaneio-fluxcd/distroless/source-controller
     newTag: v1.7.4
-    digest: sha256:446ff8f3e02b4c6a715407f7d673588095a67b3b8460a1e231ba6ad7e4cabdcd
+    digest: sha256:dfe2cc3d9776951eefbf6a25e3149c69e3e7d0ca45554aa8fbedb7a717f22651
   - name: ghcr.io/controlplaneio-fluxcd/distroless/kustomize-controller
     newTag: v1.7.3
-    digest: sha256:530fca12d00b9d5d79da35a53ff919cb8b530d0380cdb9f466e265b73c9989fa
+    digest: sha256:15cb81ea516fe01e8bf22d9582d84fcf13004cb338da5141bda50ba34e1327f9
   - name: ghcr.io/controlplaneio-fluxcd/distroless/helm-controller
     newTag: v1.4.5
-    digest: sha256:406c737c35dfd6b3229f48a25176e960f7ff997c35d1f188697a55260fc67432
+    digest: sha256:9d0d746f46a5e094f9f4518ea647bc57db9ac5ceee78660f84032a6b799456ac
   - name: ghcr.io/controlplaneio-fluxcd/distroless/notification-controller
     newTag: v1.7.5
-    digest: sha256:0e16d6a58010080a79fca043a02476766189245dce324c3de4dda1ce27d09611
+    digest: sha256:0edb7473fab27b8e8fc41eaf5a6261e79382b7775ffb60af4ce67c5f10cc5b9c
   - name: ghcr.io/controlplaneio-fluxcd/distroless/image-reflector-controller
     newTag: v1.0.4
-    digest: sha256:97e0c76303d23db93a7fcd8a779fa7b7b3e9ed4886933fadd5de0e1a16b840a8
+    digest: sha256:9899bccc2bcc529a220632d2d226b8f703a848ab85a0be5fdf20d0857081fdae
   - name: ghcr.io/controlplaneio-fluxcd/distroless/image-automation-controller
     newTag: v1.0.4
-    digest: sha256:52ba55132dd82791e83d0fb46c0c6b2b457b8edff738777fe9d5422273263e32
+    digest: sha256:a7388c2ff8a098ac08573308cec4288aa96074dbcd5fb91b8ee8662cf9040f10
   - name: ghcr.io/controlplaneio-fluxcd/distroless/source-watcher
     newTag: v2.0.3
-    digest: sha256:1416711119005a6aaab76cf0aaed30de9f9591d10fb719875cb55332f8293fc8
+    digest: sha256:4652ff73eae829d2fc15d0286508c8af8d4bf5cf08c23bebbf2afed8936369fa
