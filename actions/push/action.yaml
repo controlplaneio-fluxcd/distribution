@@ -123,11 +123,15 @@ runs:
         echo "ignore-paths-flag=--ignore-paths=$ignore_paths" >> $GITHUB_OUTPUT
       fi
 
-      annotations_flag=""
-      for annotation in `echo "$ANNOTATIONS" | xargs`; do
-        annotations_flag="$annotations_flag --annotations=$annotation"
-      done
-      echo "annotations-flag=$annotations_flag" >> $GITHUB_OUTPUT
+      EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+      echo "annotations<<$EOF" >> $GITHUB_OUTPUT
+      while IFS= read -r annotation; do
+        annotation=$(echo "$annotation" | xargs)
+        if [ -n "$annotation" ]; then
+          echo "$annotation" >> $GITHUB_OUTPUT
+        fi
+      done <<< "$ANNOTATIONS"
+      echo "$EOF" >> $GITHUB_OUTPUT
 
       provider_flag=""
       if [ -n "$PROVIDER" ]; then
@@ -169,7 +173,7 @@ runs:
       TAGS: ${{ steps.inputs.outputs.tags }}
       DIFF_TAG: ${{ inputs.diff-tag }}
       IGNORE_PATHS_FLAG: ${{ steps.inputs.outputs.ignore-paths-flag }}
-      ANNOTATIONS_FLAG: ${{ steps.inputs.outputs.annotations-flag }}
+      ANNOTATIONS: ${{ steps.inputs.outputs.annotations }}
       PROVIDER_FLAG: ${{ steps.inputs.outputs.provider-flag }}
     run: |
       set -euo pipefail
@@ -184,12 +188,19 @@ runs:
 
       echo "Pushing $INPUT_PATH to ${artifact_url}..."
 
+      annotations_args=()
+      while IFS= read -r annotation; do
+        if [ -n "$annotation" ]; then
+          annotations_args+=("--annotations=$annotation")
+        fi
+      done <<< "$ANNOTATIONS"
+
       push_output=$(flux push artifact oci://$artifact_url \
         --path="$INPUT_PATH" \
         --source="$SOURCE" \
         --revision="$REVISION" \
         $IGNORE_PATHS_FLAG \
-        $ANNOTATIONS_FLAG \
+        "${annotations_args[@]}" \
         $PROVIDER_FLAG \
         --output json)
 
