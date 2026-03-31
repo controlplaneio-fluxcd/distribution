@@ -6,8 +6,6 @@ on:
       version:
         description: 'Flux version'
         required: false
-  schedule:
-    - cron: '00 10 * * 1-5'
 
 permissions:
   contents: read
