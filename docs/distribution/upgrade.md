@@ -55,12 +55,12 @@ spec:
       interval: 12h
       releaseName: << inputs.provider.name >>
       serviceAccountName: << inputs.provider.name >>
+      upgrade:
+        strategy:
+          name: RetryOnFailure
       chartRef:
         kind: OCIRepository
         name: << inputs.provider.name >>
-      values:
-        reporting:
-          interval: 30s
 ```
 
 If you installed the operator with [Terraform/OpenTofu](https://github.com/controlplaneio-fluxcd/flux-operator/tree/main/config/terraform),
