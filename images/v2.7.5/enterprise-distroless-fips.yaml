@@ -1,16 +1,16 @@
 images:
   - name: ghcr.io/controlplaneio-fluxcd/distroless-fips/source-controller
     newTag: v1.7.4
-    digest: sha256:48c4fae6f5cfec4cb10ed7e5f0839642d4cd4b14c611b863066a995b10cff7d1
+    digest: sha256:e8080c7cddfc83b049f3aecd91e8ffc832dd313e3e6b93ef162d9a67058ac853
   - name: ghcr.io/controlplaneio-fluxcd/distroless-fips/kustomize-controller
     newTag: v1.7.3
-    digest: sha256:dcd911159c03af1f17ee2cf67d35f7cb92f4ef3af7f90c2d6b5f9789c858560d
+    digest: sha256:9c8247ddb0ecd7af56b53d5532588e9b5469ec970314df8bbf4c3d676aa42454
   - name: ghcr.io/controlplaneio-fluxcd/distroless-fips/helm-controller
     newTag: v1.4.5
     digest: sha256:b7631f14db0ee953d5ac530f096ecd7fb9326913955b05fc576f1a952f10d6b3
   - name: ghcr.io/controlplaneio-fluxcd/distroless-fips/notification-controller
     newTag: v1.7.5
-    digest: sha256:58f4e828ac7678c9a0b37e5039dd08d39f7f9aad3825cfbaf097809d54d6937c
+    digest: sha256:8e91041c0dca577d55361687ada6e7ab05c1bd35a8e4e75a7d106c6a3d713e9a
   - name: ghcr.io/controlplaneio-fluxcd/distroless-fips/image-reflector-controller
     newTag: v1.0.4
     digest: sha256:3587a74ca47860faa77c512d9b8c1d6595b504133f3e14ff6e92fbde30ae48b3
