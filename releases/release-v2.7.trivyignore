@@ -1,3 +1,6 @@
 # justification: vulnerable_code_not_in_execute_path
 CVE-2025-66506
 CVE-2025-66564
+
+# status: fixed (backported via patch; false positive from pseudo-version semver)
+CVE-2026-40109
