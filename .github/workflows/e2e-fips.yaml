@@ -38,7 +38,7 @@ jobs:
       packages: read
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Cleanup Runner
         uses: ./.github/actions/runner-cleanup
       - name: Latest release
@@ -60,11 +60,11 @@ jobs:
           
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
       - name: Setup Flux
-        uses: fluxcd/flux2/action@5350425cdcd5fa015337e09fa502153c0275bd4b #v2.4.0
+        uses: fluxcd/flux2/action@04acaec6161ac4fb1a82ffafa88901c03271d34f #v2.8.6
         with:
           version: ${{ steps.release.outputs.version }}
       - name: Setup Kubernetes
-        uses: helm/kind-action@ae94020eaf628e9b9b9f341a10cc0cdcf5c018fb # v1.11.0
+        uses: helm/kind-action@ef37e7f390d99f746eb8b610417061a60e82a6cc # v1.14.0
         with:
           cluster_name: flux
           version: v0.31.0
