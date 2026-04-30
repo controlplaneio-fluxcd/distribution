@@ -34,15 +34,15 @@ jobs:
       contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.pull-token }}
       - name: Latest release
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         id: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -82,7 +82,7 @@ jobs:
             core.setOutput('version', version);
             core.setOutput('version-without-patch', versionWithoutPatch);
       - name: Setup Flux
-        uses: fluxcd/flux2/action@5350425cdcd5fa015337e09fa502153c0275bd4b #v2.4.0
+        uses: fluxcd/flux2/action@04acaec6161ac4fb1a82ffafa88901c03271d34f #v2.8.6
         with:
           version: ${{ steps.release.outputs.version }}
       - name: Export images
@@ -94,7 +94,7 @@ jobs:
       - name: Scan source-controller
         id: sc
         continue-on-error: true
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: ${{ steps.images.outputs.sc }}
           format: 'table'
@@ -109,7 +109,7 @@ jobs:
       - name: Scan kustomize-controller
         id: kc
         continue-on-error: true
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: ${{ steps.images.outputs.kc }}
           format: 'table'
@@ -124,7 +124,7 @@ jobs:
       - name: Scan helm-controller
         id: hc
         continue-on-error: true
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: ${{ steps.images.outputs.hc }}
           format: 'table'
@@ -139,7 +139,7 @@ jobs:
       - name: Scan notification-controller
         id: nc
         continue-on-error: true
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: ${{ steps.images.outputs.nc }}
           format: 'table'
@@ -154,7 +154,7 @@ jobs:
       - name: Scan image-reflector-controller
         id: irc
         continue-on-error: true
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: ${{ steps.images.outputs.irc }}
           format: 'table'
@@ -169,7 +169,7 @@ jobs:
       - name: Scan image-automation-controller
         id: iac
         continue-on-error: true
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: ${{ steps.images.outputs.iac }}
           format: 'table'
@@ -185,7 +185,7 @@ jobs:
         id: sw
         if: steps.images.outputs.sw != ''
         continue-on-error: true
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: ${{ steps.images.outputs.sw }}
           format: 'table'
