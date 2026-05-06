@@ -10,7 +10,7 @@ images:
     digest: sha256:9977ad76a0547792b5df2048797f3ea5f0afc0a6c358f9444a0e1139a1740cea
   - name: ghcr.io/controlplaneio-fluxcd/alpine/notification-controller
     newTag: v1.6.0
-    digest: sha256:09b16b48f12ce8796fa3e26a70ccf7d0cfae880af88a096ea2c48f69046a76be
+    digest: sha256:4b0131e1a7a674fb23c7f11e8b717e9264abe11d066d982d6ed1c20998123b09
   - name: ghcr.io/controlplaneio-fluxcd/alpine/image-reflector-controller
     newTag: v0.35.2
     digest: sha256:b921302b1f286cbdde661be0467720429f58a90e56c03943f30b4f7a724acae0

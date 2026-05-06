@@ -10,7 +10,7 @@ images:
     digest: sha256:b9963e69ee359d2c3e7774166a377e743fbbc02ea9336f8354c301c0abc8ba3d
   - name: ghcr.io/controlplaneio-fluxcd/distroless/notification-controller
     newTag: v1.6.0
-    digest: sha256:e07d1dd87cc0ed4bf6f83d39982eea53a93490bb443fa9679a596f9b0ffe90b8
+    digest: sha256:52b47b689a9c41a5028ab07ee3ed48f8412b7eb91d4e78004ce9968b4ff6a27f
   - name: ghcr.io/controlplaneio-fluxcd/distroless/image-reflector-controller
     newTag: v0.35.2
     digest: sha256:3592b93966ae355cccdd104bd5da665ef33db3875845bbd1c77dc4f64f2c332c
