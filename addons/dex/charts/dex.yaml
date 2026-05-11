@@ -1,0 +1,7 @@
+# Chart pin for the dex addon. Chart version evolves independently of
+# the dex addon-version, so this lives outside addons/dex/images/<v>/.
+# Maintained by .github/workflows/update-addons.yaml.
+chart:
+  name: ghcr.io/controlplaneio-fluxcd/charts/dex
+  version: 0.0.0
+  digest: sha256:0000000000000000000000000000000000000000000000000000000000000000
