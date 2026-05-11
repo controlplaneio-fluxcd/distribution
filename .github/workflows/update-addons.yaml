@@ -1,0 +1,70 @@
+name: Update addons
+
+# Refresh chart and image pins under addons/<addon>/. Mirrors
+# update-images.yaml's dispatch-only model — operator runs this
+# after a CVE round / dependabot bump rebuilds the addon image,
+# or when a new addon-version is published.
+
+on:
+  workflow_dispatch:
+    inputs:
+      addon:
+        description: 'addon name'
+        required: true
+        type: choice
+        default: dex
+        options:
+          - dex
+      version:
+        description: 'addon version (e.g. v2.45.1 for dex)'
+        required: true
+        type: string
+        default: v2.45.1
+
+permissions:
+  contents: read
+
+env:
+  IMAGE_REGISTRY: ghcr.io/controlplaneio-fluxcd
+  CHART_REGISTRY: ghcr.io/controlplaneio-fluxcd/charts
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_READONLY }}
+      - name: Install crane
+        uses: imjasonh/setup-crane@6da1ae018866400525525ce74ff892880c099987 # v0.5
+      - name: Resolve and write addon pins
+        shell: bash
+        env:
+          ADDON: ${{ inputs.addon }}
+          ADDON_VERSION: ${{ inputs.version }}
+        run: .github/workflows/update-addons.sh
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            Update addon ${{ inputs.addon }} ${{ inputs.version }} pins
+          committer: GitHub <noreply@github.com>
+          signoff: true
+          branch: update-addon-${{ inputs.addon }}-${{ inputs.version }}
+          title: "Update addon ${{ inputs.addon }} ${{ inputs.version }} pins"
+          body: |
+            Refresh chart and image pins for the **${{ inputs.addon }}** addon at version `${{ inputs.version }}`:
+
+            - `addons/${{ inputs.addon }}/charts/${{ inputs.addon }}.yaml` — latest chart version + digest from the mirror.
+            - `addons/${{ inputs.addon }}/images/${{ inputs.version }}/enterprise-<variant>.yaml` — image digest at this addon-version.
+          labels: |
+            area/addons
