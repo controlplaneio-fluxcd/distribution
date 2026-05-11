@@ -4,27 +4,31 @@
 # addon-version. Called by .github/workflows/update-addons.yaml.
 #
 # Required env:
-#   ADDON           - addon name (today: dex). Drives variant lookup.
-#   ADDON_VERSION   - the addon's release tag (e.g. v2.45.1).
+#   ADDON           - addon name (today: dex). Drives variant + upstream lookup.
 #   IMAGE_REGISTRY  - ghcr.io/controlplaneio-fluxcd
 #   CHART_REGISTRY  - ghcr.io/controlplaneio-fluxcd/charts
+#   GITHUB_TOKEN    - for `gh release view` on the upstream addon repo
+# Optional env (auto-discovered when empty):
+#   ADDON_VERSION   - the addon's release tag (e.g. v2.45.1).
+#                     Empty = latest release of the upstream addon repo.
+#   CHART_VERSION   - the helm chart version (e.g. 0.24.0).
+#                     Empty = latest tag pulled by `helm pull`.
 #
 # Writes:
-#   addons/<addon>/charts/<addon>.yaml             (latest chart from mirror)
+#   addons/<addon>/charts/<addon>.yaml
 #   addons/<addon>/images/<addon-version>/enterprise-<variant>.yaml
 
 set -eoux pipefail
 
 ADDON="${ADDON}"
-ADDON_VERSION="${ADDON_VERSION}"
 IMAGE_REGISTRY="${IMAGE_REGISTRY}"
 CHART_REGISTRY="${CHART_REGISTRY}"
 
-# Per-addon variant. Today only dex (distroless-fips); future addons
-# extend this case statement.
+# Per-addon variant + upstream repo. Future addons extend these case statements.
 case "$ADDON" in
   dex)
     IMAGE_VARIANT=distroless-fips
+    UPSTREAM_REPO=dexidp/dex
     ;;
   *)
     echo "unknown addon: $ADDON" >&2
@@ -32,18 +36,34 @@ case "$ADDON" in
     ;;
 esac
 
+CHART_REPO="${CHART_REGISTRY}/${ADDON}"
+IMAGE_REPO="${IMAGE_REGISTRY}/${IMAGE_VARIANT}/${ADDON}"
+
+# Default ADDON_VERSION to the latest upstream release tag (same pattern as
+# the flux update-images workflow uses `gh release view`).
+if [ -z "${ADDON_VERSION:-}" ]; then
+  ADDON_VERSION="$(gh release view --repo "$UPSTREAM_REPO" --json tagName -q .tagName)"
+fi
+
 ROOT_DIR="$(git rev-parse --show-toplevel)"
 CHART_DIR="${ROOT_DIR}/addons/${ADDON}/charts"
 IMAGES_DIR="${ROOT_DIR}/addons/${ADDON}/images/${ADDON_VERSION}"
 mkdir -p "$CHART_DIR" "$IMAGES_DIR"
 
 # ---- chart pin -------------------------------------------------------------
-# Pick the highest semver tag in the mirror as "latest", then resolve
-# its digest. Helm OCI charts are stored as plain OCI artifacts, so
-# crane reads them.
-CHART_REPO="${CHART_REGISTRY}/${ADDON}"
-CHART_VERSION="$(crane ls "$CHART_REPO" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -1)"
-CHART_DIGEST="$(crane digest "${CHART_REPO}:${CHART_VERSION}")"
+# Use the helm CLI to pull the chart (buildx imagetools doesn't handle
+# Helm OCI artifact media types reliably). `helm pull` prints the
+# resolved version and digest on stdout — parse them.
+CHART_TMP="$(mktemp -d)"
+trap 'rm -rf "$CHART_TMP"' EXIT
+HELM_PULL_ARGS=( "oci://${CHART_REPO}" --destination "$CHART_TMP" )
+[ -n "${CHART_VERSION:-}" ] && HELM_PULL_ARGS+=( --version "$CHART_VERSION" )
+HELM_OUT="$(helm pull "${HELM_PULL_ARGS[@]}" 2>&1)"
+echo "$HELM_OUT"
+# "Pulled: ghcr.io/.../dex:0.24.0"  →  0.24.0
+CHART_VERSION="$(echo "$HELM_OUT" | awk -F: '/^Pulled:/ {print $NF}')"
+# "Digest: sha256:0b5f3..."         →  sha256:0b5f3...
+CHART_DIGEST="$(echo "$HELM_OUT" | awk '/^Digest:/ {print $2}')"
 
 cat >"${CHART_DIR}/${ADDON}.yaml" <<EOF
 chart:
@@ -53,8 +73,8 @@ chart:
 EOF
 
 # ---- image pin -------------------------------------------------------------
-IMAGE_REPO="${IMAGE_REGISTRY}/${IMAGE_VARIANT}/${ADDON}"
-IMAGE_DIGEST="$(crane digest "${IMAGE_REPO}:${ADDON_VERSION}")"
+# Same approach as the flux update-images workflow.
+IMAGE_DIGEST="$(docker buildx imagetools inspect "${IMAGE_REPO}:${ADDON_VERSION}" --format '{{json .}}' | jq -r .manifest.digest)"
 
 cat >"${IMAGES_DIR}/enterprise-${IMAGE_VARIANT}.yaml" <<EOF
 images:
@@ -62,3 +82,11 @@ images:
     newTag: ${ADDON_VERSION}
     digest: ${IMAGE_DIGEST}
 EOF
+
+# Re-export resolved versions for the calling workflow.
+if [ -n "${GITHUB_OUTPUT:-}" ]; then
+  {
+    echo "addon_version=${ADDON_VERSION}"
+    echo "chart_version=${CHART_VERSION}"
+  } >> "$GITHUB_OUTPUT"
+fi
