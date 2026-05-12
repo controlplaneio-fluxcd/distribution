@@ -16,10 +16,13 @@ on:
         options:
           - dex
       version:
-        description: 'addon version (e.g. v2.45.1 for dex)'
-        required: true
+        description: 'addon version (e.g. v2.45.1 for dex). Empty = latest tag in the registry.'
+        required: false
         type: string
-        default: v2.45.1
+      chart_version:
+        description: 'helm chart version (e.g. 0.24.0 for dex). Empty = latest tag in the chart mirror.'
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -43,28 +46,34 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_READONLY }}
-      - name: Install crane
-        uses: imjasonh/setup-crane@6da1ae018866400525525ce74ff892880c099987 # v0.5
+      - name: Helm login to GitHub Container Registry
+        shell: bash
+        env:
+          GHCR_READONLY: ${{ secrets.GHCR_READONLY }}
+        run: echo "$GHCR_READONLY" | helm registry login ghcr.io -u "${{ github.actor }}" --password-stdin
       - name: Resolve and write addon pins
+        id: pins
         shell: bash
         env:
           ADDON: ${{ inputs.addon }}
           ADDON_VERSION: ${{ inputs.version }}
+          CHART_VERSION: ${{ inputs.chart_version }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: .github/workflows/update-addons.sh
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: |
-            Update addon ${{ inputs.addon }} ${{ inputs.version }} pins
+            Update addon ${{ inputs.addon }} ${{ steps.pins.outputs.addon_version }} pins
           committer: GitHub <noreply@github.com>
           signoff: true
-          branch: update-addon-${{ inputs.addon }}-${{ inputs.version }}
-          title: "Update addon ${{ inputs.addon }} ${{ inputs.version }} pins"
+          branch: update-addon-${{ inputs.addon }}-${{ steps.pins.outputs.addon_version }}
+          title: "Update addon ${{ inputs.addon }} ${{ steps.pins.outputs.addon_version }} pins"
           body: |
-            Refresh chart and image pins for the **${{ inputs.addon }}** addon at version `${{ inputs.version }}`:
+            Refresh chart and image pins for the **${{ inputs.addon }}** addon at version `${{ steps.pins.outputs.addon_version }}` (chart `${{ steps.pins.outputs.chart_version }}`):
 
-            - `addons/${{ inputs.addon }}/charts/${{ inputs.addon }}.yaml` — latest chart version + digest from the mirror.
-            - `addons/${{ inputs.addon }}/images/${{ inputs.version }}/enterprise-<variant>.yaml` — image digest at this addon-version.
+            - `addons/${{ inputs.addon }}/charts/${{ inputs.addon }}.yaml` — chart digest from the mirror.
+            - `addons/${{ inputs.addon }}/images/${{ steps.pins.outputs.addon_version }}/enterprise-<variant>.yaml` — image digest at this addon-version.
           labels: |
             area/addons
