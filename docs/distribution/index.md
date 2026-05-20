@@ -52,7 +52,7 @@ The ControlPlane distribution comes with enterprise-hardened Flux controllers in
 !!! tip "Flux Operator"
 
     To streamline the deployment of the enterprise distribution, the ControlPlane team
-    created the [Flux Operator](../operator/index.md). The operator manages the lifecycle of the
+    created the [Flux Operator](https://fluxoperator.dev/). The operator manages the lifecycle of the
     Flux controllers and automates the upgrade process, including the patching of hotfixes
     and CVEs affecting Flux functionality.
 
@@ -90,7 +90,7 @@ container base images, OS packages, and Go dependencies.
 
 The ControlPlane distribution comprises Open Source components such as the CNCF
 [Flux controllers](../guides/flux-architecture.md#flux-controllers) (Apache 2.0 License)
-and the [Flux Operator](../operator/index.md) (AGPL-3.0 License).
+and the [Flux Operator](https://fluxoperator.dev/) (AGPL-3.0 License).
 
 !!! note "Delivery Pipeline"
 

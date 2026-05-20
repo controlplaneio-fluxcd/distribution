@@ -8,7 +8,7 @@ description: FluxCD CLI cheatsheet for monitoring and troubleshooting
 This guide contains a list of commonly used `flux` commands
 for monitoring and troubleshooting the GitOps workflows managed by Flux.
 
-We assume that the [Flux Operator](../operator/index.md) was used to bootstrap the cluster
+We assume that the [Flux Operator](https://fluxoperator.dev/) was used to bootstrap the cluster
 and the Flux CLI users are restricted to [read-only operations](#read-only-mode).
 
 ## Installation

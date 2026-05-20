@@ -144,7 +144,7 @@ metadata:
     fluxcd.controlplane.io/reconcileTimeout: "5m"
 spec:
   distribution:
-    version: "2.4.x"
+    version: "2.8.x"
     registry: "709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd"
     artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
   cluster:
@@ -154,6 +154,6 @@ spec:
     domain: "cluster.local"
 ```
 
-For more information, see the Flux Operator [documentation](../operator/index.md).
+For more information, see the Flux Operator [documentation](https://fluxoperator.dev/docs/crd/fluxinstance/).
 
 [^1]: AWS Marketplace and the AWS Marketplace logo are trademarks of Amazon.com, Inc. or its affiliates.

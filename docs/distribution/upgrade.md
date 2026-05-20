@@ -11,12 +11,12 @@ to automatically upgrade Flux to the latest patch release in the specified minor
 
 !!! tip "Flux Operator"
 
-    The [Flux Operator](../operator/index.md) APIs are stable and backward compatible,
+    The [Flux Operator](https://fluxoperator.dev/) APIs are stable and backward compatible,
     so it is safe to upgrade the operator to the latest version at any time.
 
 ## Upgrading the Flux Operator
 
-Depending on the installation [method](../operator/install.md),
+Depending on the installation [method](https://fluxoperator.dev/docs/guides/install/),
 upgrading the Flux Operator should be done in an automated manner.
 
 If you installed the operator with the Helm CLI, you can configure automated
