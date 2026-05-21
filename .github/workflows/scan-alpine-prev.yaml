@@ -32,7 +32,7 @@ jobs:
         GITHUB_RUN_ID: ${{ github.run_id }}
         GITHUB_REPO: ${{ github.repository }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - uses: zulip/github-actions-zulip/send-message@e4c8f27c732ba9bd98ac6be0583096dea82feea5 # v1.0.2
+    - uses: zulip/github-actions-zulip/send-message@8f8523530d0b8b62cb841d580be364df3c4a69d9 # v2.0.0
       with:
         email: ${{ secrets.ZULIP_EMAIL }}
         api-key: ${{ secrets.ZULIP_API_KEY }}
@@ -68,7 +68,7 @@ jobs:
         GITHUB_RUN_ID: ${{ github.run_id }}
         GITHUB_REPO: ${{ github.repository }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - uses: zulip/github-actions-zulip/send-message@e4c8f27c732ba9bd98ac6be0583096dea82feea5 # v1.0.2
+    - uses: zulip/github-actions-zulip/send-message@8f8523530d0b8b62cb841d580be364df3c4a69d9 # v2.0.0
       with:
         email: ${{ secrets.ZULIP_EMAIL }}
         api-key: ${{ secrets.ZULIP_API_KEY }}
