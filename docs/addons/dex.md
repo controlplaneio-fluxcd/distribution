@@ -1,14 +1,14 @@
 ---
-title: Dex
+title: Dex IPD Addon
 description: Single Sign-On provider for Flux Enterprise
 ---
 
-# Dex
+# Dex IDP
 
 Flux enterprise comes with a hardened [Dex](https://dexidp.io/) distribution that can be used
 to configure Single Sign-On (SSO) for the Flux Web UI and the Flux MCP Server.
 
-The Dex Helm chart and the hardened container image are published at:
+The Dex Helm charts and the hardened container images are published at:
 
 - `ghcr.io/controlplaneio-fluxcd/charts/dex`
 - `ghcr.io/controlplaneio-fluxcd/distroless-fips/dex`
