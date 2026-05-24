@@ -73,7 +73,7 @@ jobs:
           body: |
             Refresh chart and image pins for the **${{ inputs.addon }}** addon at version `${{ steps.pins.outputs.addon_version }}` (chart `${{ steps.pins.outputs.chart_version }}`):
 
-            - `addons/${{ inputs.addon }}/charts/${{ inputs.addon }}.yaml` — chart digest from the mirror.
+            - `addons/${{ inputs.addon }}/charts/${{ steps.pins.outputs.chart_version }}/enterprise.yaml` — chart OCIRepository patch from the mirror.
             - `addons/${{ inputs.addon }}/images/${{ steps.pins.outputs.addon_version }}/enterprise-<variant>.yaml` — image digest at this addon-version.
           labels: |
             area/addons

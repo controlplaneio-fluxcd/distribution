@@ -15,7 +15,7 @@
 #                     Empty = latest tag pulled by `helm pull`.
 #
 # Writes:
-#   addons/<addon>/charts/<addon>.yaml
+#   addons/<addon>/charts/<chart-version>/enterprise.yaml
 #   addons/<addon>/images/<addon-version>/enterprise-<variant>.yaml
 
 set -eoux pipefail
@@ -46,14 +46,10 @@ if [ -z "${ADDON_VERSION:-}" ]; then
 fi
 
 ROOT_DIR="$(git rev-parse --show-toplevel)"
-CHART_DIR="${ROOT_DIR}/addons/${ADDON}/charts"
 IMAGES_DIR="${ROOT_DIR}/addons/${ADDON}/images/${ADDON_VERSION}"
-mkdir -p "$CHART_DIR" "$IMAGES_DIR"
 
 # ---- chart pin -------------------------------------------------------------
-# Use the helm CLI to pull the chart (buildx imagetools doesn't handle
-# Helm OCI artifact media types reliably). `helm pull` prints the
-# resolved version and digest on stdout — parse them.
+# Runs `helm pull` to extract the chart version and digest.
 CHART_TMP="$(mktemp -d)"
 trap 'rm -rf "$CHART_TMP"' EXIT
 HELM_PULL_ARGS=( "oci://${CHART_REPO}" --destination "$CHART_TMP" )
@@ -65,11 +61,20 @@ CHART_VERSION="$(echo "$HELM_OUT" | awk -F: '/^Pulled:/ {print $NF}')"
 # "Digest: sha256:0b5f3..."         →  sha256:0b5f3...
 CHART_DIGEST="$(echo "$HELM_OUT" | awk '/^Digest:/ {print $2}')"
 
-cat >"${CHART_DIR}/${ADDON}.yaml" <<EOF
-chart:
-  name: ${CHART_REPO}
-  version: ${CHART_VERSION}
-  digest: ${CHART_DIGEST}
+CHART_DIR="${ROOT_DIR}/addons/${ADDON}/charts/${CHART_VERSION}"
+mkdir -p "$CHART_DIR" "$IMAGES_DIR"
+
+# Generate OCIRepository patch
+cat >"${CHART_DIR}/enterprise.yaml" <<EOF
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: ${ADDON}
+spec:
+  url: oci://${CHART_REPO}
+  ref:
+    tag: ${CHART_VERSION}
+    digest: ${CHART_DIGEST}
 EOF
 
 # ---- image pin -------------------------------------------------------------
