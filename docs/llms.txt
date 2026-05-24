@@ -9,30 +9,48 @@ Flux Operator offers a production-ready solution for managing the delivery of ap
 The operator is designed to automate the installation, configuration, and upgrade of the Flux controllers as well as to provide advanced features such as preview environments for testing pull requests, deployment windows, and self-service capabilities for developers.
 The Flux Operator is an open-source project licensed under AGPL-3.0 and is developed by the CNCF Flux core maintainers part of the ControlPlane team.
 
-### Flux Operator Documentation
+## Flux Operator Documentation
 
 - Installation
-    - [Flux operator installation](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/install.md)
-    - [Migration of bootstrapped clusters](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/flux-bootstrap-migration.md)
+    - [Flux operator installation](https://fluxoperator.dev/docs/guides/install.md)
+    - [Migration of bootstrapped clusters](https://fluxoperator.dev/docs/guides/migration.md)
 - Flux Instance Configuration
-    - [Flux controllers configuration](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/flux-config.md)
-    - [Flux instance customization](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/flux-kustomize.md)
-    - [Cluster sync configuration](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/flux-sync.md)
-    - [Flux controllers sharding](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/flux-sharding.md)
-    - [Flux monitoring and reporting](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/monitoring.md)
+    - [Flux controllers configuration](https://fluxoperator.dev/docs/instance/controllers.md)
+    - [Flux instance customization](https://fluxoperator.dev/docs/instance/customization.md)
+    - [Cluster sync configuration](https://fluxoperator.dev/docs/instance/sync.md)
+    - [Flux controllers sharding](https://fluxoperator.dev/docs/instance/sharding.md)
+    - [Flux monitoring and reporting](https://fluxoperator.dev/docs/instance/monitoring.md)
 - Application Definitions and Self-Service Environments
-    - [Using ResourceSets for Application Definitions](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/resourcesets/app-definition.md)
-    - [Using ResourceSets for Time-Based Delivery and Deployment Windows](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/resourcesets/time-based-delivery.md)
-    - [Using ResourceSets for Image Update Automation](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/resourcesets/image-automation.md)
-    - [Ephemeral Environments for GitHub Pull Requests](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/resourcesets/github-pull-requests.md)
-    - [Ephemeral Environments for GitLab Merge Requests](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/resourcesets/gitlab-merge-requests.md)
+    - [Using ResourceSets for Application Definitions](https://fluxoperator.dev/docs/resourcesets/app-definition.md)
+    - [Using ResourceSets for Time-Based Delivery and Deployment Windows](https://fluxoperator.dev/docs/resourcesets/time-based-delivery.md)
+    - [Using ResourceSets for Image Update Automation](https://fluxoperator.dev/docs/resourcesets/image-automation.md)
+    - [Ephemeral Environments for GitHub Pull Requests](https://fluxoperator.dev/docs/resourcesets/github-pull-requests.md)
+    - [Ephemeral Environments for GitLab Merge Requests](https://fluxoperator.dev/docs/resourcesets/gitlab-merge-requests.md)
 - API References
-    - [FluxInstance CRD](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/fluxinstance.md)
-    - [FluxReport CRD](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/fluxreport.md)
-    - [ResourceSet CRD](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/resourceset.md)
-    - [ResourceSetInputProvider CRD](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/operator/resourcesetinputprovider.md)
+    - [FluxInstance CRD](https://fluxoperator.dev/docs/crd/fluxinstance.md)
+    - [FluxReport CRD](https://fluxoperator.dev/docs/crd/fluxreport.md)
+    - [ResourceSet CRD](https://fluxoperator.dev/docs/crd/resourceset.md)
+    - [ResourceSetInputProvider CRD](https://fluxoperator.dev/docs/crd/resourcesetinputprovider.md)
 
-## Flux MCP Server Overview
+## Flux Web UI
+
+The Flux Web UI (also known as Flux Status Page) provides a real-time dashboard for monitoring GitOps pipelines and cluster state.
+It offers visibility into Flux resources, their reconciliation status, and events, helping teams quickly identify and troubleshoot deployment issues.
+The Web UI supports Single Sign-On (SSO) with various identity providers and role-based access control for secure multi-user access.
+The Flux Web UI is a subproject of the Flux Operator licensed under AGPL-3.0.
+
+### Flux Web UI Documentation
+
+- [Standalone installation](https://fluxoperator.dev/docs/web-ui/standalone-install.md)
+- [Ingress configuration](https://fluxoperator.dev/docs/web-ui/ingress.md)
+- [User management](https://fluxoperator.dev/docs/web-ui/user-management.md)
+- [SSO with Dex](https://fluxoperator.dev/docs/web-ui/sso-dex.md)
+- [SSO with Keycloak](https://fluxoperator.dev/docs/web-ui/sso-keycloak.md)
+- [SSO with OpenShift](https://fluxoperator.dev/docs/web-ui/sso-openshift.md)
+- [SSO with Microsoft Entra](https://fluxoperator.dev/docs/web-ui/sso-microsoft.md)
+- [Config API reference](https://fluxoperator.dev/docs/web-ui/web-config-api.md)
+
+## Flux MCP Server
 
 The Flux Model Context Protocol (MCP) Server connects AI assistants directly to your Kubernetes clusters running Flux Operator, enabling seamless interaction through natural language.
 It serves as a bridge between AI tools and your GitOps pipelines, allowing you to analyze the cluster state, troubleshoot deployment issues, and perform operations using conversational prompts.
@@ -40,12 +58,11 @@ The MCP Server is a subproject of the Flux Operator licensed under AGPL-3.0.
 
 ### Flux MCP Server Documentation
 
-- [Flux MCP Server Installation](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/mcp/install.md)
-- [Flux MCP Server Configuration](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/mcp/config.md)
-- [Flux MCP Server Prompting Guide](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/mcp/prompt-engineering.md)
-- [Flux MCP Server Tools](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/refs/heads/main/docs/mcp/tools.md)
+- [Flux MCP Server Installation](https://fluxoperator.dev/docs/mcp/install.md)
+- [Flux MCP Server Prompting Guide](https://fluxoperator.dev/docs/mcp/prompting.md)
+- [Flux MCP Server Tools](https://fluxoperator.dev/docs/mcp/tools.md)
 
-## CNCF Flux CD Overview
+## CNCF Flux CD
 
 Flux is a leading GitOps Continuous Delivery tool used to streamline and automate application deployments on Kubernetes.
 Flux enables teams to achieve a reliable and auditable delivery process while promoting collaboration and traceability across different environments.
@@ -54,18 +71,18 @@ Flux is a Cloud Native Computing Foundation (CNCF) graduated project, licensed u
 
 ### Flux API Documentation
 
-- [GitRepository CRD](https://raw.githubusercontent.com/fluxcd/source-controller/refs/heads/main/docs/spec/v1/gitrepositories.md)
-- [OCIRepository CRD](https://raw.githubusercontent.com/fluxcd/source-controller/refs/heads/main/docs/spec/v1/ocirepositories.md)
-- [Bucket CRD](https://raw.githubusercontent.com/fluxcd/source-controller/refs/heads/main/docs/spec/v1/buckets.md)
-- [Kustomization CRD](https://raw.githubusercontent.com/fluxcd/kustomize-controller/refs/heads/main/docs/spec/v1/kustomizations.md)
-- [HelmRelease CRD](https://raw.githubusercontent.com/fluxcd/helm-controller/refs/heads/main/docs/spec/v2/helmreleases.md)
-- [Webhook Receiver CRD](https://raw.githubusercontent.com/fluxcd/notification-controller/refs/heads/main/docs/spec/v1/receivers.md)
-- [Alert Provider CRD](https://raw.githubusercontent.com/fluxcd/notification-controller/refs/heads/main/docs/spec/v1beta3/providers.md)
-- [Alert CRD](https://raw.githubusercontent.com/fluxcd/notification-controller/refs/heads/main/docs/spec/v1beta3/alerts.md)
-- [ImageRepository CRD](https://raw.githubusercontent.com/fluxcd/image-reflector-controller/refs/heads/main/docs/spec/v1/imagerpositories.md)
-- [ImagePolicy CRD](https://raw.githubusercontent.com/fluxcd/image-reflector-controller/refs/heads/main/docs/spec/v1/imagepolicies.md)
-- [ImageUpdateAutomation CRD](https://raw.githubusercontent.com/fluxcd/image-automation-controller/refs/heads/main/docs/spec/v1/imageupdateautomations.md)
-- [ArtifactGenerator CRD](https://raw.githubusercontent.com/fluxcd/source-watcher/refs/heads/main/docs/spec/v1beta1/artifactgenerators.md)
+- [GitRepository CRD](https://fluxoperator.dev/docs/crd/gitrepository.md)
+- [OCIRepository CRD](https://fluxoperator.dev/docs/crd/ocirepository.md)
+- [Bucket CRD](https://fluxoperator.dev/docs/crd/bucket.md)
+- [Kustomization CRD](https://fluxoperator.dev/docs/crd/kustomization.md)
+- [HelmRelease CRD](https://fluxoperator.dev/docs/crd/helmrelease.md)
+- [Webhook Receiver CRD](https://fluxoperator.dev/docs/crd/receiver.md)
+- [Alert Provider CRD](https://fluxoperator.dev/docs/crd/provider.md)
+- [Alert CRD](https://fluxoperator.dev/docs/crd/alert.md)
+- [ImageRepository CRD](https://fluxoperator.dev/docs/crd/imagerepository.md)
+- [ImagePolicy CRD](https://fluxoperator.dev/docs/crd/imagepolicy.md)
+- [ImageUpdateAutomation CRD](https://fluxoperator.dev/docs/crd/imageupdateautomation.md)
+- [ArtifactGenerator CRD](https://fluxoperator.dev/docs/crd/artifactgenerator.md)
 
 ## About ControlPlane Group Limited
 
