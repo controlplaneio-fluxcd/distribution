@@ -36,7 +36,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -82,7 +82,7 @@ jobs:
             core.setOutput('version', version);
             core.setOutput('version-without-patch', versionWithoutPatch);
       - name: Setup Flux
-        uses: fluxcd/flux2/action@54e4ba378e155ada619caafdc599e5c4d759ce5c #v2.8.7
+        uses: fluxcd/flux2/action@1fd61a06264d71cf445ed55c4f14d401d26a1c64 #v2.8.8
         with:
           version: ${{ steps.release.outputs.version }}
       - name: Export images
