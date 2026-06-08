@@ -6,4 +6,4 @@ spec:
   url: oci://ghcr.io/controlplaneio-fluxcd/charts/dex
   ref:
     tag: 0.24.0
-    digest: sha256:0b5f3dea13ef7fc04cc221213b032d5419cefe820aafa777dae485e8f2af839c
+    digest: sha256:cd97cd96930b9227b1bad69717ff25247a73cd5c10b19a147a371e077601eed7
