@@ -1,5 +1,5 @@
 ---
-title: Local MCP Server
+title: Local MCP Server Addon
 description: Local MCP Server for Flux Enterprise
 ---
 
@@ -11,7 +11,7 @@ The major difference to upstream is that this version is **exclusively read-only
 and does not support any operation that would alter the Kubernetes cluster state regardless
 of the permissions granted by the kubeconfig.
 
-The hardened container image is published at:
+The hardened container images are published at:
 
 - `ghcr.io/controlplaneio-fluxcd/flux-mcp-enterprise:<VERSION>-stdio-readonly`
 

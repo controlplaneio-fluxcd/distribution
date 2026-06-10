@@ -23,7 +23,7 @@ The ControlPlane distribution comes with enterprise-hardened Flux controllers in
 -   :octicons-container-24:{ .lg .middle } __Hardened Images__
 
     ---
-    The ControlPlane enterprise distribution comes with FIPS-compliant hardened containers images
+    The ControlPlane enterprise distribution comes with FIPS-compliant hardened container images
     for the GitOps Toolkit controllers in-sync with the upstream CNCF Flux releases.
 
 -   :octicons-check-circle-24:{ .lg .middle } __Extended Kubernetes Compatibility__
@@ -31,20 +31,20 @@ The ControlPlane distribution comes with enterprise-hardened Flux controllers in
     ---
     The distribution is end-to-end tested with the latest six minor releases of Kubernetes,
     as well as RedHat OpenShift and Kubernetes LTS versions provided by cloud vendors
-    such as AWS EKS, Azure AKS and Google GKE.
+    such as AWS EKS, Azure AKS, and Google GKE.
 
 -   :octicons-shield-check-24:{ .lg .middle } __Zero CVEs__
 
     ---
-    The ControlPlane images are continuously scanned for vulnerabilities and patched accordingly.
-    We offer SLAs for remediation of critical vulnerabilities affecting Flux functionality, and we provide
-    SBOMs and VEX documents for container images, dependencies and build environments.
+    The container images are continuously scanned for vulnerabilities and patched accordingly.
+    ControlPlane offers SLAs for remediation of critical vulnerabilities affecting Flux functionality, and provides
+    SBOMs and VEX documents for images, dependencies, and build environments.
 
 -   :octicons-people-24:{ .lg .middle } __Maintained by Experts__
 
     ---
     The enterprise distribution is maintained by security experts at ControlPlane together with
-    CNCF Flux core maintainers. We provide hotfixes and CVE patches for the enterprise distribution
+    CNCF Flux core maintainers. ControlPlane provides hotfixes and CVE patches for the enterprise distribution
     ahead of the upstream releases, while keeping the feature set in-sync with the Flux project.
 
 </div>
@@ -58,11 +58,11 @@ The ControlPlane distribution comes with enterprise-hardened Flux controllers in
 
 ## Distribution Channels
 
-We offer the following distribution channels for the Flux controllers:
+ControlPlane offers the following distribution channels for the Flux controllers:
 
 <div class="grid cards" markdown>
 
-- :octicons-verified-24: __[FIPS-compliant](#fips-compliant)__
+- :octicons-verified-24: __[Distroless](#distroless)__
 - :octicons-check-circle-24: __[Mainline](#mainline)__
 
 </div>
@@ -74,7 +74,18 @@ The ControlPlane distribution offers hardened
 
 Distroless comes with two variants, `distroless` and `distroless-fips`. The latter
 is built using the [FIPS 140-3 mode](https://go.dev/doc/security/fips140),
-and the Go runtime is configured to restrict all TLS configuration to FIPS-approved settings.
+and the Go runtime is configured to restrict the TLS and SSH configuration to FIPS-approved settings.
+
+The Distroless variants have no shell or package managers installed, reducing the attack surface
+and eliminating entire classes of CVEs. Due to the absence of a shell environment and OS packages,
+the following kustomize-controller features are disabled:
+
+- **Kustomize remote bases**: requires the `git` binary for fetching remote resources which bypass source-controller;
+  use [GitRepository](https://fluxoperator.dev/docs/crd/gitrepository/) or
+  [OCIRepository](https://fluxoperator.dev/docs/crd/ocirepository/) sources instead.
+- **Secrets decryption with GnuPG**: requires the `gpg` binary;
+  use [Age encryption](https://fluxcd.io/flux/guides/mozilla-sops/#encrypting-secrets-using-age) or a
+  cloud KMS provider instead.
 
 ### Mainline
 
@@ -102,3 +113,16 @@ and the [Flux Operator](https://fluxoperator.dev/) (AGPL-3.0 License).
     & hotfixes to the Open Source components, and runs conformance tests.
     The resulting container images and SBOMs are hosted on private registries
     that are only available to customers with a valid subscription.
+
+## Distribution Addons
+
+ControlPlane offers enterprise-grade addons that integrate seamlessly with the Flux distribution,
+enabling organizations to enforce identity policies, streamline incident response,
+and operate GitOps at scale.
+
+- [Dex IDP](../addons/dex.md) — hardened Dex providing OIDC-based Single Sign-On for
+  the [Flux Web UI](https://fluxoperator.dev/web-ui/).
+- [Local MCP Server](../addons/mcp-stdio.md) — hardened Flux MCP for AI-assisted
+  incident response and GitOps pipeline troubleshooting across environments.
+
+All addons are covered by ControlPlane's SLA for CVE remediation and FIPS compliance.
