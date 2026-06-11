@@ -120,7 +120,7 @@ ControlPlane offers enterprise-grade addons that integrate seamlessly with the F
 enabling organizations to enforce identity policies, streamline incident response,
 and operate GitOps at scale.
 
-- [Dex IDP](../addons/dex.md) — hardened Dex providing OIDC-based Single Sign-On for
+- [Dex IdP](../addons/dex.md) — hardened Dex providing OIDC-based Single Sign-On for
   the [Flux Web UI](https://fluxoperator.dev/web-ui/).
 - [Local MCP Server](../addons/mcp-stdio.md) — hardened Flux MCP for AI-assisted
   incident response and GitOps pipeline troubleshooting across environments.
