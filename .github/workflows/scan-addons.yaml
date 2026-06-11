@@ -1,0 +1,144 @@
+# Vulnerability scan of the published Enterprise addon images.
+#
+# Discovers addons dynamically from the addons/ tree: for every
+# addons/<addon>/, the latest version dir under images/ is selected
+# and every image pinned in its enterprise-*.yaml files is scanned
+# at its published tag. Adding a new addon (or a new addon version)
+# requires no workflow change — the pins are the source of truth.
+#
+# Cron with no inputs scans every addon. Manual dispatch can narrow
+# with the optional addon / severity filters.
+name: Vulnerability scan - Addons
+
+on:
+  workflow_dispatch:
+    inputs:
+      addon:
+        description: 'filter: addon name'
+        required: true
+        type: choice
+        default: all
+        options:
+          - dex
+          - mcp
+          - all
+      severity:
+        description: 'vulnerability severity'
+        required: true
+        type: choice
+        default: CRITICAL,HIGH,MEDIUM,LOW
+        options:
+          - CRITICAL,HIGH,MEDIUM,LOW
+          - CRITICAL,HIGH,MEDIUM
+          - CRITICAL,HIGH
+          - CRITICAL
+  schedule:
+    - cron: '00 5 * * 1-5'
+
+permissions:
+  contents: read
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      targets: ${{ steps.find.outputs.targets }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Build (addon, image) matrix from the latest pins
+        id: find
+        shell: bash
+        env:
+          FILTER_ADDON: ${{ inputs.addon }}
+        run: |
+          set -euo pipefail
+          [ "${FILTER_ADDON:-all}" = "all" ] && FILTER_ADDON=""
+          targets="[]"
+          for dir in addons/*/; do
+            addon="$(basename "$dir")"
+            [ -n "$FILTER_ADDON" ] && [ "$addon" != "$FILTER_ADDON" ] && continue
+            latest="$(ls "${dir}images" | sort -V | tail -n1)"
+            for file in "${dir}images/${latest}"/enterprise*.yaml; do
+              count="$(yq '.images | length' "$file")"
+              for i in $(seq 0 $((count - 1))); do
+                name="$(yq ".images[$i].name" "$file")"
+                tag="$(yq ".images[$i].newTag" "$file")"
+                targets="$(jq -c --arg a "$addon" --arg img "${name}:${tag}" \
+                  '. + [{addon: $a, image: $img}]' <<<"$targets")"
+              done
+            done
+          done
+          echo "targets=$targets" >> "$GITHUB_OUTPUT"
+          echo "$targets" | jq .
+
+  scan:
+    needs: discover
+    if: needs.discover.outputs.targets != '[]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ${{ fromJSON(needs.discover.outputs.targets) }}
+    name: scan ${{ matrix.target.image }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_READONLY }}
+      - name: Resolve trivyignore files
+        id: ignores
+        shell: bash
+        env:
+          ADDON: ${{ matrix.target.addon }}
+        run: |
+          set -euo pipefail
+          files=".trivyignore"
+          if [ -f "addons/${ADDON}/.trivyignore" ]; then
+            files="${files},addons/${ADDON}/.trivyignore"
+          fi
+          echo "files=$files" >> "$GITHUB_OUTPUT"
+      - name: Scan image
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: ${{ matrix.target.image }}
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: ${{ inputs.severity || 'CRITICAL,HIGH,MEDIUM,LOW' }}
+          trivyignores: ${{ steps.ignores.outputs.files }}
+        env:
+          TRIVY_USERNAME: ${{ github.actor }}
+          TRIVY_PASSWORD: ${{ secrets.GHCR_READONLY }}
+
+  notify-zulip:
+    needs: scan
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get Job URL
+      id: job-url
+      run: |
+        url=$(gh run view ${GITHUB_RUN_ID} --repo ${GITHUB_REPO} --json jobs --jq ".jobs[0].url")
+        echo "url: $url"
+        echo url=$url >> $GITHUB_OUTPUT
+      env:
+        GITHUB_RUN_ID: ${{ github.run_id }}
+        GITHUB_REPO: ${{ github.repository }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: zulip/github-actions-zulip/send-message@bd8ec52de371d139ae8313661b7d8318c19266aa # v2.0.1
+      with:
+        email: ${{ secrets.ZULIP_EMAIL }}
+        api-key: ${{ secrets.ZULIP_API_KEY }}
+        organization-url: ${{ secrets.ZULIP_ORGANIZATION_URL }}
+        type: stream
+        to: team-flux
+        topic: cve-alerts
+        content: 'Flux Enterprise Addons CVE alert: ${{ steps.job-url.outputs.url }}'
