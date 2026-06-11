@@ -15,6 +15,11 @@ The hardened container images are published at:
 
 - `ghcr.io/controlplaneio-fluxcd/flux-mcp-enterprise:<VERSION>-stdio-readonly`
 
+!!! tip "MCP Server latest version"
+
+    The MCP Server container image tag and digest should be kept up to date
+    with the latest release published at [controlplaneio-fluxcd/distribution/addons/mcp](https://github.com/controlplaneio-fluxcd/distribution/tree/main/addons/mcp).
+
 The MCP Server binaries packaged in the multi-arch container images are built
 for Linux amd64/arm64 and are subject to ControlPlane's SLA for CVE remediation and FIPS compliance.
 
@@ -41,13 +46,13 @@ echo $ENTERPRISE_TOKEN | docker login ghcr.io -u flux-enterprise --password-stdi
 On Linux and Windows (WSL2), you can pull the image from the ControlPlane registry with:
 
 ```shell
-docker pull ghcr.io/controlplaneio-fluxcd/flux-mcp-enterprise:v0.0.5-stdio-readonly
+docker pull ghcr.io/controlplaneio-fluxcd/flux-mcp-enterprise:v0.1.0-stdio-readonly
 ```
 
 Copy the `flux-operator-mcp` binary from the image to a local directory (e.g. `/usr/local/bin`):
 
 ```shell
-docker create --name flux-mcp-extract ghcr.io/controlplaneio-fluxcd/flux-mcp-enterprise:v0.0.5-stdio-readonly
+docker create --name flux-mcp-extract ghcr.io/controlplaneio-fluxcd/flux-mcp-enterprise:v0.1.0-stdio-readonly
 docker cp flux-mcp-extract:/flux-operator-mcp /usr/local/bin/flux-operator-mcp
 docker rm flux-mcp-extract
 ```
@@ -89,7 +94,7 @@ Add the MCP server to your AI Agent configuration (e.g. `.mcp.json`):
       "run", "--rm", "-i",
       "-v", "/path/to/.kube/config:/home/nonroot/.kube/config:ro",
       "-e", "KUBECONFIG=/home/nonroot/.kube/config",
-      "ghcr.io/controlplaneio-fluxcd/flux-mcp-enterprise:v0.0.5-stdio-readonly",
+      "ghcr.io/controlplaneio-fluxcd/flux-mcp-enterprise:v0.1.0-stdio-readonly",
       "serve"
     ]
   }

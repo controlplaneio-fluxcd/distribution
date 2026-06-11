@@ -4,19 +4,19 @@
 # addon-version. Called by .github/workflows/update-addons.yaml.
 #
 # Required env:
-#   ADDON           - addon name (today: dex). Drives variant + upstream lookup.
+#   ADDON           - addon name (dex, mcp). Drives the per-addon artifact table.
 #   IMAGE_REGISTRY  - ghcr.io/controlplaneio-fluxcd
 #   CHART_REGISTRY  - ghcr.io/controlplaneio-fluxcd/charts
 #   GITHUB_TOKEN    - for `gh release view` on the upstream addon repo
 # Optional env (auto-discovered when empty):
-#   ADDON_VERSION   - the addon's release tag (e.g. v2.45.1).
+#   ADDON_VERSION   - the addon's release tag (e.g. v2.45.1 for dex).
 #                     Empty = latest release of the upstream addon repo.
-#   CHART_VERSION   - the helm chart version (e.g. 0.24.0).
+#   CHART_VERSION   - the helm chart version (e.g. 0.24.0 for dex).
 #                     Empty = latest tag pulled by `helm pull`.
 #
 # Writes:
 #   addons/<addon>/charts/<chart-version>/enterprise.yaml
-#   addons/<addon>/images/<addon-version>/enterprise-<variant>.yaml
+#   addons/<addon>/images/<addon-version>/<image-file> (one per image flavor)
 
 set -eoux pipefail
 
@@ -24,11 +24,27 @@ ADDON="${ADDON}"
 IMAGE_REGISTRY="${IMAGE_REGISTRY}"
 CHART_REGISTRY="${CHART_REGISTRY}"
 
-# Per-addon variant + upstream repo. Future addons extend these case statements.
+# Per-addon artifact table. Future addons extend these case statements.
+#
+#   UPSTREAM_REPO      - repo whose latest release defaults ADDON_VERSION
+#   CHART_NAME         - chart repo name under CHART_REGISTRY
+#   IMAGE_REPOS        - image repo paths under IMAGE_REGISTRY, one per flavor
+#   IMAGE_TAG_SUFFIXES - tag suffix appended to ADDON_VERSION, one per flavor
+#   IMAGE_FILES        - pin file name under images/<version>/, one per flavor
 case "$ADDON" in
   dex)
-    IMAGE_VARIANT=distroless-fips
     UPSTREAM_REPO=dexidp/dex
+    CHART_NAME=dex
+    IMAGE_REPOS=( "distroless-fips/dex" )
+    IMAGE_TAG_SUFFIXES=( "" )
+    IMAGE_FILES=( "enterprise-distroless-fips.yaml" )
+    ;;
+  mcp)
+    UPSTREAM_REPO=controlplaneio-fluxcd/flux-mcp-enterprise
+    CHART_NAME=flux-mcp-enterprise
+    IMAGE_REPOS=( "flux-mcp-enterprise" "flux-mcp-enterprise" )
+    IMAGE_TAG_SUFFIXES=( "" "-stdio-readonly" )
+    IMAGE_FILES=( "enterprise-http.yaml" "enterprise-stdio-readonly.yaml" )
     ;;
   *)
     echo "unknown addon: $ADDON" >&2
@@ -36,8 +52,7 @@ case "$ADDON" in
     ;;
 esac
 
-CHART_REPO="${CHART_REGISTRY}/${ADDON}"
-IMAGE_REPO="${IMAGE_REGISTRY}/${IMAGE_VARIANT}/${ADDON}"
+CHART_REPO="${CHART_REGISTRY}/${CHART_NAME}"
 
 # Default ADDON_VERSION to the latest upstream release tag (same pattern as
 # the flux update-images workflow uses `gh release view`).
@@ -77,16 +92,20 @@ spec:
     digest: ${CHART_DIGEST}
 EOF
 
-# ---- image pin -------------------------------------------------------------
-# Same approach as the flux update-images workflow.
-IMAGE_DIGEST="$(docker buildx imagetools inspect "${IMAGE_REPO}:${ADDON_VERSION}" --format '{{json .}}' | jq -r .manifest.digest)"
+# ---- image pins ------------------------------------------------------------
+# Same approach as the flux update-images workflow, once per image flavor.
+for i in "${!IMAGE_REPOS[@]}"; do
+  IMAGE_REPO="${IMAGE_REGISTRY}/${IMAGE_REPOS[$i]}"
+  IMAGE_TAG="${ADDON_VERSION}${IMAGE_TAG_SUFFIXES[$i]}"
+  IMAGE_DIGEST="$(docker buildx imagetools inspect "${IMAGE_REPO}:${IMAGE_TAG}" --format '{{json .}}' | jq -r .manifest.digest)"
 
-cat >"${IMAGES_DIR}/enterprise-${IMAGE_VARIANT}.yaml" <<EOF
+  cat >"${IMAGES_DIR}/${IMAGE_FILES[$i]}" <<EOF
 images:
   - name: ${IMAGE_REPO}
-    newTag: ${ADDON_VERSION}
+    newTag: ${IMAGE_TAG}
     digest: ${IMAGE_DIGEST}
 EOF
+done
 
 # Re-export resolved versions for the calling workflow.
 if [ -n "${GITHUB_OUTPUT:-}" ]; then

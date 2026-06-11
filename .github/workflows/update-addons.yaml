@@ -15,8 +15,9 @@ on:
         default: dex
         options:
           - dex
+          - mcp
       version:
-        description: 'addon version (e.g. v2.45.1 for dex). Empty = latest tag in the registry.'
+        description: 'addon version (e.g. v2.45.1 for dex, v0.1.0 for mcp). Empty = latest tag in the registry.'
         required: false
         type: string
       chart_version:
