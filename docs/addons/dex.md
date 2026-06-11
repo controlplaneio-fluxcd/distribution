@@ -1,9 +1,9 @@
 ---
-title: Dex IPD Addon
+title: Dex IdP Addon
 description: Single Sign-On provider for Flux Enterprise
 ---
 
-# Dex IDP
+# Dex IdP
 
 Flux enterprise comes with a hardened [Dex](https://dexidp.io/) distribution that can be used
 to configure Single Sign-On (SSO) for the Flux Web UI and the Flux MCP Server.
@@ -12,6 +12,11 @@ The Dex Helm charts and the hardened container images are published at:
 
 - `ghcr.io/controlplaneio-fluxcd/charts/dex`
 - `ghcr.io/controlplaneio-fluxcd/distroless-fips/dex`
+
+!!! tip "Dex latest version"
+
+    The Dex chart version, container image tag and digest should be kept up to date
+    with the latest release published at [controlplaneio-fluxcd/distribution/addons/dex](https://github.com/controlplaneio-fluxcd/distribution/tree/main/addons/dex).
 
 The Helm charts are built from the upstream Dex [chart repository](https://github.com/dexidp/helm-charts).
 
@@ -80,11 +85,6 @@ spec:
     imagePullSecrets:
       - name: flux-enterprise-auth
 ```
-
-!!! tip "Dex latest version"
-
-    The Dex chart version, container image tag and digest should be kept up to date
-    with the latest release published at [controlplaneio-fluxcd/distribution/addons/dex](https://github.com/controlplaneio-fluxcd/distribution/tree/main/addons/dex).
 
 For a complete example on how to configure Dex for Single Sign-On with Flux Operator,
 please see the [Flux Web UI SSO with Dex documentation](https://fluxoperator.dev/docs/web-ui/sso-dex/).

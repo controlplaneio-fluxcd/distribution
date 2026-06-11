@@ -121,7 +121,7 @@ nav:
     - Upgrade: distribution/upgrade.md
     - Security: distribution/security.md
     - Flux Addons:
-        - Dex IDP: addons/dex.md
+        - Dex IdP: addons/dex.md
         - Local MCP Server: addons/mcp-stdio.md
     - Guides:
         - Flux Architecture Overview: guides/flux-architecture.md
