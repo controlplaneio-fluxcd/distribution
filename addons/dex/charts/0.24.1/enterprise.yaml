@@ -1,0 +1,9 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: dex
+spec:
+  url: oci://ghcr.io/controlplaneio-fluxcd/charts/dex
+  ref:
+    tag: 0.24.1
+    digest: sha256:6c07bac6193fdece8159a70f37111c8993315bf4458b63f78b2d91ce3f9e4889
