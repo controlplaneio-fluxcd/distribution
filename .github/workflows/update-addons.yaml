@@ -4,24 +4,30 @@ name: Update addons
 # update-images.yaml's dispatch-only model — operator runs this
 # after a CVE round / dependabot bump rebuilds the addon image,
 # or when a new addon-version is published.
+#
+# Addons are discovered dynamically from the addons/ tree (same as
+# the Vulnerability scan - Addons workflow). The default addon=all
+# refreshes every addon, opening one PR per addon that has drifted;
+# addons already at the latest pins produce no PR.
 
 on:
   workflow_dispatch:
     inputs:
       addon:
-        description: 'addon name'
+        description: 'filter: addon name'
         required: true
         type: choice
-        default: dex
+        default: all
         options:
           - dex
           - mcp
+          - all
       version:
-        description: 'addon version (e.g. v2.45.1 for dex, v0.1.0 for mcp). Empty = latest tag in the registry.'
+        description: 'addon version (e.g. v2.45.1 for dex, v0.1.0 for mcp). Only honored for a single addon; empty = latest tag in the registry.'
         required: false
         type: string
       chart_version:
-        description: 'helm chart version (e.g. 0.24.0 for dex). Empty = latest tag in the chart mirror.'
+        description: 'helm chart version (e.g. 0.24.0 for dex). Only honored for a single addon; empty = latest tag in the chart registry.'
         required: false
         type: string
 
@@ -33,11 +39,42 @@ env:
   CHART_REGISTRY: ghcr.io/controlplaneio-fluxcd/charts
 
 jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      addons: ${{ steps.find.outputs.addons }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - name: List addons
+        id: find
+        shell: bash
+        env:
+          FILTER_ADDON: ${{ inputs.addon }}
+        run: |
+          set -euo pipefail
+          [ "${FILTER_ADDON:-all}" = "all" ] && FILTER_ADDON=""
+          addons="[]"
+          for dir in addons/*/; do
+            addon="$(basename "$dir")"
+            [ -n "$FILTER_ADDON" ] && [ "$addon" != "$FILTER_ADDON" ] && continue
+            addons="$(jq -c --arg a "$addon" '. + [$a]' <<<"$addons")"
+          done
+          echo "addons=$addons" >> "$GITHUB_OUTPUT"
+          echo "$addons" | jq .
+
   generate:
+    needs: discover
+    if: needs.discover.outputs.addons != '[]'
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        addon: ${{ fromJSON(needs.discover.outputs.addons) }}
+    name: generate ${{ matrix.addon }}
     steps:
       - name: Checkout
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
@@ -56,25 +93,24 @@ jobs:
         id: pins
         shell: bash
         env:
-          ADDON: ${{ inputs.addon }}
-          ADDON_VERSION: ${{ inputs.version }}
-          CHART_VERSION: ${{ inputs.chart_version }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ADDON: ${{ matrix.addon }}
+          ADDON_VERSION: ${{ inputs.addon != 'all' && inputs.version || '' }}
+          CHART_VERSION: ${{ inputs.addon != 'all' && inputs.chart_version || '' }}
         run: .github/workflows/update-addons.sh
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: |
-            Update addon ${{ inputs.addon }} ${{ steps.pins.outputs.addon_version }} pins
+            Update addon ${{ matrix.addon }} ${{ steps.pins.outputs.addon_version }} pins
           committer: GitHub <noreply@github.com>
           signoff: true
-          branch: update-addon-${{ inputs.addon }}-${{ steps.pins.outputs.addon_version }}
-          title: "Update addon ${{ inputs.addon }} ${{ steps.pins.outputs.addon_version }} pins"
+          branch: update-addon-${{ matrix.addon }}-${{ steps.pins.outputs.addon_version }}
+          title: "Update addon ${{ matrix.addon }} ${{ steps.pins.outputs.addon_version }} pins"
           body: |
-            Refresh chart and image pins for the **${{ inputs.addon }}** addon at version `${{ steps.pins.outputs.addon_version }}` (chart `${{ steps.pins.outputs.chart_version }}`):
+            Refresh chart and image pins for the **${{ matrix.addon }}** addon at version `${{ steps.pins.outputs.addon_version }}` (chart `${{ steps.pins.outputs.chart_version }}`):
 
-            - `addons/${{ inputs.addon }}/charts/${{ steps.pins.outputs.chart_version }}/enterprise.yaml` — chart OCIRepository patch from the mirror.
-            - `addons/${{ inputs.addon }}/images/${{ steps.pins.outputs.addon_version }}/enterprise-<variant>.yaml` — image digest at this addon-version.
+            - `addons/${{ matrix.addon }}/charts/${{ steps.pins.outputs.chart_version }}/enterprise.yaml` — chart OCIRepository patch from the mirror.
+            - `addons/${{ matrix.addon }}/images/${{ steps.pins.outputs.addon_version }}/enterprise-<variant>.yaml` — image digest at this addon-version.
           labels: |
             area/addons

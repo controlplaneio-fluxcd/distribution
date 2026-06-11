@@ -7,10 +7,11 @@
 #   ADDON           - addon name (dex, mcp). Drives the per-addon artifact table.
 #   IMAGE_REGISTRY  - ghcr.io/controlplaneio-fluxcd
 #   CHART_REGISTRY  - ghcr.io/controlplaneio-fluxcd/charts
-#   GITHUB_TOKEN    - for `gh release view` on the upstream addon repo
 # Optional env (auto-discovered when empty):
 #   ADDON_VERSION   - the addon's release tag (e.g. v2.45.1 for dex).
-#                     Empty = latest release of the upstream addon repo.
+#                     Empty = highest semver tag published on the addon's
+#                     image repo in our registry (the source of truth for
+#                     what we have actually shipped).
 #   CHART_VERSION   - the helm chart version (e.g. 0.24.0 for dex).
 #                     Empty = latest tag pulled by `helm pull`.
 #
@@ -26,21 +27,18 @@ CHART_REGISTRY="${CHART_REGISTRY}"
 
 # Per-addon artifact table. Future addons extend these case statements.
 #
-#   UPSTREAM_REPO      - repo whose latest release defaults ADDON_VERSION
 #   CHART_NAME         - chart repo name under CHART_REGISTRY
 #   IMAGE_REPOS        - image repo paths under IMAGE_REGISTRY, one per flavor
 #   IMAGE_TAG_SUFFIXES - tag suffix appended to ADDON_VERSION, one per flavor
 #   IMAGE_FILES        - pin file name under images/<version>/, one per flavor
 case "$ADDON" in
   dex)
-    UPSTREAM_REPO=dexidp/dex
     CHART_NAME=dex
     IMAGE_REPOS=( "distroless-fips/dex" )
     IMAGE_TAG_SUFFIXES=( "" )
     IMAGE_FILES=( "enterprise-distroless-fips.yaml" )
     ;;
   mcp)
-    UPSTREAM_REPO=controlplaneio-fluxcd/flux-mcp-enterprise
     CHART_NAME=flux-mcp-enterprise
     IMAGE_REPOS=( "flux-mcp-enterprise" "flux-mcp-enterprise" )
     IMAGE_TAG_SUFFIXES=( "" "-stdio-readonly" )
@@ -54,10 +52,15 @@ esac
 
 CHART_REPO="${CHART_REGISTRY}/${CHART_NAME}"
 
-# Default ADDON_VERSION to the latest upstream release tag (same pattern as
-# the flux update-images workflow uses `gh release view`).
+# Default ADDON_VERSION to the highest bare-semver tag (vX.Y.Z) published
+# on the addon's primary image repo. Flavor-suffixed tags (e.g.
+# v0.1.0-stdio-readonly) are excluded by the filter.
 if [ -z "${ADDON_VERSION:-}" ]; then
-  ADDON_VERSION="$(gh release view --repo "$UPSTREAM_REPO" --json tagName -q .tagName)"
+  ADDON_VERSION="$(skopeo list-tags "docker://${IMAGE_REGISTRY}/${IMAGE_REPOS[0]}" \
+    | jq -r '.Tags[]' \
+    | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
+    | sort -V | tail -n1)"
+  [ -n "$ADDON_VERSION" ] || { echo "no semver tags found for ${IMAGE_REPOS[0]}" >&2; exit 1; }
 fi
 
 ROOT_DIR="$(git rev-parse --show-toplevel)"
