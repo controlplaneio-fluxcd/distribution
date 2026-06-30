@@ -112,7 +112,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.8.x"
+    version: "2.9.x"
     registry: "709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd"
   cluster:
     type: aws
@@ -144,7 +144,7 @@ metadata:
     fluxcd.controlplane.io/reconcileTimeout: "5m"
 spec:
   distribution:
-    version: "2.8.x"
+    version: "2.9.x"
     registry: "709825985650.dkr.ecr.us-east-1.amazonaws.com/controlplane/fluxcd"
     artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
   cluster:
