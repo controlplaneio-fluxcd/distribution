@@ -32,7 +32,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.8.x"
+    version: "2.9.x"
     artifact: "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests"
     registry: "ghcr.io/controlplaneio-fluxcd/distroless"
     imagePullSecret: "flux-enterprise-auth"
@@ -64,7 +64,7 @@ the Flux Operator CLI:
 
 ```shell
 echo $ENTERPRISE_TOKEN | flux-operator distro mirror registry.example.com/fluxcd \
-  --version=2.8.x \
+  --version=2.9.x \
   --variant=enterprise-distroless \
   --pull-token-stdin
 ```
@@ -85,7 +85,7 @@ metadata:
   namespace: flux-system
 spec:
   distribution:
-    version: "2.8.x"
+    version: "2.9.x"
     registry: "registry.example.com/fluxcd"
     variant: "enterprise-distroless"
   cluster:
