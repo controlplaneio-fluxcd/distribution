@@ -14,6 +14,7 @@
 | kind                                                                                               | apiVersion                          |
 |:---------------------------------------------------------------------------------------------------|:------------------------------------|
 | [Bucket](https://v2-7.docs.fluxcd.io/flux/components/source/buckets/)                              | `source.toolkit.fluxcd.io/v1`       |
+| [ExternalArtifact](https://v2-7.docs.fluxcd.io/flux/components/source/externalartifacts/)          | `source.toolkit.fluxcd.io/v1`       |
 | [GitRepository](https://v2-7.docs.fluxcd.io/flux/components/source/gitrepositories/)               | `source.toolkit.fluxcd.io/v1`       |
 | [HelmChart](https://v2-7.docs.fluxcd.io/flux/components/source/helmcharts/)                        | `source.toolkit.fluxcd.io/v1`       |
 | [HelmRelease](https://v2-7.docs.fluxcd.io/flux/components/helm/helmreleases/)                      | `helm.toolkit.fluxcd.io/v2`         |
