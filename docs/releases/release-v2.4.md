@@ -1,3 +1,8 @@
+---
+title: Release v2.4
+description: ControlPlane Enterprise Distribution for Flux v2.4
+---
+
 # Enterprise Distribution for Flux v2.4.x
 
 ## Supported Kubernetes Versions

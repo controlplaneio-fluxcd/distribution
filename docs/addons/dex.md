@@ -13,10 +13,10 @@ The Dex Helm charts and the hardened container images are published at:
 - `ghcr.io/controlplaneio-fluxcd/charts/dex`
 - `ghcr.io/controlplaneio-fluxcd/distroless-fips/dex`
 
-!!! tip "Dex latest version"
-
-    The Dex chart version, container image tag and digest should be kept up to date
-    with the latest release published at [controlplaneio-fluxcd/distribution/addons/dex](https://github.com/controlplaneio-fluxcd/distribution/tree/main/addons/dex).
+> [!tip] Dex latest version
+>
+> The Dex chart version, container image tag and digest should be kept up to date
+> with the latest release published at [controlplaneio-fluxcd/distribution/addons/dex](https://github.com/controlplaneio-fluxcd/distribution/tree/main/addons/dex).
 
 The Helm charts are built from the upstream Dex [chart repository](https://github.com/dexidp/helm-charts).
 

@@ -15,10 +15,10 @@ The hardened container images are published at:
 
 - `ghcr.io/controlplaneio-fluxcd/flux-mcp-enterprise:<VERSION>-stdio-readonly`
 
-!!! tip "MCP Server latest version"
-
-    The MCP Server container image tag and digest should be kept up to date
-    with the latest release published at [controlplaneio-fluxcd/distribution/addons/mcp](https://github.com/controlplaneio-fluxcd/distribution/tree/main/addons/mcp).
+> [!tip] MCP Server latest version
+>
+> The MCP Server container image tag and digest should be kept up to date
+> with the latest release published at [controlplaneio-fluxcd/distribution/addons/mcp](https://github.com/controlplaneio-fluxcd/distribution/tree/main/addons/mcp).
 
 The MCP Server binaries packaged in the multi-arch container images are built
 for Linux amd64/arm64 and are subject to ControlPlane's SLA for CVE remediation and FIPS compliance.

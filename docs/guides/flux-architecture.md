@@ -44,6 +44,7 @@ The Flux project is made out of the following components:
 ## Flux controllers
 
 <div class="grid cards" markdown>
+
 -   :octicons-cpu-24:{ .lg .middle } __source-controller__
 
     ---

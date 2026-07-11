@@ -9,10 +9,10 @@ The Flux distribution has a release cadence of approximately one minor release e
 with patch releases in between. On production clusters, it is recommended to configure Flux Operator
 to automatically upgrade Flux to the latest patch release in the specified minor version range.
 
-!!! tip "Flux Operator"
-
-    The [Flux Operator](https://fluxoperator.dev/) APIs are stable and backward compatible,
-    so it is safe to upgrade the operator to the latest version at any time.
+> [!tip] Flux Operator
+>
+> The [Flux Operator](https://fluxoperator.dev/) APIs are stable and backward compatible,
+> so it is safe to upgrade the operator to the latest version at any time.
 
 ## Upgrading the Flux Operator
 
@@ -76,13 +76,13 @@ to a specific minor version, such as `2.9.x`, to have more control over the upgr
 
 ### Migrate to Flux stable APIs in Git
 
-!!! warning "Flux beta APIs EOL"
-
-    In Flux v2.7, the deprecated **beta1** APIs have reached their end of life and are no longer supported.
-
-    In Flux v2.8, the deprecated **beta2** APIs have reached their end of life and are no longer supported.
-
-    In Flux v2.9, the deprecated **beta2** APIs are no longer present in the Flux CRDs.
+> [!warning] Flux beta APIs EOL
+>
+> In Flux v2.7, the deprecated **beta1** APIs have reached their end of life and are no longer supported.
+>
+> In Flux v2.8, the deprecated **beta2** APIs have reached their end of life and are no longer supported.
+>
+> In Flux v2.9, the deprecated **beta2** APIs are no longer present in the Flux CRDs.
 
 Before upgrading to Flux v2.9 or later, make sure to migrate all your manifests
 to the Flux v2.8 stable APIs in your Git repositories by using the `flux migrate -f` command:
