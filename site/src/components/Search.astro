@@ -1,0 +1,134 @@
+<button id="search-open" type="button" aria-label="Search docs" title="Search (Cmd+K)">
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+    <circle cx="11" cy="11" r="7"></circle>
+    <line x1="21" y1="21" x2="16.5" y2="16.5"></line>
+  </svg>
+  <span class="label">Search</span>
+  <kbd>⌘K</kbd>
+</button>
+
+<dialog id="search-dialog" aria-label="Search documentation">
+  <div id="pagefind-container"></div>
+</dialog>
+
+<style>
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: var(--bg-soft);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    color: var(--muted);
+    padding: 0.4rem 0.7rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  button:hover {
+    color: var(--fg);
+    border-color: var(--muted);
+  }
+
+  kbd {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0 0.3rem;
+    background: var(--bg);
+  }
+
+  dialog {
+    width: min(38rem, calc(100vw - 2rem));
+    margin: 10vh auto auto;
+    border: 1px solid var(--border-strong);
+    border-radius: 12px;
+    background: var(--bg);
+    color: var(--fg);
+    padding: 1rem;
+    box-shadow: var(--shadow);
+  }
+
+  dialog::backdrop {
+    background: rgba(10, 18, 32, 0.5);
+    backdrop-filter: blur(2px);
+  }
+
+  @media (max-width: 860px) {
+    .label,
+    kbd {
+      display: none;
+    }
+
+    button {
+      padding: 0.4rem 0.5rem;
+    }
+  }
+</style>
+
+<style is:global>
+  /* Pagefind UI theming */
+  #pagefind-container {
+    --pagefind-ui-primary: var(--accent);
+    --pagefind-ui-text: var(--fg);
+    --pagefind-ui-background: var(--bg);
+    --pagefind-ui-border: var(--border);
+    --pagefind-ui-tag: var(--bg-raised);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 8px;
+    --pagefind-ui-font: var(--font-body);
+    min-height: 8rem;
+  }
+</style>
+
+<script>
+  const openButton = document.getElementById('search-open') as HTMLButtonElement;
+  const dialog = document.getElementById('search-dialog') as HTMLDialogElement;
+  let loaded = false;
+
+  async function loadPagefind(): Promise<boolean> {
+    if (loaded) return true;
+    try {
+      const css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = '/pagefind/pagefind-ui.css';
+      document.head.appendChild(css);
+      /* UMD script: registers window.PagefindUI (a dynamic import would not) */
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = '/pagefind/pagefind-ui.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+      // @ts-expect-error PagefindUI is provided by the generated script
+      new PagefindUI({ element: '#pagefind-container', showSubResults: true, showImages: false });
+      loaded = true;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async function openSearch() {
+    if (!(await loadPagefind())) return;
+    dialog.showModal();
+    dialog.querySelector<HTMLInputElement>('input')?.focus();
+  }
+
+  openButton.addEventListener('click', openSearch);
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      dialog.open ? dialog.close() : openSearch();
+    }
+    if (e.key === 'Escape' && dialog.open) dialog.close();
+  });
+
+  /* Close when clicking the backdrop */
+  dialog.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+</script>

@@ -1,0 +1,293 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const features = [
+  {
+    title: 'Hardened Images',
+    body: 'The ControlPlane distribution comes with hardened container images and FIPS-compliance for the Flux controllers.',
+    icon: 'M4 7l8-4 8 4-8 4-8-4zm0 5l8 4 8-4M4 17l8 4 8-4',
+  },
+  {
+    title: 'Zero CVEs',
+    body: 'We employ continuous vulnerabilities scanning and CVE patching for the Flux controllers.',
+    icon: 'M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3zm-3 9l2.2 2.2L15.5 9.9',
+  },
+  {
+    title: '24/7 Support',
+    body: 'Our team provides best-in-class expertise to securely design, deploy, and operate your Flux CD instances at scale.',
+    icon: 'M12 3a8 8 0 018 8v5a3 3 0 01-3 3h-1v-7h4M4 19v-8a8 8 0 018-8m-8 9H3m1 0h3v7H6a3 3 0 01-2-1',
+  },
+  {
+    title: 'FIPS Compliance',
+    body: 'The ControlPlane distribution includes FIPS-compliant Flux builds based on Go crypto FIPS 140-3 mode.',
+    icon: 'M7 11V7a5 5 0 0110 0v4m-12 0h14v10H5V11zm7 4v3',
+  },
+  {
+    title: 'Kubernetes Compatibility',
+    body: 'The ControlPlane distribution comes with assured compatibility for OpenShift and Kubernetes LTS versions provided by cloud vendors.',
+    icon: 'M12 8a4 4 0 100 8 4 4 0 000-8zm0-6v4m0 12v4M2 12h4m12 0h4M5 5l2.8 2.8m8.4 8.4L19 19M19 5l-2.8 2.8M7.8 16.2L5 19',
+  },
+  {
+    title: 'Supply Chain Security',
+    body: 'The ControlPlane distribution supply chain is SLSA Build Level 3, and ships cryptographically signed images, SBOMs and VEX documents.',
+    icon: 'M12 3l2 2h5v5l2 2-2 2v5h-5l-2 2-2-2H5v-5l-2-2 2-2V5h5l2-2zm-3 9l2.2 2.2L15.5 9.9',
+  },
+  {
+    title: 'Self-service Capabilities',
+    body: 'The ControlPlane distribution extends Flux with self-service capabilities and preview environments for GitHub, GitLab and Azure DevOps pull requests testing.',
+    icon: 'M4 5h16v4H4V5zm0 10h16v4H4v-4zm3-8v0m0 10v0m5-10h5m-5 10h5',
+  },
+  {
+    title: 'AI-Assisted GitOps',
+    body: 'The ControlPlane MCP Server connects AI assistants to Kubernetes clusters managed by Flux, enabling seamless interaction through natural language.',
+    icon: 'M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2zm7 11l.8 2.2L22 16l-2.2.8L19 19l-.8-2.2L16 16l2.2-.8L19 13zM6 15l1 2.5L9.5 18 7 19l-1 2.5L5 19l-2.5-1L5 17.5 6 15z',
+  },
+];
+---
+
+<BaseLayout
+  title="ControlPlane Enterprise for Flux CD"
+  description="ControlPlane offers a hardened, enterprise-grade distribution and support services for the CNCF-graduated Flux project."
+>
+  <section class="hero">
+    <div class="hero-inner">
+      <img
+        class="hero-logo"
+        src="/images/logo/enterprise-for-flux-cd-icon-white.svg"
+        alt=""
+        width="220"
+        height="220"
+      />
+      <div class="hero-content">
+        <h1>Assured Flux CD</h1>
+        <p>
+          ControlPlane Enterprise enhances the security and stability of Kubernetes GitOps delivery
+          through comprehensive security assurance and compliance with required regulatory standards
+          for Flux CD. The enterprise distribution extends Flux with self-service features and
+          AI-assisted GitOps capabilities.
+        </p>
+        <div class="hero-actions">
+          <a class="hero-button primary" href="/distribution/">Get Started</a>
+          <a class="hero-button" href="/pricing/">Pricing</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" aria-labelledby="features-title">
+    <h2 id="features-title">Enterprise Distribution Features</h2>
+    <div class="grid">
+      {
+        features.map(({ title, body, icon }) => (
+          <div class="card">
+            <div class="icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d={icon} />
+              </svg>
+            </div>
+            <div>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-inner">
+      <h2>Run Flux in production with confidence</h2>
+      <p>
+        Get enterprise-hardened Flux controllers, guaranteed SLAs for CVE remediation,
+        and direct access to Flux core maintainers.
+      </p>
+      <div class="cta-actions">
+        <a class="button button-primary" href="https://control-plane.io/contact/?inquiry=fluxcd" target="_blank" rel="noopener">Contact us</a>
+        <a class="button" href="/distribution/install/">Installation guide</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    background: linear-gradient(135deg, #0a2f73 0%, #0d4bb5 45%, var(--brand) 75%, #3f93f5 100%);
+    color: #ffffff;
+  }
+
+  .hero-inner {
+    max-width: var(--site-width);
+    margin: 0 auto;
+    padding: 4.5rem var(--space);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+  }
+
+  .hero-logo {
+    width: 13rem;
+    height: 13rem;
+    flex-shrink: 0;
+  }
+
+  .hero-content {
+    max-width: 34rem;
+  }
+
+  h1 {
+    font-size: 2.6rem;
+    margin: 0 0 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-content p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin: 0 0 1.75rem;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-button {
+    display: inline-block;
+    font-weight: 600;
+    padding: 0.65rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    color: #ffffff;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .hero-button:hover {
+    background: rgba(255, 255, 255, 0.12);
+    text-decoration: none;
+  }
+
+  .hero-button.primary {
+    background: #ffffff;
+    border-color: #ffffff;
+    color: var(--brand);
+  }
+
+  .hero-button.primary:hover {
+    background: var(--brand-pale);
+    border-color: var(--brand-pale);
+  }
+
+  .features {
+    max-width: var(--site-width);
+    margin: 0 auto;
+    padding: 3.5rem var(--space) 1rem;
+  }
+
+  .features h2 {
+    font-size: 1.8rem;
+    text-align: center;
+    margin: 0 0 2rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    gap: 1.25rem;
+  }
+
+  .card {
+    display: flex;
+    gap: 1rem;
+    padding: 1.4rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-soft);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .card:hover {
+    border-color: var(--brand-light);
+    box-shadow: var(--shadow);
+  }
+
+  .icon {
+    flex-shrink: 0;
+    width: 2.75rem;
+    height: 2.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--brand) 12%, transparent);
+    color: var(--accent);
+  }
+
+  .card h3 {
+    font-size: 1.05rem;
+    margin: 0.1rem 0 0.4rem;
+  }
+
+  .card p {
+    font-size: 0.92rem;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .cta {
+    max-width: var(--site-width);
+    margin: 3.5rem auto 0;
+    padding: 0 var(--space);
+  }
+
+  .cta-inner {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--brand) 8%, var(--bg-soft)), var(--bg-soft));
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .cta h2 {
+    font-size: 1.6rem;
+    margin: 0 0 0.75rem;
+  }
+
+  .cta p {
+    color: var(--muted);
+    max-width: 36rem;
+    margin: 0 auto 1.75rem;
+  }
+
+  .cta-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 860px) {
+    .hero-inner {
+      flex-direction: column;
+      gap: 2rem;
+      padding: 3rem var(--space);
+      text-align: center;
+    }
+
+    .hero-logo {
+      width: 8.5rem;
+      height: 8.5rem;
+    }
+
+    .hero-actions {
+      justify-content: center;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+    }
+  }
+</style>

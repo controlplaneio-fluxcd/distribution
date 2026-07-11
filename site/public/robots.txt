@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fluxcd.control-plane.io/sitemap-index.xml

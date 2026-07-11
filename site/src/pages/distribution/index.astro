@@ -1,0 +1,397 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const highlights = [
+  {
+    title: 'Hardened Images',
+    body: 'FIPS-compliant hardened container images for the GitOps Toolkit controllers, in-sync with the upstream CNCF Flux releases.',
+    icon: 'M4 7l8-4 8 4-8 4-8-4zm0 5l8 4 8-4M4 17l8 4 8-4',
+  },
+  {
+    title: 'Extended Kubernetes Compatibility',
+    body: 'End-to-end tested with the latest six minor releases of Kubernetes, as well as RedHat OpenShift and Kubernetes LTS versions provided by cloud vendors such as AWS EKS, Azure AKS, and Google GKE.',
+    icon: 'M12 8a4 4 0 100 8 4 4 0 000-8zm0-6v4m0 12v4M2 12h4m12 0h4M5 5l2.8 2.8m8.4 8.4L19 19M19 5l-2.8 2.8M7.8 16.2L5 19',
+  },
+  {
+    title: 'Zero CVEs',
+    body: 'Container images continuously scanned and patched, with SLAs for remediation of critical vulnerabilities, plus SBOMs and VEX documents for images, dependencies, and build environments.',
+    icon: 'M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3zm-3 9l2.2 2.2L15.5 9.9',
+  },
+  {
+    title: 'Maintained by Experts',
+    body: 'Maintained by security experts at ControlPlane together with CNCF Flux core maintainers, with hotfixes and CVE patches shipped ahead of upstream releases.',
+    icon: 'M16 11a4 4 0 10-8 0 4 4 0 008 0zm-9 9a5 5 0 0110 0M2 20a7 7 0 013-5m16 5a7 7 0 00-3-5',
+  },
+];
+
+const nextSteps = [
+  { title: 'Installation', body: 'Deploy the enterprise distribution with the Flux Operator or bootstrap with the Flux CLI.', href: '/distribution/install/' },
+  { title: 'Upgrade', body: 'Keep the Flux controllers up to date with automated upgrade workflows.', href: '/distribution/upgrade/' },
+  { title: 'Security', body: 'Learn about the SLSA Build Level 3 supply chain and signed artifacts.', href: '/distribution/security/' },
+];
+---
+
+<BaseLayout
+  title="Flux Distribution Introduction - ControlPlane Enterprise for Flux CD"
+  description="FluxCD Enterprise Distribution overview and features"
+>
+  <section class="intro">
+    <div class="intro-inner">
+      <p class="eyebrow">Enterprise Distribution</p>
+      <h1>Flux Distribution Introduction</h1>
+      <p class="lead">
+        ControlPlane Enterprise for Flux CD is a comprehensive solution for organizations seeking to
+        leverage the power of GitOps in their Kubernetes environments.
+      </p>
+      <p class="body-copy">
+        Built on top of the <a href="https://www.cncf.io/projects/flux/" target="_blank" rel="noopener">CNCF-graduated</a> Flux project, the ControlPlane distribution provides a secure, scalable, and enterprise-ready
+        platform for managing the delivery of application and infrastructure workloads on multi-tenant
+        Kubernetes clusters. The distribution comes with enterprise-hardened Flux controllers including <a href="/pricing/">support services</a> for running Flux in production.
+      </p>
+    </div>
+  </section>
+
+  <div class="page">
+    <section aria-labelledby="highlights" class="section">
+      <h2 id="highlights">Highlights</h2>
+      <div class="cards">
+        {
+          highlights.map(({ title, body, icon }) => (
+            <div class="card">
+              <div class="icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d={icon} />
+                </svg>
+              </div>
+              <div>
+                <h3>{title}</h3>
+                <p>{body}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <aside class="callout">
+        <div class="callout-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 18h6M10 21h4m-2-18a7 7 0 00-4 12.7c.6.5 1 1.2 1 2V18h6v-.3c0-.8.4-1.5 1-2A7 7 0 0012 3z" />
+          </svg>
+        </div>
+        <div>
+          <p class="callout-title">Flux Operator</p>
+          <p>
+            To streamline the deployment of the enterprise distribution, the ControlPlane team created
+            the <a href="https://fluxoperator.dev/" target="_blank" rel="noopener">Flux Operator</a>. The operator manages
+            the lifecycle of the Flux controllers and automates the upgrade process, including the
+            patching of hotfixes and CVEs affecting Flux functionality.
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <section aria-labelledby="distribution-channels" class="section">
+      <h2 id="distribution-channels">Distribution Channels</h2>
+      <p>ControlPlane offers the following distribution channels for the Flux controllers:</p>
+      <div class="channels">
+        <div class="channel" id="distroless">
+          <h3>Distroless</h3>
+          <p>
+            The ControlPlane distribution offers hardened <a href="https://github.com/GoogleContainerTools/distroless" target="_blank" rel="noopener">Google Distroless</a>-based
+            Flux images.
+          </p>
+          <p>
+            Distroless comes with two variants, <code>distroless</code> and <code>distroless-fips</code>.
+            The latter is built using the <a href="https://go.dev/doc/security/fips140" target="_blank" rel="noopener">FIPS 140-3 mode</a>,
+            and the Go runtime is configured to restrict the TLS and SSH configuration to FIPS-approved settings.
+          </p>
+          <p>
+            The Distroless variants have no shell or package managers installed, reducing the attack
+            surface and eliminating entire classes of CVEs. Due to the absence of a shell environment
+            and OS packages, the following kustomize-controller features are disabled:
+          </p>
+          <ul>
+            <li>
+              <strong>Kustomize remote bases</strong>: requires the <code>git</code> binary for fetching
+              remote resources which bypass source-controller; use <a href="https://fluxoperator.dev/docs/crd/gitrepository/" target="_blank" rel="noopener">GitRepository</a> or <a href="https://fluxoperator.dev/docs/crd/ocirepository/" target="_blank" rel="noopener">OCIRepository</a> sources instead.
+            </li>
+            <li>
+              <strong>Secrets decryption with GnuPG</strong>: requires the <code>gpg</code> binary; use <a href="https://fluxcd.io/flux/guides/mozilla-sops/#encrypting-secrets-using-age" target="_blank" rel="noopener">Age encryption</a> or a cloud KMS provider instead.
+            </li>
+          </ul>
+        </div>
+        <div class="channel" id="mainline">
+          <h3>Mainline</h3>
+          <p>
+            The mainline distribution channel offers <a href="https://www.alpinelinux.org/" target="_blank" rel="noopener">Alpine Linux</a>-based images
+            fully compatible with the upstream Flux feature set.
+          </p>
+          <p>
+            The major difference between the Flux upstream images and the ControlPlane mainline images
+            is the continuous scanning and CVE patching for the container base images, OS packages,
+            and Go dependencies.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="distribution-components" class="section">
+      <h2 id="distribution-components">Distribution Components</h2>
+      <p>
+        The ControlPlane distribution comprises Open Source components such as the CNCF <a href="/guides/flux-architecture/#flux-controllers">Flux controllers</a> (Apache 2.0 License)
+        and the <a href="https://fluxoperator.dev/" target="_blank" rel="noopener">Flux Operator</a> (AGPL-3.0 License).
+      </p>
+      <aside class="callout">
+        <div class="callout-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3l2 2h5v5l2 2-2 2v5h-5l-2 2-2-2H5v-5l-2-2 2-2V5h5l2-2z" />
+          </svg>
+        </div>
+        <div>
+          <p class="callout-title">Delivery Pipeline</p>
+          <p>
+            The build, test and release pipeline developed by <a href="https://control-plane.io" target="_blank" rel="noopener">ControlPlane</a> is compliant with the <a href="/distribution/security/">SLSA</a> security framework.
+          </p>
+          <p>
+            The ControlPlane build system produces FIPS-compliant binaries, multi-arch container
+            images, generates SBOMs, applies CVE patches &amp; hotfixes to the Open Source components,
+            and runs conformance tests. The resulting container images and SBOMs are hosted on private
+            registries that are only available to customers with a valid subscription.
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <section aria-labelledby="distribution-addons" class="section">
+      <h2 id="distribution-addons">Distribution Addons</h2>
+      <p>
+        ControlPlane offers enterprise-grade addons that integrate seamlessly with the Flux
+        distribution, enabling organizations to enforce identity policies, streamline incident
+        response, and operate GitOps at scale.
+      </p>
+      <ul>
+        <li>
+          <a href="/addons/dex/">Dex IdP</a> — hardened Dex providing OIDC-based Single Sign-On for the <a href="https://fluxoperator.dev/web-ui/" target="_blank" rel="noopener">Flux Web UI</a>.
+        </li>
+        <li>
+          <a href="/addons/mcp-stdio/">Local MCP Server</a> — hardened Flux MCP for AI-assisted incident
+          response and GitOps pipeline troubleshooting across environments.
+        </li>
+      </ul>
+      <p>All addons are covered by ControlPlane's SLA for CVE remediation and FIPS compliance.</p>
+    </section>
+
+    <section aria-labelledby="next-steps" class="section">
+      <h2 id="next-steps">Next Steps</h2>
+      <div class="steps">
+        {
+          nextSteps.map(({ title, body, href }) => (
+            <a class="step" href={href}>
+              <h3>{title}</h3>
+              <p>{body}</p>
+              <span class="more">Read more &rarr;</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .intro {
+    background: linear-gradient(180deg, color-mix(in srgb, var(--brand) 7%, var(--bg)) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .intro-inner {
+    max-width: 52rem;
+    margin: 0 auto;
+    padding: 3.5rem var(--space) 2.5rem;
+  }
+
+  .eyebrow {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin: 0 0 0.5rem;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    margin: 0 0 1rem;
+  }
+
+  .lead {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin: 0 0 1rem;
+  }
+
+  .body-copy {
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .page {
+    max-width: 52rem;
+    margin: 0 auto;
+    padding: 1rem var(--space) 2rem;
+  }
+
+  .section {
+    margin-top: 2.5rem;
+  }
+
+  h2 {
+    font-size: 1.55rem;
+    margin: 0 0 1rem;
+    scroll-margin-top: calc(var(--header-height) + 1rem);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    gap: 1.1rem;
+  }
+
+  .card {
+    display: flex;
+    gap: 1rem;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-soft);
+  }
+
+  .icon,
+  .callout-icon {
+    flex-shrink: 0;
+    width: 2.6rem;
+    height: 2.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--brand) 12%, transparent);
+    color: var(--accent);
+  }
+
+  .card h3 {
+    font-size: 1rem;
+    margin: 0.1rem 0 0.4rem;
+  }
+
+  .card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .callout {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    background: var(--bg-soft);
+  }
+
+  .callout-title {
+    font-weight: 700;
+    margin: 0.1rem 0 0.4rem;
+    color: var(--accent);
+  }
+
+  .callout p {
+    font-size: 0.95rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .callout p:last-child {
+    margin-bottom: 0;
+  }
+
+  .channels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-top: 1.25rem;
+  }
+
+  .channel {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-soft);
+    padding: 1.5rem;
+    scroll-margin-top: calc(var(--header-height) + 1rem);
+  }
+
+  .channel h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1.15rem;
+    color: var(--accent);
+  }
+
+  .channel p,
+  .channel li {
+    font-size: 0.93rem;
+  }
+
+  .channel ul {
+    padding-left: 1.2rem;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1.1rem;
+  }
+
+  .step {
+    display: block;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-soft);
+    color: var(--fg);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .step:hover {
+    text-decoration: none;
+    border-color: var(--brand-light);
+    box-shadow: var(--shadow);
+  }
+
+  .step h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.02rem;
+  }
+
+  .step p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin: 0 0 0.75rem;
+  }
+
+  .more {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  @media (max-width: 760px) {
+    .channels {
+      grid-template-columns: 1fr;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+    }
+  }
+</style>
