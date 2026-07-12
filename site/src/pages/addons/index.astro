@@ -2,7 +2,8 @@
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import HeroShapes from '../../components/HeroShapes.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
 import { contactUrl } from '../../lib/nav';
 import shotWorkload from '../../assets/web-ui/fluxcd-web-ui-workload-dark.png';
 import shotGraph from '../../assets/web-ui/fluxcd-web-ui-graph-dark.png';
@@ -104,22 +105,11 @@ const addons: Addon[] = [
   description="Enterprise-grade Flux addons: Web UI dashboard, AI-assisted MCP Server, and Dex single sign-on"
   forcedTheme="light"
 >
-  <section class="phero">
-    <HeroShapes />
-    <div class="phero-inner">
-      <img class="glyph" src="/images/logo/enterprise-for-flux-cd-icon-white.svg" alt="" width="56" height="56" />
-      <p class="phero-eyebrow">ControlPlane Enterprise</p>
-      <h1>Flux Addons</h1>
-      <p class="lead">
-        Extend Flux with a full-featured Web UI, AI-assisted
-        troubleshooting, and single sign-on, all hardened and covered by the same SLAs.
-      </p>
-      <div class="phero-actions">
-        <a class="hero-button" href={contactUrl} target="_blank" rel="noopener">Request a demo</a>
-        <a class="hero-link" href="/pricing/">See pricing &rarr;</a>
-      </div>
-    </div>
-  </section>
+  <ProductHero
+    title="Flux Addons"
+    lead="Extend Flux with a full-featured Web UI, AI-assisted troubleshooting, and single sign-on, all hardened and covered by the same SLAs."
+    secondary={{ label: 'See pricing', href: '/pricing/' }}
+  />
 
   <div class="rows">
     <section class="row" aria-label={webUi.title}>
@@ -127,7 +117,7 @@ const addons: Addon[] = [
         <p class="eyebrow">{webUi.tag}</p>
         <h2>{webUi.title}</h2>
         <p class="row-lead">{webUi.lead}</p>
-        <ul class="points">
+        <ul class="checklist">
           {webUi.points.map((point) => (
             <li>
               <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -180,15 +170,15 @@ const addons: Addon[] = [
     </div>
   </section>
 
-  <div class="rows rows-alt">
+  <div class="rows">
     {
-      addons.map(({ tag, title, lead, points, links, image, imageAlt, lightImage }) => (
-        <section class="row" aria-label={title}>
+      addons.map(({ tag, title, lead, points, links, image, imageAlt, lightImage }, i) => (
+        <section class:list={['row', { flip: i % 2 === 0 }]} aria-label={title}>
           <div class="row-copy">
             <p class="eyebrow">{tag}</p>
             <h2>{title}</h2>
             <p class="row-lead">{lead}</p>
-            <ul class="points">
+            <ul class="checklist">
               {points.map((point) => (
                 <li>
                   <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -216,154 +206,26 @@ const addons: Addon[] = [
     }
   </div>
 
-  <section class="cta">
-    <HeroShapes />
-    <div class="cta-inner">
-      <h2>Covered by your subscription</h2>
-      <p>
-        All addons are included in the subscription plans and covered by ControlPlane's SLA for CVE
-        remediation, with hardened images published to private registries available to customers.
-      </p>
-      <div class="cta-actions">
-        <a class="hero-button" href="/pricing/">See the plans</a>
-        <a class="hero-link" href={contactUrl} target="_blank" rel="noopener">Contact us &rarr;</a>
-      </div>
-    </div>
-  </section>
+  <CtaBand
+    title="Covered by your subscription"
+    body="All addons are included in the subscription plans and covered by ControlPlane's SLA for CVE remediation, with hardened images published to private registries available to customers."
+    primary={{ label: 'See the plans', href: '/pricing/' }}
+    secondary={{ label: 'Contact us', href: contactUrl, external: true }}
+  />
 </BaseLayout>
 
 <style>
-  .phero {
-    position: relative;
-    background:
-      radial-gradient(56rem 30rem at 50% -12%, rgba(20, 114, 235, 0.32), transparent 62%),
-      var(--navy-900);
-    border-bottom: 1px solid var(--navy-line);
-    color: #eef4fd;
-    overflow: hidden;
-  }
-
-  .phero-inner {
-    position: relative;
-    z-index: 1;
-    max-width: 52rem;
-    margin: 0 auto;
-    padding: clamp(4rem, 8vw, 6.5rem) var(--space);
-    text-align: center;
-  }
-
-  .glyph {
-    width: 3.5rem;
-    height: 3.5rem;
-    margin-bottom: 1.25rem;
-    filter: drop-shadow(0 0 18px rgba(114, 174, 250, 0.45));
-  }
-
-  .phero-eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    color: var(--brand-light);
-    margin: 0 0 1rem;
-  }
-
-  h1 {
-    font-size: clamp(2.4rem, 5vw, 3.6rem);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.06;
-    margin: 0 0 1.25rem;
-    color: #ffffff;
-  }
-
-  .lead {
-    font-size: clamp(1rem, 1.6vw, 1.15rem);
-    line-height: 1.65;
-    color: rgba(222, 233, 248, 0.85);
-    margin: 0 auto 2.25rem;
-    max-width: 38rem;
-  }
-
-  .phero-actions,
-  .cta-actions {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1.75rem;
-    flex-wrap: wrap;
-  }
-
-  .hero-button {
-    display: inline-block;
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 0.8rem 1.9rem;
-    border-radius: var(--radius-sm);
-    background: var(--brand);
-    border: 1px solid var(--brand);
-    color: #ffffff;
-    transition: background 0.15s, border-color 0.15s;
-  }
-
-  .hero-button:hover {
-    background: #2c82f2;
-    border-color: #2c82f2;
-    text-decoration: none;
-  }
-
-  .hero-link {
-    font-weight: 600;
-    font-size: 1rem;
-    color: #ffffff;
-  }
-
-  .hero-link:hover {
-    color: var(--brand-light);
-    text-decoration: none;
-  }
-
-  .rows {
-    max-width: var(--site-width);
-    margin: 0 auto;
-    padding: 0 var(--space);
-  }
-
+  /* Slightly wider copy column than the shared .row default: the checklists
+     carry longer lines than the point paragraphs elsewhere */
   .row {
-    display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    gap: clamp(2.5rem, 6vw, 5rem);
-    align-items: center;
-    padding: var(--section-pad) 0;
   }
 
-  .row + .row {
-    border-top: 1px solid var(--border);
+  .row h2 {
+    margin-bottom: 1rem;
   }
 
-  .rows-alt .row:nth-of-type(odd) .row-copy {
-    order: 2;
-  }
-
-  .rows-alt .row:nth-of-type(odd) .row-visual {
-    order: 1;
-  }
-
-  h2 {
-    font-size: var(--text-h2);
-    line-height: 1.12;
-    margin: 0 0 1rem;
-  }
-
-  .row-lead {
-    font-size: 1.02rem;
-    color: var(--muted);
-    line-height: 1.7;
-    margin: 0 0 1.5rem;
-  }
-
-  .points {
+  .checklist {
     list-style: none;
     margin: 0 0 1.75rem;
     padding: 0;
@@ -372,7 +234,7 @@ const addons: Addon[] = [
     gap: 0.7rem;
   }
 
-  .points li {
+  .checklist li {
     display: flex;
     align-items: baseline;
     gap: 0.7rem;
@@ -433,7 +295,9 @@ const addons: Addon[] = [
   }
 
   .tour-inner > h2 {
-    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+    font-size: var(--text-h2);
+    line-height: 1.12;
+    margin: 0 0 clamp(2.5rem, 5vw, 3.5rem);
   }
 
   .tour-grid {
@@ -477,47 +341,9 @@ const addons: Addon[] = [
     margin: 0;
   }
 
-  .cta {
-    position: relative;
-    background:
-      radial-gradient(50rem 26rem at 50% -20%, rgba(20, 114, 235, 0.3), transparent 60%),
-      var(--navy-900);
-    color: #eef4fd;
-    overflow: hidden;
-  }
-
-  .cta-inner {
-    position: relative;
-    z-index: 1;
-    max-width: 48rem;
-    margin: 0 auto;
-    padding: clamp(4rem, 8vw, 5.5rem) var(--space);
-    text-align: center;
-  }
-
-  .cta h2 {
-    color: #ffffff;
-    margin-bottom: 1rem;
-  }
-
-  .cta p {
-    font-size: 1.02rem;
-    color: rgba(222, 233, 248, 0.8);
-    margin: 0 auto 2.25rem;
-  }
-
   @media (max-width: 960px) {
     .row {
       grid-template-columns: minmax(0, 1fr);
-      gap: 2.5rem;
-    }
-
-    .rows-alt .row:nth-of-type(odd) .row-copy {
-      order: 1;
-    }
-
-    .rows-alt .row:nth-of-type(odd) .row-visual {
-      order: 2;
     }
 
     .row-visual {

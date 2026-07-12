@@ -43,6 +43,9 @@ const ogImage = new URL('/images/og/og-cpef.png', Astro.site);
     <slot name="head" />
     <script is:inline>
       (() => {
+        /* The .js class gates JS-dependent CSS (hidden mobile nav, docs sidebar);
+           without it those collapse to always-visible no-JS fallbacks */
+        document.documentElement.classList.add('js');
         const forced = document.documentElement.dataset.forcedTheme;
         if (forced) {
           document.documentElement.dataset.theme = forced;

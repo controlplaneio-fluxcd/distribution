@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroShapes from '../components/HeroShapes.astro';
+import CtaBand from '../components/CtaBand.astro';
 import { contactUrl } from '../lib/nav';
 import shotHome from '../assets/web-ui/fluxcd-web-ui-home-dark.png';
 import fluxLogo from '../assets/flux-horizontal-color.svg';
@@ -157,8 +158,8 @@ const compliance = [
 
   <div class="rows">
     {
-      rows.map(({ eyebrow, title, points, link, visual }) => (
-        <section class="row">
+      rows.map(({ eyebrow, title, points, link, visual }, i) => (
+        <section class:list={['row', { flip: i % 2 === 1 }]}>
           <div class="row-copy">
             <p class="eyebrow">{eyebrow}</p>
             <h2>{title}</h2>
@@ -222,20 +223,12 @@ const compliance = [
     }
   </div>
 
-  <section class="cta">
-    <HeroShapes />
-    <div class="cta-inner">
-      <h2>Talk to the Flux team at ControlPlane</h2>
-      <p>
-        Get a demo of the enterprise distribution and a subscription that fits your
-        environment, from a single cluster to a whole fleet.
-      </p>
-      <div class="cta-actions">
-        <a class="hero-button" href={contactUrl} target="_blank" rel="noopener">Contact us</a>
-        <a class="hero-link" href="/pricing/">See the plans &rarr;</a>
-      </div>
-    </div>
-  </section>
+  <CtaBand
+    title="Talk to the Flux team at ControlPlane"
+    body="Get a demo of the enterprise distribution and a subscription that fits your environment, from a single cluster to a whole fleet."
+    primary={{ label: 'Contact us', href: contactUrl, external: true }}
+    secondary={{ label: 'See the plans', href: '/pricing/' }}
+  />
 </BaseLayout>
 
 <script>
@@ -316,44 +309,6 @@ const compliance = [
     margin: 0 0 2.5rem;
   }
 
-  .hero-actions,
-  .cta-actions {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1.75rem;
-    flex-wrap: wrap;
-  }
-
-  .hero-button {
-    display: inline-block;
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 0.8rem 1.9rem;
-    border-radius: var(--radius-sm);
-    background: var(--brand);
-    border: 1px solid var(--brand);
-    color: #ffffff;
-    transition: background 0.15s, border-color 0.15s;
-  }
-
-  .hero-button:hover {
-    background: #2c82f2;
-    border-color: #2c82f2;
-    text-decoration: none;
-  }
-
-  .hero-link {
-    font-weight: 600;
-    font-size: 1rem;
-    color: #ffffff;
-  }
-
-  .hero-link:hover {
-    color: var(--brand-light);
-    text-decoration: none;
-  }
-
   .trust {
     border-bottom: 1px solid var(--border);
     background: var(--bg-soft);
@@ -426,61 +381,8 @@ const compliance = [
     }
   }
 
-  .rows {
-    max-width: var(--site-width);
-    margin: 0 auto;
-    padding: 0 var(--space);
-  }
-
-  .row {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    gap: clamp(2.5rem, 6vw, 5.5rem);
-    align-items: center;
-    padding: var(--section-pad) 0;
-  }
-
-  .row + .row {
-    border-top: 1px solid var(--border);
-  }
-
-  .row:nth-child(even) .row-copy {
-    order: 2;
-  }
-
-  .row:nth-child(even) .row-visual {
-    order: 1;
-  }
-
   .row h2 {
-    font-size: var(--text-h2);
-    line-height: 1.12;
-    margin: 0 0 2rem;
-  }
-
-  .points {
-    display: flex;
-    flex-direction: column;
-    gap: 1.4rem;
     margin-bottom: 2rem;
-  }
-
-  .point h3 {
-    font-size: 1.05rem;
-    font-weight: 700;
-    margin: 0 0 0.25rem;
-  }
-
-  .point p {
-    font-size: 0.98rem;
-    color: var(--muted);
-    margin: 0;
-    line-height: 1.6;
-  }
-
-  .row-more {
-    font-weight: 650;
-    font-size: 1rem;
   }
 
   .panel {
@@ -592,55 +494,6 @@ const compliance = [
     display: block;
     width: 100%;
     height: auto;
-  }
-
-  .cta {
-    position: relative;
-    background:
-      radial-gradient(50rem 26rem at 50% -20%, rgba(20, 114, 235, 0.3), transparent 60%),
-      var(--navy-900);
-    color: #eef4fd;
-    overflow: hidden;
-  }
-
-  .cta-inner {
-    position: relative;
-    z-index: 1;
-    max-width: 48rem;
-    margin: 0 auto;
-    padding: clamp(4rem, 8vw, 6rem) var(--space);
-    text-align: center;
-  }
-
-  .cta h2 {
-    font-size: var(--text-h2);
-    margin: 0 0 1rem;
-    color: #ffffff;
-  }
-
-  .cta p {
-    font-size: 1.05rem;
-    color: rgba(222, 233, 248, 0.8);
-    margin: 0 auto 2.25rem;
-  }
-
-  @media (max-width: 960px) {
-    .row {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 2.5rem;
-    }
-
-    .row:nth-child(even) .row-copy {
-      order: 1;
-    }
-
-    .row:nth-child(even) .row-visual {
-      order: 2;
-    }
-
-    .row-visual {
-      max-width: 32rem;
-    }
   }
 
 </style>

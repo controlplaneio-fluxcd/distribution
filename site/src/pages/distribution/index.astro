@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import HeroShapes from '../../components/HeroShapes.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
 import { contactUrl } from '../../lib/nav';
 
 const whyPoints = [
@@ -49,22 +50,11 @@ const pipeline = [
   description="Enterprise-ready Flux CD distribution with zero CVEs, FIPS compliance, guaranteed security backports, and extended Kubernetes compatibility"
   forcedTheme="light"
 >
-  <section class="phero">
-    <HeroShapes />
-    <div class="phero-inner">
-      <img class="glyph" src="/images/logo/enterprise-for-flux-cd-icon-white.svg" alt="" width="56" height="56" />
-      <p class="phero-eyebrow">ControlPlane Enterprise</p>
-      <h1>Flux Distribution</h1>
-      <p class="lead">
-        An enterprise-ready distribution of Flux CD and ecosystem tools. Fully hardened by
-        ControlPlane's security team, end-to-end tested for production use.
-      </p>
-      <div class="phero-actions">
-        <a class="hero-button" href={contactUrl} target="_blank" rel="noopener">Request a demo</a>
-        <a class="hero-link" href="/distribution/overview/">Read the docs &rarr;</a>
-      </div>
-    </div>
-  </section>
+  <ProductHero
+    title="Flux Distribution"
+    lead="An enterprise-ready distribution of Flux CD and ecosystem tools. Fully hardened by ControlPlane's security team, end-to-end tested for production use."
+    secondary={{ label: 'Read the docs', href: '/distribution/overview/' }}
+  />
 
   <div class="rows">
     <section class="row">
@@ -289,175 +279,15 @@ const pipeline = [
 
   </div>
 
-  <section class="cta">
-    <HeroShapes />
-    <div class="cta-inner">
-      <h2>Talk to the Flux team at ControlPlane</h2>
-      <p>Get a demo of the enterprise distribution and a subscription tailored to your environment.</p>
-      <div class="cta-actions">
-        <a class="hero-button" href={contactUrl} target="_blank" rel="noopener">Contact us</a>
-        <a class="hero-link" href="/pricing/">See pricing &rarr;</a>
-      </div>
-    </div>
-  </section>
+  <CtaBand
+    title="Talk to the Flux team at ControlPlane"
+    body="Get a demo of the enterprise distribution and a subscription tailored to your environment."
+    primary={{ label: 'Contact us', href: contactUrl, external: true }}
+    secondary={{ label: 'See pricing', href: '/pricing/' }}
+  />
 </BaseLayout>
 
 <style>
-  .phero {
-    position: relative;
-    background:
-      radial-gradient(56rem 30rem at 50% -12%, rgba(20, 114, 235, 0.32), transparent 62%),
-      var(--navy-900);
-    border-bottom: 1px solid var(--navy-line);
-    color: #eef4fd;
-    overflow: hidden;
-  }
-
-  .phero-inner {
-    position: relative;
-    z-index: 1;
-    max-width: 52rem;
-    margin: 0 auto;
-    padding: clamp(4rem, 8vw, 6.5rem) var(--space);
-    text-align: center;
-  }
-
-  .glyph {
-    width: 3.5rem;
-    height: 3.5rem;
-    margin-bottom: 1.25rem;
-    filter: drop-shadow(0 0 18px rgba(114, 174, 250, 0.45));
-  }
-
-  .phero-eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    color: var(--brand-light);
-    margin: 0 0 1rem;
-  }
-
-  h1 {
-    font-size: clamp(2.4rem, 5vw, 3.6rem);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.06;
-    margin: 0 0 1.25rem;
-    color: #ffffff;
-  }
-
-  .lead {
-    font-size: clamp(1rem, 1.6vw, 1.15rem);
-    line-height: 1.65;
-    color: rgba(222, 233, 248, 0.85);
-    margin: 0 auto 2.25rem;
-    max-width: 38rem;
-  }
-
-  .phero-actions,
-  .cta-actions {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1.75rem;
-    flex-wrap: wrap;
-  }
-
-  .hero-button {
-    display: inline-block;
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 0.8rem 1.9rem;
-    border-radius: var(--radius-sm);
-    background: var(--brand);
-    border: 1px solid var(--brand);
-    color: #ffffff;
-    transition: background 0.15s, border-color 0.15s;
-  }
-
-  .hero-button:hover {
-    background: #2c82f2;
-    border-color: #2c82f2;
-    text-decoration: none;
-  }
-
-  .hero-link {
-    font-weight: 600;
-    font-size: 1rem;
-    color: #ffffff;
-  }
-
-  .hero-link:hover {
-    color: var(--brand-light);
-    text-decoration: none;
-  }
-
-  .rows {
-    max-width: var(--site-width);
-    margin: 0 auto;
-    padding: 0 var(--space);
-  }
-
-  .row {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    gap: clamp(2.5rem, 6vw, 5rem);
-    align-items: center;
-    padding: var(--section-pad) 0;
-  }
-
-  .row + .row {
-    border-top: 1px solid var(--border);
-  }
-
-  .row.flip .row-copy {
-    order: 2;
-  }
-
-  .row.flip .row-visual {
-    order: 1;
-  }
-
-  h2 {
-    font-size: var(--text-h2);
-    line-height: 1.12;
-    margin: 0 0 1.5rem;
-  }
-
-  .points {
-    display: flex;
-    flex-direction: column;
-    gap: 1.3rem;
-    margin: 0.5rem 0 2rem;
-  }
-
-  .point h3 {
-    font-size: 1.05rem;
-    font-weight: 700;
-    margin: 0 0 0.25rem;
-  }
-
-  .point p {
-    font-size: 0.95rem;
-    color: var(--muted);
-    margin: 0;
-    line-height: 1.6;
-  }
-
-  .row-lead {
-    font-size: 1rem;
-    color: var(--muted);
-    line-height: 1.7;
-    margin: 0 0 2rem;
-  }
-
-  .row-more {
-    font-weight: 650;
-    font-size: 1rem;
-  }
-
   .panel {
     border-radius: var(--radius-lg);
   }
@@ -760,55 +590,9 @@ const pipeline = [
     margin-top: 2rem;
   }
 
-  .cta {
-    position: relative;
-    background:
-      radial-gradient(50rem 26rem at 50% -20%, rgba(20, 114, 235, 0.3), transparent 60%),
-      var(--navy-900);
-    color: #eef4fd;
-    overflow: hidden;
-  }
-
-  .cta-inner {
-    position: relative;
-    z-index: 1;
-    max-width: 48rem;
-    margin: 0 auto;
-    padding: clamp(4rem, 8vw, 5.5rem) var(--space);
-    text-align: center;
-  }
-
-  .cta h2 {
-    color: #ffffff;
-    margin-bottom: 1rem;
-  }
-
-  .cta p {
-    font-size: 1.05rem;
-    color: rgba(222, 233, 248, 0.8);
-    margin: 0 auto 2.25rem;
-  }
-
   @media (max-width: 960px) {
-    .row {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 2.5rem;
-    }
-
-    .row.flip .row-copy {
-      order: 1;
-    }
-
-    .row.flip .row-visual {
-      order: 2;
-    }
-
     .dnode-name {
       white-space: normal;
-    }
-
-    .row-visual {
-      max-width: 32rem;
     }
 
     .channels {

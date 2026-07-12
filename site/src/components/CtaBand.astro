@@ -1,0 +1,76 @@
+---
+import HeroShapes from './HeroShapes.astro';
+
+interface CtaLink {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
+interface Props {
+  title: string;
+  body: string;
+  primary: CtaLink;
+  secondary: CtaLink;
+}
+
+const { title, body, primary, secondary } = Astro.props;
+---
+
+<section class="cta-band">
+  <HeroShapes />
+  <div class="inner">
+    <h2>{title}</h2>
+    <p>{body}</p>
+    <div class="hero-actions">
+      <a
+        class="hero-button"
+        href={primary.href}
+        target={primary.external ? '_blank' : undefined}
+        rel={primary.external ? 'noopener' : undefined}
+      >
+        {primary.label}
+      </a>
+      <a
+        class="hero-link"
+        href={secondary.href}
+        target={secondary.external ? '_blank' : undefined}
+        rel={secondary.external ? 'noopener' : undefined}
+      >
+        {secondary.label} &rarr;
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    position: relative;
+    background:
+      radial-gradient(50rem 26rem at 50% -20%, rgba(20, 114, 235, 0.3), transparent 60%),
+      var(--navy-900);
+    color: #eef4fd;
+    overflow: hidden;
+  }
+
+  .inner {
+    position: relative;
+    z-index: 1;
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: clamp(4rem, 8vw, 6rem) var(--space);
+    text-align: center;
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    margin: 0 0 1rem;
+    color: #ffffff;
+  }
+
+  p {
+    font-size: 1.05rem;
+    color: rgba(222, 233, 248, 0.8);
+    margin: 0 auto 2.25rem;
+  }
+</style>

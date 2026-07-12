@@ -566,6 +566,36 @@ const activeMenu = productPages.has(path) ? 'Product' : path === '/' ? undefined
       width: auto;
       margin: 0.75rem 0.5rem 0.5rem;
     }
+
+    /* No-JS fallback: the hamburger cannot work, so render the nav in flow,
+       fully expanded, and let the page scroll past it */
+    :global(html:not(.js)) header {
+      position: static;
+    }
+
+    :global(html:not(.js)) .menu-toggle {
+      display: none;
+    }
+
+    :global(html:not(.js)) .inner {
+      flex-wrap: wrap;
+      height: auto;
+      min-height: var(--header-height);
+    }
+
+    :global(html:not(.js)) nav {
+      display: flex;
+      position: static;
+      order: 3;
+      width: 100%;
+      max-height: none;
+      box-shadow: none;
+      border-bottom: 0;
+    }
+
+    :global(html:not(.js)) .dropdown {
+      display: block;
+    }
   }
 </style>
 
@@ -578,18 +608,36 @@ const activeMenu = productPages.has(path) ? 'Product' : path === '/' ? undefined
   });
 
   /* Click-toggled dropdowns (touch devices and mobile accordion).
-     Desktop hover/focus is handled in CSS. */
+     Desktop hover/focus is handled in CSS, so aria-expanded must also track
+     the CSS-driven reveal or assistive tech reads a closed state on an
+     open panel. */
+  const desktop = window.matchMedia('(min-width: 961px)');
   for (const menu of document.querySelectorAll<HTMLElement>('.menu')) {
     const trigger = menu.querySelector<HTMLButtonElement>('.menu-trigger')!;
+    const sync = (open: boolean) => trigger.setAttribute('aria-expanded', String(open));
     trigger.addEventListener('click', () => {
       const open = menu.classList.toggle('open');
-      trigger.setAttribute('aria-expanded', String(open));
+      sync(open);
       for (const other of document.querySelectorAll<HTMLElement>('.menu.open')) {
         if (other !== menu) {
           other.classList.remove('open');
           other.querySelector('.menu-trigger')?.setAttribute('aria-expanded', 'false');
         }
       }
+    });
+    menu.addEventListener('pointerenter', () => {
+      if (desktop.matches) sync(true);
+    });
+    menu.addEventListener('pointerleave', () => {
+      if (desktop.matches && !menu.classList.contains('open')) sync(false);
+    });
+    menu.addEventListener('focusin', () => {
+      if (desktop.matches) sync(true);
+    });
+    menu.addEventListener('focusout', (e) => {
+      const next = e.relatedTarget;
+      const stillInside = next instanceof Node && menu.contains(next);
+      if (desktop.matches && !stillInside && !menu.classList.contains('open')) sync(false);
     });
   }
 

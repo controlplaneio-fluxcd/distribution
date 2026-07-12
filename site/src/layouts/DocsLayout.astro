@@ -220,6 +220,15 @@ const path = Astro.url.pathname;
     .sidebar.open {
       display: block;
     }
+
+    /* No-JS fallback: the toggle cannot work, so keep the sidebar visible */
+    :global(html:not(.js)) .sidebar-toggle {
+      display: none;
+    }
+
+    :global(html:not(.js)) .sidebar {
+      display: block;
+    }
   }
 </style>
 
