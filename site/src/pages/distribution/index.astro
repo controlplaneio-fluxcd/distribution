@@ -42,12 +42,6 @@ const pipeline = [
   { step: 'publish', desc: 'Private registries available to subscribed customers' },
 ];
 
-const nextSteps = [
-  { title: 'Overview', body: 'Learn what ships in the enterprise distribution and how the pieces fit together.', href: '/distribution/overview/' },
-  { title: 'Installation', body: 'Deploy the enterprise distribution with the Flux Operator or bootstrap with the Flux CLI.', href: '/distribution/install/' },
-  { title: 'Upgrade', body: 'Keep the Flux controllers up to date with automated upgrade workflows.', href: '/distribution/upgrade/' },
-  { title: 'Security', body: 'Learn about the SLSA Build Level 3 supply chain and signed artifacts.', href: '/distribution/security/' },
-];
 ---
 
 <BaseLayout
@@ -293,20 +287,6 @@ const nextSteps = [
       </div>
     </section>
 
-    <section class="steps-section" aria-label="Next steps">
-      <p class="eyebrow">next steps</p>
-      <div class="steps">
-        {
-          nextSteps.map(({ title, body, href }) => (
-            <a class="step" href={href}>
-              <h3>{title}</h3>
-              <p>{body}</p>
-              <span class="more">Read more &rarr;</span>
-            </a>
-          ))
-        }
-      </div>
-    </section>
   </div>
 
   <section class="cta">
@@ -430,9 +410,7 @@ const nextSteps = [
     padding: var(--section-pad) 0;
   }
 
-  .row + .row,
-  .row + .steps-section,
-  .steps-section {
+  .row + .row {
     border-top: 1px solid var(--border);
   }
 
@@ -785,54 +763,6 @@ const nextSteps = [
   .channels-more {
     display: inline-block;
     margin-top: 2rem;
-  }
-
-  /* ---------- Next steps ---------- */
-  .steps-section {
-    padding: var(--section-pad) 0;
-  }
-
-  .steps-section h2 {
-    margin-bottom: 2rem;
-  }
-
-  .steps {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-    gap: 1.1rem;
-  }
-
-  .step {
-    display: block;
-    padding: 1.4rem 1.3rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    background: var(--bg-soft);
-    color: var(--fg);
-    transition: border-color 0.15s, box-shadow 0.15s;
-  }
-
-  .step:hover {
-    text-decoration: none;
-    border-color: var(--brand-light);
-    box-shadow: var(--shadow);
-  }
-
-  .step h3 {
-    margin: 0 0 0.4rem;
-    font-size: 1.05rem;
-  }
-
-  .step p {
-    font-size: 0.88rem;
-    color: var(--muted);
-    margin: 0 0 0.75rem;
-  }
-
-  .more {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--accent);
   }
 
   /* ---------- CTA ---------- */

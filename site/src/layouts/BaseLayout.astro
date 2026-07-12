@@ -14,7 +14,7 @@ interface Props {
 
 const { title, description, forcedTheme } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const ogImage = new URL('/images/logo-card.png', Astro.site);
+const ogImage = new URL('/images/og/og-cpef.png', Astro.site);
 ---
 
 <!doctype html>
@@ -31,6 +31,9 @@ const ogImage = new URL('/images/logo-card.png', Astro.site);
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@controlplaneio" />
