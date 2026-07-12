@@ -32,6 +32,11 @@
   :global([data-theme='dark']) .icon-moon {
     display: none;
   }
+
+  /* Marketing pages are light-only — no toggle there */
+  :global([data-forced-theme]) button {
+    display: none;
+  }
 </style>
 
 <script>

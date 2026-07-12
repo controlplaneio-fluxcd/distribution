@@ -1,101 +1,167 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroShapes from '../components/HeroShapes.astro';
 import { contactUrl } from '../lib/nav';
 
 const trust = [
-  { value: 'SLSA Level 3', label: 'Supply chain security' },
-  { value: 'FIPS 140-3', label: 'Compliant crypto builds' },
-  { value: 'Zero CVEs', label: 'Continuous patching with SLAs' },
-  { value: 'CNCF maintainers', label: 'Built by Flux core maintainers' },
+  '100% upstream compatible',
+  'Maintained by Flux core maintainers',
+  'SLSA Build Level 3',
+  'FIPS 140-3',
 ];
 
-const features = [
+const rows = [
   {
-    title: 'Hardened images',
-    body: 'Distroless container images for the Flux controllers with no shell or package manager, in-sync with upstream CNCF Flux releases.',
-    icon: 'M4 7l8-4 8 4-8 4-8-4zm0 5l8 4 8-4M4 17l8 4 8-4',
+    eyebrow: 'security & compliance',
+    title: 'Meet regulatory requirements without forking your GitOps stack',
+    points: [
+      {
+        title: 'Zero CVEs with remediation SLAs',
+        body: 'Continuous scanning and patching for controllers, base images, and Go dependencies.',
+      },
+      {
+        title: 'FIPS 140-3 compliant builds',
+        body: 'Go crypto FIPS mode with TLS and SSH restricted to approved settings.',
+      },
+      {
+        title: 'SLSA Build Level 3 supply chain',
+        body: 'Cryptographically signed images with SBOMs and VEX documents for every release.',
+      },
+    ],
+    link: { title: 'Explore the security architecture', href: '/distribution/security/' },
+    visual: 'compliance',
   },
   {
-    title: 'Zero CVEs',
-    body: 'Continuous vulnerability scanning and CVE patching for the Flux controllers, with SLAs for critical remediation.',
-    icon: 'M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3zm-3 9l2.2 2.2L15.5 9.9',
+    eyebrow: 'enterprise distribution',
+    title: 'Hardened Flux controllers, managed end-to-end',
+    points: [
+      {
+        title: 'Distroless hardened images',
+        body: 'No shell, no package manager — entire classes of CVEs eliminated by design.',
+      },
+      {
+        title: 'Extended Kubernetes compatibility',
+        body: 'Tested against six minor Kubernetes releases, OpenShift, and EKS, AKS, GKE LTS versions.',
+      },
+      {
+        title: 'Automated lifecycle with Flux Operator',
+        body: 'Declarative install, upgrades, hotfixes, and CVE patches rolled out automatically.',
+      },
+    ],
+    link: { title: 'Explore the distribution', href: '/distribution/' },
+    visual: 'yaml',
   },
   {
-    title: 'FIPS compliance',
-    body: 'FIPS-compliant Flux builds based on Go crypto FIPS 140-3 mode, with TLS and SSH restricted to approved settings.',
-    icon: 'M7 11V7a5 5 0 0110 0v4m-12 0h14v10H5V11zm7 4v3',
-  },
-  {
-    title: '24/7 support',
-    body: 'Best-in-class expertise to securely design, deploy, and operate your Flux CD instances at scale, around the clock.',
-    icon: 'M12 3a8 8 0 018 8v5a3 3 0 01-3 3h-1v-7h4M4 19v-8a8 8 0 018-8m-8 9H3m1 0h3v7H6a3 3 0 01-2-1',
-  },
-  {
-    title: 'Kubernetes compatibility',
-    body: 'Assured compatibility for OpenShift and Kubernetes LTS versions provided by AWS EKS, Azure AKS, and Google GKE.',
-    icon: 'M12 8a4 4 0 100 8 4 4 0 000-8zm0-6v4m0 12v4M2 12h4m12 0h4M5 5l2.8 2.8m8.4 8.4L19 19M19 5l-2.8 2.8M7.8 16.2L5 19',
-  },
-  {
-    title: 'Supply chain security',
-    body: 'SLSA Build Level 3 pipeline shipping cryptographically signed images, SBOMs, and VEX documents.',
-    icon: 'M12 3l2 2h5v5l2 2-2 2v5h-5l-2 2-2-2H5v-5l-2-2 2-2V5h5l2-2zm-3 9l2.2 2.2L15.5 9.9',
-  },
-  {
-    title: 'Self-service capabilities',
-    body: 'Preview environments and self-service workflows for GitHub, GitLab, and Azure DevOps pull request testing.',
-    icon: 'M4 5h16v4H4V5zm0 10h16v4H4v-4zm3-8v0m0 10v0m5-10h5m-5 10h5',
-  },
-  {
-    title: 'AI-assisted GitOps',
-    body: 'The Flux MCP Server connects AI assistants to your clusters for natural-language troubleshooting and incident response.',
-    icon: 'M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2zm7 11l.8 2.2L22 16l-2.2.8L19 19l-.8-2.2L16 16l2.2-.8L19 13zM6 15l1 2.5L9.5 18 7 19l-1 2.5L5 19l-2.5-1L5 17.5 6 15z',
+    eyebrow: 'enterprise addons',
+    title: 'Operate GitOps at scale, from dashboard to AI assistant',
+    points: [
+      {
+        title: 'Flux Web UI',
+        body: 'Real-time visibility into GitOps pipelines across all your clusters, with SSO built in.',
+      },
+      {
+        title: 'Flux MCP Server',
+        body: 'Read-only AI-assisted troubleshooting for incident response — no cluster mutations, ever.',
+      },
+      {
+        title: 'Dex identity provider',
+        body: 'OIDC single sign-on connected to your existing IdP, hardened and FIPS-compliant.',
+      },
+    ],
+    link: { title: 'Explore the addons', href: '/addons/' },
+    visual: 'addons',
   },
 ];
 
-const addons = [
-  {
-    title: 'Flux Web UI',
-    body: 'A dashboard for monitoring GitOps pipelines across clusters, with single sign-on and multi-tenancy built in.',
-    href: '/addons/',
-  },
-  {
-    title: 'Flux MCP Server',
-    body: 'A read-only, hardened MCP server that lets AI assistants inspect Flux-managed clusters safely.',
-    href: '/addons/',
-  },
-  {
-    title: 'Dex IdP',
-    body: 'A hardened Dex distribution providing OIDC-based single sign-on for the Flux Web UI and MCP Server.',
-    href: '/addons/',
-  },
+const outcomes = [
+  { value: '0', label: 'Known CVEs in shipped images' },
+  { value: '6', label: 'Kubernetes minor releases tested' },
+  { value: 'L3', label: 'SLSA Build Level supply chain' },
+  { value: '24/7', label: 'Support from Flux maintainers' },
+];
+
+const compliance = [
+  { title: 'SLSA Build Level 3', body: 'Verified provenance for every artifact' },
+  { title: 'FIPS 140-3', body: 'Approved cryptography end to end' },
+  { title: 'Zero known CVEs', body: 'Patched ahead of upstream releases' },
+  { title: 'Signed images + SBOMs', body: 'Cosign signatures and VEX documents' },
 ];
 ---
 
 <BaseLayout
   title="ControlPlane Enterprise for Flux CD"
   description="ControlPlane offers a hardened, enterprise-grade distribution and support services for the CNCF-graduated Flux project."
+  forcedTheme="light"
 >
   <section class="hero">
+    <HeroShapes />
     <div class="hero-inner">
-      <div class="hero-copy">
-        <p class="hero-eyebrow">Enterprise-grade GitOps</p>
-        <h1>The hardened distribution of Flux&nbsp;CD</h1>
-        <p class="hero-lead">
-          Zero-CVE, FIPS-compliant Flux controllers with guaranteed remediation SLAs and 24/7
-          support — built and maintained by the security experts and core maintainers behind
-          the CNCF-graduated Flux project.
-        </p>
-        <div class="hero-actions">
-          <a class="hero-button primary" href={contactUrl} target="_blank" rel="noopener">Request a demo</a>
-          <a class="hero-button" href="/distribution/">Explore the distribution</a>
-        </div>
+      <a class="pill" href="/releases/release-v2.9/">
+        Flux Distribution v2.9 is out
+        <span class="pill-more">Release notes &rarr;</span>
+      </a>
+      <h1>The hardened distribution<br />of Flux&nbsp;CD</h1>
+      <p class="hero-sub">Zero-CVE, FIPS-compliant GitOps for regulated environments.</p>
+      <div class="hero-actions">
+        <a class="hero-button" href={contactUrl} target="_blank" rel="noopener">Request a demo</a>
+        <a class="hero-link" href="/distribution/overview/">Read the docs &rarr;</a>
       </div>
-      <div class="hero-panel" aria-hidden="true">
-        <div class="panel-bar">
-          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-          <span class="panel-file">flux-instance.yaml</span>
-        </div>
-        <pre class="panel-code"><code><span class="yk">apiVersion</span>: fluxcd.controlplane.io/v1
+    </div>
+  </section>
+
+  <section class="trust" aria-label="Project pedigree">
+    <div class="trust-inner">
+      <p class="trust-eyebrow">Built on the CNCF-graduated Flux project</p>
+      <ul>
+        {trust.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <div class="rows">
+    {
+      rows.map(({ eyebrow, title, points, link, visual }) => (
+        <section class="row">
+          <div class="row-copy">
+            <p class="eyebrow">{eyebrow}</p>
+            <h2>{title}</h2>
+            <div class="points">
+              {points.map((point) => (
+                <div class="point">
+                  <h3>{point.title}</h3>
+                  <p>{point.body}</p>
+                </div>
+              ))}
+            </div>
+            <a class="row-more" href={link.href}>
+              {link.title} &rarr;
+            </a>
+          </div>
+          <div class="row-visual">
+            {visual === 'compliance' && (
+              <div class="panel compliance">
+                {compliance.map((row) => (
+                  <div class="comp-row">
+                    <svg class="check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                    <div>
+                      <p class="comp-title">{row.title}</p>
+                      <p class="comp-body">{row.body}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {visual === 'yaml' && (
+              <div class="panel yaml" aria-hidden="true">
+                <div class="panel-bar">
+                  <span class="dot" />
+                  <span class="dot" />
+                  <span class="dot" />
+                  <span class="panel-file">flux-instance.yaml</span>
+                </div>
+                <pre class="panel-code"><code><span class="yk">apiVersion</span>: fluxcd.controlplane.io/v1
 <span class="yk">kind</span>: FluxInstance
 <span class="yk">metadata</span>:
   <span class="yk">name</span>: flux
@@ -107,97 +173,66 @@ const addons = [
     <span class="yk">variant</span>: <span class="ys">distroless-fips</span>
   <span class="yk">cluster</span>:
     <span class="yk">multitenant</span>: <span class="yb">true</span></code></pre>
-        <div class="panel-status">
-          <span class="status-dot"></span>
-          Reconciled — enterprise distribution up to date
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="trust" aria-label="Compliance and assurance">
-    <div class="trust-inner">
-      {
-        trust.map(({ value, label }) => (
-          <div class="fact">
-            <p class="fact-value">{value}</p>
-            <p class="fact-label">{label}</p>
+                <div class="panel-status">
+                  <span class="status-dot" />
+                  Reconciled — enterprise distribution up to date
+                </div>
+              </div>
+            )}
+            {visual === 'addons' && (
+              <div class="panel addons" aria-hidden="true">
+                <div class="addon-node hub">
+                  <img src="/images/logo/enterprise-for-flux-cd-icon-colour.svg" alt="" width="28" height="28" />
+                  Flux Enterprise
+                </div>
+                <div class="addon-branches">
+                  <div class="addon-node">Flux Web UI</div>
+                  <div class="addon-node">MCP Server</div>
+                  <div class="addon-node">Dex IdP</div>
+                </div>
+              </div>
+            )}
           </div>
-        ))
-      }
-    </div>
-  </section>
+        </section>
+      ))
+    }
+  </div>
 
-  <section class="features" aria-labelledby="features-title">
-    <div class="section-head">
-      <p class="eyebrow">product: distribution</p>
-      <h2 id="features-title">Everything upstream Flux has, hardened for the enterprise</h2>
-      <p class="section-lead">
-        The ControlPlane distribution keeps full compatibility with CNCF Flux while adding the
-        security assurance, compliance, and support that regulated environments require.
-      </p>
-    </div>
-    <div class="grid">
+  <section class="outcomes" aria-label="Assurance in numbers">
+    <div class="outcomes-inner">
       {
-        features.map(({ title, body, icon }) => (
-          <div class="card">
-            <div class="icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d={icon} />
-              </svg>
-            </div>
-            <h3>{title}</h3>
-            <p>{body}</p>
+        outcomes.map(({ value, label }) => (
+          <div class="outcome">
+            <p class="outcome-value">{value}</p>
+            <p class="outcome-label">{label}</p>
           </div>
-        ))
-      }
-    </div>
-  </section>
-
-  <section class="addons" aria-labelledby="addons-title">
-    <div class="section-head">
-      <p class="eyebrow">product: addons</p>
-      <h2 id="addons-title">Enterprise addons that extend Flux</h2>
-      <p class="section-lead">
-        Operate GitOps at scale with a web dashboard, AI-assisted troubleshooting, and single
-        sign-on — all covered by the same CVE remediation SLAs as the distribution.
-      </p>
-    </div>
-    <div class="addon-grid">
-      {
-        addons.map(({ title, body, href }) => (
-          <a class="addon" href={href}>
-            <h3>{title}</h3>
-            <p>{body}</p>
-            <span class="more">Learn more &rarr;</span>
-          </a>
         ))
       }
     </div>
   </section>
 
   <section class="cta">
+    <HeroShapes />
     <div class="cta-inner">
-      <p class="cta-eyebrow">Get started</p>
       <h2>Run Flux in production with confidence</h2>
       <p>
         Get enterprise-hardened Flux controllers, guaranteed SLAs for CVE remediation, and direct
         access to Flux core maintainers.
       </p>
       <div class="cta-actions">
-        <a class="cta-button primary" href={contactUrl} target="_blank" rel="noopener">Contact us</a>
-        <a class="cta-button" href="/distribution/install/">Installation guide</a>
+        <a class="hero-button" href={contactUrl} target="_blank" rel="noopener">Contact us</a>
+        <a class="hero-link" href="/distribution/install/">Installation guide &rarr;</a>
       </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  /* ---------- Hero: navy in both themes ---------- */
+  /* ---------- Hero: navy, centered, Isovalent-scaled ---------- */
   .hero {
+    position: relative;
     background:
-      radial-gradient(56rem 30rem at 78% -10%, rgba(20, 114, 235, 0.28), transparent 60%),
-      radial-gradient(40rem 24rem at 8% 110%, rgba(20, 114, 235, 0.14), transparent 60%),
+      radial-gradient(60rem 32rem at 50% -12%, rgba(20, 114, 235, 0.35), transparent 62%),
       var(--navy-900);
     border-bottom: 1px solid var(--navy-line);
     color: #eef4fd;
@@ -205,85 +240,234 @@ const addons = [
   }
 
   .hero-inner {
-    max-width: var(--site-width);
+    position: relative;
+    z-index: 1;
+    max-width: 56rem;
     margin: 0 auto;
-    padding: 5.5rem var(--space) 5rem;
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    gap: 4rem;
-    align-items: center;
-    background-image:
-      linear-gradient(rgba(114, 174, 250, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(114, 174, 250, 0.05) 1px, transparent 1px);
-    background-size: 36px 36px;
+    padding: clamp(5rem, 10vw, 8rem) var(--space) clamp(5rem, 10vw, 7.5rem);
+    text-align: center;
   }
 
-  .hero-eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.88rem;
     font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
+    color: #dbe7fa;
+    background: rgba(14, 28, 54, 0.7);
+    border: 1px solid var(--navy-line);
+    border-radius: 99px;
+    padding: 0.45rem 1.1rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .pill:hover {
+    text-decoration: none;
+    border-color: rgba(114, 174, 250, 0.5);
+  }
+
+  .pill-more {
     color: var(--brand-light);
-    margin: 0 0 1rem;
+    font-weight: 600;
   }
 
   h1 {
-    font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+    font-size: var(--text-display);
     font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.08;
-    margin: 0 0 1.25rem;
+    letter-spacing: -0.032em;
+    line-height: 1.04;
+    margin: 0 0 1.5rem;
     color: #ffffff;
   }
 
-  .hero-lead {
-    font-size: 1.08rem;
-    line-height: 1.7;
-    margin: 0 0 2rem;
+  .hero-sub {
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
     color: rgba(222, 233, 248, 0.85);
-    max-width: 34rem;
+    margin: 0 0 2.5rem;
   }
 
-  .hero-actions {
+  .hero-actions,
+  .cta-actions {
     display: flex;
-    gap: 0.75rem;
+    align-items: center;
+    justify-content: center;
+    gap: 1.75rem;
     flex-wrap: wrap;
   }
 
   .hero-button {
     display: inline-block;
     font-weight: 600;
-    font-size: 0.95rem;
-    padding: 0.65rem 1.5rem;
+    font-size: 1rem;
+    padding: 0.8rem 1.9rem;
     border-radius: var(--radius-sm);
-    border: 1px solid rgba(190, 211, 252, 0.35);
+    background: var(--brand);
+    border: 1px solid var(--brand);
     color: #ffffff;
     transition: background 0.15s, border-color 0.15s;
   }
 
   .hero-button:hover {
-    background: rgba(114, 174, 250, 0.12);
-    border-color: rgba(190, 211, 252, 0.6);
+    background: #2c82f2;
+    border-color: #2c82f2;
     text-decoration: none;
   }
 
-  .hero-button.primary {
-    background: var(--brand);
-    border-color: var(--brand);
+  .hero-link {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #ffffff;
   }
 
-  .hero-button.primary:hover {
-    background: #2c82f2;
-    border-color: #2c82f2;
+  .hero-link:hover {
+    color: var(--brand-light);
+    text-decoration: none;
   }
 
-  /* The signature: a live FluxInstance resource, reconciled */
-  .hero-panel {
-    background: color-mix(in srgb, var(--navy-950) 82%, transparent);
+  /* ---------- Trust bar ---------- */
+  .trust {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-soft);
+  }
+
+  .trust-inner {
+    max-width: var(--site-width);
+    margin: 0 auto;
+    padding: 2rem var(--space);
+    text-align: center;
+  }
+
+  .trust-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    margin: 0 0 1rem;
+  }
+
+  .trust ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem 3rem;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+  }
+
+  .trust li {
+    font-size: 1.02rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+    opacity: 0.75;
+  }
+
+  /* ---------- Editorial rows ---------- */
+  .rows {
+    max-width: var(--site-width);
+    margin: 0 auto;
+    padding: 0 var(--space);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(2.5rem, 6vw, 5.5rem);
+    align-items: center;
+    padding: var(--section-pad) 0;
+  }
+
+  .row + .row {
+    border-top: 1px solid var(--border);
+  }
+
+  .row:nth-child(even) .row-copy {
+    order: 2;
+  }
+
+  .row:nth-child(even) .row-visual {
+    order: 1;
+  }
+
+  .row h2 {
+    font-size: var(--text-h2);
+    line-height: 1.12;
+    margin: 0 0 2rem;
+  }
+
+  .points {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    margin-bottom: 2rem;
+  }
+
+  .point h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem;
+  }
+
+  .point p {
+    font-size: 0.98rem;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .row-more {
+    font-weight: 650;
+    font-size: 1rem;
+  }
+
+  /* ---------- Row visuals ---------- */
+  .panel {
+    border-radius: var(--radius-lg);
+  }
+
+  .panel.compliance {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    padding: 2.25rem 2rem;
+    box-shadow: var(--shadow);
+  }
+
+  .comp-row {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .check {
+    flex-shrink: 0;
+    color: var(--ok);
+    margin-top: 0.2rem;
+  }
+
+  .comp-title {
+    font-weight: 700;
+    font-size: 1.02rem;
+    margin: 0;
+  }
+
+  .comp-body {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 0.15rem 0 0;
+  }
+
+  .panel.yaml {
+    background: var(--navy-950);
     border: 1px solid var(--navy-line);
-    border-radius: var(--radius-md);
-    box-shadow: 0 24px 60px rgba(3, 8, 18, 0.5);
+    box-shadow: 0 24px 60px rgba(6, 14, 30, 0.35);
     overflow: hidden;
   }
 
@@ -311,11 +495,11 @@ const addons = [
 
   .panel-code {
     margin: 0;
-    padding: 1.1rem 1.25rem;
+    padding: 1.1rem 1.4rem;
     border: 0;
     border-radius: 0;
     background: none;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     line-height: 1.7;
     color: #d7e3f7;
   }
@@ -328,7 +512,7 @@ const addons = [
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.6rem 1.25rem;
+    padding: 0.6rem 1.4rem;
     border-top: 1px solid var(--navy-line);
     font-family: var(--font-mono);
     font-size: 0.72rem;
@@ -343,255 +527,152 @@ const addons = [
     box-shadow: 0 0 8px rgba(52, 211, 153, 0.7);
   }
 
-  /* ---------- Trust strip ---------- */
-  .trust {
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-soft);
-  }
-
-  .trust-inner {
-    max-width: var(--site-width);
-    margin: 0 auto;
-    padding: 1.75rem var(--space);
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
-  }
-
-  .fact {
-    padding-left: 1rem;
-    border-left: 2px solid var(--accent);
-  }
-
-  .fact-value {
-    font-weight: 700;
-    font-size: 1.02rem;
-    letter-spacing: -0.01em;
-    margin: 0;
-  }
-
-  .fact-label {
-    font-size: 0.82rem;
-    color: var(--muted);
-    margin: 0.15rem 0 0;
-  }
-
-  /* ---------- Sections ---------- */
-  .features,
-  .addons {
-    max-width: var(--site-width);
-    margin: 0 auto;
-    padding: 4.5rem var(--space) 0;
-  }
-
-  .section-head {
-    max-width: 44rem;
-    margin-bottom: 2.5rem;
-  }
-
-  .section-head h2 {
-    font-size: clamp(1.6rem, 2.6vw, 2.1rem);
-    margin: 0 0 0.75rem;
-  }
-
-  .section-lead {
-    color: var(--muted);
-    font-size: 1rem;
-    margin: 0;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.1rem;
-  }
-
-  .card {
-    padding: 1.4rem 1.3rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    background: var(--bg-soft);
-    transition: border-color 0.15s, box-shadow 0.15s;
-  }
-
-  .card:hover {
-    border-color: var(--brand-light);
-    box-shadow: var(--shadow);
-  }
-
-  .icon {
-    width: 2.4rem;
-    height: 2.4rem;
+  .panel.addons {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    border-radius: var(--radius-sm);
-    background: color-mix(in srgb, var(--brand) 12%, transparent);
-    color: var(--accent);
-    margin-bottom: 0.9rem;
-  }
-
-  .card h3 {
-    font-size: 1rem;
-    margin: 0 0 0.4rem;
-  }
-
-  .card p {
-    font-size: 0.88rem;
-    color: var(--muted);
-    margin: 0;
-    line-height: 1.6;
-  }
-
-  .addon-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.1rem;
-  }
-
-  .addon {
-    display: block;
-    padding: 1.5rem 1.4rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
+    gap: 0;
     background: var(--bg-soft);
-    color: var(--fg);
-    transition: border-color 0.15s, box-shadow 0.15s;
-  }
-
-  .addon:hover {
-    text-decoration: none;
-    border-color: var(--brand-light);
+    border: 1px solid var(--border);
+    padding: 2.5rem 2rem;
     box-shadow: var(--shadow);
   }
 
-  .addon h3 {
+  .addon-node {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 650;
+    font-size: 0.95rem;
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    padding: 0.7rem 1.2rem;
+  }
+
+  .addon-node.hub {
     font-size: 1.05rem;
-    margin: 0 0 0.5rem;
+    border-color: var(--brand-light);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 10%, transparent);
   }
 
-  .addon p {
-    font-size: 0.9rem;
-    color: var(--muted);
-    margin: 0 0 1rem;
-    line-height: 1.6;
+  .addon-branches {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 2.25rem;
+    position: relative;
   }
 
-  .more {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--accent);
+  .addon-branches::before {
+    content: '';
+    position: absolute;
+    top: -2.25rem;
+    left: 50%;
+    width: 1px;
+    height: 2.25rem;
+    background: var(--border-strong);
   }
 
-  /* ---------- CTA band: navy in both themes ---------- */
-  .cta {
+  /* ---------- Outcomes ---------- */
+  .outcomes {
+    border-top: 1px solid var(--border);
+    background: var(--bg-soft);
+  }
+
+  .outcomes-inner {
     max-width: var(--site-width);
-    margin: 4.5rem auto 0;
-    padding: 0 var(--space);
+    margin: 0 auto;
+    padding: clamp(3rem, 6vw, 4.5rem) var(--space);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .outcome-value {
+    font-size: clamp(2.4rem, 4.5vw, 3.4rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--accent);
+    margin: 0;
+    line-height: 1;
+  }
+
+  .outcome-label {
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin: 0.6rem 0 0;
+  }
+
+  /* ---------- CTA band ---------- */
+  .cta {
+    position: relative;
+    background:
+      radial-gradient(50rem 26rem at 50% -20%, rgba(20, 114, 235, 0.3), transparent 60%),
+      var(--navy-900);
+    color: #eef4fd;
+    overflow: hidden;
   }
 
   .cta-inner {
-    border-radius: var(--radius-lg);
-    background:
-      radial-gradient(42rem 20rem at 85% -30%, rgba(20, 114, 235, 0.35), transparent 60%),
-      var(--navy-900);
-    border: 1px solid var(--navy-line);
-    padding: 3.5rem 2rem;
+    position: relative;
+    z-index: 1;
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: clamp(4rem, 8vw, 6rem) var(--space);
     text-align: center;
-    color: #eef4fd;
-  }
-
-  .cta-eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--brand-light);
-    margin: 0 0 0.75rem;
   }
 
   .cta h2 {
-    font-size: clamp(1.5rem, 2.6vw, 1.9rem);
-    margin: 0 0 0.75rem;
+    font-size: var(--text-h2);
+    margin: 0 0 1rem;
     color: #ffffff;
   }
 
   .cta p {
+    font-size: 1.05rem;
     color: rgba(222, 233, 248, 0.8);
-    max-width: 36rem;
-    margin: 0 auto 1.75rem;
-  }
-
-  .cta-actions {
-    display: flex;
-    justify-content: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-  }
-
-  .cta-button {
-    display: inline-block;
-    font-weight: 600;
-    font-size: 0.95rem;
-    padding: 0.65rem 1.5rem;
-    border-radius: var(--radius-sm);
-    border: 1px solid rgba(190, 211, 252, 0.35);
-    color: #ffffff;
-    transition: background 0.15s, border-color 0.15s;
-  }
-
-  .cta-button:hover {
-    background: rgba(114, 174, 250, 0.12);
-    border-color: rgba(190, 211, 252, 0.6);
-    text-decoration: none;
-  }
-
-  .cta-button.primary {
-    background: var(--brand);
-    border-color: var(--brand);
-  }
-
-  .cta-button.primary:hover {
-    background: #2c82f2;
-    border-color: #2c82f2;
+    margin: 0 auto 2.25rem;
   }
 
   /* ---------- Responsive ---------- */
-  @media (max-width: 1020px) {
-    .grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .trust-inner {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 860px) {
-    .hero-inner {
+  @media (max-width: 960px) {
+    .row {
       grid-template-columns: 1fr;
       gap: 2.5rem;
-      padding: 3.5rem var(--space) 3rem;
     }
 
-    .hero-panel {
-      max-width: 30rem;
+    .row:nth-child(even) .row-copy {
+      order: 1;
     }
 
-    .addon-grid {
-      grid-template-columns: 1fr;
+    .row:nth-child(even) .row-visual {
+      order: 2;
+    }
+
+    .row-visual {
+      max-width: 32rem;
+    }
+
+    .outcomes-inner {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 
   @media (max-width: 560px) {
-    .grid {
+    .outcomes-inner {
       grid-template-columns: 1fr;
+      gap: 2.5rem;
     }
 
-    .trust-inner {
-      grid-template-columns: 1fr;
-      gap: 1rem;
+    .trust ul {
+      gap: 0.75rem 1.75rem;
+    }
+
+    .trust li {
+      font-size: 0.92rem;
     }
   }
 </style>

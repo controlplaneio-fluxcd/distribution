@@ -1,0 +1,90 @@
+---
+/* Floating Flux-triangle motifs for navy hero surfaces — the brand-geometry
+   equivalent of Isovalent's hexagons. Parent must be position: relative;
+   hero content needs position: relative + z-index above. */
+---
+
+<div class="shapes" aria-hidden="true">
+  <svg class="shape s1" viewBox="0 0 100 88" fill="none">
+    <path d="M50 6 94 82H6L50 6Z" fill="currentColor" stroke="currentColor" stroke-width="10" stroke-linejoin="round" />
+  </svg>
+  <svg class="shape s2" viewBox="0 0 100 88" fill="none">
+    <path d="M50 6 94 82H6L50 6Z" fill="currentColor" stroke="currentColor" stroke-width="10" stroke-linejoin="round" />
+  </svg>
+  <svg class="shape s3" viewBox="0 0 100 88" fill="none">
+    <path d="M50 6 94 82H6L50 6Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round" />
+  </svg>
+  <svg class="shape s4" viewBox="0 0 100 88" fill="none">
+    <path d="M50 6 94 82H6L50 6Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" />
+  </svg>
+</div>
+
+<style>
+  .shapes {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .shape {
+    position: absolute;
+    color: #3b5ccc;
+  }
+
+  .s1 {
+    width: 22rem;
+    top: -6rem;
+    right: -4rem;
+    transform: rotate(22deg);
+    opacity: 0.32;
+  }
+
+  .s2 {
+    width: 13rem;
+    bottom: -4rem;
+    left: 4%;
+    transform: rotate(-14deg);
+    opacity: 0.22;
+  }
+
+  .s3 {
+    width: 9rem;
+    top: 18%;
+    left: 12%;
+    transform: rotate(38deg);
+    opacity: 0.35;
+  }
+
+  .s4 {
+    width: 6rem;
+    bottom: 22%;
+    right: 16%;
+    transform: rotate(-28deg);
+    opacity: 0.3;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .shape {
+      animation: shape-in 1.2s ease both;
+    }
+
+    @keyframes shape-in {
+      from {
+        opacity: 0;
+      }
+    }
+  }
+
+  @media (max-width: 860px) {
+    .s1 {
+      width: 14rem;
+      right: -5rem;
+    }
+
+    .s3,
+    .s4 {
+      display: none;
+    }
+  }
+</style>

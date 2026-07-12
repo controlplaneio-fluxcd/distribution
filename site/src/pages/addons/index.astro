@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import HeroShapes from '../../components/HeroShapes.astro';
 import { contactUrl } from '../../lib/nav';
 
 const addons = [
@@ -52,182 +53,227 @@ const addons = [
 <BaseLayout
   title="Enterprise Addons - ControlPlane Enterprise for Flux CD"
   description="Enterprise-grade Flux addons: Web UI dashboard, AI-assisted MCP Server, and Dex single sign-on"
+  forcedTheme="light"
 >
-  <section class="intro">
-    <div class="intro-inner">
-      <p class="eyebrow">product: enterprise-addons</p>
+  <section class="phero">
+    <HeroShapes />
+    <div class="phero-inner">
+      <img class="glyph" src="/images/logo/enterprise-for-flux-cd-icon-white.svg" alt="" width="56" height="56" />
+      <p class="phero-eyebrow">ControlPlane Enterprise</p>
       <h1>Enterprise Addons</h1>
       <p class="lead">
         Extend the Flux enterprise distribution with a web dashboard, AI-assisted troubleshooting,
-        and single sign-on. Every addon ships hardened images covered by ControlPlane's SLA for
-        CVE remediation and FIPS compliance.
+        and single sign-on — hardened and covered by the same SLAs.
       </p>
-      <div class="intro-actions">
-        <a class="button button-primary" href={contactUrl} target="_blank" rel="noopener">Request a demo</a>
-        <a class="button" href="/pricing/">See pricing</a>
+      <div class="phero-actions">
+        <a class="hero-button" href={contactUrl} target="_blank" rel="noopener">Request a demo</a>
+        <a class="hero-link" href="/pricing/">See pricing &rarr;</a>
       </div>
     </div>
   </section>
 
-  <div class="page">
+  <div class="rows">
     {
       addons.map(({ tag, title, lead, points, links, icon }) => (
-        <section class="addon" aria-label={title}>
-          <div class="addon-head">
-            <div class="icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d={icon} />
-              </svg>
-            </div>
-            <div>
-              <p class="addon-tag">{tag}</p>
-              <h2>{title}</h2>
+        <section class="row" aria-label={title}>
+          <div class="row-copy">
+            <p class="eyebrow">{tag}</p>
+            <h2>{title}</h2>
+            <p class="row-lead">{lead}</p>
+            <ul class="points">
+              {points.map((point) => (
+                <li>
+                  <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  {point}
+                </li>
+              ))}
+            </ul>
+            <p class="links">
+              {links.map(({ title: linkTitle, href, external }) => (
+                <a href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>
+                  {linkTitle} &rarr;
+                </a>
+              ))}
+            </p>
+          </div>
+          <div class="row-visual">
+            <div class="panel">
+              <div class="icon">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d={icon} />
+                </svg>
+              </div>
+              <p class="panel-tag">{tag}</p>
             </div>
           </div>
-          <p class="addon-lead">{lead}</p>
-          <ul class="points">
-            {points.map((point) => (
-              <li>
-                <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M20 6 9 17l-5-5" />
-                </svg>
-                {point}
-              </li>
-            ))}
-          </ul>
-          <p class="links">
-            {links.map(({ title: linkTitle, href, external }) => (
-              <a
-                href={href}
-                target={external ? '_blank' : undefined}
-                rel={external ? 'noopener' : undefined}
-              >
-                {linkTitle} &rarr;
-              </a>
-            ))}
-          </p>
         </section>
       ))
     }
-
-    <section class="note-section" aria-label="Support coverage">
-      <aside class="callout">
-        <div class="callout-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z" />
-          </svg>
-        </div>
-        <div>
-          <p class="callout-title">Covered by your subscription</p>
-          <p>
-            All addons are included in the <a href="/pricing/">subscription plans</a> and covered by
-            ControlPlane's SLA for CVE remediation, with hardened images published to private
-            registries available to customers.
-          </p>
-        </div>
-      </aside>
-    </section>
   </div>
+
+  <section class="cta">
+    <HeroShapes />
+    <div class="cta-inner">
+      <h2>Covered by your subscription</h2>
+      <p>
+        All addons are included in the subscription plans and covered by ControlPlane's SLA for CVE
+        remediation, with hardened images published to private registries available to customers.
+      </p>
+      <div class="cta-actions">
+        <a class="hero-button" href="/pricing/">See the plans</a>
+        <a class="hero-link" href={contactUrl} target="_blank" rel="noopener">Contact us &rarr;</a>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
-  .intro {
-    background: linear-gradient(180deg, color-mix(in srgb, var(--brand) 7%, var(--bg)) 0%, var(--bg) 100%);
-    border-bottom: 1px solid var(--border);
+  .phero {
+    position: relative;
+    background:
+      radial-gradient(56rem 30rem at 50% -12%, rgba(20, 114, 235, 0.32), transparent 62%),
+      var(--navy-900);
+    border-bottom: 1px solid var(--navy-line);
+    color: #eef4fd;
+    overflow: hidden;
   }
 
-  .intro-inner {
+  .phero-inner {
+    position: relative;
+    z-index: 1;
     max-width: 52rem;
     margin: 0 auto;
-    padding: 4rem var(--space) 3rem;
+    padding: clamp(4rem, 8vw, 6.5rem) var(--space);
+    text-align: center;
+  }
+
+  .glyph {
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: 1.25rem;
+    filter: drop-shadow(0 0 18px rgba(114, 174, 250, 0.45));
+  }
+
+  .phero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--brand-light);
+    margin: 0 0 1rem;
   }
 
   h1 {
-    font-size: clamp(2rem, 3.6vw, 2.6rem);
-    margin: 0 0 1rem;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.06;
+    margin: 0 0 1.25rem;
+    color: #ffffff;
   }
 
   .lead {
-    font-size: 1.12rem;
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
     line-height: 1.65;
-    color: var(--muted);
-    margin: 0 0 1.75rem;
-    max-width: 42rem;
+    color: rgba(222, 233, 248, 0.85);
+    margin: 0 auto 2.25rem;
+    max-width: 38rem;
   }
 
-  .intro-actions {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-  }
-
-  .page {
-    max-width: 52rem;
-    margin: 0 auto;
-    padding: 1rem var(--space) 2rem;
-  }
-
-  .addon {
-    margin-top: 3rem;
-    padding: 2rem 1.75rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    background: var(--bg-soft);
-  }
-
-  .addon-head {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  .icon,
-  .callout-icon {
-    flex-shrink: 0;
-    width: 3rem;
-    height: 3rem;
+  .phero-actions,
+  .cta-actions {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-sm);
-    background: color-mix(in srgb, var(--brand) 12%, transparent);
-    color: var(--accent);
+    gap: 1.75rem;
+    flex-wrap: wrap;
   }
 
-  .addon-tag {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-    color: var(--accent);
-    margin: 0 0 0.15rem;
+  .hero-button {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.75rem 1.8rem;
+    border-radius: var(--radius-sm);
+    background: var(--brand);
+    border: 1px solid var(--brand);
+    color: #ffffff;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .hero-button:hover {
+    background: #2c82f2;
+    border-color: #2c82f2;
+    text-decoration: none;
+  }
+
+  .hero-link {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #ffffff;
+  }
+
+  .hero-link:hover {
+    color: var(--brand-light);
+    text-decoration: none;
+  }
+
+  .rows {
+    max-width: var(--site-width);
+    margin: 0 auto;
+    padding: 0 var(--space);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: center;
+    padding: var(--section-pad) 0;
+  }
+
+  .row + .row {
+    border-top: 1px solid var(--border);
+  }
+
+  .row:nth-of-type(even) .row-copy {
+    order: 2;
+  }
+
+  .row:nth-of-type(even) .row-visual {
+    order: 1;
   }
 
   h2 {
-    font-size: 1.4rem;
-    margin: 0;
+    font-size: var(--text-h2);
+    line-height: 1.12;
+    margin: 0 0 1rem;
   }
 
-  .addon-lead {
-    font-size: 1rem;
-    margin: 0 0 1rem;
+  .row-lead {
+    font-size: 1.02rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 0 0 1.5rem;
   }
 
   .points {
     list-style: none;
-    margin: 0 0 1.25rem;
+    margin: 0 0 1.75rem;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.7rem;
   }
 
   .points li {
     display: flex;
     align-items: baseline;
-    gap: 0.6rem;
-    font-size: 0.93rem;
-    color: var(--muted);
+    gap: 0.7rem;
+    font-size: 0.98rem;
   }
 
   .check {
@@ -238,43 +284,97 @@ const addons = [
 
   .links {
     display: flex;
-    gap: 1.5rem;
+    gap: 1.75rem;
     flex-wrap: wrap;
     margin: 0;
   }
 
   .links a {
-    font-size: 0.9rem;
-    font-weight: 600;
-  }
-
-  .note-section {
-    margin-top: 3rem;
-  }
-
-  .callout {
-    display: flex;
-    gap: 1rem;
-    padding: 1.25rem;
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    border-radius: var(--radius-md);
-    background: var(--bg-soft);
-  }
-
-  .callout-icon {
-    width: 2.6rem;
-    height: 2.6rem;
-  }
-
-  .callout-title {
+    font-size: 0.98rem;
     font-weight: 650;
-    margin: 0.1rem 0 0.4rem;
+  }
+
+  .panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(24rem 16rem at 50% 0%, color-mix(in srgb, var(--brand) 9%, transparent), transparent 70%),
+      var(--bg-soft);
+    box-shadow: var(--shadow);
+  }
+
+  .icon {
+    width: 5.5rem;
+    height: 5.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    background: var(--bg);
+    border: 1px solid var(--brand-light);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--brand) 8%, transparent);
     color: var(--accent);
   }
 
-  .callout p {
-    font-size: 0.95rem;
+  .panel-tag {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    color: var(--accent);
     margin: 0;
+  }
+
+  .cta {
+    position: relative;
+    background:
+      radial-gradient(50rem 26rem at 50% -20%, rgba(20, 114, 235, 0.3), transparent 60%),
+      var(--navy-900);
+    color: #eef4fd;
+    overflow: hidden;
+  }
+
+  .cta-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: clamp(4rem, 8vw, 5.5rem) var(--space);
+    text-align: center;
+  }
+
+  .cta h2 {
+    color: #ffffff;
+    margin-bottom: 1rem;
+  }
+
+  .cta p {
+    font-size: 1.02rem;
+    color: rgba(222, 233, 248, 0.8);
+    margin: 0 auto 2.25rem;
+  }
+
+  @media (max-width: 960px) {
+    .row {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    .row:nth-of-type(even) .row-copy {
+      order: 1;
+    }
+
+    .row:nth-of-type(even) .row-visual {
+      order: 2;
+    }
+
+    .row-visual {
+      max-width: 26rem;
+    }
   }
 </style>

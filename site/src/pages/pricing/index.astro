@@ -38,6 +38,7 @@ const services = [
 <BaseLayout
   title="Pricing - ControlPlane Enterprise for Flux CD"
   description="FluxCD Enterprise pricing and support services"
+  forcedTheme="light"
 >
   <section class="intro">
     <div class="intro-inner">
@@ -160,7 +161,7 @@ const services = [
   .intro-inner {
     max-width: 62rem;
     margin: 0 auto;
-    padding: 4rem var(--space) 3rem;
+    padding: clamp(4rem, 8vw, 6rem) var(--space) 3rem;
     text-align: center;
   }
 
@@ -169,12 +170,13 @@ const services = [
   }
 
   h1 {
-    font-size: clamp(2rem, 3.6vw, 2.6rem);
-    margin: 0 0 1rem;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    letter-spacing: -0.03em;
+    margin: 0 0 1.25rem;
   }
 
   .lead {
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
     color: var(--muted);
     max-width: 40rem;
     margin: 0 auto;
