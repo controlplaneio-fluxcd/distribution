@@ -90,7 +90,7 @@ const activeMenu = productPages.has(path) ? 'Product' : path === '/' ? undefined
                 </div>
                 {menu.aside === 'demo' && (
                   <aside class="promo">
-                    <p class="promo-title">Get a demo</p>
+                    <p class="promo-title">Product demo</p>
                     <p class="promo-text">
                       See the enterprise distribution and addons in action, presented by the Flux
                       CD maintainers.
@@ -104,8 +104,8 @@ const activeMenu = productPages.has(path) ? 'Product' : path === '/' ? undefined
                   <aside class="promo">
                     <Image class="promo-logo" src={fluxOperatorLogo} alt="Flux Operator" width="162" height="36" />
                     <p class="promo-text">
-                      Autopilot for Flux CD: self-service installation, upgrades, and
-                      multi-tenancy.
+                      Autopilot for Flux CD: self-service capabilities, auto upgrades, and
+                      multi-tenancy lockdown.
                     </p>
                     <a class="promo-link" href="https://fluxoperator.dev/" target="_blank" rel="noopener">
                       fluxoperator.dev &rarr;
@@ -116,7 +116,7 @@ const activeMenu = productPages.has(path) ? 'Product' : path === '/' ? undefined
                   <aside class="promo">
                     <Image class="promo-logo" src={controlPlaneLogo} alt="ControlPlane" width="144" height="30" />
                     <p class="promo-text">
-                      Kubernetes security consultancy, home of the Flux CD maintainers.
+                      Cybersecurity consulting and advisory, trusted by the world's leading organisations.
                     </p>
                     <a class="promo-link" href="https://control-plane.io/" target="_blank" rel="noopener">
                       control-plane.io &rarr;
@@ -196,7 +196,7 @@ const activeMenu = productPages.has(path) ? 'Product' : path === '/' ? undefined
 
   /* Menus are static so the panels anchor to the full-width header, and the
      triggers span the whole header height so there is no dead hover gap
-     between the trigger and its panel (Isovalent model — no flicker) */
+     between the trigger and its panel without flicker */
   .menu {
     display: flex;
     align-items: stretch;
@@ -361,7 +361,7 @@ const activeMenu = productPages.has(path) ? 'Product' : path === '/' ? undefined
     color: var(--muted);
   }
 
-  /* Right-hand panel column: navy promo card (Isovalent's "Get a demo") */
+  /* Right-hand panel column: navy promo card */
   .promo {
     display: flex;
     flex-direction: column;

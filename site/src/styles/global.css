@@ -21,7 +21,7 @@
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
-  /* Marketing display scale (Isovalent-sized) */
+  /* Marketing display scale */
   --text-display: clamp(2.8rem, 6vw, 4.3rem);
   --text-h2: clamp(1.9rem, 3.4vw, 2.6rem);
   --section-pad: clamp(4rem, 8vw, 6.5rem);

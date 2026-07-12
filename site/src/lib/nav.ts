@@ -27,7 +27,7 @@ export interface NavSection {
 export const contactUrl = 'https://control-plane.io/contact/?inquiry=fluxcd';
 export const githubUrl = 'https://github.com/controlplaneio-fluxcd/distribution';
 
-/* Top navigation: two levels, Isovalent-style dropdown panels */
+/* Top navigation: two levels with dropdown panels */
 export const mainNav: NavMenu[] = [
   {
     title: 'Product',
