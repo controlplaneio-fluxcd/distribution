@@ -217,6 +217,39 @@ const nextSteps = [
       </div>
     </section>
 
+    <section class="row channels-row" aria-labelledby="advanced-delivery">
+      <div class="channels-head">
+        <p class="eyebrow">advanced delivery</p>
+        <h2 id="advanced-delivery">Built for the way regulated teams ship</h2>
+      </div>
+      <div class="channels">
+        <div class="channel">
+          <p class="channel-tag">delivery: time-based</p>
+          <h3>Time-Based Delivery</h3>
+          <p>
+            Keep GitOps automation inside your change-management process. With reconciliation
+            schedules, Flux applies changes only during approved windows, so CAB slots and
+            peak business hours are enforced by the platform instead of by convention.
+          </p>
+          <a href="https://fluxoperator.dev/docs/resourcesets/time-based-delivery/" target="_blank" rel="noopener">
+            Read the time-based delivery guide &rarr;
+          </a>
+        </div>
+        <div class="channel">
+          <p class="channel-tag">gitops: gitless</p>
+          <h3>Gitless GitOps</h3>
+          <p>
+            Take the Git server out of the critical path. Production clusters pull versioned,
+            signed OCI artifacts from container registries, which suits air-gapped environments
+            and removes the need for Git credentials inside the cluster.
+          </p>
+          <a href="https://fluxoperator.dev/gitless-gitops/" target="_blank" rel="noopener">
+            Learn about Gitless GitOps &rarr;
+          </a>
+        </div>
+      </div>
+    </section>
+
     <section class="row flip">
       <div class="row-copy">
         <p class="eyebrow">enterprise addons</p>
@@ -260,42 +293,8 @@ const nextSteps = [
       </div>
     </section>
 
-    <section class="row channels-row" aria-labelledby="advanced-delivery">
-      <div class="channels-head">
-        <p class="eyebrow">advanced delivery</p>
-        <h2 id="advanced-delivery">Built for the way regulated teams ship</h2>
-      </div>
-      <div class="channels">
-        <div class="channel">
-          <p class="channel-tag">delivery: time-based</p>
-          <h3>Time-Based Delivery</h3>
-          <p>
-            Keep GitOps automation inside your change-management process. With reconciliation
-            schedules, Flux applies changes only during approved windows, so CAB slots and
-            peak business hours are enforced by the platform instead of by convention.
-          </p>
-          <a href="https://fluxoperator.dev/docs/resourcesets/time-based-delivery/" target="_blank" rel="noopener">
-            Read the time-based delivery guide &rarr;
-          </a>
-        </div>
-        <div class="channel">
-          <p class="channel-tag">gitops: gitless</p>
-          <h3>Gitless GitOps</h3>
-          <p>
-            Take the Git server out of the critical path. Production clusters pull versioned,
-            signed OCI artifacts from container registries, which suits air-gapped environments
-            and removes the need for Git credentials inside the cluster.
-          </p>
-          <a href="https://fluxoperator.dev/gitless-gitops/" target="_blank" rel="noopener">
-            Learn about Gitless GitOps &rarr;
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <section class="steps-section" aria-labelledby="next-steps">
+    <section class="steps-section" aria-label="Next steps">
       <p class="eyebrow">next steps</p>
-      <h2 id="next-steps">Get started with the documentation</h2>
       <div class="steps">
         {
           nextSteps.map(({ title, body, href }) => (

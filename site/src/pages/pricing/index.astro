@@ -13,13 +13,12 @@ const included = [
   'Enterprise distribution and addons',
   'CVE remediation SLAs',
   '24/7 production support',
-  'Direct access to Flux maintainers',
 ];
 
 const services = [
   {
-    title: 'Around-the-clock support',
-    body: 'Dedicated 24/7/365 on-call assistance for Flux-related production outages.',
+    title: '24/7 Expert Coverage',
+    body: 'Global support teams across North America, EMEA, and APAC with guaranteed response SLAs.',
     icon: 'M12 3a8 8 0 018 8v5a3 3 0 01-3 3h-1v-7h4M4 19v-8a8 8 0 018-8m-8 9H3m1 0h3v7H6a3 3 0 01-2-1',
   },
   {
@@ -31,6 +30,25 @@ const services = [
     title: 'Continuous updates',
     body: 'Regular communication on Flux updates, patches, RFCs, and roadmap changes.',
     icon: 'M21 12a9 9 0 11-9-9c2.5 0 4.8 1 6.4 2.6L21 8m0-5v5h-5',
+  },
+];
+
+const consultancy = [
+  {
+    title: 'Architecture reviews',
+    body: 'A thorough assessment of your GitOps setup with concrete recommendations.',
+  },
+  {
+    title: 'Flux training',
+    body: 'Hands-on workshops that bring your platform and application teams up to speed.',
+  },
+  {
+    title: 'GitOps adoption',
+    body: 'Guidance for rolling out Flux across teams, clusters, and environments.',
+  },
+  {
+    title: 'Custom development',
+    body: 'Flux Operator features and integrations built for your platform.',
   },
 ];
 ---
@@ -129,10 +147,29 @@ const services = [
           ))
         }
       </div>
-      <p class="muted">
-        Additional support services such as training, consulting, architectural reviews, and custom
-        development are available upon request.
-      </p>
+    </section>
+
+    <section class="section" aria-labelledby="consultancy-services">
+      <div class="consult">
+        <div class="consult-head">
+          <p class="eyebrow">consultancy</p>
+          <h2 id="consultancy-services">Work with the Flux experts</h2>
+          <p class="consult-lead">
+            Get direct access to CNCF Flux core maintainers and ControlPlane security engineers.
+            All engagements are available upon request, on top of any subscription plan.
+          </p>
+        </div>
+        <ul class="consult-grid">
+          {
+            consultancy.map(({ title, body }) => (
+              <li>
+                <h3>{title}</h3>
+                <p>{body}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </section>
 
     <section class="section" aria-labelledby="custom-plans">
@@ -406,6 +443,75 @@ const services = [
   .muted {
     color: var(--muted);
     font-size: 0.95rem;
+  }
+
+  .consult {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: center;
+    gap: clamp(1.75rem, 4vw, 3rem);
+    padding: clamp(2rem, 4vw, 3rem);
+    border: 1px solid var(--navy-line);
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(38rem 24rem at 90% -30%, rgba(20, 114, 235, 0.32), transparent 62%),
+      var(--navy-900);
+  }
+
+  .consult .eyebrow {
+    color: #72aefa;
+  }
+
+  .consult-head h2 {
+    color: #ffffff;
+    margin-bottom: 0.75rem;
+  }
+
+  .consult-lead {
+    color: rgba(222, 233, 248, 0.78);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .consult-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .consult-grid li {
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--navy-line);
+    border-radius: var(--radius-md);
+    background: rgba(14, 28, 54, 0.55);
+  }
+
+  .consult-grid h3 {
+    font-size: 0.95rem;
+    color: #ffffff;
+    margin: 0 0 0.35rem;
+  }
+
+  .consult-grid p {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: rgba(222, 233, 248, 0.72);
+    margin: 0;
+  }
+
+  @media (max-width: 760px) {
+    .consult {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .consult-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 
   .custom {
