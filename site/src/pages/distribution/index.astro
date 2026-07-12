@@ -5,6 +5,14 @@ import { contactUrl } from '../../lib/nav';
 
 const whyPoints = [
   {
+    title: '24/7 support from the people who build Flux',
+    body: 'Production incidents, upgrade assistance, and architecture reviews handled around the clock by CNCF Flux core maintainers and ControlPlane security engineers. Nobody knows Flux better.',
+  },
+  {
+    title: 'Guaranteed security backports',
+    body: 'The enterprise distribution guarantees security updates and bug fixes for all supported versions.',
+  },
+  {
     title: 'Hardened images',
     body: 'FIPS-compliant hardened container images for the GitOps Toolkit controllers, in-sync with the upstream CNCF Flux releases.',
   },
@@ -14,19 +22,16 @@ const whyPoints = [
   },
   {
     title: 'Zero CVEs with remediation SLAs',
-    body: 'Container images continuously scanned and patched, plus SBOMs and VEX documents for images, dependencies, and build environments.',
-  },
-  {
-    title: 'Maintained by experts',
-    body: 'Security experts at ControlPlane together with CNCF Flux core maintainers, shipping hotfixes and CVE patches ahead of upstream releases.',
+    body: 'Container images scanned and patched on a daily basis, plus SBOMs and VEX documents for images, dependencies, and build environments.',
   },
 ];
 
 const compliance = [
-  { title: 'SLSA Build Level 3', body: 'Verified provenance for every artifact' },
+  { title: '24/7 incident support', body: 'On-call access to Flux core maintainers' },
+  { title: 'Zero known CVEs', body: 'Images scanned and patched daily' },
   { title: 'FIPS 140-3', body: 'Approved cryptography end to end' },
-  { title: 'Zero known CVEs', body: 'Patched ahead of upstream releases' },
-  { title: 'Signed images + SBOMs', body: 'Cosign signatures and VEX documents' },
+  { title: 'Signed images', body: 'Authenticity verified with Cosign' },
+  { title: 'SBOMs and VEX documents', body: 'Dependency transparency and exploitability status' },
 ];
 
 const pipeline = [
@@ -46,8 +51,8 @@ const nextSteps = [
 ---
 
 <BaseLayout
-  title="Enterprise Distribution - ControlPlane Enterprise for Flux CD"
-  description="Hardened, FIPS-compliant Flux CD distribution with zero CVEs, enterprise support, and extended Kubernetes compatibility"
+  title="Flux Distribution - ControlPlane Enterprise for Flux CD"
+  description="Enterprise-ready Flux CD distribution with zero CVEs, FIPS compliance, guaranteed security backports, and extended Kubernetes compatibility"
   forcedTheme="light"
 >
   <section class="phero">
@@ -55,10 +60,10 @@ const nextSteps = [
     <div class="phero-inner">
       <img class="glyph" src="/images/logo/enterprise-for-flux-cd-icon-white.svg" alt="" width="56" height="56" />
       <p class="phero-eyebrow">ControlPlane Enterprise</p>
-      <h1>Enterprise Distribution</h1>
+      <h1>Flux Distribution</h1>
       <p class="lead">
-        A secure, scalable, enterprise-ready distribution of the CNCF-graduated Flux project for
-        multi-tenant Kubernetes clusters.
+        An enterprise-ready distribution of Flux CD and ecosystem tools. Fully hardened by
+        ControlPlane's security team, end-to-end tested for production use.
       </p>
       <div class="phero-actions">
         <a class="hero-button" href={contactUrl} target="_blank" rel="noopener">Request a demo</a>
@@ -116,37 +121,21 @@ const nextSteps = [
       </div>
       <div class="channels">
         <div class="channel" id="distroless">
-          <p class="channel-tag">variant: distroless</p>
+          <p class="channel-tag">variant: Debian</p>
           <h3>Distroless</h3>
           <p>
-            Hardened <a href="https://github.com/GoogleContainerTools/distroless" target="_blank" rel="noopener">Google Distroless</a>-based
-            Flux images with no shell or package managers, reducing the attack surface and
-            eliminating entire classes of CVEs.
+            Hardened Google Distroless-based Flux images with no shell or package managers,
+            reducing the attack surface and eliminating entire classes of CVEs.
           </p>
           <p>
             Available as <code>distroless</code> and <code>distroless-fips</code>. The FIPS variant is built
-            with the <a href="https://go.dev/doc/security/fips140" target="_blank" rel="noopener">Go FIPS 140-3 mode</a>,
-            restricting TLS and SSH to FIPS-approved settings.
+            with the Go FIPS 140-3 mode, restricting TLS and SSH to FIPS-approved settings.
           </p>
-          <p>Without a shell environment and OS packages, two kustomize-controller features are disabled:</p>
-          <ul>
-            <li>
-              <strong>Kustomize remote bases</strong>: requires the <code>git</code> binary;
-              use <a href="https://fluxoperator.dev/docs/crd/gitrepository/" target="_blank" rel="noopener">GitRepository</a> or <a href="https://fluxoperator.dev/docs/crd/ocirepository/" target="_blank" rel="noopener">OCIRepository</a> sources instead.
-            </li>
-            <li>
-              <strong>Secrets decryption with GnuPG</strong>: requires the <code>gpg</code> binary;
-              use <a href="https://fluxcd.io/flux/guides/mozilla-sops/#encrypting-secrets-using-age" target="_blank" rel="noopener">Age encryption</a> or a cloud KMS provider instead.
-            </li>
-          </ul>
         </div>
         <div class="channel" id="mainline">
-          <p class="channel-tag">variant: mainline</p>
+          <p class="channel-tag">variant: Alpine</p>
           <h3>Mainline</h3>
-          <p>
-            <a href="https://www.alpinelinux.org/" target="_blank" rel="noopener">Alpine Linux</a>-based images
-            fully compatible with the upstream Flux feature set.
-          </p>
+          <p>Alpine Linux-based images fully compatible with the upstream Flux feature set.</p>
           <p>
             The major difference between the Flux upstream images and the ControlPlane mainline images
             is the continuous scanning and CVE patching for the container base images, OS packages,
@@ -154,17 +143,19 @@ const nextSteps = [
           </p>
         </div>
       </div>
+      <a class="row-more channels-more" href="/distribution/overview/#distribution-channels">
+        Compare the distribution channels in the docs &rarr;
+      </a>
     </section>
 
-    <section class="row">
+    <section class="row flip">
       <div class="row-copy">
         <p class="eyebrow">delivery pipeline</p>
-        <h2>A SLSA-compliant path from source to registry</h2>
+        <h2>A SLSA-compliant path from source to production</h2>
         <p class="row-lead">
-          The build, test and release pipeline developed by <a href="https://control-plane.io" target="_blank" rel="noopener">ControlPlane</a> is
-          compliant with the <a href="/distribution/security/">SLSA</a> security framework. The distribution comprises Open Source
-          components: the CNCF <a href="/guides/flux-architecture/#flux-controllers">Flux controllers</a> (Apache 2.0)
-          and the <a href="https://fluxoperator.dev/" target="_blank" rel="noopener">Flux Operator</a> (AGPL-3.0).
+          The build, test and release pipeline developed by ControlPlane is compliant with the
+          SLSA security framework. The distribution comprises Open Source components: the CNCF
+          Flux controllers (Apache 2.0) and the Flux Operator (AGPL-3.0).
         </p>
         <a class="row-more" href="/distribution/security/">Explore the security architecture &rarr;</a>
       </div>
@@ -184,6 +175,50 @@ const nextSteps = [
 
     <section class="row">
       <div class="row-copy">
+        <p class="eyebrow">seamless migration</p>
+        <h2>Adopt in minutes, leave whenever you want</h2>
+        <div class="points">
+          <div class="point">
+            <h3>Zero-downtime migration</h3>
+            <p>
+              Moving from upstream Flux to the enterprise distribution is a one-field change:
+              point the FluxInstance at the ControlPlane registry and the operator rolls out
+              the hardened controllers in place, without interrupting reconciliation.
+            </p>
+          </div>
+          <div class="point">
+            <h3>No vendor lock-in</h3>
+            <p>
+              The distribution is 100% compatible with the upstream APIs and manifests.
+              Switching back to the CNCF images is the same one-field change in reverse.
+            </p>
+          </div>
+        </div>
+        <a class="row-more" href="/distribution/install/">Read the installation guide &rarr;</a>
+      </div>
+      <div class="row-visual">
+        <div class="panel yaml" aria-hidden="true">
+          <div class="panel-bar">
+            <span class="dot" />
+            <span class="dot" />
+            <span class="dot" />
+            <span class="panel-file">flux-instance.yaml</span>
+          </div>
+          <pre class="panel-code"><code><span class="yk">apiVersion</span>: fluxcd.controlplane.io/v1
+<span class="yk">kind</span>: FluxInstance
+<span class="yk">spec</span>:
+  <span class="yk">distribution</span>:
+    <span class="yk">version</span>: <span class="ys">"2.x"</span><span class="diff-del">-   registry: ghcr.io/fluxcd</span><span class="diff-add">+   registry: ghcr.io/controlplaneio-fluxcd/distroless</span></code></pre>
+          <div class="panel-status">
+            <span class="status-dot" />
+            Rolling update applied, no downtime
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row flip">
+      <div class="row-copy">
         <p class="eyebrow">enterprise addons</p>
         <h2>Extend the distribution across your platform</h2>
         <p class="row-lead">
@@ -194,16 +229,66 @@ const nextSteps = [
         <a class="row-more" href="/addons/">Explore the enterprise addons &rarr;</a>
       </div>
       <div class="row-visual">
-        <div class="panel addons" aria-hidden="true">
-          <div class="addon-node hub">
-            <img src="/images/logo/enterprise-for-flux-cd-icon-colour.svg" alt="" width="28" height="28" />
-            Flux Enterprise
+        <div class="panel diagram" aria-hidden="true">
+          <div class="dnode hub">
+            <span class="dnode-kind">distribution</span>
+            <span class="dnode-name">Flux Enterprise</span>
           </div>
-          <div class="addon-branches">
-            <div class="addon-node">Flux Web UI</div>
-            <div class="addon-node">MCP Server</div>
-            <div class="addon-node">Dex IdP</div>
+          <div class="dstem"></div>
+          <div class="drail"></div>
+          <div class="dbranches">
+            <div class="dbranch">
+              <div class="dnode">
+                <span class="dnode-kind">addon</span>
+                <span class="dnode-name">Web UI</span>
+              </div>
+            </div>
+            <div class="dbranch">
+              <div class="dnode">
+                <span class="dnode-kind">addon</span>
+                <span class="dnode-name">MCP Server</span>
+              </div>
+            </div>
+            <div class="dbranch">
+              <div class="dnode">
+                <span class="dnode-kind">addon</span>
+                <span class="dnode-name">Dex IdP</span>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row channels-row" aria-labelledby="advanced-delivery">
+      <div class="channels-head">
+        <p class="eyebrow">advanced delivery</p>
+        <h2 id="advanced-delivery">Built for the way regulated teams ship</h2>
+      </div>
+      <div class="channels">
+        <div class="channel">
+          <p class="channel-tag">delivery: time-based</p>
+          <h3>Time-Based Delivery</h3>
+          <p>
+            Keep GitOps automation inside your change-management process. With reconciliation
+            schedules, Flux applies changes only during approved windows, so CAB slots and
+            peak business hours are enforced by the platform instead of by convention.
+          </p>
+          <a href="https://fluxoperator.dev/docs/resourcesets/time-based-delivery/" target="_blank" rel="noopener">
+            Read the time-based delivery guide &rarr;
+          </a>
+        </div>
+        <div class="channel">
+          <p class="channel-tag">gitops: gitless</p>
+          <h3>Gitless GitOps</h3>
+          <p>
+            Take the Git server out of the critical path. Production clusters pull versioned,
+            signed OCI artifacts from container registries, which suits air-gapped environments
+            and removes the need for Git credentials inside the cluster.
+          </p>
+          <a href="https://fluxoperator.dev/gitless-gitops/" target="_blank" rel="noopener">
+            Learn about Gitless GitOps &rarr;
+          </a>
         </div>
       </div>
     </section>
@@ -352,11 +437,11 @@ const nextSteps = [
     border-top: 1px solid var(--border);
   }
 
-  .row:nth-of-type(3) .row-copy {
+  .row.flip .row-copy {
     order: 2;
   }
 
-  .row:nth-of-type(3) .row-visual {
+  .row.flip .row-visual {
     order: 1;
   }
 
@@ -483,51 +568,166 @@ const nextSteps = [
     margin: 0.3rem 0 0;
   }
 
-  .panel.addons {
+  /* YAML migration panel, diff-style */
+  .panel.yaml {
+    background: var(--navy-950);
+    border: 1px solid var(--navy-line);
+    box-shadow: 0 24px 60px rgba(6, 14, 30, 0.35);
+    overflow: hidden;
+  }
+
+  .panel-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--navy-line);
+  }
+
+  .dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: rgba(190, 211, 252, 0.18);
+  }
+
+  .panel-file {
+    margin-left: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: rgba(190, 211, 252, 0.55);
+  }
+
+  .panel-code {
+    margin: 0;
+    padding: 1.1rem 1.4rem;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: #d7e3f7;
+  }
+
+  .yk { color: var(--brand-light); }
+  .ys { color: var(--brand-pale); }
+
+  .diff-del {
+    display: block;
+    color: #f2937f;
+    background: rgba(220, 76, 44, 0.16);
+    margin: 0 -1.4rem;
+    padding: 0 1.4rem;
+  }
+
+  .diff-add {
+    display: block;
+    color: #4ade80;
+    background: rgba(34, 197, 94, 0.14);
+    margin: 0 -1.4rem;
+    padding: 0 1.4rem;
+  }
+
+  .panel-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.4rem;
+    border-top: 1px solid var(--navy-line);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: #34d399;
+  }
+
+  .status-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.7);
+  }
+
+  /* Addons tree diagram, styled after the Flux Status graph */
+  .panel.diagram {
+    background:
+      radial-gradient(20rem 12rem at 50% 0%, rgba(20, 114, 235, 0.18), transparent 70%),
+      var(--navy-950);
+    border: 1px solid var(--navy-line);
+    padding: 2.75rem 1.75rem 3rem;
+    box-shadow: 0 24px 60px rgba(6, 14, 30, 0.35);
+  }
+
+  .dnode {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    background: rgba(20, 32, 54, 0.85);
+    border: 1px solid rgba(114, 174, 250, 0.35);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+  }
+
+  .dnode.hub {
+    width: fit-content;
+    margin: 0 auto;
+    align-items: center;
+    text-align: center;
+    border-color: var(--brand-light);
+    box-shadow: 0 0 18px rgba(20, 114, 235, 0.35);
+    padding: 0.75rem 1.6rem;
+  }
+
+  .dnode-kind {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(190, 211, 252, 0.55);
+  }
+
+  .dnode-name {
+    font-weight: 650;
+    font-size: 0.95rem;
+    color: #ffffff;
+    white-space: nowrap;
+  }
+
+  .dstem {
+    width: 1px;
+    height: 1.6rem;
+    margin: 0 auto;
+    background: rgba(114, 174, 250, 0.4);
+  }
+
+  .drail {
+    height: 1px;
+    margin: 0 calc(100% / 6);
+    background: rgba(114, 174, 250, 0.4);
+  }
+
+  .dbranches {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  .dbranch {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: var(--bg-soft);
-    border: 1px solid var(--border);
-    padding: 2.5rem 2rem;
-    box-shadow: var(--shadow);
   }
 
-  .addon-node {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-weight: 650;
-    font-size: 0.95rem;
-    background: var(--bg);
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-md);
-    padding: 0.7rem 1.2rem;
-  }
-
-  .addon-node.hub {
-    font-size: 1.05rem;
-    border-color: var(--brand-light);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 10%, transparent);
-  }
-
-  .addon-branches {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 2.25rem;
-    position: relative;
-  }
-
-  .addon-branches::before {
+  .dbranch::before {
     content: '';
-    position: absolute;
-    top: -2.25rem;
-    left: 50%;
     width: 1px;
-    height: 2.25rem;
-    background: var(--border-strong);
+    height: 1.6rem;
+    background: rgba(114, 174, 250, 0.4);
+  }
+
+  .dbranch .dnode {
+    width: 100%;
+    align-items: center;
+    text-align: center;
   }
 
   /* ---------- Channels ---------- */
@@ -576,8 +776,16 @@ const nextSteps = [
     font-size: 0.95rem;
   }
 
-  .channel ul {
-    padding-left: 1.2rem;
+  .channel > a {
+    display: inline-block;
+    font-weight: 650;
+    font-size: 0.95rem;
+    margin-top: 0.25rem;
+  }
+
+  .channels-more {
+    display: inline-block;
+    margin-top: 2rem;
   }
 
   /* ---------- Next steps ---------- */
@@ -661,16 +869,20 @@ const nextSteps = [
   /* ---------- Responsive ---------- */
   @media (max-width: 960px) {
     .row {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       gap: 2.5rem;
     }
 
-    .row:nth-of-type(3) .row-copy {
+    .row.flip .row-copy {
       order: 1;
     }
 
-    .row:nth-of-type(3) .row-visual {
+    .row.flip .row-visual {
       order: 2;
+    }
+
+    .dnode-name {
+      white-space: normal;
     }
 
     .row-visual {

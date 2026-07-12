@@ -85,7 +85,7 @@ const outcomes = [
 const compliance = [
   { title: 'SLSA Build Level 3', body: 'Verified provenance for every artifact' },
   { title: 'FIPS 140-3', body: 'Approved cryptography end to end' },
-  { title: 'Zero known CVEs', body: 'Patched ahead of upstream releases' },
+  { title: 'Zero known CVEs', body: 'Images scanned and patched daily' },
   { title: 'Signed images + SBOMs', body: 'Cosign signatures and VEX documents' },
 ];
 ---
@@ -605,7 +605,7 @@ const compliance = [
   /* ---------- Responsive ---------- */
   @media (max-width: 960px) {
     .row {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       gap: 2.5rem;
     }
 
