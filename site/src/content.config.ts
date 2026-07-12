@@ -1,5 +1,6 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 /* The docs collection reads the markdown files kept at the repo root /docs.
    The home, distribution and pricing pages are native Astro pages. */

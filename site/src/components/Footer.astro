@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import { githubUrl } from '../lib/nav';
+import controlPlaneLogo from '../assets/controlplane-logo.svg';
 
 const year = new Date().getFullYear();
 ---
@@ -7,7 +9,9 @@ const year = new Date().getFullYear();
 <footer>
   <div class="inner">
     <div class="brand">
-      <img src="/images/logo/enterprise-for-flux-cd-icon-colour.svg" alt="" width="24" height="24" />
+      <a href="https://control-plane.io/" target="_blank" rel="noopener" aria-label="ControlPlane">
+        <Image class="cp-logo" src={controlPlaneLogo} alt="ControlPlane" width="144" height="30" />
+      </a>
       <p>
         ControlPlane offers a hardened, enterprise-grade distribution and support services
         for the CNCF-graduated Flux project.
@@ -18,23 +22,22 @@ const year = new Date().getFullYear();
         <p class="col-title">Product</p>
         <a href="/distribution/">Enterprise Distribution</a>
         <a href="/addons/">Enterprise Addons</a>
-        <a href="/pricing/">Pricing</a>
+        <a href="/pricing/">Enterprise Pricing</a>
         <a href="/marketplace/aws/">AWS Marketplace</a>
       </div>
       <div class="col">
         <p class="col-title">Resources</p>
-        <a href="/distribution/overview/">Documentation</a>
-        <a href="/guides/flux-architecture/">Flux Architecture</a>
-        <a href="https://fluxoperator.dev/docs/guides/install/" target="_blank" rel="noopener">Flux Operator Docs</a>
-        <a href="https://fluxoperator.dev/docs/web-ui/standalone-install/" target="_blank" rel="noopener">Flux Web UI Docs</a>
+        <a href="/distribution/overview/">Enterprise Docs</a>
+        <a href="https://fluxoperator.dev/" target="_blank" rel="noopener">Flux Operator</a>
+        <a href="https://fluxoperator.dev/docs/web-ui/standalone-install/" target="_blank" rel="noopener">Flux Web UI</a>
         <a href="https://schemas.fluxoperator.dev/" target="_blank" rel="noopener">Flux Schema Catalog</a>
       </div>
       <div class="col">
         <p class="col-title">Company</p>
-        <a href="https://control-plane.io/about/" target="_blank" rel="noopener">About ControlPlane</a>
-        <a href="https://control-plane.io/working-here/" target="_blank" rel="noopener">Working Here</a>
-        <a href="https://control-plane.io/working-here/" target="_blank" rel="noopener">Careers</a>
-        <a href="https://control-plane.io/contact/" target="_blank" rel="noopener">Contact</a>
+        <a href="https://control-plane.io/about/" target="_blank" rel="noopener">About Us</a>
+        <a href="https://control-plane.io/posts/" target="_blank" rel="noopener">Blog &amp; News</a>
+        <a href="https://control-plane.io/terms/" target="_blank" rel="noopener">Terms &amp; Conditions</a>
+        <a href="https://control-plane.io/privacy/" target="_blank" rel="noopener">Privacy Notice</a>
       </div>
     </nav>
   </div>
@@ -69,11 +72,22 @@ const year = new Date().getFullYear();
     padding: 2.5rem var(--space);
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
     gap: 2.5rem 4rem;
   }
 
   .brand {
     max-width: 20rem;
+  }
+
+  .cp-logo {
+    width: 10rem;
+    height: auto;
+  }
+
+  /* The vendored ControlPlane logo is white-fill; flip it for light surfaces */
+  :global([data-theme='light']) .cp-logo {
+    filter: invert(1);
   }
 
   .brand p {

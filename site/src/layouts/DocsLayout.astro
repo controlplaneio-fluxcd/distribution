@@ -75,11 +75,13 @@ const path = Astro.url.pathname;
 </BaseLayout>
 
 <style>
+  /* Docs use a wider container than the marketing pages so the prose
+     column gets a comfortable measure between the two sidebars */
   .docs {
     display: grid;
-    grid-template-columns: 16rem minmax(0, 1fr) 14rem;
+    grid-template-columns: 13rem minmax(0, 1fr) 13rem;
     gap: 2.5rem;
-    max-width: var(--site-width);
+    max-width: 84rem;
     margin: 0 auto;
     padding: 2rem var(--space) 3rem;
     align-items: start;
@@ -176,7 +178,7 @@ const path = Astro.url.pathname;
 
   @media (max-width: 1180px) {
     .docs {
-      grid-template-columns: 15rem minmax(0, 1fr);
+      grid-template-columns: 13rem minmax(0, 1fr);
     }
 
     .toc {

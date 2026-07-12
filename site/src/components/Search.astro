@@ -48,6 +48,7 @@
 
   dialog {
     width: min(40rem, calc(100vw - 2rem));
+    max-height: min(76vh, 44rem);
     margin: 8vh auto auto;
     border: 1px solid var(--border-strong);
     border-radius: var(--radius-md);
@@ -55,6 +56,11 @@
     color: var(--fg);
     padding: 1rem 1.25rem 1.25rem;
     box-shadow: var(--shadow-lift);
+  }
+
+  dialog[open] {
+    display: flex;
+    flex-direction: column;
   }
 
   dialog::backdrop {
@@ -76,12 +82,33 @@
     --pagefind-ui-font: var(--font-body);
     --pagefind-ui-scale: 0.85;
     min-height: 8rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* Keep the input pinned and let the results list scroll inside the dialog,
+     so the "Load more" button stays reachable on long result sets */
+  #pagefind-container .pagefind-ui,
+  #pagefind-container .pagefind-ui__form {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  #pagefind-container .pagefind-ui__drawer {
+    overflow-y: auto;
+    min-height: 0;
+    scrollbar-width: thin;
+    padding-right: 0.35rem;
   }
 
   #pagefind-container .pagefind-ui__search-input {
     font-weight: 400;
     background: var(--bg-soft);
     border-color: var(--border-strong);
+    flex-shrink: 0;
   }
 
   #pagefind-container .pagefind-ui__search-input:focus {
@@ -98,6 +125,7 @@
   #pagefind-container .pagefind-ui__message {
     color: var(--muted);
     font-weight: 500;
+    flex-shrink: 0;
   }
 
   #pagefind-container .pagefind-ui__result {
