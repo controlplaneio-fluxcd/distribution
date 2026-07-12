@@ -1,15 +1,16 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { contactUrl } from '../../lib/nav';
 
 const highlights = [
   {
-    title: 'Hardened Images',
+    title: 'Hardened images',
     body: 'FIPS-compliant hardened container images for the GitOps Toolkit controllers, in-sync with the upstream CNCF Flux releases.',
     icon: 'M4 7l8-4 8 4-8 4-8-4zm0 5l8 4 8-4M4 17l8 4 8-4',
   },
   {
-    title: 'Extended Kubernetes Compatibility',
-    body: 'End-to-end tested with the latest six minor releases of Kubernetes, as well as RedHat OpenShift and Kubernetes LTS versions provided by cloud vendors such as AWS EKS, Azure AKS, and Google GKE.',
+    title: 'Extended Kubernetes compatibility',
+    body: 'End-to-end tested with the latest six minor releases of Kubernetes, plus RedHat OpenShift and the LTS versions provided by AWS EKS, Azure AKS, and Google GKE.',
     icon: 'M12 8a4 4 0 100 8 4 4 0 000-8zm0-6v4m0 12v4M2 12h4m12 0h4M5 5l2.8 2.8m8.4 8.4L19 19M19 5l-2.8 2.8M7.8 16.2L5 19',
   },
   {
@@ -18,13 +19,14 @@ const highlights = [
     icon: 'M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3zm-3 9l2.2 2.2L15.5 9.9',
   },
   {
-    title: 'Maintained by Experts',
+    title: 'Maintained by experts',
     body: 'Maintained by security experts at ControlPlane together with CNCF Flux core maintainers, with hotfixes and CVE patches shipped ahead of upstream releases.',
     icon: 'M16 11a4 4 0 10-8 0 4 4 0 008 0zm-9 9a5 5 0 0110 0M2 20a7 7 0 013-5m16 5a7 7 0 00-3-5',
   },
 ];
 
 const nextSteps = [
+  { title: 'Overview', body: 'Learn what ships in the enterprise distribution and how the pieces fit together.', href: '/distribution/overview/' },
   { title: 'Installation', body: 'Deploy the enterprise distribution with the Flux Operator or bootstrap with the Flux CLI.', href: '/distribution/install/' },
   { title: 'Upgrade', body: 'Keep the Flux controllers up to date with automated upgrade workflows.', href: '/distribution/upgrade/' },
   { title: 'Security', body: 'Learn about the SLSA Build Level 3 supply chain and signed artifacts.', href: '/distribution/security/' },
@@ -32,28 +34,27 @@ const nextSteps = [
 ---
 
 <BaseLayout
-  title="Flux Distribution Introduction - ControlPlane Enterprise for Flux CD"
-  description="FluxCD Enterprise Distribution overview and features"
+  title="Enterprise Distribution - ControlPlane Enterprise for Flux CD"
+  description="Hardened, FIPS-compliant Flux CD distribution with zero CVEs, enterprise support, and extended Kubernetes compatibility"
 >
   <section class="intro">
     <div class="intro-inner">
-      <p class="eyebrow">Enterprise Distribution</p>
-      <h1>Flux Distribution Introduction</h1>
+      <p class="eyebrow">product: enterprise-distribution</p>
+      <h1>Enterprise Distribution</h1>
       <p class="lead">
-        ControlPlane Enterprise for Flux CD is a comprehensive solution for organizations seeking to
-        leverage the power of GitOps in their Kubernetes environments.
+        A secure, scalable, enterprise-ready distribution of the CNCF-graduated Flux project for
+        managing application and infrastructure delivery on multi-tenant Kubernetes clusters.
       </p>
-      <p class="body-copy">
-        Built on top of the <a href="https://www.cncf.io/projects/flux/" target="_blank" rel="noopener">CNCF-graduated</a> Flux project, the ControlPlane distribution provides a secure, scalable, and enterprise-ready
-        platform for managing the delivery of application and infrastructure workloads on multi-tenant
-        Kubernetes clusters. The distribution comes with enterprise-hardened Flux controllers including <a href="/pricing/">support services</a> for running Flux in production.
-      </p>
+      <div class="intro-actions">
+        <a class="button button-primary" href={contactUrl} target="_blank" rel="noopener">Request a demo</a>
+        <a class="button" href="/distribution/overview/">Read the docs</a>
+      </div>
     </div>
   </section>
 
   <div class="page">
     <section aria-labelledby="highlights" class="section">
-      <h2 id="highlights">Highlights</h2>
+      <h2 id="highlights">Why teams choose the enterprise distribution</h2>
       <div class="cards">
         {
           highlights.map(({ title, body, icon }) => (
@@ -91,25 +92,23 @@ const nextSteps = [
     </section>
 
     <section aria-labelledby="distribution-channels" class="section">
-      <h2 id="distribution-channels">Distribution Channels</h2>
+      <h2 id="distribution-channels">Distribution channels</h2>
       <p>ControlPlane offers the following distribution channels for the Flux controllers:</p>
       <div class="channels">
         <div class="channel" id="distroless">
+          <p class="channel-tag">variant: distroless</p>
           <h3>Distroless</h3>
           <p>
-            The ControlPlane distribution offers hardened <a href="https://github.com/GoogleContainerTools/distroless" target="_blank" rel="noopener">Google Distroless</a>-based
-            Flux images.
+            Hardened <a href="https://github.com/GoogleContainerTools/distroless" target="_blank" rel="noopener">Google Distroless</a>-based
+            Flux images with no shell or package managers, reducing the attack surface and
+            eliminating entire classes of CVEs.
           </p>
           <p>
-            Distroless comes with two variants, <code>distroless</code> and <code>distroless-fips</code>.
+            Distroless comes in two variants, <code>distroless</code> and <code>distroless-fips</code>.
             The latter is built using the <a href="https://go.dev/doc/security/fips140" target="_blank" rel="noopener">FIPS 140-3 mode</a>,
             and the Go runtime is configured to restrict the TLS and SSH configuration to FIPS-approved settings.
           </p>
-          <p>
-            The Distroless variants have no shell or package managers installed, reducing the attack
-            surface and eliminating entire classes of CVEs. Due to the absence of a shell environment
-            and OS packages, the following kustomize-controller features are disabled:
-          </p>
+          <p>Due to the absence of a shell environment and OS packages, the following kustomize-controller features are disabled:</p>
           <ul>
             <li>
               <strong>Kustomize remote bases</strong>: requires the <code>git</code> binary for fetching
@@ -121,9 +120,10 @@ const nextSteps = [
           </ul>
         </div>
         <div class="channel" id="mainline">
+          <p class="channel-tag">variant: mainline</p>
           <h3>Mainline</h3>
           <p>
-            The mainline distribution channel offers <a href="https://www.alpinelinux.org/" target="_blank" rel="noopener">Alpine Linux</a>-based images
+            <a href="https://www.alpinelinux.org/" target="_blank" rel="noopener">Alpine Linux</a>-based images
             fully compatible with the upstream Flux feature set.
           </p>
           <p>
@@ -136,7 +136,7 @@ const nextSteps = [
     </section>
 
     <section aria-labelledby="distribution-components" class="section">
-      <h2 id="distribution-components">Distribution Components</h2>
+      <h2 id="distribution-components">Distribution components</h2>
       <p>
         The ControlPlane distribution comprises Open Source components such as the CNCF <a href="/guides/flux-architecture/#flux-controllers">Flux controllers</a> (Apache 2.0 License)
         and the <a href="https://fluxoperator.dev/" target="_blank" rel="noopener">Flux Operator</a> (AGPL-3.0 License).
@@ -148,7 +148,7 @@ const nextSteps = [
           </svg>
         </div>
         <div>
-          <p class="callout-title">Delivery Pipeline</p>
+          <p class="callout-title">Delivery pipeline</p>
           <p>
             The build, test and release pipeline developed by <a href="https://control-plane.io" target="_blank" rel="noopener">ControlPlane</a> is compliant with the <a href="/distribution/security/">SLSA</a> security framework.
           </p>
@@ -163,26 +163,21 @@ const nextSteps = [
     </section>
 
     <section aria-labelledby="distribution-addons" class="section">
-      <h2 id="distribution-addons">Distribution Addons</h2>
+      <h2 id="distribution-addons">Distribution addons</h2>
       <p>
         ControlPlane offers enterprise-grade addons that integrate seamlessly with the Flux
         distribution, enabling organizations to enforce identity policies, streamline incident
-        response, and operate GitOps at scale.
+        response, and operate GitOps at scale — the Flux Web UI, the Flux MCP Server, and the
+        Dex identity provider. All addons are covered by ControlPlane's SLA for CVE remediation
+        and FIPS compliance.
       </p>
-      <ul>
-        <li>
-          <a href="/addons/dex/">Dex IdP</a> — hardened Dex providing OIDC-based Single Sign-On for the <a href="https://fluxoperator.dev/web-ui/" target="_blank" rel="noopener">Flux Web UI</a>.
-        </li>
-        <li>
-          <a href="/addons/mcp-stdio/">Local MCP Server</a> — hardened Flux MCP for AI-assisted incident
-          response and GitOps pipeline troubleshooting across environments.
-        </li>
-      </ul>
-      <p>All addons are covered by ControlPlane's SLA for CVE remediation and FIPS compliance.</p>
+      <p>
+        <a class="button" href="/addons/">Explore the enterprise addons &rarr;</a>
+      </p>
     </section>
 
     <section aria-labelledby="next-steps" class="section">
-      <h2 id="next-steps">Next Steps</h2>
+      <h2 id="next-steps">Next steps</h2>
       <div class="steps">
         {
           nextSteps.map(({ title, body, href }) => (
@@ -207,32 +202,26 @@ const nextSteps = [
   .intro-inner {
     max-width: 52rem;
     margin: 0 auto;
-    padding: 3.5rem var(--space) 2.5rem;
-  }
-
-  .eyebrow {
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--accent);
-    margin: 0 0 0.5rem;
+    padding: 4rem var(--space) 3rem;
   }
 
   h1 {
-    font-size: 2.2rem;
+    font-size: clamp(2rem, 3.6vw, 2.6rem);
     margin: 0 0 1rem;
   }
 
   .lead {
-    font-size: 1.15rem;
-    line-height: 1.6;
-    margin: 0 0 1rem;
+    font-size: 1.12rem;
+    line-height: 1.65;
+    color: var(--muted);
+    margin: 0 0 1.75rem;
+    max-width: 42rem;
   }
 
-  .body-copy {
-    color: var(--muted);
-    margin: 0;
+  .intro-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
   }
 
   .page {
@@ -242,11 +231,11 @@ const nextSteps = [
   }
 
   .section {
-    margin-top: 2.5rem;
+    margin-top: 3rem;
   }
 
   h2 {
-    font-size: 1.55rem;
+    font-size: 1.5rem;
     margin: 0 0 1rem;
     scroll-margin-top: calc(var(--header-height) + 1rem);
   }
@@ -262,7 +251,7 @@ const nextSteps = [
     gap: 1rem;
     padding: 1.25rem;
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     background: var(--bg-soft);
   }
 
@@ -274,7 +263,7 @@ const nextSteps = [
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     background: color-mix(in srgb, var(--brand) 12%, transparent);
     color: var(--accent);
   }
@@ -297,12 +286,12 @@ const nextSteps = [
     padding: 1.25rem;
     border: 1px solid var(--border);
     border-left: 3px solid var(--accent);
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     background: var(--bg-soft);
   }
 
   .callout-title {
-    font-weight: 700;
+    font-weight: 650;
     margin: 0.1rem 0 0.4rem;
     color: var(--accent);
   }
@@ -325,16 +314,27 @@ const nextSteps = [
 
   .channel {
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     background: var(--bg-soft);
     padding: 1.5rem;
     scroll-margin-top: calc(var(--header-height) + 1rem);
   }
 
+  .channel-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--brand) 10%, transparent);
+    border-radius: 4px;
+    padding: 0.15rem 0.5rem;
+    margin: 0 0 0.75rem;
+  }
+
   .channel h3 {
     margin: 0 0 0.75rem;
     font-size: 1.15rem;
-    color: var(--accent);
   }
 
   .channel p,
@@ -348,7 +348,7 @@ const nextSteps = [
 
   .steps {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
     gap: 1.1rem;
   }
 
@@ -356,7 +356,7 @@ const nextSteps = [
     display: block;
     padding: 1.25rem;
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     background: var(--bg-soft);
     color: var(--fg);
     transition: border-color 0.15s, box-shadow 0.15s;
@@ -388,10 +388,6 @@ const nextSteps = [
   @media (max-width: 760px) {
     .channels {
       grid-template-columns: 1fr;
-    }
-
-    h1 {
-      font-size: 1.8rem;
     }
   }
 </style>

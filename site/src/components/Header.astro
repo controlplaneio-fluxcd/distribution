@@ -1,11 +1,10 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
-import Search from './Search.astro';
-import { headerNav, githubUrl } from '../lib/nav';
+import { mainNav, contactUrl, githubUrl } from '../lib/nav';
 
 const path = Astro.url.pathname;
-const isActive = (href: string) =>
-  !href.startsWith('http') && (href === '/' ? path === '/' : path.startsWith(href));
+const isActiveMenu = (items: { href: string; external?: boolean }[]) =>
+  items.some((item) => !item.external && path.startsWith(item.href));
 ---
 
 <header>
@@ -19,29 +18,53 @@ const isActive = (href: string) =>
     </a>
     <nav id="site-nav" aria-label="Main">
       {
-        headerNav.map(({ title, href, external }) => (
-          <a
-            href={href}
-            target={external ? '_blank' : undefined}
-            rel={external ? 'noopener' : undefined}
-            aria-current={isActive(href) ? 'page' : undefined}
-          >
-            {title}
-            {external && (
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M7 17 17 7M9 7h8v8" />
+        mainNav.map((menu) => (
+          <div class="menu">
+            <button
+              class="menu-trigger"
+              type="button"
+              aria-expanded="false"
+              aria-current={isActiveMenu(menu.items) ? 'true' : undefined}
+            >
+              {menu.title}
+              <svg class="chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m6 9 6 6 6-6" />
               </svg>
-            )}
-          </a>
+            </button>
+            <div class="dropdown">
+              <ul>
+                {menu.items.map(({ title, href, external, description }) => (
+                  <li>
+                    <a
+                      href={href}
+                      target={external ? '_blank' : undefined}
+                      rel={external ? 'noopener' : undefined}
+                      aria-current={!external && path === href ? 'page' : undefined}
+                    >
+                      <span class="item-title">
+                        {title}
+                        {external && (
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M7 17 17 7M9 7h8v8" />
+                          </svg>
+                        )}
+                      </span>
+                      {description && <span class="item-desc">{description}</span>}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         ))
       }
     </nav>
     <div class="controls">
-      <Search />
       <a class="github" href={githubUrl} target="_blank" rel="noopener" aria-label="GitHub repository" title="GitHub">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></svg>
       </a>
       <ThemeToggle />
+      <a class="button button-primary cta" href={contactUrl} target="_blank" rel="noopener">Contact us</a>
       <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
         <svg class="icon-burger" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
           <line x1="4" y1="6" x2="20" y2="6"></line>
@@ -62,9 +85,9 @@ const isActive = (href: string) =>
     position: sticky;
     top: 0;
     z-index: 50;
-    background: color-mix(in srgb, var(--bg) 85%, transparent);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
   }
 
@@ -75,14 +98,13 @@ const isActive = (href: string) =>
     padding: 0 var(--space);
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 2rem;
   }
 
   .wordmark {
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    margin-right: auto;
     color: var(--fg);
     flex-shrink: 0;
   }
@@ -113,36 +135,125 @@ const isActive = (href: string) =>
   nav {
     display: flex;
     align-items: center;
-    gap: 1.4rem;
+    gap: 0.25rem;
+    margin-right: auto;
   }
 
-  nav a {
+  .menu {
+    position: relative;
+  }
+
+  .menu-trigger {
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.35rem;
+    background: none;
+    border: 0;
+    font-family: var(--font-body);
     font-size: 0.92rem;
     font-weight: 500;
     color: var(--fg);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
   }
 
-  nav a:hover {
+  .menu-trigger:hover,
+  .menu:focus-within .menu-trigger {
     color: var(--accent);
+    background: var(--bg-soft);
+  }
+
+  .menu-trigger[aria-current='true'] {
+    color: var(--accent);
+  }
+
+  .chevron {
+    color: var(--muted);
+    transition: transform 0.15s;
+  }
+
+  .dropdown {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    min-width: 17rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lift);
+    padding: 0.4rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.12s, transform 0.12s, visibility 0.12s;
+  }
+
+  .menu:hover .dropdown,
+  .menu:focus-within .dropdown,
+  .menu.open .dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .menu:hover .chevron,
+  .menu:focus-within .chevron,
+  .menu.open .chevron {
+    transform: rotate(180deg);
+  }
+
+  .dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .dropdown a {
+    display: block;
+    padding: 0.55rem 0.75rem;
+    border-radius: var(--radius-sm);
+    color: var(--fg);
+    line-height: 1.4;
+  }
+
+  .dropdown a:hover {
+    background: var(--bg-soft);
     text-decoration: none;
   }
 
-  nav a[aria-current='page'] {
+  .dropdown a:hover .item-title {
     color: var(--accent);
-    font-weight: 600;
   }
 
-  nav a svg {
+  .dropdown a[aria-current='page'] .item-title {
+    color: var(--accent);
+  }
+
+  .item-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.9rem;
+    font-weight: 550;
+  }
+
+  .item-title svg {
     color: var(--muted);
+  }
+
+  .item-desc {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.1rem;
   }
 
   .controls {
     display: flex;
     align-items: center;
     gap: 0.6rem;
+    flex-shrink: 0;
   }
 
   .github {
@@ -155,11 +266,16 @@ const isActive = (href: string) =>
     color: var(--fg);
   }
 
+  .cta {
+    font-size: 0.88rem;
+    padding: 0.5rem 1.1rem;
+  }
+
   .menu-toggle {
     display: none;
     background: none;
     border: 1px solid var(--border-strong);
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     color: var(--muted);
     padding: 0.35rem 0.45rem;
     cursor: pointer;
@@ -177,7 +293,7 @@ const isActive = (href: string) =>
     display: block;
   }
 
-  @media (max-width: 860px) {
+  @media (max-width: 960px) {
     .menu-toggle {
       display: inline-flex;
     }
@@ -193,20 +309,69 @@ const isActive = (href: string) =>
       gap: 0;
       background: var(--bg);
       border-bottom: 1px solid var(--border);
-      padding: 0.5rem 0;
+      padding: 0.5rem 0 0.75rem;
       box-shadow: var(--shadow);
+      max-height: calc(100dvh - var(--header-height));
+      overflow-y: auto;
     }
 
     nav.open {
       display: flex;
     }
 
-    nav a {
+    .menu-trigger {
+      width: 100%;
+      justify-content: space-between;
       padding: 0.7rem var(--space);
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 0;
+    }
+
+    /* On mobile the dropdowns become click-toggled accordion sections */
+    .dropdown {
+      position: static;
+      min-width: 0;
+      border: 0;
+      box-shadow: none;
+      border-radius: 0;
+      padding: 0 0.5rem;
+      background: none;
+      display: none;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition: none;
+    }
+
+    .menu:hover .dropdown,
+    .menu:focus-within .dropdown {
+      display: none;
+    }
+
+    .menu.open .dropdown {
+      display: block;
+    }
+
+    .menu:hover .chevron,
+    .menu:focus-within .chevron {
+      transform: none;
+    }
+
+    .menu.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    .dropdown a {
+      padding: 0.55rem var(--space);
     }
 
     .github {
       display: none;
+    }
+
+    .cta {
+      padding: 0.45rem 0.85rem;
     }
   }
 </style>
@@ -217,5 +382,39 @@ const isActive = (href: string) =>
   toggle.addEventListener('click', () => {
     const open = nav.classList.toggle('open');
     toggle.setAttribute('aria-expanded', String(open));
+  });
+
+  /* Click-toggled dropdowns (touch devices and mobile accordion).
+     Desktop hover/focus is handled in CSS. */
+  for (const menu of document.querySelectorAll<HTMLElement>('.menu')) {
+    const trigger = menu.querySelector<HTMLButtonElement>('.menu-trigger')!;
+    trigger.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      trigger.setAttribute('aria-expanded', String(open));
+      for (const other of document.querySelectorAll<HTMLElement>('.menu.open')) {
+        if (other !== menu) {
+          other.classList.remove('open');
+          other.querySelector('.menu-trigger')?.setAttribute('aria-expanded', 'false');
+        }
+      }
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!(e.target instanceof Node)) return;
+    for (const menu of document.querySelectorAll<HTMLElement>('.menu.open')) {
+      if (!menu.contains(e.target)) {
+        menu.classList.remove('open');
+        menu.querySelector('.menu-trigger')?.setAttribute('aria-expanded', 'false');
+      }
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    for (const menu of document.querySelectorAll<HTMLElement>('.menu.open')) {
+      menu.classList.remove('open');
+      menu.querySelector('.menu-trigger')?.setAttribute('aria-expanded', 'false');
+    }
   });
 </script>

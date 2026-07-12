@@ -2,6 +2,12 @@ export interface NavLink {
   title: string;
   href: string;
   external?: boolean;
+  description?: string;
+}
+
+export interface NavMenu {
+  title: string;
+  items: NavLink[];
 }
 
 export interface NavSection {
@@ -9,12 +15,60 @@ export interface NavSection {
   items: NavLink[];
 }
 
+export const contactUrl = 'https://control-plane.io/contact/?inquiry=fluxcd';
+export const githubUrl = 'https://github.com/controlplaneio-fluxcd/distribution';
+
+/* Top navigation: two levels, Isovalent-style dropdown menus */
+export const mainNav: NavMenu[] = [
+  {
+    title: 'Product',
+    items: [
+      {
+        title: 'Enterprise Distribution',
+        href: '/distribution/',
+        description: 'Hardened, FIPS-compliant Flux controllers with zero CVEs',
+      },
+      {
+        title: 'Enterprise Addons',
+        href: '/addons/',
+        description: 'Flux Web UI, MCP Server and Dex single sign-on',
+      },
+      {
+        title: 'Pricing',
+        href: '/pricing/',
+        description: 'Subscription plans and enterprise support services',
+      },
+    ],
+  },
+  {
+    title: 'Resources',
+    items: [
+      { title: 'Enterprise Distribution Docs', href: '/distribution/overview/' },
+      { title: 'Flux Architecture', href: '/guides/flux-architecture/' },
+      { title: 'D1 Reference Architecture', href: '/guides/d1-architecture-reference/' },
+      { title: 'D2 Reference Architecture', href: '/guides/d2-architecture-reference/' },
+      { title: 'Flux Operator Docs', href: 'https://fluxoperator.dev/docs/guides/install/', external: true },
+      { title: 'Flux Web UI Docs', href: 'https://fluxoperator.dev/docs/web-ui/standalone-install/', external: true },
+      { title: 'Flux Schema Catalog', href: 'https://schemas.fluxoperator.dev/', external: true },
+    ],
+  },
+  {
+    title: 'Company',
+    items: [
+      { title: 'About ControlPlane', href: 'https://control-plane.io/about/', external: true },
+      { title: 'Working Here', href: 'https://control-plane.io/working-here/', external: true },
+      { title: 'Careers', href: 'https://control-plane.io/working-here/', external: true },
+      { title: 'Contact', href: 'https://control-plane.io/contact/', external: true },
+    ],
+  },
+];
+
 /* Docs sidebar, mirroring the mkdocs.yml nav tree */
 export const docsNav: NavSection[] = [
   {
     title: 'Flux Distribution',
     items: [
-      { title: 'Introduction', href: '/distribution/' },
+      { title: 'Overview', href: '/distribution/overview/' },
       { title: 'Installation', href: '/distribution/install/' },
       { title: 'Upgrade', href: '/distribution/upgrade/' },
       { title: 'Security', href: '/distribution/security/' },
@@ -56,14 +110,3 @@ export const docsNav: NavSection[] = [
     ],
   },
 ];
-
-/* Top navigation, mirroring the mkdocs.yml tabs */
-export const headerNav: NavLink[] = [
-  { title: 'Distribution', href: '/distribution/' },
-  { title: 'Flux Operator', href: 'https://fluxoperator.dev/', external: true },
-  { title: 'Pricing', href: '/pricing/' },
-  { title: 'Contact', href: 'https://control-plane.io/contact/?inquiry=fluxcd', external: true },
-];
-
-export const contactUrl = 'https://control-plane.io/contact/?inquiry=fluxcd';
-export const githubUrl = 'https://github.com/controlplaneio-fluxcd/distribution';

@@ -1,6 +1,7 @@
 ---
 import type { MarkdownHeading } from 'astro';
 import BaseLayout from './BaseLayout.astro';
+import Search from '../components/Search.astro';
 import { docsNav } from '../lib/nav';
 
 interface Props {
@@ -27,6 +28,9 @@ const path = Astro.url.pathname;
     </button>
 
     <aside id="docs-sidebar" class="sidebar">
+      <div class="sidebar-search">
+        <Search />
+      </div>
       <nav aria-label="Documentation">
         {
           docsNav.map((section) => (
@@ -113,7 +117,14 @@ const path = Astro.url.pathname;
   }
 
   .sidebar section:first-child .section-title {
-    margin-top: 0.2rem;
+    margin-top: 1rem;
+  }
+
+  .sidebar-search {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    padding-bottom: 0.25rem;
   }
 
   .toc-title {

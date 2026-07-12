@@ -1,0 +1,280 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { contactUrl } from '../../lib/nav';
+
+const addons = [
+  {
+    tag: 'addon: web-ui',
+    title: 'Flux Web UI',
+    lead: 'A dashboard for monitoring and troubleshooting GitOps pipelines across all your Kubernetes clusters.',
+    points: [
+      'Real-time visibility into Flux resources, sources, and reconciliation status',
+      'Multi-cluster and multi-tenant views for platform teams',
+      'OIDC-based single sign-on with the Dex IdP addon',
+    ],
+    links: [
+      { title: 'Web UI documentation', href: 'https://fluxoperator.dev/docs/web-ui/standalone-install/', external: true },
+    ],
+    icon: 'M3 5h18v12H3V5zm0 12l4 4h10l4-4M7 9h6m-6 4h10',
+  },
+  {
+    tag: 'addon: mcp-server',
+    title: 'Flux MCP Server',
+    lead: 'A hardened, exclusively read-only MCP server that connects AI assistants to Flux-managed clusters for incident response and pipeline troubleshooting.',
+    points: [
+      'Read-only by design — no operation can alter cluster state, regardless of kubeconfig permissions',
+      'Runs locally on dev laptops and workstations over stdio',
+      'Works with Claude, Copilot, Cursor, and any MCP-compatible assistant',
+    ],
+    links: [
+      { title: 'Local MCP Server docs', href: '/addons/mcp-stdio/' },
+      { title: 'Flux Operator MCP docs', href: 'https://fluxoperator.dev/mcp-server/', external: true },
+    ],
+    icon: 'M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2zm7 11l.8 2.2L22 16l-2.2.8L19 19l-.8-2.2L16 16l2.2-.8L19 13zM6 15l1 2.5L9.5 18 7 19l-1 2.5L5 19l-2.5-1L5 17.5 6 15z',
+  },
+  {
+    tag: 'addon: dex-idp',
+    title: 'Dex IdP',
+    lead: 'A hardened Dex distribution providing OIDC-based single sign-on for the Flux Web UI and the Flux MCP Server.',
+    points: [
+      'Connects to your existing identity provider — LDAP, SAML, GitHub, Google, Microsoft Entra ID, and more',
+      'Hardened, FIPS-compliant container images and Helm charts',
+      'Enforce identity policies across your GitOps tooling',
+    ],
+    links: [
+      { title: 'Dex IdP docs', href: '/addons/dex/' },
+    ],
+    icon: 'M16 11a4 4 0 10-8 0 4 4 0 008 0zm-9 9a5 5 0 0110 0M7 11H3m18 0h-4',
+  },
+];
+---
+
+<BaseLayout
+  title="Enterprise Addons - ControlPlane Enterprise for Flux CD"
+  description="Enterprise-grade Flux addons: Web UI dashboard, AI-assisted MCP Server, and Dex single sign-on"
+>
+  <section class="intro">
+    <div class="intro-inner">
+      <p class="eyebrow">product: enterprise-addons</p>
+      <h1>Enterprise Addons</h1>
+      <p class="lead">
+        Extend the Flux enterprise distribution with a web dashboard, AI-assisted troubleshooting,
+        and single sign-on. Every addon ships hardened images covered by ControlPlane's SLA for
+        CVE remediation and FIPS compliance.
+      </p>
+      <div class="intro-actions">
+        <a class="button button-primary" href={contactUrl} target="_blank" rel="noopener">Request a demo</a>
+        <a class="button" href="/pricing/">See pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="page">
+    {
+      addons.map(({ tag, title, lead, points, links, icon }) => (
+        <section class="addon" aria-label={title}>
+          <div class="addon-head">
+            <div class="icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d={icon} />
+              </svg>
+            </div>
+            <div>
+              <p class="addon-tag">{tag}</p>
+              <h2>{title}</h2>
+            </div>
+          </div>
+          <p class="addon-lead">{lead}</p>
+          <ul class="points">
+            {points.map((point) => (
+              <li>
+                <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+                {point}
+              </li>
+            ))}
+          </ul>
+          <p class="links">
+            {links.map(({ title: linkTitle, href, external }) => (
+              <a
+                href={href}
+                target={external ? '_blank' : undefined}
+                rel={external ? 'noopener' : undefined}
+              >
+                {linkTitle} &rarr;
+              </a>
+            ))}
+          </p>
+        </section>
+      ))
+    }
+
+    <section class="note-section" aria-label="Support coverage">
+      <aside class="callout">
+        <div class="callout-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z" />
+          </svg>
+        </div>
+        <div>
+          <p class="callout-title">Covered by your subscription</p>
+          <p>
+            All addons are included in the <a href="/pricing/">subscription plans</a> and covered by
+            ControlPlane's SLA for CVE remediation, with hardened images published to private
+            registries available to customers.
+          </p>
+        </div>
+      </aside>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .intro {
+    background: linear-gradient(180deg, color-mix(in srgb, var(--brand) 7%, var(--bg)) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .intro-inner {
+    max-width: 52rem;
+    margin: 0 auto;
+    padding: 4rem var(--space) 3rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 3.6vw, 2.6rem);
+    margin: 0 0 1rem;
+  }
+
+  .lead {
+    font-size: 1.12rem;
+    line-height: 1.65;
+    color: var(--muted);
+    margin: 0 0 1.75rem;
+    max-width: 42rem;
+  }
+
+  .intro-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .page {
+    max-width: 52rem;
+    margin: 0 auto;
+    padding: 1rem var(--space) 2rem;
+  }
+
+  .addon {
+    margin-top: 3rem;
+    padding: 2rem 1.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-soft);
+  }
+
+  .addon-head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .icon,
+  .callout-icon {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--brand) 12%, transparent);
+    color: var(--accent);
+  }
+
+  .addon-tag {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    margin: 0 0 0.15rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    margin: 0;
+  }
+
+  .addon-lead {
+    font-size: 1rem;
+    margin: 0 0 1rem;
+  }
+
+  .points {
+    list-style: none;
+    margin: 0 0 1.25rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .points li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-size: 0.93rem;
+    color: var(--muted);
+  }
+
+  .check {
+    flex-shrink: 0;
+    color: var(--ok);
+    transform: translateY(2px);
+  }
+
+  .links {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin: 0;
+  }
+
+  .links a {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .note-section {
+    margin-top: 3rem;
+  }
+
+  .callout {
+    display: flex;
+    gap: 1rem;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-md);
+    background: var(--bg-soft);
+  }
+
+  .callout-icon {
+    width: 2.6rem;
+    height: 2.6rem;
+  }
+
+  .callout-title {
+    font-weight: 650;
+    margin: 0.1rem 0 0.4rem;
+    color: var(--accent);
+  }
+
+  .callout p {
+    font-size: 0.95rem;
+    margin: 0;
+  }
+</style>
