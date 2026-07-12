@@ -1,7 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroShapes from '../components/HeroShapes.astro';
 import { contactUrl } from '../lib/nav';
+import shotHome from '../assets/web-ui/flux-status-home-dark.png';
 
 const trust = [
   '100% upstream compatible',
@@ -37,7 +39,7 @@ const rows = [
     points: [
       {
         title: 'Distroless hardened images',
-        body: 'No shell, no package manager — entire classes of CVEs eliminated by design.',
+        body: 'No shell, no package manager, and entire classes of CVEs eliminated by design.',
       },
       {
         title: 'Extended Kubernetes compatibility',
@@ -61,7 +63,7 @@ const rows = [
       },
       {
         title: 'Flux MCP Server',
-        body: 'Read-only AI-assisted troubleshooting for incident response — no cluster mutations, ever.',
+        body: 'Read-only AI-assisted troubleshooting for incident response. No cluster mutations, ever.',
       },
       {
         title: 'Dex identity provider',
@@ -175,21 +177,18 @@ const compliance = [
     <span class="yk">multitenant</span>: <span class="yb">true</span></code></pre>
                 <div class="panel-status">
                   <span class="status-dot" />
-                  Reconciled — enterprise distribution up to date
+                  Reconciled: enterprise distribution up to date
                 </div>
               </div>
             )}
             {visual === 'addons' && (
-              <div class="panel addons" aria-hidden="true">
-                <div class="addon-node hub">
-                  <img src="/images/logo/enterprise-for-flux-cd-icon-colour.svg" alt="" width="28" height="28" />
-                  Flux Enterprise
-                </div>
-                <div class="addon-branches">
-                  <div class="addon-node">Flux Web UI</div>
-                  <div class="addon-node">MCP Server</div>
-                  <div class="addon-node">Dex IdP</div>
-                </div>
+              <div class="panel shot">
+                <Image
+                  src={shotHome}
+                  alt="Cluster overview in the Flux Web UI with controller health, sync state and GitOps resource counters"
+                  widths={[640, 1280]}
+                  sizes="(min-width: 960px) 34rem, 100vw"
+                />
               </div>
             )}
           </div>
@@ -527,52 +526,18 @@ const compliance = [
     box-shadow: 0 0 8px rgba(52, 211, 153, 0.7);
   }
 
-  .panel.addons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-    background: var(--bg-soft);
-    border: 1px solid var(--border);
-    padding: 2.5rem 2rem;
-    box-shadow: var(--shadow);
+  /* Dark Web UI screenshot framed in navy so it sits well on the light surface */
+  .panel.shot {
+    overflow: hidden;
+    border: 1px solid var(--navy-line);
+    background: var(--navy-950);
+    box-shadow: 0 24px 60px rgba(6, 14, 30, 0.35);
   }
 
-  .addon-node {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-weight: 650;
-    font-size: 0.95rem;
-    background: var(--bg);
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-md);
-    padding: 0.7rem 1.2rem;
-  }
-
-  .addon-node.hub {
-    font-size: 1.05rem;
-    border-color: var(--brand-light);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 10%, transparent);
-  }
-
-  .addon-branches {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 2.25rem;
-    position: relative;
-  }
-
-  .addon-branches::before {
-    content: '';
-    position: absolute;
-    top: -2.25rem;
-    left: 50%;
-    width: 1px;
-    height: 2.25rem;
-    background: var(--border-strong);
+  .panel.shot img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   /* ---------- Outcomes ---------- */
