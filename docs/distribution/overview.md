@@ -21,19 +21,55 @@ applies CVE patches & hotfixes, and runs conformance tests.
 
 ### Flux Controllers
 
-TODO: list controllers with a short description
+The distribution includes hardened builds of the Flux controllers that implement the
+GitOps reconciliation loop:
+
+- **source-controller**: Fetches artifacts from Git repositories, OCI registries,
+  Helm repositories, and S3-compatible buckets, making them available to the other
+  controllers as versioned artifacts.
+- **kustomize-controller**: Builds Kustomize overlays or plain Kubernetes manifests
+  and applies them to the cluster with server-side apply, drift detection and correction,
+  dependency ordering, and SOPS secrets decryption.
+- **helm-controller**: Performs Helm releases in a declarative way, with support for
+  automated rollbacks, remediation strategies, and chart values composition.
+- **notification-controller**: Dispatches events to external systems
+  (Slack, Teams, Grafana, Git providers, generic webhooks) and triggers
+  reconciliations from incoming webhooks.
+- **image-reflector-controller**: Scans container registries and resolves the latest
+  image tags based on version policies.
+- **image-automation-controller**: Updates the image tags in Git repositories based on
+  the policies set with image-reflector-controller.
+- **source-watcher**: Composes and decomposes artifacts from multiple sources
+  using the ArtifactGenerator API, enabling advanced artifact transformation workflows.
 
 ### Flux Operator
 
-TODO: short description + link to https://fluxoperator.dev/
+The [Flux Operator](https://fluxoperator.dev/) provides a declarative API for the
+lifecycle management of the Flux controllers. It handles the installation, configuration,
+sharding, and upgrade of Flux through the `FluxInstance` custom resource, reports the
+observed state of the GitOps pipelines via `FluxReport`, and enables self-service
+environments and application definitions through the `ResourceSet` APIs.
 
 ### Flux Web UI
 
-TODO: short description + link to https://fluxoperator.dev/web-ui/
+The [Flux Web UI](https://fluxoperator.dev/web-ui/) is built into the Flux Operator and
+offers a browser-based dashboard for monitoring the Flux resources and their managed
+workloads, triggering reconciliations, and troubleshooting GitOps pipelines. It supports
+single sign-on with OIDC providers, Kubernetes-native role-based access control, and
+audit logging of user actions.
+
+For Single Sign-On, the distribution provides the [Dex IdP Addon](../addons/dex.md),
+a hardened [Dex](https://dexidp.io/) distribution used to configure OIDC authentication
+for the Flux Web UI.
 
 ### Flux MCP Server
 
-TODO: short description of the EE edition of the MCP + link to the addon doc (and mention the Dex IdP Addon)
+The distribution includes a hardened edition of the
+[Flux Operator MCP Server](https://fluxoperator.dev/mcp-server/) that connects AI assistants
+to Kubernetes clusters managed by Flux. Unlike the upstream version, the enterprise edition
+is exclusively read-only and cannot alter the cluster state regardless of the permissions
+granted by the kubeconfig. See the [Local MCP Server Addon](../addons/mcp-stdio.md)
+documentation for installation and usage instructions.
 
 ## Distribution Channels
 
