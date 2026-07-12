@@ -30,7 +30,7 @@ const rows = [
         body: 'Cryptographically signed images with SBOMs and VEX documents for every release.',
       },
     ],
-    link: { title: 'Explore the security architecture', href: '/distribution/security/' },
+    link: { title: 'See how we harden Flux', href: '/distribution/' },
     visual: 'compliance',
   },
   {
@@ -43,7 +43,7 @@ const rows = [
       },
       {
         title: 'Extended Kubernetes compatibility',
-        body: 'Tested against six minor Kubernetes releases, OpenShift, and EKS, AKS, GKE LTS versions.',
+        body: 'Tested against six minor Kubernetes releases, RedHat OpenShift, and the LTS versions of EKS, AKS, and GKE.',
       },
       {
         title: 'Automated lifecycle with Flux Operator',
@@ -83,10 +83,10 @@ const outcomes = [
 ];
 
 const compliance = [
-  { title: 'SLSA Build Level 3', body: 'Verified provenance for every artifact' },
-  { title: 'FIPS 140-3', body: 'Approved cryptography end to end' },
   { title: 'Zero known CVEs', body: 'Images scanned and patched daily' },
-  { title: 'Signed images + SBOMs', body: 'Cosign signatures and VEX documents' },
+  { title: 'FIPS 140-3', body: 'Approved cryptography end to end' },
+  { title: 'Signed images', body: 'Authenticity verified with Cosign' },
+  { title: 'SBOMs and VEX documents', body: 'Dependency transparency and exploitability status' },
 ];
 ---
 
@@ -106,7 +106,7 @@ const compliance = [
       <p class="hero-sub">Zero-CVE, FIPS-compliant GitOps for regulated environments.</p>
       <div class="hero-actions">
         <a class="hero-button" href={contactUrl} target="_blank" rel="noopener">Request a demo</a>
-        <a class="hero-link" href="/distribution/overview/">Read the docs &rarr;</a>
+        <a class="hero-link" href="/pricing/">See pricing &rarr;</a>
       </div>
     </div>
   </section>
@@ -220,7 +220,7 @@ const compliance = [
       </p>
       <div class="cta-actions">
         <a class="hero-button" href={contactUrl} target="_blank" rel="noopener">Contact us</a>
-        <a class="hero-link" href="/distribution/install/">Installation guide &rarr;</a>
+        <a class="hero-link" href="/pricing/">See the plans &rarr;</a>
       </div>
     </div>
   </section>

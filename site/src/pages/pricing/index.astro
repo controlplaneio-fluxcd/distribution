@@ -2,11 +2,11 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { contactUrl } from '../../lib/nav';
 
-const plans = [
-  { name: 'CPE-1', scope: 'Up to 1 cluster or 10 nodes', price: '$1,250', featured: false },
-  { name: 'CPE-10', scope: 'Up to 10 clusters or 100 nodes', price: '$6,250', featured: true },
-  { name: 'CPE-25', scope: 'Up to 25 clusters or 250 nodes', price: '$10,500', featured: false },
-  { name: 'CPE-100', scope: 'Up to 100 clusters or 1000 nodes', price: '$42,000', featured: false },
+const plans: { name: string; scope: string; price: string | null; featured: boolean }[] = [
+  { name: 'CPEF-1', scope: 'Up to 1 cluster or 10 nodes', price: '$1,250', featured: false },
+  { name: 'CPEF-10', scope: 'Up to 10 clusters or 100 nodes', price: '$6,250', featured: true },
+  { name: 'CPEF-25', scope: 'Up to 25 clusters or 250 nodes', price: '$10,500', featured: false },
+  { name: 'CPEF-100', scope: 'Up to 100 clusters or 1000 nodes', price: null, featured: false },
 ];
 
 const included = [
@@ -37,7 +37,7 @@ const services = [
 
 <BaseLayout
   title="Pricing - ControlPlane Enterprise for Flux CD"
-  description="FluxCD Enterprise pricing and support services"
+  description="ControlPlane Enterprise for Flux CD pricing and support services"
   forcedTheme="light"
 >
   <section class="intro">
@@ -59,11 +59,11 @@ const services = [
           plans.map(({ name, scope, price, featured }) => (
             <div class:list={['plan', { featured }]}>
               {featured && <p class="flag">Most popular</p>}
-              <h3>{name} Bundle</h3>
+              <h3>{name}</h3>
               <p class="scope">{scope}</p>
               <p class="price">
-                {price}
-                <span class="period">USD / month</span>
+                {price ?? 'Custom'}
+                <span class="period">{price ? 'USD / month, billed annually' : 'contact us for a quote'}</span>
               </p>
               <a class:list={['button', { 'button-primary': featured }]} href={contactUrl} target="_blank" rel="noopener">
                 Contact us
@@ -93,9 +93,9 @@ const services = [
         <aside class="note tip">
           <p class="note-title">Free for non-production environments</p>
           <p>
-            The offer is based on the number of Production clusters or the number of Production nodes
-            across clusters (whichever is hit first). Dev &amp; Staging environments are covered at no
-            extra cost.
+            The offer is based on the number of production clusters or the number of production nodes
+            across clusters, whichever limit is reached first. Dev and Staging environments are covered
+            at no extra cost.
           </p>
         </aside>
         <aside class="note info">
@@ -111,8 +111,8 @@ const services = [
     <section class="section" aria-labelledby="support-services">
       <h2 id="support-services">Support services</h2>
       <p>
-        ControlPlane offers a range of support services to help you get the most out of Enterprise
-        for Flux CD. The support services included in the subscription plans are:
+        ControlPlane offers a range of support services to help you get the most out of the
+        enterprise distribution. The support services included in the subscription plans are:
       </p>
       <div class="services">
         {
