@@ -15,8 +15,8 @@ const docs = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
-    /* mkdocs-material style: hide "toc" or "navigation" on a page */
-    hide: z.array(z.string()).optional(),
+    /* hide: [toc] removes the on-page table of contents; nothing else is supported */
+    hide: z.array(z.enum(['toc'])).optional(),
   }),
 });
 

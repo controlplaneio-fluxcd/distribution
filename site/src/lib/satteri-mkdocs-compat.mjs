@@ -16,6 +16,7 @@ import { defineMdastPlugin } from 'satteri';
    snapshot, so two writers to the same property clobber each other). The
    text visitor only rewrites text values. */
 
+/* Keep in sync with `site` in astro.config.mjs */
 const SITE_ORIGIN = 'https://fluxcd.control-plane.io';
 const ICON_RE = /:(?:octicons|material|fontawesome)-[a-z0-9-]+(?:\/[a-z0-9-]+)*:/g;
 /* Attr lists made only of .classes and key="value" pairs, e.g. { .lg .middle } */

@@ -123,7 +123,9 @@ export const mainNav: NavMenu[] = [
   },
 ];
 
-/* Docs sidebar, mirroring the mkdocs.yml nav tree */
+/* Docs sidebar. The Versions list below is maintained by hand and must be
+   extended when a new docs/releases/release-v*.md lands; only the home page
+   hero pill derives the latest release automatically. */
 export const docsNav: NavSection[] = [
   {
     title: 'Flux Distribution',

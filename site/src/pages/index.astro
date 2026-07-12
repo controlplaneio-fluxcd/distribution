@@ -9,7 +9,7 @@ import fluxLogo from '../assets/flux-horizontal-color.svg';
 
 /* The hero pill always announces the newest release markdown in docs/releases */
 const releases = await getCollection('docs', ({ id }) => id.startsWith('releases/release-v'));
-const latestRelease = releases
+const latestRelease: { version: string; major: number; minor: number } | undefined = releases
   .map(({ id }) => {
     const version = id.replace('releases/release-', '');
     const [major = 0, minor = 0] = version.slice(1).split('.').map(Number);
@@ -119,10 +119,14 @@ const compliance = [
   <section class="hero">
     <HeroShapes />
     <div class="hero-inner">
-      <a class="pill" href={`/releases/release-${latestRelease.version}/`}>
-        Flux Distribution {latestRelease.version} is out
-        <span class="pill-more">Release notes &rarr;</span>
-      </a>
+      {
+        latestRelease && (
+          <a class="pill" href={`/releases/release-${latestRelease.version}/`}>
+            Flux Distribution {latestRelease.version} is out
+            <span class="pill-more">Release notes &rarr;</span>
+          </a>
+        )
+      }
       <h1>Run Flux in production<br />with confidence</h1>
       <p class="hero-sub">
         Ship changes to thousands of clusters with the enterprise distribution of Flux CD,
@@ -254,7 +258,6 @@ const compliance = [
 </script>
 
 <style>
-  /* ---------- Hero: navy, centered ---------- */
   .hero {
     position: relative;
     background:
@@ -351,7 +354,6 @@ const compliance = [
     text-decoration: none;
   }
 
-  /* ---------- Trust bar ---------- */
   .trust {
     border-bottom: 1px solid var(--border);
     background: var(--bg-soft);
@@ -424,7 +426,6 @@ const compliance = [
     }
   }
 
-  /* ---------- Editorial rows ---------- */
   .rows {
     max-width: var(--site-width);
     margin: 0 auto;
@@ -482,7 +483,6 @@ const compliance = [
     font-size: 1rem;
   }
 
-  /* ---------- Row visuals ---------- */
   .panel {
     border-radius: var(--radius-lg);
   }
@@ -527,7 +527,7 @@ const compliance = [
     background: var(--navy-950);
     border: 1px solid var(--navy-line);
     padding: 1.75rem 1.9rem;
-    box-shadow: 0 24px 60px rgba(6, 14, 30, 0.35);
+    box-shadow: var(--shadow-navy);
   }
 
   .tl-row {
@@ -552,7 +552,6 @@ const compliance = [
     margin: 0.3rem 0 0;
   }
 
-  /* Light brand banner, styled after the OG social card */
   .panel.banner {
     display: flex;
     flex-direction: column;
@@ -586,7 +585,7 @@ const compliance = [
     overflow: hidden;
     border: 1px solid var(--navy-line);
     background: var(--navy-950);
-    box-shadow: 0 24px 60px rgba(6, 14, 30, 0.35);
+    box-shadow: var(--shadow-navy);
   }
 
   .panel.shot img {
@@ -595,7 +594,6 @@ const compliance = [
     height: auto;
   }
 
-  /* ---------- CTA band ---------- */
   .cta {
     position: relative;
     background:
@@ -626,7 +624,6 @@ const compliance = [
     margin: 0 auto 2.25rem;
   }
 
-  /* ---------- Responsive ---------- */
   @media (max-width: 960px) {
     .row {
       grid-template-columns: minmax(0, 1fr);

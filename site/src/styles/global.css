@@ -14,6 +14,7 @@
   --navy-900: #081226;
   --navy-800: #0e1c36;
   --navy-line: #1d3054;
+  --shadow-navy: 0 24px 60px rgba(6, 14, 30, 0.35);
   --header-height: 4rem;
   --content-width: 50rem;
   --site-width: 76rem;
@@ -25,6 +26,24 @@
   --text-display: clamp(2.8rem, 6vw, 4.3rem);
   --text-h2: clamp(1.9rem, 3.4vw, 2.6rem);
   --section-pad: clamp(4rem, 8vw, 6.5rem);
+
+  /* Light theme values double as the bare :root defaults so the site renders
+     styled even when the theme script never runs (no JS, strict CSP). The
+     [data-theme] blocks below override them once the script sets the attribute. */
+  color-scheme: light;
+  --bg: #ffffff;
+  --bg-soft: #f6f8fc;
+  --bg-raised: #edf2fa;
+  --fg: #101c30;
+  --muted: #51607a;
+  --accent: #1472eb;
+  --accent-hover: #0f5ec5;
+  --accent-contrast: #ffffff;
+  --ok: #067a53;
+  --border: #e3e9f2;
+  --border-strong: #c9d6e8;
+  --shadow: 0 1px 3px rgba(16, 28, 48, 0.08), 0 8px 24px rgba(16, 28, 48, 0.06);
+  --shadow-lift: 0 2px 6px rgba(16, 28, 48, 0.08), 0 16px 40px rgba(16, 28, 48, 0.1);
 }
 
 :root[data-theme='light'] {
@@ -194,7 +213,6 @@ pre code {
   display: none;
 }
 
-/* ---------- Prose (rendered markdown) ---------- */
 
 .prose {
   font-size: 0.96rem;
@@ -399,7 +417,6 @@ a.md-button--primary:hover {
   border-color: var(--accent-hover);
 }
 
-/* Footnotes */
 .prose section[data-footnotes] {
   margin-top: 3rem;
   font-size: 0.85rem;

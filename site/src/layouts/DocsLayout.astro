@@ -231,7 +231,6 @@ const path = Astro.url.pathname;
     toggle.setAttribute('aria-expanded', String(open));
   });
 
-  /* Copy buttons on code blocks */
   for (const pre of document.querySelectorAll('.prose pre.astro-code')) {
     const button = document.createElement('button');
     button.className = 'code-copy';

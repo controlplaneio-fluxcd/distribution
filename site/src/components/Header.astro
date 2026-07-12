@@ -8,7 +8,8 @@ import fluxOperatorLogo from '../assets/flux-operator-logo.svg';
 const path = Astro.url.pathname;
 
 /* Exactly one menu may be highlighted: the standalone marketing pages belong
-   to Product, everything else with content is documentation → Resources. */
+   to Product, everything else with content is documentation → Resources.
+   Keep this set in sync with the Product group hrefs in mainNav. */
 const productPages = new Set(['/distribution/', '/addons/', '/pricing/']);
 const activeMenu = productPages.has(path) ? 'Product' : path === '/' ? undefined : 'Resources';
 ---
@@ -464,7 +465,6 @@ const activeMenu = productPages.has(path) ? 'Product' : path === '/' ? undefined
   }
 
   @media (max-width: 960px) {
-    /* Logo with the hamburger right next to it; theme toggle at the far right */
     .inner {
       gap: 1rem;
     }
