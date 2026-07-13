@@ -52,11 +52,11 @@ const compliance = [
 ];
 
 const pipeline = [
+  { step: 'patch', desc: 'CVE patches and hotfixes applied to the Flux components' },
   { step: 'build', desc: 'FIPS-compliant binaries and multi-arch container images' },
-  { step: 'patch', desc: 'CVE patches and hotfixes applied to the Open Source components' },
   { step: 'test', desc: 'Conformance tests across Kubernetes and OpenShift versions' },
   { step: 'sign', desc: 'Cosign signatures, SBOMs, and VEX documents generated' },
-  { step: 'publish', desc: 'Private registries available to subscribed customers' },
+  { step: 'publish', desc: 'Container images available to customers' },
 ];
 
 ---
@@ -174,17 +174,17 @@ const pipeline = [
         <h2>A SLSA-compliant path from source to production</h2>
         <p class="row-lead">
           The build, test and release pipeline developed by ControlPlane is compliant with the
-          SLSA security framework. The distribution comprises Open Source components: the CNCF
-          Flux controllers (Apache 2.0) and the Flux Operator (AGPL-3.0).
+          SLSA security framework (Build Level 3). The distribution comprises Open Source components: the CNCF
+          Flux controllers (Apache 2.0) and the Flux Operator (AGPL 3.0).
         </p>
         <a class="row-more" href="/distribution/security/">Explore the security architecture &rarr;</a>
       </div>
       <div class="row-visual">
         <div class="panel pipeline">
           {
-            pipeline.map(({ step, desc }, i) => (
+            pipeline.map(({ step, desc }) => (
               <div class="pipe-row">
-                <span class="pipe-step">{String(i + 1).padStart(2, '0')} {step}</span>
+                <span class="pipe-step">{step}</span>
                 <p>{desc}</p>
               </div>
             ))
@@ -444,21 +444,60 @@ const pipeline = [
     border: 1px solid var(--navy-line);
     padding: 1.75rem 1.9rem;
     box-shadow: var(--shadow-navy);
+    counter-reset: stage;
   }
 
+  /* Vertical timeline: a numbered ring per stage, connected by a rail that
+     runs into the next ring (the ring's own background covers the overlap) */
   .pipe-row {
-    padding: 0.9rem 0;
+    position: relative;
+    padding: 0 0 1.4rem 2.5rem;
+    counter-increment: stage;
   }
 
-  .pipe-row + .pipe-row {
-    border-top: 1px solid var(--navy-line);
+  .pipe-row:last-child {
+    padding-bottom: 0;
+  }
+
+  .pipe-row::before {
+    content: counter(stage);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--brand-light);
+    border: 1.5px solid var(--brand-light);
+    border-radius: 50%;
+    background: var(--navy-950);
+  }
+
+  .pipe-row::after {
+    content: '';
+    position: absolute;
+    left: calc(0.75rem + 0.5px);
+    top: calc(1.5rem + 6px);
+    bottom: -0.15rem;
+    width: 2px;
+    background: rgba(114, 174, 250, 0.35);
+  }
+
+  .pipe-row:last-child::after {
+    content: none;
   }
 
   .pipe-step {
+    display: block;
     font-family: var(--font-mono);
     font-size: 0.78rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
+    line-height: 1.65rem;
     color: var(--brand-light);
   }
 
