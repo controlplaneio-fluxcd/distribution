@@ -107,10 +107,10 @@ before reporting a change as done.
 3. Add a sidebar entry to the Guides section of `docsNav` in
    `src/lib/nav.ts`. The sidebar is hand-curated on purpose: pick the title
    and position deliberately. Only the Versions list is generated.
-4. Images: reference them as `../images/<file>.png` and add the file to
-   both `docs/images/` (GitHub rendering) and `site/public/images/`
-   (site serving). The two directories are mirrored by hand; there is no
-   copy step.
+4. Images: add the file to `site/public/images/` and reference it as
+   `../images/<file>.png`; the mkdocs compat plugin rewrites that to
+   `/images/...` at build time. GitHub's markdown preview will not
+   resolve these paths; only the published site renders them.
 5. Verify with `npx astro check && npm run build` and check the page and
    its sidebar entry in the built output.
 
