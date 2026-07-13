@@ -12,7 +12,9 @@ import fluxLogo from '../assets/flux-horizontal-color.svg';
 /* The hero pill always announces the newest release */
 const latestRelease: Release | undefined = (await getReleases())[0];
 
-const rows = [
+/* The alternating rows are split in two groups around the full-width
+   security band; each group keeps its own copy-left/visual-right rhythm */
+const rowsTop = [
   {
     eyebrow: 'assurance',
     title: 'Open source software, with someone on the hook',
@@ -53,26 +55,9 @@ const rows = [
     link: { title: 'Explore the enterprise addons', href: '/addons/' },
     visual: 'shot',
   },
-  {
-    eyebrow: 'security & compliance',
-    title: 'Meet regulatory requirements without forking your GitOps stack',
-    points: [
-      {
-        title: 'Zero CVEs with remediation SLAs',
-        body: 'Continuous scanning and patching for controllers, base images, and Go dependencies.',
-      },
-      {
-        title: 'FIPS 140-3 compliant builds',
-        body: 'Go crypto FIPS mode with TLS and SSH restricted to approved settings.',
-      },
-      {
-        title: 'EU Cyber Resilience Act ready',
-        body: 'Full SBOM traceability, vulnerability disclosure, and compliance reporting for CRA obligations.',
-      },
-    ],
-    link: { title: 'See how we harden Flux', href: '/distribution/' },
-    visual: 'compliance',
-  },
+];
+
+const rowsBottom = [
   {
     eyebrow: 'hybrid & air-gapped',
     title: 'From public cloud to air-gapped, one distribution',
@@ -118,11 +103,48 @@ const timeline = [
   { step: 'resolution', desc: 'Root cause documented, fix backported to supported releases' },
 ];
 
-const compliance = [
-  { title: 'Zero known CVEs', body: 'Images scanned and patched daily' },
-  { title: 'FIPS 140-3', body: 'Approved cryptography end to end' },
-  { title: 'Signed images', body: 'Authenticity verified with Cosign' },
-  { title: 'SBOMs and VEX documents', body: 'Dependency transparency and exploitability status' },
+/* Lucide stroke icon paths (24x24) for the security band cards */
+const securityIcons: Record<string, string> = {
+  shield:
+    '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+  lock: '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  badge:
+    '<path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/>',
+  check:
+    '<path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/>',
+};
+
+/* One entry per compliance requirement: the copy that used to be split
+   between the row points and the checklist panel, merged */
+const security = [
+  {
+    icon: 'shield',
+    hue: '#067a53',
+    title: 'Zero CVEs with remediation SLA',
+    body: 'Continuous scanning and patching for controllers and base images.',
+    status: 'patched',
+  },
+  {
+    icon: 'lock',
+    hue: '#1472eb',
+    title: 'FIPS 140-3 builds',
+    body: 'Go crypto FIPS mode with TLS and SSH restricted to approved settings.',
+    status: 'compliant',
+  },
+  {
+    icon: 'badge',
+    hue: '#067a53',
+    title: 'Signed container images',
+    body: 'Authenticity and provenance verifiable with Cosign.',
+    status: 'verified',
+  },
+  {
+    icon: 'check',
+    hue: '#1472eb',
+    title: 'EU Cyber Resilience Act ready',
+    body: 'Full SBOM traceability and compliance reporting for CRA obligations.',
+    status: 'compliant',
+  },
 ];
 ---
 
@@ -173,7 +195,7 @@ const compliance = [
 
   <div class="rows">
     {
-      rows.map(({ eyebrow, title, points, link, visual }, i) => (
+      rowsTop.map(({ eyebrow, title, points, link, visual }, i) => (
         <section class:list={['row', { flip: i % 2 === 1 }]}>
           <div class="row-copy">
             <p class="eyebrow">{eyebrow}</p>
@@ -201,28 +223,6 @@ const compliance = [
                 ))}
               </div>
             )}
-            {visual === 'compliance' && (
-              <div class="panel compliance">
-                {compliance.map((row) => (
-                  <div class="comp-row">
-                    <svg class="check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <path d="M20 6 9 17l-5-5" />
-                    </svg>
-                    <div>
-                      <p class="comp-title">{row.title}</p>
-                      <p class="comp-body">{row.body}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-            {visual === 'diagram' && <HybridDiagram />}
-            {visual === 'banner' && (
-              <div class="panel banner">
-                <img src={fluxLogo.src} alt="CNCF Flux" width="320" height="166" loading="lazy" />
-                <p class="banner-caption">reconciling since 2016</p>
-              </div>
-            )}
             {visual === 'shot' && (
               <div class="panel shot">
                 <Image
@@ -231,6 +231,74 @@ const compliance = [
                   widths={[640, 1280]}
                   sizes="(min-width: 960px) 34rem, 100vw"
                 />
+              </div>
+            )}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+
+  <section class="sec-band">
+    <div class="sec-band-inner">
+      <p class="eyebrow">security &amp; compliance</p>
+      <h2>Meet regulatory requirements without forking your GitOps stack</h2>
+      <div class="sec-cards">
+        {
+          security.map((item) => (
+            <div class="sec-card" style={`--hue: ${item.hue}`}>
+              <span class="sec-icon">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  set:html={securityIcons[item.icon]}
+                />
+              </span>
+              <div class="sec-text">
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+              </div>
+              <span class="sec-status">{item.status}</span>
+            </div>
+          ))
+        }
+      </div>
+      <a class="row-more" href="/distribution/">See how we harden Flux &rarr;</a>
+    </div>
+  </section>
+
+  <div class="rows">
+    {
+      rowsBottom.map(({ eyebrow, title, points, link, visual }, i) => (
+        <section class:list={['row', { flip: i % 2 === 0 }]}>
+          <div class="row-copy">
+            <p class="eyebrow">{eyebrow}</p>
+            <h2>{title}</h2>
+            <div class="points">
+              {points.map((point) => (
+                <div class="point">
+                  <h3>{point.title}</h3>
+                  <p>{point.body}</p>
+                </div>
+              ))}
+            </div>
+            <a class="row-more" href={link.href}>
+              {link.title} &rarr;
+            </a>
+          </div>
+          <div class="row-visual">
+            {visual === 'diagram' && <HybridDiagram />}
+            {visual === 'banner' && (
+              <div class="panel banner">
+                <img src={fluxLogo.src} alt="CNCF Flux" width="320" height="166" loading="lazy" />
+                <p class="banner-caption">reconciling since 2016</p>
               </div>
             )}
           </div>
@@ -405,38 +473,97 @@ const compliance = [
     border-radius: var(--radius-lg);
   }
 
-  .panel.compliance {
+  /* Security band: the one section that breaks the alternating two-column
+     rhythm — a full-width tinted strip of horizontal compliance cards */
+  .sec-band {
+    background: var(--bg-soft);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sec-band-inner {
+    max-width: var(--site-width);
+    margin: 0 auto;
+    padding: var(--section-pad) var(--space);
     display: flex;
     flex-direction: column;
-    gap: 1.4rem;
-    background: var(--bg-soft);
+    align-items: center;
+  }
+
+  .sec-band h2 {
+    font-size: var(--text-h2);
+    line-height: 1.12;
+    text-align: center;
+    max-width: 42rem;
+    margin: 0 0 2.75rem;
+  }
+
+  .sec-cards {
+    width: 100%;
+    max-width: 52rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .sec-card {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.2rem 1.5rem;
+    background: var(--bg);
     border: 1px solid var(--border);
-    padding: 2.25rem 2rem;
+    border-radius: var(--radius-md);
     box-shadow: var(--shadow);
   }
 
-  .comp-row {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-
-  .check {
+  .sec-icon {
     flex-shrink: 0;
-    color: var(--ok);
-    margin-top: 0.2rem;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--hue) 11%, var(--bg));
+    color: var(--hue);
   }
 
-  .comp-title {
-    font-weight: 700;
+  .sec-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .sec-text h3 {
     font-size: 1.02rem;
+    font-weight: 700;
     margin: 0;
   }
 
-  .comp-body {
-    font-size: 0.9rem;
+  .sec-text p {
+    font-size: 0.92rem;
     color: var(--muted);
-    margin: 0.15rem 0 0;
+    margin: 0.2rem 0 0;
+  }
+
+  .sec-status {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    padding: 0.3rem 0.7rem;
+    border-radius: 99px;
+    background: color-mix(in srgb, var(--hue) 10%, var(--bg));
+    color: var(--hue);
+  }
+
+  @media (max-width: 480px) {
+    .sec-status {
+      display: none;
+    }
   }
 
   .panel.timeline {

@@ -52,11 +52,11 @@ const compliance = [
 ];
 
 const pipeline = [
+  { step: 'patch', desc: 'CVE patches and hotfixes applied to the Flux components' },
   { step: 'build', desc: 'FIPS-compliant binaries and multi-arch container images' },
-  { step: 'patch', desc: 'CVE patches and hotfixes applied to the Open Source components' },
   { step: 'test', desc: 'Conformance tests across Kubernetes and OpenShift versions' },
   { step: 'sign', desc: 'Cosign signatures, SBOMs, and VEX documents generated' },
-  { step: 'publish', desc: 'Private registries available to subscribed customers' },
+  { step: 'publish', desc: 'Container images available to customers' },
 ];
 
 ---
@@ -113,16 +113,23 @@ const pipeline = [
         </aside>
       </div>
     </section>
+  </div>
 
-    <section class="row channels-row" aria-labelledby="distribution-channels">
-      <div class="channels-head">
-        <p class="eyebrow">distribution channels</p>
-        <h2 id="distribution-channels">Pick the variant that fits your compliance posture</h2>
-      </div>
+  <section class="band" aria-labelledby="distribution-channels">
+    <div class="band-inner">
+      <p class="eyebrow">distribution channels</p>
+      <h2 id="distribution-channels">Pick the variant that fits your compliance posture</h2>
       <div class="channels">
         <div class="channel" id="distroless">
-          <p class="channel-tag">variant: Debian</p>
+          <div class="channel-head">
+          <span class="channel-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+            </svg>
+          </span>
           <h3>Distroless</h3>
+          </div>
+          <div class="channel-body">
           <p>
             Hardened Google Distroless-based Flux images with no shell or package managers,
             reducing the attack surface and eliminating entire classes of CVEs.
@@ -131,40 +138,53 @@ const pipeline = [
             Available as <code>distroless</code> and <code>distroless-fips</code>. The FIPS variant is built
             with the Go FIPS 140-3 mode, restricting TLS and SSH to FIPS-approved settings.
           </p>
+          </div>
         </div>
         <div class="channel" id="mainline">
-          <p class="channel-tag">variant: Alpine</p>
+          <div class="channel-head">
+          <span class="channel-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" />
+              <path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" />
+              <path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" />
+            </svg>
+          </span>
           <h3>Mainline</h3>
+          </div>
+          <div class="channel-body">
           <p>Alpine Linux-based images fully compatible with the upstream Flux feature set.</p>
           <p>
             The major difference between the Flux upstream images and the ControlPlane mainline images
             is the continuous scanning and CVE patching for the container base images, OS packages,
             and Go dependencies.
           </p>
+          </div>
         </div>
       </div>
       <a class="row-more channels-more" href="/distribution/overview/#distribution-channels">
         Compare the distribution channels in the docs &rarr;
       </a>
-    </section>
+    </div>
+  </section>
 
+  <div class="rows">
     <section class="row flip">
       <div class="row-copy">
         <p class="eyebrow">delivery pipeline</p>
         <h2>A SLSA-compliant path from source to production</h2>
         <p class="row-lead">
           The build, test and release pipeline developed by ControlPlane is compliant with the
-          SLSA security framework. The distribution comprises Open Source components: the CNCF
-          Flux controllers (Apache 2.0) and the Flux Operator (AGPL-3.0).
+          SLSA security framework (Build Level 3). The distribution comprises Open Source components: the CNCF
+          Flux controllers (Apache 2.0) and the Flux Operator (AGPL 3.0).
         </p>
         <a class="row-more" href="/distribution/security/">Explore the security architecture &rarr;</a>
       </div>
       <div class="row-visual">
         <div class="panel pipeline">
           {
-            pipeline.map(({ step, desc }, i) => (
+            pipeline.map(({ step, desc }) => (
               <div class="pipe-row">
-                <span class="pipe-step">{String(i + 1).padStart(2, '0')} {step}</span>
+                <span class="pipe-step">{step}</span>
                 <p>{desc}</p>
               </div>
             ))
@@ -216,16 +236,24 @@ const pipeline = [
         </div>
       </div>
     </section>
+  </div>
 
-    <section class="row channels-row" aria-labelledby="advanced-delivery">
-      <div class="channels-head">
-        <p class="eyebrow">advanced delivery</p>
-        <h2 id="advanced-delivery">Built for the way regulated teams ship</h2>
-      </div>
+  <section class="band" aria-labelledby="advanced-delivery">
+    <div class="band-inner">
+      <p class="eyebrow">advanced delivery</p>
+      <h2 id="advanced-delivery">Built the way regulated teams ship</h2>
       <div class="channels">
         <div class="channel">
-          <p class="channel-tag">delivery: time-based</p>
+          <div class="channel-head">
+          <span class="channel-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </span>
           <h3>Time-Based Delivery</h3>
+          </div>
+          <div class="channel-body">
           <p>
             Keep GitOps automation inside your change-management process. With reconciliation
             schedules, Flux applies changes only during approved windows, so CAB slots and
@@ -234,10 +262,20 @@ const pipeline = [
           <a href="https://fluxoperator.dev/docs/resourcesets/time-based-delivery/" target="_blank" rel="noopener">
             Read the time-based delivery guide &rarr;
           </a>
+          </div>
         </div>
         <div class="channel">
-          <p class="channel-tag">gitops: gitless</p>
+          <div class="channel-head">
+          <span class="channel-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+              <path d="m3.3 7 8.7 5 8.7-5" />
+              <path d="M12 22V12" />
+            </svg>
+          </span>
           <h3>Gitless GitOps</h3>
+          </div>
+          <div class="channel-body">
           <p>
             Take the Git server out of the critical path. Production clusters pull versioned,
             signed OCI artifacts from container registries, which suits air-gapped environments
@@ -246,10 +284,13 @@ const pipeline = [
           <a href="https://fluxoperator.dev/gitless-gitops/" target="_blank" rel="noopener">
             Learn about Gitless GitOps &rarr;
           </a>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
+  <div class="rows">
     <section class="row">
       <div class="row-copy">
         <p class="eyebrow">air-gapped operations</p>
@@ -403,21 +444,60 @@ const pipeline = [
     border: 1px solid var(--navy-line);
     padding: 1.75rem 1.9rem;
     box-shadow: var(--shadow-navy);
+    counter-reset: stage;
   }
 
+  /* Vertical timeline: a numbered ring per stage, connected by a rail that
+     runs into the next ring (the ring's own background covers the overlap) */
   .pipe-row {
-    padding: 0.9rem 0;
+    position: relative;
+    padding: 0 0 1.4rem 2.5rem;
+    counter-increment: stage;
   }
 
-  .pipe-row + .pipe-row {
-    border-top: 1px solid var(--navy-line);
+  .pipe-row:last-child {
+    padding-bottom: 0;
+  }
+
+  .pipe-row::before {
+    content: counter(stage);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--brand-light);
+    border: 1.5px solid var(--brand-light);
+    border-radius: 50%;
+    background: var(--navy-950);
+  }
+
+  .pipe-row::after {
+    content: '';
+    position: absolute;
+    left: calc(0.75rem + 0.5px);
+    top: calc(1.5rem + 6px);
+    bottom: -0.15rem;
+    width: 2px;
+    background: rgba(114, 174, 250, 0.35);
+  }
+
+  .pipe-row:last-child::after {
+    content: none;
   }
 
   .pipe-step {
+    display: block;
     font-family: var(--font-mono);
     font-size: 0.78rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
+    line-height: 1.65rem;
     color: var(--brand-light);
   }
 
@@ -625,44 +705,73 @@ const pipeline = [
     text-align: center;
   }
 
-  .channels-row {
-    display: block;
+  /* Full-width tinted bands that break the alternating row rhythm,
+     matching the security band on the home page */
+  .band {
+    background: var(--bg-soft);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
   }
 
-  .channels-head {
-    max-width: 44rem;
-    margin-bottom: 2.5rem;
+  .band-inner {
+    max-width: var(--site-width);
+    margin: 0 auto;
+    padding: var(--section-pad) var(--space);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .band h2 {
+    font-size: var(--text-h2);
+    line-height: 1.12;
+    text-align: center;
+    max-width: 42rem;
+    margin: 0 0 2.75rem;
   }
 
   .channels {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.25rem;
   }
 
   .channel {
-    border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    background: var(--bg-soft);
-    padding: 2rem 1.75rem;
+    background: var(--bg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
     scroll-margin-top: calc(var(--header-height) + 1rem);
   }
 
-  .channel-tag {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.04em;
-    color: var(--accent);
-    background: color-mix(in srgb, var(--brand) 10%, transparent);
-    border-radius: 4px;
-    padding: 0.15rem 0.5rem;
-    margin: 0 0 0.85rem;
+  .channel-head {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    background: var(--navy-800);
+    padding: 1rem 1.75rem;
+  }
+
+  .channel-icon {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: var(--radius-md);
+    background: rgba(20, 114, 235, 0.3);
+    color: #ffffff;
   }
 
   .channel h3 {
-    margin: 0 0 0.75rem;
+    margin: 0;
     font-size: 1.3rem;
+    color: #ffffff;
+  }
+
+  .channel-body {
+    padding: 1.25rem 1.75rem 1.75rem;
   }
 
   .channel p,
@@ -670,7 +779,7 @@ const pipeline = [
     font-size: 0.95rem;
   }
 
-  .channel > a {
+  .channel-body > a {
     display: inline-block;
     font-weight: 650;
     font-size: 0.95rem;

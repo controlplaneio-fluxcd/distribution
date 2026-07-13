@@ -1,0 +1,281 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+/* GitHub mark (octicon, 16x16) rendered next to each example repository */
+const githubMark =
+  'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z';
+
+const papers = [
+  {
+    id: 'd2',
+    tag: 'design: 2',
+    date: 'April 2025',
+    title: 'Gitless Reference Architecture',
+    paragraphs: [
+      'This guide introduces Gitless GitOps: the desired state of the system is driven by OCI artifacts stored in container registries, built from manifests tracked in Git during the continuous integration process.',
+      'Production clusters pull versioned, signed artifacts without direct access to the Git server, and the continuous synchronization of desired and actual state is handled by automated workflows and the Flux reconciliation mechanisms.',
+    ],
+    pdf: 'https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/main/guides/ControlPlane_Flux_D2_Reference_Architecture_Guide.pdf',
+    repos: [
+      {
+        name: 'd2-fleet',
+        href: 'https://github.com/controlplaneio-fluxcd/d2-fleet',
+        body: 'The desired state of the Kubernetes clusters and tenants in the fleet',
+      },
+      {
+        name: 'd2-infra',
+        href: 'https://github.com/controlplaneio-fluxcd/d2-infra',
+        body: 'The desired state of the cluster add-ons and the monitoring stack',
+      },
+      {
+        name: 'd2-apps',
+        href: 'https://github.com/controlplaneio-fluxcd/d2-apps',
+        body: 'The desired state of the applications deployed across environments',
+      },
+    ],
+  },
+  {
+    id: 'd1',
+    tag: 'design: 1',
+    date: 'March 2024',
+    title: 'GitOps Reference Architecture',
+    paragraphs: [
+      'This guide is a set of best practices and production-ready examples for managing complex multi-tenant, multi-cluster environments with Flux. It shows how to orchestrate the GitOps delivery of applications and infrastructure workloads while catering to the different teams and stakeholders within an organisation.',
+      'The guide covers the automated update of applications to staging with gated promotion to production through GitHub Pull Requests.',
+    ],
+    pdf: 'https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/main/guides/ControlPlane_Flux_D1_Reference_Architecture_Guide.pdf',
+    repos: [
+      {
+        name: 'd1-fleet',
+        href: 'https://github.com/controlplaneio-fluxcd/d1-fleet',
+        body: 'The desired state of the Kubernetes clusters and tenants in the fleet',
+      },
+      {
+        name: 'd1-infra',
+        href: 'https://github.com/controlplaneio-fluxcd/d1-infra',
+        body: 'The desired state of the cluster add-ons and the monitoring stack',
+      },
+      {
+        name: 'd1-apps',
+        href: 'https://github.com/controlplaneio-fluxcd/d1-apps',
+        body: 'The desired state of the applications deployed across environments',
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="White Papers - ControlPlane Enterprise for Flux CD"
+  description="Reference architecture guides for running Flux in production"
+  forcedTheme="light"
+>
+  <section class="intro">
+    <div class="intro-inner">
+      <p class="eyebrow center">reference architectures</p>
+      <h1>White Papers</h1>
+      <p class="lead">Reference architecture guides for running Flux in production.</p>
+    </div>
+  </section>
+
+  <div class="page">
+    {
+      papers.map((paper) => (
+        <article class="paper" id={paper.id} aria-labelledby={`${paper.id}-title`}>
+          <div class="paper-info">
+            <div class="paper-meta">
+              <p class="eyebrow">{paper.tag}</p>
+              <span class="paper-date">{paper.date}</span>
+            </div>
+            <h2 id={`${paper.id}-title`}>{paper.title}</h2>
+            {paper.paragraphs.map((text) => (
+              <p class="paper-body">{text}</p>
+            ))}
+            <a class="button button-primary paper-download" href={paper.pdf} target="_blank" rel="noopener">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" x2="12" y1="15" y2="3" />
+              </svg>
+              Download the PDF
+            </a>
+          </div>
+          <aside class="paper-repos" aria-label={`${paper.title} example repositories`}>
+            <p class="repos-title">Example repositories</p>
+            {paper.repos.map((repo) => (
+              <a class="repo" href={repo.href} target="_blank" rel="noopener">
+                <svg class="repo-mark" width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path d={githubMark} />
+                </svg>
+                <span class="repo-text">
+                  <span class="repo-name">{repo.name}</span>
+                  <span class="repo-desc">{repo.body}</span>
+                </span>
+              </a>
+            ))}
+          </aside>
+        </article>
+      ))
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .intro {
+    background: linear-gradient(180deg, color-mix(in srgb, var(--brand) 7%, var(--bg)) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .intro-inner {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: clamp(4rem, 8vw, 6rem) var(--space) 3rem;
+    text-align: center;
+  }
+
+  .eyebrow.center {
+    text-align: center;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    letter-spacing: -0.03em;
+    margin: 0 0 1.25rem;
+  }
+
+  .lead {
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    color: var(--muted);
+    max-width: 44rem;
+    margin: 0 auto;
+  }
+
+  .page {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: 2.5rem var(--space) 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .paper {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(1.75rem, 4vw, 3rem);
+    padding: clamp(1.75rem, 3.5vw, 2.5rem);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-soft);
+    scroll-margin-top: calc(var(--header-height) + 1rem);
+  }
+
+  .paper-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .paper-meta .eyebrow {
+    margin: 0;
+  }
+
+  .paper-date {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    background: var(--bg-raised);
+    border-radius: 99px;
+    padding: 0.2rem 0.7rem;
+  }
+
+  .paper h2 {
+    font-size: 1.6rem;
+    margin: 0 0 1rem;
+  }
+
+  .paper-body {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin: 0 0 1rem;
+  }
+
+  .paper-download {
+    margin-top: 0.5rem;
+  }
+
+  .paper-repos {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .repos-title {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .repo {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg);
+    color: var(--fg);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .repo:hover {
+    text-decoration: none;
+    border-color: var(--brand-light);
+    box-shadow: var(--shadow);
+  }
+
+  .repo-mark {
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  .repo-name {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .repo-desc {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 0.15rem;
+  }
+
+  @media (max-width: 860px) {
+    .paper {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

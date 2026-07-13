@@ -66,22 +66,20 @@ export const mainNav: NavMenu[] = [
           {
             title: 'Enterprise Documentation',
             href: '/distribution/overview/',
+            description: 'Install, upgrade, and operate the enterprise distribution with the official guides.',
             icon: 'M4 19.5A2.5 2.5 0 016.5 17H20V3H6.5A2.5 2.5 0 004 5.5v14zm0 0A2.5 2.5 0 006.5 22H20',
           },
           {
             title: 'Flux Architecture',
             href: '/guides/flux-architecture/',
+            description: 'Understand the GitOps Toolkit controllers and how Flux reconciles your clusters.',
             icon: 'M12 2l9 5-9 5-9-5 9-5zm-9 10l9 5 9-5m-18 5l9 5 9-5',
           },
           {
-            title: 'D1 Reference Architecture',
-            href: '/guides/d1-architecture-reference/',
-            icon: 'M6 3v12m12-9a3 3 0 11-6 0 3 3 0 016 0zM9 18a3 3 0 11-6 0 3 3 0 016 0zm9-9a9 9 0 01-9 9',
-          },
-          {
-            title: 'D2 Reference Architecture',
-            href: '/guides/d2-architecture-reference/',
-            icon: 'M3 3h6v6H3zm12 12h6v6h-6zM6 9v3a3 3 0 003 3h6',
+            title: 'White Papers',
+            href: '/whitepapers/',
+            description: 'Reference architectures for production Flux, with example repositories to fork.',
+            icon: 'M4 19.5v-15A2.5 2.5 0 016.5 2H19a1 1 0 011 1v18a1 1 0 01-1 1H6.5a2.5 2.5 0 010-5H20M9 7h6m-6 4h6',
           },
         ],
       },
