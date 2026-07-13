@@ -1,0 +1,81 @@
+---
+import HeroShapes from './HeroShapes.astro';
+import { contactUrl } from '../lib/nav';
+
+interface Props {
+  title: string;
+  lead: string;
+  secondary: { label: string; href: string };
+}
+
+const { title, lead, secondary } = Astro.props;
+---
+
+<section class="phero">
+  <HeroShapes />
+  <div class="inner">
+    <img class="glyph" src="/images/logo/enterprise-for-flux-cd-icon-white.svg" alt="" width="56" height="56" />
+    <p class="phero-eyebrow">ControlPlane Enterprise</p>
+    <h1>{title}</h1>
+    <p class="lead">{lead}</p>
+    <div class="hero-actions">
+      <a class="hero-button" href={contactUrl} target="_blank" rel="noopener">Request a demo</a>
+      <a class="hero-link" href={secondary.href}>{secondary.label} &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .phero {
+    position: relative;
+    background:
+      radial-gradient(56rem 30rem at 50% -12%, rgba(20, 114, 235, 0.32), transparent 62%),
+      var(--navy-900);
+    border-bottom: 1px solid var(--navy-line);
+    color: #eef4fd;
+    overflow: hidden;
+  }
+
+  .inner {
+    position: relative;
+    z-index: 1;
+    max-width: 52rem;
+    margin: 0 auto;
+    padding: clamp(4rem, 8vw, 6.5rem) var(--space);
+    text-align: center;
+  }
+
+  .glyph {
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: 1.25rem;
+    filter: drop-shadow(0 0 18px rgba(114, 174, 250, 0.45));
+  }
+
+  .phero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--brand-light);
+    margin: 0 0 1rem;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.06;
+    margin: 0 0 1.25rem;
+    color: #ffffff;
+  }
+
+  .lead {
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    line-height: 1.65;
+    color: rgba(222, 233, 248, 0.85);
+    margin: 0 auto 2.25rem;
+    max-width: 38rem;
+  }
+</style>

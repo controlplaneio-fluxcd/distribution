@@ -1,0 +1,357 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { contactUrl } from '../../lib/nav';
+import shotWorkload from '../../assets/web-ui/fluxcd-web-ui-workload-dark.png';
+import shotGraph from '../../assets/web-ui/fluxcd-web-ui-graph-dark.png';
+import shotLogViewer from '../../assets/web-ui/fluxcd-web-ui-log-viewer-dark.png';
+import shotFavorites from '../../assets/web-ui/fluxcd-web-ui-favorites-dark.png';
+import shotLogin from '../../assets/web-ui/fluxcd-web-ui-login-dark.png';
+import shotSearch from '../../assets/web-ui/fluxcd-web-ui-search-dark.png';
+import mcpDiagram from '../../assets/diagrams/flux-mcp-ai-assisted-gitops.png';
+
+const webUi = {
+  tag: 'addon: web-ui',
+  title: 'Flux Web UI',
+  lead: 'Watch your clusters converge in real time, with sources, releases, and workloads on one screen, from any device. The UI ships inside the Flux Operator, so there is nothing extra to install or operate.',
+  points: [
+    'Live status for everything Flux manages, from Git and OCI sources to running pods',
+    'Follow a release through each stage of delivery and jump straight into events and logs',
+    'Sign in with your corporate IdP over OIDC, with every action guarded by Kubernetes RBAC',
+  ],
+  links: [
+    { title: 'Try the live demo', href: 'https://status.staging.flux-d2.com', external: true },
+  ],
+};
+
+const tour = [
+  {
+    title: 'GitOps Graph',
+    body: 'Your delivery pipeline drawn as a live graph. Follow a change from its upstream repository down to the pods it created, and watch failures light up where they start.',
+    image: shotGraph,
+    alt: 'GitOps dependency graph in the Flux Web UI tracing a Kustomization from its sources to workloads and resources',
+  },
+  {
+    title: 'Log Viewer',
+    body: 'A viewer that understands your logs: severity levels are picked out, stack traces grouped, and noise filtered away. It parses structured and plain-text formats from any language runtime.',
+    image: shotLogViewer,
+    alt: 'Pod log viewer in the Flux Web UI with severity highlighting and filters for pods, containers and log levels',
+  },
+  {
+    title: 'Favorites',
+    body: 'Build your own watchlist. Star the releases that matter, from production apps to critical infrastructure, and check their health from a single screen.',
+    image: shotFavorites,
+    alt: 'Favorites board in the Flux Web UI listing starred Flux resources with their readiness status',
+  },
+  {
+    title: 'Powerful Search',
+    body: 'Type a few characters and jump to any Kustomization, HelmRelease or source repository across every namespace, narrowing by kind, status or name as you go.',
+    image: shotSearch,
+    alt: 'Search dropdown in the Flux Web UI filtering Flux resources by kind and namespace',
+  },
+];
+
+interface Addon {
+  tag: string;
+  title: string;
+  lead: string;
+  points: string[];
+  links: { title: string; href: string; external?: boolean }[];
+  image: ImageMetadata;
+  imageAlt: string;
+  lightImage?: boolean;
+}
+
+const addons: Addon[] = [
+  {
+    tag: 'addon: mcp-server',
+    title: 'Flux MCP Server',
+    lead: 'A hardened, exclusively read-only MCP server that connects AI assistants to Flux-managed clusters for incident response and pipeline troubleshooting.',
+    points: [
+      'Read-only by design: no operation can alter cluster state, regardless of kubeconfig permissions',
+      'Runs locally on dev laptops and workstations over stdio',
+      'Works with Claude, Copilot, Cursor, and any MCP-compatible assistant',
+    ],
+    links: [
+      { title: 'Local MCP Server docs', href: '/addons/mcp-stdio/' },
+    ],
+    image: mcpDiagram,
+    imageAlt: 'Diagram of AI-assisted GitOps where an AI assistant uses the Flux MCP Server to analyze deployments on a cluster while code changes ship through a pull request',
+    lightImage: true,
+  },
+  {
+    tag: 'addon: dex-idp',
+    title: 'Dex IdP',
+    lead: 'A hardened Dex distribution providing OIDC-based single sign-on for the Flux Web UI and the Flux MCP Server.',
+    points: [
+      'Connects to your existing identity provider: LDAP, SAML, GitHub, Google, Microsoft Entra ID, and more',
+      'Hardened, FIPS-compliant container images and Helm charts',
+      'Enforce identity policies across your GitOps tooling',
+    ],
+    links: [
+      { title: 'Dex IdP docs', href: '/addons/dex/' },
+    ],
+    image: shotLogin,
+    imageAlt: 'Flux Web UI login screen with single sign-on via OpenID Connect',
+  },
+];
+---
+
+<BaseLayout
+  title="Enterprise Addons - ControlPlane Enterprise for Flux CD"
+  description="Enterprise-grade Flux addons: Web UI dashboard, AI-assisted MCP Server, and Dex single sign-on"
+  forcedTheme="light"
+>
+  <ProductHero
+    title="Flux Addons"
+    lead="Extend Flux with a full-featured Web UI, AI-assisted troubleshooting, and single sign-on, all hardened and covered by the same SLAs."
+    secondary={{ label: 'See pricing', href: '/pricing/' }}
+  />
+
+  <div class="rows">
+    <section class="row" aria-label={webUi.title}>
+      <div class="row-copy">
+        <p class="eyebrow">{webUi.tag}</p>
+        <h2>{webUi.title}</h2>
+        <p class="row-lead">{webUi.lead}</p>
+        <ul class="checklist">
+          {webUi.points.map((point) => (
+            <li>
+              <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              {point}
+            </li>
+          ))}
+        </ul>
+        <p class="links">
+          {webUi.links.map(({ title: linkTitle, href, external }) => (
+            <a href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>
+              {linkTitle} &rarr;
+            </a>
+          ))}
+        </p>
+      </div>
+      <div class="row-visual">
+        <div class="shot">
+          <Image
+            src={shotWorkload}
+            alt="Workload view in the Flux Web UI tracing a deployment back through its Helm release to the OCI artifact it came from"
+            widths={[640, 1280]}
+            sizes="(min-width: 960px) 34rem, 100vw"
+          />
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="tour" aria-label="Flux Web UI tour">
+    <div class="tour-inner">
+      <p class="eyebrow">inside the flux web ui</p>
+      <h2>Every stage of delivery, one dashboard</h2>
+      <div class="tour-grid">
+        {
+          tour.map(({ title, body, image, alt }) => (
+            <figure class="tour-card">
+              <div class="tour-shot">
+                <Image src={image} alt={alt} widths={[640, 1280]} sizes="(min-width: 960px) 36rem, 100vw" />
+              </div>
+              <figcaption>
+                <h3>{title}</h3>
+                <p>{body}</p>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <div class="rows">
+    {
+      addons.map(({ tag, title, lead, points, links, image, imageAlt, lightImage }, i) => (
+        <section class:list={['row', { flip: i % 2 === 0 }]} aria-label={title}>
+          <div class="row-copy">
+            <p class="eyebrow">{tag}</p>
+            <h2>{title}</h2>
+            <p class="row-lead">{lead}</p>
+            <ul class="checklist">
+              {points.map((point) => (
+                <li>
+                  <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  {point}
+                </li>
+              ))}
+            </ul>
+            <p class="links">
+              {links.map(({ title: linkTitle, href, external }) => (
+                <a href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>
+                  {linkTitle} &rarr;
+                </a>
+              ))}
+            </p>
+          </div>
+          <div class="row-visual">
+            <div class:list={['shot', { 'shot-light': lightImage }]}>
+              <Image src={image} alt={imageAlt} widths={[640, 1280]} sizes="(min-width: 960px) 34rem, 100vw" />
+            </div>
+          </div>
+        </section>
+      ))
+    }
+  </div>
+
+  <CtaBand
+    title="Covered by your subscription"
+    body="All addons are included in the subscription plans and covered by ControlPlane's SLA for CVE remediation, with hardened images published to private registries available to customers."
+    primary={{ label: 'See the plans', href: '/pricing/' }}
+    secondary={{ label: 'Contact us', href: contactUrl, external: true }}
+  />
+</BaseLayout>
+
+<style>
+  /* Slightly wider copy column than the shared .row default: the checklists
+     carry longer lines than the point paragraphs elsewhere */
+  .row {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  }
+
+  .row h2 {
+    margin-bottom: 1rem;
+  }
+
+  .checklist {
+    list-style: none;
+    margin: 0 0 1.75rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    font-size: 0.98rem;
+  }
+
+  .check {
+    flex-shrink: 0;
+    color: var(--ok);
+    transform: translateY(2px);
+  }
+
+  .links {
+    display: flex;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+    margin: 0;
+  }
+
+  .links a {
+    font-size: 0.98rem;
+    font-weight: 650;
+  }
+
+  /* Dark Web UI screenshots get a navy frame so they sit well on light surfaces */
+  .shot {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--navy-line);
+    background: var(--navy-950);
+    box-shadow: var(--shadow-navy);
+  }
+
+  .shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .shot-light {
+    border-color: var(--border);
+    background: #ffffff;
+    box-shadow: var(--shadow);
+    padding: 1rem;
+  }
+
+  .tour {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-soft);
+  }
+
+  .tour-inner {
+    max-width: var(--site-width);
+    margin: 0 auto;
+    padding: var(--section-pad) var(--space);
+    text-align: center;
+  }
+
+  .tour-inner > h2 {
+    font-size: var(--text-h2);
+    line-height: 1.12;
+    margin: 0 0 clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .tour-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2rem, 4vw, 3rem);
+    text-align: left;
+  }
+
+  .tour-card {
+    margin: 0;
+  }
+
+  .tour-shot {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--navy-line);
+    background: var(--navy-950);
+    box-shadow: 0 18px 44px rgba(6, 14, 30, 0.28);
+    aspect-ratio: 16 / 10;
+  }
+
+  .tour-shot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  .tour-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 1.4rem 0 0.4rem;
+  }
+
+  .tour-card p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  @media (max-width: 960px) {
+    .row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .row-visual {
+      max-width: 34rem;
+    }
+
+    .tour-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

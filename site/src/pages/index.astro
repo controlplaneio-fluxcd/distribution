@@ -1,0 +1,515 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroShapes from '../components/HeroShapes.astro';
+import CtaBand from '../components/CtaBand.astro';
+import HybridDiagram from '../components/HybridDiagram.astro';
+import { contactUrl } from '../lib/nav';
+import { getReleases, type Release } from '../lib/releases';
+import shotHome from '../assets/web-ui/fluxcd-web-ui-home-dark.png';
+import fluxLogo from '../assets/flux-horizontal-color.svg';
+
+/* The hero pill always announces the newest release */
+const latestRelease: Release | undefined = (await getReleases())[0];
+
+const rows = [
+  {
+    eyebrow: 'assurance',
+    title: 'Open source software, with someone on the hook',
+    points: [
+      {
+        title: '24/7 incident support',
+        body: 'Production outages handled around the clock by CNCF Flux maintainers and ControlPlane security engineers.',
+      },
+      {
+        title: 'Guaranteed remediation SLAs',
+        body: 'Contractual response times for CVEs and critical bugs, with fixes backported to the last three minor releases.',
+      },
+      {
+        title: 'A direct line to the source',
+        body: 'No tiered ticket queues. Escalations go to the engineers who wrote the code you run.',
+      },
+    ],
+    link: { title: 'See the support plans', href: '/pricing/' },
+    visual: 'timeline',
+  },
+  {
+    eyebrow: 'continuous delivery',
+    title: 'Deployment velocity that survives change management',
+    points: [
+      {
+        title: 'Ship on every merge',
+        body: 'Declarative delivery from Git or OCI registries to any number of clusters, with automated rollback on failure.',
+      },
+      {
+        title: 'Automation inside approved windows',
+        body: 'Time-based delivery keeps Flux within CAB-approved change windows, enforced by the platform instead of by convention.',
+      },
+      {
+        title: 'Faster incident response',
+        body: 'The Flux Web UI and MCP Server take teams from alert to root cause in minutes, with live pipeline status and AI-assisted troubleshooting.',
+      },
+    ],
+    link: { title: 'Explore the enterprise addons', href: '/addons/' },
+    visual: 'shot',
+  },
+  {
+    eyebrow: 'security & compliance',
+    title: 'Meet regulatory requirements without forking your GitOps stack',
+    points: [
+      {
+        title: 'Zero CVEs with remediation SLAs',
+        body: 'Continuous scanning and patching for controllers, base images, and Go dependencies.',
+      },
+      {
+        title: 'FIPS 140-3 compliant builds',
+        body: 'Go crypto FIPS mode with TLS and SSH restricted to approved settings.',
+      },
+      {
+        title: 'EU Cyber Resilience Act ready',
+        body: 'Full SBOM traceability, vulnerability disclosure, and compliance reporting for CRA obligations.',
+      },
+    ],
+    link: { title: 'See how we harden Flux', href: '/distribution/' },
+    visual: 'compliance',
+  },
+  {
+    eyebrow: 'hybrid & air-gapped',
+    title: 'From public cloud to air-gapped, one distribution',
+    points: [
+      {
+        title: 'Any cloud, any k8s distro',
+        body: 'The same hardened Flux controllers run on EKS, AKS, GKE, OpenShift, and any CNCF-conformant Kubernetes.',
+      },
+      {
+        title: 'Air-gapped by design',
+        body: 'Mirror the entire distribution to your private registry with one command, signatures verified at the boundary.',
+      },
+      {
+        title: 'Updates without internet access',
+        body: 'Patch releases and CVE fixes flow from your own registry, on your schedule, with no outside connectivity.',
+      },
+    ],
+    link: { title: 'Read the air-gapped guide', href: '/distribution/install/' },
+    visual: 'diagram',
+  },
+  {
+    eyebrow: 'open source sustainability',
+    title: 'Your subscription keeps Flux thriving',
+    points: [
+      {
+        title: 'Funded upstream development',
+        body: 'Enterprise revenue pays the maintainers who develop, secure, and release CNCF Flux for everyone.',
+      },
+      {
+        title: 'No lock-in by design',
+        body: 'The enterprise edition is 100% compatible with the upstream APIs. Switching back to the CNCF images is a one-field change.',
+      },
+    ],
+    link: { title: 'Read about the distribution', href: '/distribution/' },
+    visual: 'banner',
+  },
+];
+
+const timeline = [
+  { step: 'incident', desc: 'Production reconciliation stalled, P1 raised with the support team' },
+  { step: 'response', desc: 'Flux core maintainer engaged within the SLA window' },
+  { step: 'remediation', desc: 'Hotfix built, signed, and rolled out by the Flux Operator' },
+  { step: 'resolution', desc: 'Root cause documented, fix backported to supported releases' },
+];
+
+const compliance = [
+  { title: 'Zero known CVEs', body: 'Images scanned and patched daily' },
+  { title: 'FIPS 140-3', body: 'Approved cryptography end to end' },
+  { title: 'Signed images', body: 'Authenticity verified with Cosign' },
+  { title: 'SBOMs and VEX documents', body: 'Dependency transparency and exploitability status' },
+];
+---
+
+<BaseLayout
+  title="ControlPlane Enterprise for Flux CD"
+  description="ControlPlane offers a hardened, enterprise-grade distribution and support services for the CNCF-graduated Flux project."
+  forcedTheme="light"
+>
+  <section class="hero">
+    <HeroShapes />
+    <div class="hero-inner">
+      {
+        latestRelease && (
+          <a class="pill" href={latestRelease.href}>
+            Flux {latestRelease.version} is out
+            <span class="pill-more">Release notes &rarr;</span>
+          </a>
+        )
+      }
+      <h1>Run Flux in production<br />with confidence</h1>
+      <p class="hero-sub">
+        Ship changes to thousands of clusters with the enterprise distribution of Flux CD,
+        backed by the people who build the CNCF project.
+      </p>
+      <div class="hero-actions">
+        <a class="hero-button" href={contactUrl} target="_blank" rel="noopener">Request a demo</a>
+        <a class="hero-link" href="/pricing/">See pricing &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="trust">
+    <div class="trust-inner">
+      <p class="sr-only">
+        Trusted by Fortune 500 organisations and government institutions
+      </p>
+      <p class="trust-line" aria-hidden="true">
+        <span class="trust-label">Trusted by</span>
+        <span class="swap" id="trust-swap">
+          <span class="swap-item is-active">Financial services</span>
+          <span class="swap-item">Fortune 500 organisations</span>
+          <span class="swap-item">Telecom providers</span>
+          <span class="swap-item">Government institutions</span>
+        </span>
+      </p>
+    </div>
+  </section>
+
+  <div class="rows">
+    {
+      rows.map(({ eyebrow, title, points, link, visual }, i) => (
+        <section class:list={['row', { flip: i % 2 === 1 }]}>
+          <div class="row-copy">
+            <p class="eyebrow">{eyebrow}</p>
+            <h2>{title}</h2>
+            <div class="points">
+              {points.map((point) => (
+                <div class="point">
+                  <h3>{point.title}</h3>
+                  <p>{point.body}</p>
+                </div>
+              ))}
+            </div>
+            <a class="row-more" href={link.href}>
+              {link.title} &rarr;
+            </a>
+          </div>
+          <div class="row-visual">
+            {visual === 'timeline' && (
+              <div class="panel timeline" aria-hidden="true">
+                {timeline.map(({ step, desc }, i) => (
+                  <div class="tl-row">
+                    <span class="tl-step">{String(i + 1).padStart(2, '0')} {step}</span>
+                    <p>{desc}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            {visual === 'compliance' && (
+              <div class="panel compliance">
+                {compliance.map((row) => (
+                  <div class="comp-row">
+                    <svg class="check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                    <div>
+                      <p class="comp-title">{row.title}</p>
+                      <p class="comp-body">{row.body}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {visual === 'diagram' && <HybridDiagram />}
+            {visual === 'banner' && (
+              <div class="panel banner">
+                <img src={fluxLogo.src} alt="CNCF Flux" width="320" height="166" loading="lazy" />
+                <p class="banner-caption">reconciling since 2016</p>
+              </div>
+            )}
+            {visual === 'shot' && (
+              <div class="panel shot">
+                <Image
+                  src={shotHome}
+                  alt="Cluster overview in the Flux Web UI with controller health, sync state and GitOps resource counters"
+                  widths={[640, 1280]}
+                  sizes="(min-width: 960px) 34rem, 100vw"
+                />
+              </div>
+            )}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+
+  <CtaBand
+    title="Talk to the Flux team at ControlPlane"
+    body="Get a demo of the enterprise distribution and a subscription that fits your environment, from a single cluster to a whole fleet."
+    primary={{ label: 'Contact us', href: contactUrl, external: true }}
+    secondary={{ label: 'See the plans', href: '/pricing/' }}
+  />
+</BaseLayout>
+
+<script>
+  /* Rotate the trusted-by audiences in place; the container is sized to the
+     widest phrase by the grid, so nothing shifts horizontally */
+  const swap = document.getElementById('trust-swap');
+  const items = swap ? Array.from(swap.querySelectorAll<HTMLElement>('.swap-item')) : [];
+  if (swap && items.length > 1) {
+    let index = 0;
+    window.setInterval(() => {
+      const prev = items[index];
+      index = (index + 1) % items.length;
+      const next = items[index];
+      prev.classList.remove('is-active');
+      prev.classList.add('is-leaving');
+      window.setTimeout(() => prev.classList.remove('is-leaving'), 500);
+      next.classList.add('is-active');
+    }, 2600);
+  }
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    background:
+      radial-gradient(60rem 32rem at 50% -12%, rgba(20, 114, 235, 0.35), transparent 62%),
+      var(--navy-900);
+    border-bottom: 1px solid var(--navy-line);
+    color: #eef4fd;
+    overflow: hidden;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 56rem;
+    margin: 0 auto;
+    padding: clamp(5rem, 10vw, 8rem) var(--space) clamp(5rem, 10vw, 7.5rem);
+    text-align: center;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: #dbe7fa;
+    background: rgba(14, 28, 54, 0.7);
+    border: 1px solid var(--navy-line);
+    border-radius: 99px;
+    padding: 0.45rem 1.1rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .pill:hover {
+    text-decoration: none;
+    border-color: rgba(114, 174, 250, 0.5);
+  }
+
+  .pill-more {
+    color: var(--brand-light);
+    font-weight: 600;
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    font-weight: 700;
+    letter-spacing: -0.032em;
+    line-height: 1.04;
+    margin: 0 0 1.5rem;
+    color: #ffffff;
+  }
+
+  .hero-sub {
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    color: rgba(222, 233, 248, 0.85);
+    margin: 0 0 2.5rem;
+  }
+
+  .trust {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-soft);
+  }
+
+  .trust-inner {
+    max-width: var(--site-width);
+    margin: 0 auto;
+    padding: 1.75rem var(--space);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .trust-line {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 1rem;
+    margin: 0;
+  }
+
+  .trust-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+  }
+
+  .swap {
+    display: inline-grid;
+    text-align: left;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+  }
+
+  .swap-item {
+    grid-area: 1 / 1;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(0.7em);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+  }
+
+  .swap-item.is-active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .swap-item.is-leaving {
+    opacity: 0;
+    transform: translateY(-0.7em);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .swap,
+    .swap-item {
+      transition: none;
+    }
+  }
+
+  .row h2 {
+    margin-bottom: 2rem;
+  }
+
+  .panel {
+    border-radius: var(--radius-lg);
+  }
+
+  .panel.compliance {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    padding: 2.25rem 2rem;
+    box-shadow: var(--shadow);
+  }
+
+  .comp-row {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .check {
+    flex-shrink: 0;
+    color: var(--ok);
+    margin-top: 0.2rem;
+  }
+
+  .comp-title {
+    font-weight: 700;
+    font-size: 1.02rem;
+    margin: 0;
+  }
+
+  .comp-body {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 0.15rem 0 0;
+  }
+
+  .panel.timeline {
+    display: flex;
+    flex-direction: column;
+    background: var(--navy-950);
+    border: 1px solid var(--navy-line);
+    padding: 1.75rem 1.9rem;
+    box-shadow: var(--shadow-navy);
+  }
+
+  .tl-row {
+    padding: 0.9rem 0;
+  }
+
+  .tl-row + .tl-row {
+    border-top: 1px solid var(--navy-line);
+  }
+
+  .tl-step {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--brand-light);
+  }
+
+  .tl-row p {
+    font-size: 0.9rem;
+    color: rgba(215, 227, 247, 0.8);
+    margin: 0.3rem 0 0;
+  }
+
+  .panel.banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.75rem;
+    min-height: 22rem;
+    background:
+      radial-gradient(24rem 16rem at 50% 45%, rgba(255, 255, 255, 0.9), transparent 70%),
+      linear-gradient(115deg, #dcebfd 0%, #f3f8fe 42%, #ffffff 100%);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .panel.banner img {
+    width: clamp(13rem, 55%, 19rem);
+    height: auto;
+  }
+
+  .banner-caption {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  /* Dark Web UI screenshot framed in navy so it sits well on the light surface */
+  .panel.shot {
+    overflow: hidden;
+    border: 1px solid var(--navy-line);
+    background: var(--navy-950);
+    box-shadow: var(--shadow-navy);
+  }
+
+  .panel.shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+</style>

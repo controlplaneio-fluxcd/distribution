@@ -1,0 +1,67 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /* Marketing pages render light-only (navy hero surfaces); docs keep the toggle */
+  forcedTheme?: 'light';
+}
+
+const { title, description, forcedTheme } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/images/og/og-cpef.png', Astro.site);
+---
+
+<!doctype html>
+<html lang="en" data-forced-theme={forcedTheme}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/images/logo/enterprise-for-flux-cd-icon-colour.png" type="image/png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@controlplaneio" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <slot name="head" />
+    <script is:inline>
+      (() => {
+        /* The .js class gates JS-dependent CSS (hidden mobile nav, docs sidebar);
+           without it those collapse to always-visible no-JS fallbacks */
+        document.documentElement.classList.add('js');
+        const forced = document.documentElement.dataset.forcedTheme;
+        if (forced) {
+          document.documentElement.dataset.theme = forced;
+          return;
+        }
+        const stored = localStorage.getItem('theme');
+        const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = stored === 'light' || stored === 'dark' ? stored : system;
+      })();
+    </script>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

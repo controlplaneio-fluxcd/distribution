@@ -1,0 +1,661 @@
+---
+import { Image } from 'astro:assets';
+import ThemeToggle from './ThemeToggle.astro';
+import { mainNav, contactUrl } from '../lib/nav';
+import controlPlaneLogo from '../assets/controlplane-logo.svg';
+import fluxOperatorLogo from '../assets/flux-operator-logo.svg';
+
+const path = Astro.url.pathname;
+
+/* Exactly one menu may be highlighted: the standalone marketing pages belong
+   to Product, everything else with content is documentation → Resources.
+   Keep this set in sync with the Product group hrefs in mainNav. */
+const productPages = new Set(['/distribution/', '/addons/', '/pricing/']);
+const activeMenu = productPages.has(path) ? 'Product' : path === '/' ? undefined : 'Resources';
+---
+
+<header>
+  <div class="inner">
+    <a class="wordmark" href="/" aria-label="Enterprise for Flux CD home">
+      <img src="/images/logo/enterprise-for-flux-cd-icon-colour.svg" alt="" width="30" height="30" />
+      <span class="wordmark-text">
+        <span class="wordmark-top">Enterprise for</span>
+        <span class="wordmark-bottom">Flux CD</span>
+      </span>
+    </a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+      <svg class="icon-burger" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="4" y1="6" x2="20" y2="6"></line>
+        <line x1="4" y1="12" x2="20" y2="12"></line>
+        <line x1="4" y1="18" x2="20" y2="18"></line>
+      </svg>
+      <svg class="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="5" y1="5" x2="19" y2="19"></line>
+        <line x1="19" y1="5" x2="5" y2="19"></line>
+      </svg>
+    </button>
+    <nav id="site-nav" aria-label="Main">
+      {
+        mainNav.map((menu) => (
+          <div class="menu">
+            <button
+              class="menu-trigger"
+              type="button"
+              aria-expanded="false"
+              aria-current={menu.title === activeMenu ? 'true' : undefined}
+            >
+              {menu.title}
+              <svg class="chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+            <div class="dropdown">
+              <div class="dropdown-inner">
+                <div class="groups">
+                  {menu.groups.map((group) => (
+                    <div class="group">
+                      {group.label && <p class="group-label">{group.label}</p>}
+                      <ul>
+                        {group.items.map(({ title, href, external, description, icon }) => (
+                          <li>
+                            <a
+                              href={href}
+                              target={external ? '_blank' : undefined}
+                              rel={external ? 'noopener' : undefined}
+                              aria-current={!external && path === href ? 'page' : undefined}
+                            >
+                              {icon && (
+                                <span class="item-icon">
+                                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d={icon} />
+                                  </svg>
+                                </span>
+                              )}
+                              <span class="item-body">
+                                <span class="item-title">
+                                  {title}
+                                  {external && (
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                      <path d="M7 17 17 7M9 7h8v8" />
+                                    </svg>
+                                  )}
+                                </span>
+                                {description && <span class="item-desc">{description}</span>}
+                              </span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+                {menu.aside === 'demo' && (
+                  <aside class="promo">
+                    <p class="promo-title">Product demo</p>
+                    <p class="promo-text">
+                      See the enterprise distribution and addons in action, presented by the Flux
+                      team at ControlPlane.
+                    </p>
+                    <a class="promo-button" href={contactUrl} target="_blank" rel="noopener">
+                      Request a demo
+                    </a>
+                  </aside>
+                )}
+                {menu.aside === 'operator' && (
+                  <aside class="promo">
+                    <Image class="promo-logo" src={fluxOperatorLogo} alt="Flux Operator" width="162" height="36" />
+                    <p class="promo-text">
+                      Autopilot for Flux CD: self-service capabilities, auto upgrades, and
+                      multi-tenancy lockdown.
+                    </p>
+                    <a class="promo-link" href="https://fluxoperator.dev/" target="_blank" rel="noopener">
+                      fluxoperator.dev &rarr;
+                    </a>
+                  </aside>
+                )}
+                {menu.aside === 'brand' && (
+                  <aside class="promo">
+                    <Image class="promo-logo" src={controlPlaneLogo} alt="ControlPlane" width="144" height="30" />
+                    <p class="promo-text">
+                      Cybersecurity consulting and advisory, trusted by the world's leading organisations.
+                    </p>
+                    <a class="promo-link" href="https://control-plane.io/" target="_blank" rel="noopener">
+                      control-plane.io &rarr;
+                    </a>
+                  </aside>
+                )}
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </nav>
+    <div class="controls">
+      <ThemeToggle />
+      <a class="button button-primary cta" href={contactUrl} target="_blank" rel="noopener">Contact us</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .inner {
+    max-width: var(--site-width);
+    height: var(--header-height);
+    margin: 0 auto;
+    padding: 0 var(--space);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .wordmark {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--fg);
+    flex-shrink: 0;
+  }
+
+  .wordmark:hover {
+    text-decoration: none;
+  }
+
+  .wordmark-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+
+  .wordmark-top {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+  }
+
+  .wordmark-bottom {
+    font-size: 0.98rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  nav {
+    display: flex;
+    align-items: stretch;
+    align-self: stretch;
+    gap: 0.25rem;
+    margin-right: auto;
+  }
+
+  /* Menus are static so the panels anchor to the full-width header, and the
+     triggers span the whole header height so there is no dead hover gap
+     between the trigger and its panel without flicker */
+  .menu {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .menu-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: none;
+    border: 0;
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--fg);
+    padding: 0 0.75rem;
+    cursor: pointer;
+  }
+
+  .menu:hover .menu-trigger,
+  .menu:focus-within .menu-trigger {
+    color: var(--accent);
+  }
+
+  .menu-trigger[aria-current='true'] {
+    color: var(--accent);
+  }
+
+  .chevron {
+    color: var(--muted);
+    transition: transform 0.15s;
+  }
+
+  .dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 32px 48px -32px rgba(5, 11, 22, 0.35);
+    opacity: 0;
+    visibility: hidden;
+    /* Short close delay so diagonal mouse paths don't drop the panel */
+    transition: opacity 0.12s ease 0.06s, visibility 0.12s ease 0.06s;
+  }
+
+  .menu:hover .dropdown,
+  .menu:focus-within .dropdown,
+  .menu.open .dropdown {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+    z-index: 2;
+  }
+
+  .menu:hover .chevron,
+  .menu:focus-within .chevron,
+  .menu.open .chevron {
+    transform: rotate(180deg);
+  }
+
+  .dropdown-inner {
+    max-width: var(--site-width);
+    margin: 0 auto;
+    padding: 1.75rem var(--space) 2rem;
+    display: flex;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: stretch;
+  }
+
+  .groups {
+    flex: 1;
+    display: flex;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  .group {
+    width: 100%;
+    max-width: 22rem;
+  }
+
+  .group-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin: 0 0 0.6rem;
+    padding: 0 0.5rem;
+  }
+
+  .dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .group a {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 0.55rem 0.5rem;
+    border-radius: var(--radius-sm);
+    color: var(--fg);
+    line-height: 1.4;
+  }
+
+  .group a:hover {
+    background: var(--bg-soft);
+    text-decoration: none;
+  }
+
+  .group a:hover .item-title {
+    color: var(--accent);
+  }
+
+  .group a[aria-current='page'] .item-title {
+    color: var(--accent);
+  }
+
+  .item-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    flex-shrink: 0;
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--brand) 10%, transparent);
+    color: var(--accent);
+  }
+
+  .group a:hover .item-icon {
+    background: color-mix(in srgb, var(--brand) 16%, transparent);
+  }
+
+  .item-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+    align-self: center;
+  }
+
+  .item-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.9rem;
+    font-weight: 550;
+  }
+
+  .item-title svg {
+    color: var(--muted);
+  }
+
+  .item-desc {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  /* Right-hand panel column: navy promo card */
+  .promo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 19rem;
+    flex-shrink: 0;
+    padding: 1.5rem 1.5rem 1.4rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--navy-line);
+    background:
+      radial-gradient(18rem 10rem at 85% -20%, rgba(20, 114, 235, 0.4), transparent 70%),
+      var(--navy-900);
+  }
+
+  .promo-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #ffffff;
+    margin: 0 0 0.6rem;
+  }
+
+  .promo-text {
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: rgba(222, 233, 248, 0.78);
+    margin: 0 0 1.25rem;
+  }
+
+  .promo-button {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.5rem 1.1rem;
+    margin-top: auto;
+    border-radius: var(--radius-sm);
+    background: var(--brand);
+    border: 1px solid var(--brand);
+    color: #ffffff;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .promo-button:hover {
+    background: #2c82f2;
+    border-color: #2c82f2;
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .promo-logo {
+    width: 9.5rem;
+    height: auto;
+    margin-bottom: 0.9rem;
+  }
+
+  .promo-link {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--brand-light);
+    margin-top: auto;
+  }
+
+  .promo-link:hover {
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+  }
+
+  .cta {
+    font-size: 0.88rem;
+    padding: 0.5rem 1.1rem;
+  }
+
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--muted);
+    padding: 0.35rem 0.45rem;
+    cursor: pointer;
+  }
+
+  .menu-toggle .icon-close {
+    display: none;
+  }
+
+  .menu-toggle[aria-expanded='true'] .icon-burger {
+    display: none;
+  }
+
+  .menu-toggle[aria-expanded='true'] .icon-close {
+    display: block;
+  }
+
+  @media (max-width: 960px) {
+    .inner {
+      gap: 1rem;
+    }
+
+    .menu-toggle {
+      display: inline-flex;
+    }
+
+    .controls {
+      margin-left: auto;
+    }
+
+    .cta {
+      display: none;
+    }
+
+    nav {
+      display: none;
+      position: absolute;
+      top: var(--header-height);
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      align-self: auto;
+      gap: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 0 0.75rem;
+      box-shadow: var(--shadow);
+      max-height: calc(100dvh - var(--header-height));
+      overflow-y: auto;
+    }
+
+    nav.open {
+      display: flex;
+    }
+
+    .menu {
+      display: block;
+    }
+
+    .menu-trigger {
+      width: 100%;
+      justify-content: space-between;
+      padding: 0.7rem var(--space);
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    /* On mobile the dropdowns become click-toggled accordion sections */
+    .dropdown {
+      position: static;
+      border: 0;
+      box-shadow: none;
+      background: none;
+      display: none;
+      opacity: 1;
+      visibility: visible;
+      transition: none;
+    }
+
+    .dropdown-inner {
+      display: block;
+      padding: 0 0.75rem 0.5rem;
+    }
+
+    .groups {
+      display: block;
+    }
+
+    .group {
+      max-width: none;
+    }
+
+    .menu:hover .dropdown,
+    .menu:focus-within .dropdown {
+      display: none;
+    }
+
+    .menu.open .dropdown {
+      display: block;
+    }
+
+    .menu:hover .chevron,
+    .menu:focus-within .chevron {
+      transform: none;
+    }
+
+    .menu.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    .group-label {
+      margin-top: 0.5rem;
+    }
+
+    .promo {
+      width: auto;
+      margin: 0.75rem 0.5rem 0.5rem;
+    }
+
+    /* No-JS fallback: the hamburger cannot work, so render the nav in flow,
+       fully expanded, and let the page scroll past it */
+    :global(html:not(.js)) header {
+      position: static;
+    }
+
+    :global(html:not(.js)) .menu-toggle {
+      display: none;
+    }
+
+    :global(html:not(.js)) .inner {
+      flex-wrap: wrap;
+      height: auto;
+      min-height: var(--header-height);
+    }
+
+    :global(html:not(.js)) nav {
+      display: flex;
+      position: static;
+      order: 3;
+      width: 100%;
+      max-height: none;
+      box-shadow: none;
+      border-bottom: 0;
+    }
+
+    :global(html:not(.js)) .dropdown {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle')!;
+  const nav = document.getElementById('site-nav')!;
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+
+  /* Click-toggled dropdowns (touch devices and mobile accordion).
+     Desktop hover/focus is handled in CSS, so aria-expanded must also track
+     the CSS-driven reveal or assistive tech reads a closed state on an
+     open panel. */
+  const desktop = window.matchMedia('(min-width: 961px)');
+  for (const menu of document.querySelectorAll<HTMLElement>('.menu')) {
+    const trigger = menu.querySelector<HTMLButtonElement>('.menu-trigger')!;
+    const sync = (open: boolean) => trigger.setAttribute('aria-expanded', String(open));
+    trigger.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      sync(open);
+      for (const other of document.querySelectorAll<HTMLElement>('.menu.open')) {
+        if (other !== menu) {
+          other.classList.remove('open');
+          other.querySelector('.menu-trigger')?.setAttribute('aria-expanded', 'false');
+        }
+      }
+    });
+    menu.addEventListener('pointerenter', () => {
+      if (desktop.matches) sync(true);
+    });
+    menu.addEventListener('pointerleave', () => {
+      if (desktop.matches && !menu.classList.contains('open')) sync(false);
+    });
+    menu.addEventListener('focusin', () => {
+      if (desktop.matches) sync(true);
+    });
+    menu.addEventListener('focusout', (e) => {
+      const next = e.relatedTarget;
+      const stillInside = next instanceof Node && menu.contains(next);
+      if (desktop.matches && !stillInside && !menu.classList.contains('open')) sync(false);
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!(e.target instanceof Node)) return;
+    for (const menu of document.querySelectorAll<HTMLElement>('.menu.open')) {
+      if (!menu.contains(e.target)) {
+        menu.classList.remove('open');
+        menu.querySelector('.menu-trigger')?.setAttribute('aria-expanded', 'false');
+      }
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    for (const menu of document.querySelectorAll<HTMLElement>('.menu.open')) {
+      menu.classList.remove('open');
+      menu.querySelector('.menu-trigger')?.setAttribute('aria-expanded', 'false');
+    }
+  });
+</script>

@@ -1,0 +1,536 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { contactUrl } from '../../lib/nav';
+
+const plans: { name: string; scope: string; price: string | null; featured: boolean }[] = [
+  { name: 'CPEF-1', scope: 'Up to 1 cluster or 10 nodes', price: '$1,250', featured: false },
+  { name: 'CPEF-10', scope: 'Up to 10 clusters or 100 nodes', price: '$6,250', featured: true },
+  { name: 'CPEF-25', scope: 'Up to 25 clusters or 250 nodes', price: '$10,500', featured: false },
+  { name: 'CPEF-100', scope: 'Up to 100 clusters or 1000 nodes', price: null, featured: false },
+];
+
+const included = [
+  'Enterprise distribution and addons',
+  'CVE remediation SLAs',
+  '24/7 production support',
+];
+
+const services = [
+  {
+    title: '24/7 Expert Coverage',
+    body: 'Global support teams across North America, EMEA, and APAC with guaranteed response SLAs.',
+    icon: 'M12 3a8 8 0 018 8v5a3 3 0 01-3 3h-1v-7h4M4 19v-8a8 8 0 018-8m-8 9H3m1 0h3v7H6a3 3 0 01-2-1',
+  },
+  {
+    title: 'Vulnerability management',
+    body: 'Disclosures and remediation guidance for Flux-related vulnerabilities.',
+    icon: 'M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3zm-3 9l2.2 2.2L15.5 9.9',
+  },
+  {
+    title: 'Continuous updates',
+    body: 'Regular communication on Flux updates, patches, RFCs, and roadmap changes.',
+    icon: 'M21 12a9 9 0 11-9-9c2.5 0 4.8 1 6.4 2.6L21 8m0-5v5h-5',
+  },
+];
+
+const consultancy = [
+  {
+    title: 'Architecture reviews',
+    body: 'A thorough assessment of your GitOps setup with concrete recommendations.',
+  },
+  {
+    title: 'Flux training',
+    body: 'Hands-on workshops that bring your platform and application teams up to speed.',
+  },
+  {
+    title: 'GitOps adoption',
+    body: 'Guidance for rolling out Flux across teams, clusters, and environments.',
+  },
+  {
+    title: 'Custom development',
+    body: 'Flux Operator features and integrations built for your platform.',
+  },
+];
+---
+
+<BaseLayout
+  title="Pricing - ControlPlane Enterprise for Flux CD"
+  description="ControlPlane Enterprise for Flux CD pricing and support services"
+  forcedTheme="light"
+>
+  <section class="intro">
+    <div class="intro-inner">
+      <p class="eyebrow center">subscription: yearly</p>
+      <h1>Pricing</h1>
+      <p class="lead">
+        Plans sized to your fleet, backed by enterprise support from ControlPlane.
+      </p>
+    </div>
+  </section>
+
+  <div class="page">
+    <section class="section" aria-labelledby="subscription-plans">
+      <h2 class="visually-hidden" id="subscription-plans">Subscription plans</h2>
+      <div class="plans">
+        {
+          plans.map(({ name, scope, price, featured }) => (
+            <div class:list={['plan', { featured }]}>
+              {featured && <p class="flag">Most popular</p>}
+              <h3>{name}</h3>
+              <p class="scope">{scope}</p>
+              <p class="price">
+                {price ?? 'Custom'}
+                <span class="period">{price ? 'USD / month, billed annually' : 'contact us for a quote'}</span>
+              </p>
+              <a class:list={['button', { 'button-primary': featured }]} href={contactUrl} target="_blank" rel="noopener">
+                Contact us
+              </a>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="included" aria-label="Included in every plan">
+        <p class="included-title">Every plan includes</p>
+        <ul>
+          {
+            included.map((item) => (
+              <li>
+                <svg class="check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="notes">
+        <aside class="note tip">
+          <p class="note-title">Free for non-production environments</p>
+          <p>
+            The offer is based on the number of production clusters or the number of production nodes
+            across clusters, whichever limit is reached first. Dev and Staging environments are covered
+            at no extra cost.
+          </p>
+        </aside>
+        <aside class="note info">
+          <p class="note-title">AWS Marketplace</p>
+          <p>
+            Amazon EKS customers can purchase the ControlPlane Enterprise for Flux CD from
+            the <a href="https://aws.amazon.com/marketplace/pp/prodview-ndm54wno7tayg" target="_blank" rel="noopener">AWS Marketplace</a>.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="support-services">
+      <h2 id="support-services">Support services</h2>
+      <p>
+        ControlPlane offers a range of support services to help you get the most out of the
+        enterprise distribution. The support services included in the subscription plans are:
+      </p>
+      <div class="services">
+        {
+          services.map(({ title, body, icon }) => (
+            <div class="service">
+              <div class="icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d={icon} />
+                </svg>
+              </div>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="consultancy-services">
+      <div class="consult">
+        <div class="consult-head">
+          <p class="eyebrow">consultancy</p>
+          <h2 id="consultancy-services">Work with the Flux experts</h2>
+          <p class="consult-lead">
+            Get direct access to CNCF Flux core maintainers and ControlPlane security engineers.
+            All engagements are available upon request, on top of any subscription plan.
+          </p>
+        </div>
+        <ul class="consult-grid">
+          {
+            consultancy.map(({ title, body }) => (
+              <li>
+                <h3>{title}</h3>
+                <p>{body}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="custom-plans">
+      <div class="custom">
+        <div>
+          <h2 id="custom-plans">Custom plans</h2>
+          <p>
+            Organizations come in various sizes with different requirements for managing and securing
+            their Kubernetes deployments using GitOps. Talk to us about your environment and get a
+            quote that fits your needs, while contributing positively to the open-source CNCF Flux
+            project.
+          </p>
+        </div>
+        <a class="button button-primary" href={contactUrl} target="_blank" rel="noopener">Contact us</a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .intro {
+    background: linear-gradient(180deg, color-mix(in srgb, var(--brand) 7%, var(--bg)) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .intro-inner {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: clamp(4rem, 8vw, 6rem) var(--space) 3rem;
+    text-align: center;
+  }
+
+  .eyebrow.center {
+    text-align: center;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    letter-spacing: -0.03em;
+    margin: 0 0 1.25rem;
+  }
+
+  .lead {
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    color: var(--muted);
+    max-width: 40rem;
+    margin: 0 auto;
+  }
+
+  .page {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: 1rem var(--space) 2rem;
+  }
+
+  .section {
+    margin-top: 3rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin: 0 0 1rem;
+    scroll-margin-top: calc(var(--header-height) + 1rem);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13.5rem, 1fr));
+    gap: 1.1rem;
+    align-items: stretch;
+  }
+
+  .plan {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 1.75rem 1.4rem 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-soft);
+    text-align: center;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .plan:hover {
+    border-color: var(--brand-light);
+    box-shadow: var(--shadow);
+  }
+
+  .plan.featured {
+    border-color: var(--accent);
+    box-shadow: var(--shadow);
+  }
+
+  .flag {
+    position: absolute;
+    top: -0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-contrast);
+    background: var(--accent);
+    border-radius: 99px;
+    padding: 0.2rem 0.75rem;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .plan h3 {
+    font-size: 1.05rem;
+    margin: 0 0 0.4rem;
+  }
+
+  .scope {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin: 0 0 1.5rem;
+  }
+
+  .price {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: auto 0 1.5rem;
+  }
+
+  .period {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0;
+    margin-top: 0.2rem;
+  }
+
+  .plan .button {
+    justify-content: center;
+  }
+
+  .included {
+    margin-top: 1.75rem;
+    padding: 1.1rem 1.4rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .included-title {
+    font-size: 0.8rem;
+    font-weight: 650;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .included ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+  }
+
+  .included li {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.88rem;
+  }
+
+  .check {
+    color: var(--ok);
+    flex-shrink: 0;
+  }
+
+  .notes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: 1.1rem;
+    margin-top: 1.5rem;
+  }
+
+  .note {
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-soft);
+    font-size: 0.93rem;
+  }
+
+  .note.tip {
+    border-left: 3px solid var(--ok);
+  }
+
+  .note.info {
+    border-left: 3px solid var(--accent);
+  }
+
+  .note-title {
+    font-weight: 650;
+    margin: 0 0 0.4rem;
+  }
+
+  .note.tip .note-title {
+    color: var(--ok);
+  }
+
+  .note.info .note-title {
+    color: var(--accent);
+  }
+
+  .note p {
+    margin: 0;
+  }
+
+  .services {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.1rem;
+    margin: 1.25rem 0;
+  }
+
+  .service {
+    padding: 1.4rem 1.3rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-soft);
+  }
+
+  .icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--brand) 12%, transparent);
+    color: var(--accent);
+    margin-bottom: 0.9rem;
+  }
+
+  .service h3 {
+    font-size: 1rem;
+    margin: 0 0 0.4rem;
+  }
+
+  .service p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .consult {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: center;
+    gap: clamp(1.75rem, 4vw, 3rem);
+    padding: clamp(2rem, 4vw, 3rem);
+    border: 1px solid var(--navy-line);
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(38rem 24rem at 90% -30%, rgba(20, 114, 235, 0.32), transparent 62%),
+      var(--navy-900);
+  }
+
+  .consult .eyebrow {
+    color: #72aefa;
+  }
+
+  .consult-head h2 {
+    color: #ffffff;
+    margin-bottom: 0.75rem;
+  }
+
+  .consult-lead {
+    color: rgba(222, 233, 248, 0.78);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .consult-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .consult-grid li {
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--navy-line);
+    border-radius: var(--radius-md);
+    background: rgba(14, 28, 54, 0.55);
+  }
+
+  .consult-grid h3 {
+    font-size: 0.95rem;
+    color: #ffffff;
+    margin: 0 0 0.35rem;
+  }
+
+  .consult-grid p {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: rgba(222, 233, 248, 0.72);
+    margin: 0;
+  }
+
+  @media (max-width: 760px) {
+    .consult {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .consult-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .custom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2rem 1.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-soft);
+    flex-wrap: wrap;
+  }
+
+  .custom h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .custom p {
+    color: var(--muted);
+    max-width: 42rem;
+    margin: 0;
+  }
+
+  .custom .button {
+    flex-shrink: 0;
+  }
+</style>

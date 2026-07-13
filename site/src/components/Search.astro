@@ -1,0 +1,220 @@
+<button id="search-open" type="button" aria-label="Search docs" title="Search (Cmd+K)">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+    <circle cx="11" cy="11" r="7"></circle>
+    <line x1="21" y1="21" x2="16.5" y2="16.5"></line>
+  </svg>
+  <span class="label">Search docs</span>
+  <kbd>⌘K</kbd>
+</button>
+
+<dialog id="search-dialog" aria-label="Search documentation">
+  <div id="pagefind-container"></div>
+</dialog>
+
+<style>
+  button {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bg-soft);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--muted);
+    padding: 0.45rem 0.7rem;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+  }
+
+  button:hover {
+    color: var(--fg);
+    border-color: var(--muted);
+  }
+
+  .label {
+    margin-right: auto;
+  }
+
+  kbd {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0 0.3rem;
+    background: var(--bg);
+  }
+
+  dialog {
+    width: min(40rem, calc(100vw - 2rem));
+    max-height: min(76vh, 44rem);
+    margin: 8vh auto auto;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    background: var(--bg);
+    color: var(--fg);
+    padding: 1rem 1.25rem 1.25rem;
+    box-shadow: var(--shadow-lift);
+  }
+
+  dialog[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  dialog::backdrop {
+    background: rgba(5, 11, 22, 0.55);
+    backdrop-filter: blur(3px);
+  }
+</style>
+
+<style is:global>
+  /* Pagefind UI theming — match the docs typography and palette */
+  #pagefind-container {
+    --pagefind-ui-primary: var(--accent);
+    --pagefind-ui-text: var(--fg);
+    --pagefind-ui-background: var(--bg);
+    --pagefind-ui-border: var(--border);
+    --pagefind-ui-tag: var(--bg-raised);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: var(--radius-sm);
+    --pagefind-ui-font: var(--font-body);
+    --pagefind-ui-scale: 0.85;
+    min-height: 8rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* Keep the input pinned and let the results list scroll inside the dialog,
+     so the "Load more" button stays reachable on long result sets */
+  #pagefind-container .pagefind-ui,
+  #pagefind-container .pagefind-ui__form {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  #pagefind-container .pagefind-ui__drawer {
+    overflow-y: auto;
+    min-height: 0;
+    scrollbar-width: thin;
+    padding-right: 0.35rem;
+  }
+
+  #pagefind-container .pagefind-ui__search-input {
+    font-weight: 400;
+    background: var(--bg-soft);
+    border-color: var(--border-strong);
+    flex-shrink: 0;
+  }
+
+  #pagefind-container .pagefind-ui__search-input:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: -1px;
+  }
+
+  #pagefind-container .pagefind-ui__search-clear {
+    color: var(--muted);
+    background: none;
+    font-size: 0.8rem;
+  }
+
+  #pagefind-container .pagefind-ui__message {
+    color: var(--muted);
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  #pagefind-container .pagefind-ui__result {
+    border-color: var(--border);
+    padding: 0.9rem 0;
+  }
+
+  #pagefind-container .pagefind-ui__result-title .pagefind-ui__result-link {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  #pagefind-container .pagefind-ui__result-excerpt {
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.55;
+  }
+
+  #pagefind-container .pagefind-ui__result-excerpt mark {
+    background: color-mix(in srgb, var(--accent) 18%, transparent);
+    color: var(--fg);
+    border-radius: 3px;
+    padding: 0 0.1em;
+  }
+
+  #pagefind-container .pagefind-ui__result-nested {
+    padding-left: 1rem;
+  }
+
+  #pagefind-container .pagefind-ui__button {
+    background: var(--bg-soft);
+    border: 1px solid var(--border-strong);
+    color: var(--fg);
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+  }
+
+  #pagefind-container .pagefind-ui__button:hover {
+    background: var(--bg-raised);
+  }
+</style>
+
+<script>
+  const openButton = document.getElementById('search-open') as HTMLButtonElement;
+  const dialog = document.getElementById('search-dialog') as HTMLDialogElement;
+  let loaded = false;
+
+  async function loadPagefind(): Promise<boolean> {
+    if (loaded) return true;
+    try {
+      const css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = '/pagefind/pagefind-ui.css';
+      document.head.appendChild(css);
+      /* UMD script: registers window.PagefindUI (a dynamic import would not) */
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = '/pagefind/pagefind-ui.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+      // @ts-expect-error PagefindUI is provided by the generated script
+      new PagefindUI({ element: '#pagefind-container', showSubResults: true, showImages: false });
+      loaded = true;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async function openSearch() {
+    if (!(await loadPagefind())) return;
+    dialog.showModal();
+    dialog.querySelector<HTMLInputElement>('input')?.focus();
+  }
+
+  openButton.addEventListener('click', openSearch);
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      dialog.open ? dialog.close() : openSearch();
+    }
+    if (e.key === 'Escape' && dialog.open) dialog.close();
+  });
+
+  dialog.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+</script>

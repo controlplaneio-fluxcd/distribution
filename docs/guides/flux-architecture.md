@@ -24,11 +24,6 @@ The Flux project is made out of the following components:
     ---
     A command-line tool for installing, upgrading, operating, monitoring and debugging the Flux controllers running on Kubernetes clusters.
 
--   :octicons-log-24:{ .lg .middle } __Flux Terraform Provider__
-
-    ---
-    An infrastructure-as-code provider for bootstrapping Flux with Terraform and OpenTofu.
-
 -   :octicons-file-code-24:{ .lg .middle } __Flux APIs__
 
     ---
@@ -44,6 +39,7 @@ The Flux project is made out of the following components:
 ## Flux controllers
 
 <div class="grid cards" markdown>
+
 -   :octicons-cpu-24:{ .lg .middle } __source-controller__
 
     ---

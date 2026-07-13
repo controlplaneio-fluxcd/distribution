@@ -1,0 +1,99 @@
+---
+/* Floating ControlPlane logo-mark motifs for navy hero surfaces: the outlined
+   triangle and its offset edge stroke, taken verbatim from the brand logo in
+   src/assets/controlplane-logo.svg. The parent section must be
+   position: relative with overflow: hidden, and the hero content needs
+   position: relative plus a z-index to sit above the shapes. */
+
+const triangle =
+  'm93.2011015 69.9767305h-81.8943123c-.777996 0-1.49780386-.4138814-1.88141406-1.086704-.38145509-.6685776-.36421418-1.489973.04525738-2.1479383l40.94715618-65.79652841c.780151-1.26074639 2.8921623-1.26074639 3.6744684 0l40.9471562 65.79652841c.4051613.6579653.4224022 1.4751158.0431023 2.1479383-.3814551.6728226-1.101263 1.086704-1.8814141 1.086704zm-78.0452796-4.2449373h74.198402l-37.1002786-59.61165482z';
+const edge =
+  'm19.3959518 57.3191223h-17.24090789c-.77368573 0-1.49133852-.4096365-1.87494872-1.0760916-.3836102-.6664552-.37283464-1.4836056.03017159-2.1394484l32.32670222-53.06171654c.3879204-.63886306 1.1077283-1.12703086 1.8447771-1.0293973.7542897 0 1.4482363.3862893 1.8404669 1.01666249l9.191559 14.85091325-3.6809338 2.2094898-7.3360063-11.85398743-13.8088452 22.66749313-14.72485726 24.1711453h13.43282236z';
+---
+
+<div class="shapes" aria-hidden="true">
+  <svg class="shape s1" viewBox="0 0 95.5 70" fill="currentColor">
+    <path d={triangle} />
+    <path d={edge} />
+  </svg>
+  <svg class="shape s2" viewBox="0 0 95.5 70" fill="currentColor">
+    <path d={triangle} />
+    <path d={edge} />
+  </svg>
+  <svg class="shape s3" viewBox="0 0 95.5 70" fill="currentColor">
+    <path d={triangle} />
+  </svg>
+  <svg class="shape s4" viewBox="0 0 95.5 70" fill="currentColor">
+    <path d={triangle} />
+  </svg>
+</div>
+
+<style>
+  .shapes {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .shape {
+    position: absolute;
+    color: #3b5ccc;
+  }
+
+  .s1 {
+    width: 22rem;
+    top: -6rem;
+    right: -4rem;
+    transform: rotate(22deg);
+    opacity: 0.32;
+  }
+
+  .s2 {
+    width: 13rem;
+    bottom: -4rem;
+    left: 4%;
+    transform: rotate(-14deg);
+    opacity: 0.22;
+  }
+
+  .s3 {
+    width: 9rem;
+    top: 18%;
+    left: 12%;
+    transform: rotate(38deg);
+    opacity: 0.35;
+  }
+
+  .s4 {
+    width: 6rem;
+    bottom: 22%;
+    right: 16%;
+    transform: rotate(-28deg);
+    opacity: 0.3;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .shape {
+      animation: shape-in 1.2s ease both;
+    }
+
+    @keyframes shape-in {
+      from {
+        opacity: 0;
+      }
+    }
+  }
+
+  @media (max-width: 860px) {
+    .s1 {
+      width: 14rem;
+      right: -5rem;
+    }
+
+    .s3,
+    .s4 {
+      display: none;
+    }
+  }
+</style>

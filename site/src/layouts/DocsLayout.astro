@@ -1,0 +1,285 @@
+---
+import type { MarkdownHeading } from 'astro';
+import BaseLayout from './BaseLayout.astro';
+import Search from '../components/Search.astro';
+import { docsNav } from '../lib/nav';
+import { getReleases } from '../lib/releases';
+
+interface Props {
+  title: string;
+  description: string;
+  headings?: MarkdownHeading[];
+  hideToc?: boolean;
+}
+
+const { title, description, headings = [], hideToc = false } = Astro.props;
+const toc = hideToc ? [] : headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+const path = Astro.url.pathname;
+
+const sections = [
+  ...docsNav,
+  {
+    title: 'Versions',
+    items: (await getReleases()).map(({ version, href }) => ({ title: `Release ${version}`, href })),
+  },
+];
+---
+
+<BaseLayout title={`${title} - ControlPlane Enterprise for Flux CD`} description={description}>
+  <div class="docs">
+    <button class="sidebar-toggle" aria-expanded="false" aria-controls="docs-sidebar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="4" y1="7" x2="20" y2="7"></line>
+        <line x1="4" y1="12" x2="14" y2="12"></line>
+        <line x1="4" y1="17" x2="20" y2="17"></line>
+      </svg>
+      Documentation menu
+    </button>
+
+    <aside id="docs-sidebar" class="sidebar">
+      <div class="sidebar-search">
+        <Search />
+      </div>
+      <nav aria-label="Documentation">
+        {
+          sections.map((section) => (
+            <section>
+              <p class="section-title">{section.title}</p>
+              <ul>
+                {section.items.map((item) => (
+                  <li>
+                    <a href={item.href} aria-current={path === item.href ? 'page' : undefined}>
+                      {item.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+      </nav>
+    </aside>
+
+    <article class="prose" data-pagefind-body>
+      <slot />
+    </article>
+
+    <aside class="toc" aria-label="Table of contents">
+      {
+        toc.length > 0 && (
+          <>
+            <p class="toc-title">On this page</p>
+            <ul>
+              {toc.map((h) => (
+                <li class:list={[`depth-${h.depth}`]}>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+    </aside>
+  </div>
+</BaseLayout>
+
+<style>
+  /* Docs use a wider container than the marketing pages so the prose
+     column gets a comfortable measure between the two sidebars */
+  .docs {
+    display: grid;
+    grid-template-columns: 13rem minmax(0, 1fr) 13rem;
+    gap: 2.5rem;
+    max-width: 84rem;
+    margin: 0 auto;
+    padding: 2rem var(--space) 3rem;
+    align-items: start;
+  }
+
+  article {
+    max-width: var(--content-width);
+    min-width: 0;
+    justify-self: center;
+    width: 100%;
+  }
+
+  .sidebar-toggle {
+    display: none;
+  }
+
+  .sidebar,
+  .toc {
+    position: sticky;
+    top: calc(var(--header-height) + 1.5rem);
+    max-height: calc(100vh - var(--header-height) - 3rem);
+    overflow-y: auto;
+    font-size: 0.88rem;
+    scrollbar-width: thin;
+  }
+
+  .section-title,
+  .toc-title {
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--fg);
+    margin: 1.4rem 0 0.4rem;
+  }
+
+  .sidebar section:first-child .section-title {
+    margin-top: 1rem;
+  }
+
+  .sidebar-search {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    padding-bottom: 0.25rem;
+  }
+
+  .toc-title {
+    margin-top: 0.2rem;
+  }
+
+  .sidebar ul,
+  .toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sidebar li,
+  .toc li {
+    margin: 0;
+  }
+
+  .sidebar a,
+  .toc a {
+    display: block;
+    padding: 0.28rem 0.6rem;
+    margin-left: -0.6rem;
+    border-radius: 6px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .sidebar a:hover,
+  .toc a:hover {
+    color: var(--accent);
+    background: var(--bg-soft);
+    text-decoration: none;
+  }
+
+  .sidebar a[aria-current='page'] {
+    color: var(--accent);
+    font-weight: 600;
+    background: color-mix(in srgb, var(--accent) 9%, transparent);
+  }
+
+  .toc .depth-3 {
+    padding-left: 0.9rem;
+  }
+
+  .toc a.active {
+    color: var(--accent);
+  }
+
+  @media (max-width: 1180px) {
+    .docs {
+      grid-template-columns: 13rem minmax(0, 1fr);
+    }
+
+    .toc {
+      display: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .docs {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding-top: 1rem;
+    }
+
+    .sidebar-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg-soft);
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      color: var(--fg);
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.55rem 0.9rem;
+      cursor: pointer;
+    }
+
+    .sidebar {
+      display: none;
+      position: static;
+      max-height: none;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem var(--space);
+      background: var(--bg-soft);
+    }
+
+    .sidebar.open {
+      display: block;
+    }
+
+    /* No-JS fallback: the toggle cannot work, so keep the sidebar visible */
+    :global(html:not(.js)) .sidebar-toggle {
+      display: none;
+    }
+
+    :global(html:not(.js)) .sidebar {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.sidebar-toggle');
+  const sidebar = document.getElementById('docs-sidebar');
+  toggle?.addEventListener('click', () => {
+    const open = sidebar?.classList.toggle('open') ?? false;
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+
+  for (const pre of document.querySelectorAll('.prose pre.astro-code')) {
+    const button = document.createElement('button');
+    button.className = 'code-copy';
+    button.type = 'button';
+    button.textContent = 'copy';
+    button.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(pre.querySelector('code')?.innerText ?? '');
+      button.textContent = 'copied';
+      setTimeout(() => (button.textContent = 'copy'), 1500);
+    });
+    pre.appendChild(button);
+  }
+
+  /* Highlight the active TOC entry while scrolling */
+  const tocLinks = [...document.querySelectorAll<HTMLAnchorElement>('.toc a[href^="#"]')];
+  if (tocLinks.length > 0) {
+    const byId = new Map(tocLinks.map((a) => [decodeURIComponent(a.hash.slice(1)), a]));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            tocLinks.forEach((a) => a.classList.remove('active'));
+            byId.get(entry.target.id)?.classList.add('active');
+          }
+        }
+      },
+      { rootMargin: '-56px 0px -70% 0px' }
+    );
+    for (const id of byId.keys()) {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    }
+  }
+</script>

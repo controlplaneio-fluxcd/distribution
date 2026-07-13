@@ -1,0 +1,101 @@
+<!doctype html>
+<!--
+  OG card template for the presentation pages (1200x630).
+  Brand card: light background, faint triangle motif, ControlPlane logo,
+  a pipe divider, and the Enterprise for Flux CD lockup. No copy.
+  Regenerate:
+    1. cp site/og-templates/*.html site/src/assets/controlplane-logo.svg site/dist/og/
+    2. serve site/dist on :4321
+    3. screenshot the page at 1200x630 (DPR 2), downscale to 1200x630
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  .card {
+    position: relative;
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(115deg, #dcebfd 0%, #f3f8fe 42%, #ffffff 100%);
+  }
+
+  .shape {
+    position: absolute;
+    color: #1472eb;
+  }
+
+  .s1 {
+    width: 380px;
+    top: -90px;
+    left: -120px;
+    transform: rotate(-18deg);
+    opacity: 0.08;
+  }
+
+  .s2 {
+    width: 220px;
+    bottom: -70px;
+    left: 130px;
+    transform: rotate(24deg);
+    opacity: 0.1;
+  }
+
+  .s4 {
+    width: 300px;
+    bottom: -90px;
+    right: -80px;
+    transform: rotate(-26deg);
+    opacity: 0.07;
+  }
+
+  .lockup {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+  }
+
+  .cp-logo {
+    height: 64px;
+    display: block;
+    /* the source SVG is white; render it near-navy on the light card */
+    filter: brightness(0) opacity(0.88);
+  }
+
+  .divider {
+    width: 2px;
+    height: 170px;
+    background: rgba(14, 28, 54, 0.35);
+  }
+
+  .product-logo {
+    height: 180px;
+    display: block;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <svg class="shape s1" viewBox="0 0 100 88" fill="none">
+      <path d="M50 6 94 82H6L50 6Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" />
+    </svg>
+    <svg class="shape s2" viewBox="0 0 100 88" fill="none">
+      <path d="M50 6 94 82H6L50 6Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" />
+    </svg>
+    <svg class="shape s4" viewBox="0 0 100 88" fill="none">
+      <path d="M50 6 94 82H6L50 6Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" />
+    </svg>
+    <div class="lockup">
+      <img class="cp-logo" src="./controlplane-logo.svg" alt="" />
+      <div class="divider"></div>
+      <img class="product-logo" src="/images/logo/enterprise-for-flux-cd-colour.png" alt="" />
+    </div>
+  </div>
+</body>
+</html>

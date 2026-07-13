@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found - ControlPlane Enterprise for Flux CD" description="The page you are looking for does not exist.">
+  <div class="wrap">
+    <p class="code">404</p>
+    <h1>Page not found</h1>
+    <p class="hint">The page you are looking for does not exist or has been moved.</p>
+    <div class="actions">
+      <a class="button button-primary" href="/">Go to homepage</a>
+      <a class="button" href="/distribution/">Browse the docs</a>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .wrap {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 6rem var(--space);
+    text-align: center;
+  }
+
+  .code {
+    font-family: var(--font-mono);
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--brand-light);
+    margin: 0;
+  }
+
+  h1 {
+    margin: 0.5rem 0 1rem;
+  }
+
+  .hint {
+    color: var(--muted);
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+</style>
