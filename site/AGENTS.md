@@ -25,11 +25,12 @@ before reporting a change as done.
   Astro marketing pages.
 - `src/pages/[...slug].astro` — renders the docs collection.
 - `src/content.config.ts` — the `docs` collection reads markdown from the
-  repo-root `../docs` directory (releases, guides, addons, marketplace).
+  repo root: `../docs` (guides, addons, marketplace) plus the release notes
+  in `../releases`, which are shared with the GitHub release process.
   Entry ids keep the exact mkdocs URL paths, including dots (`release-v2.9`).
 - `src/lib/nav.ts` — header/footer/docs-sidebar navigation data plus
   `contactUrl`. The docs sidebar Versions list is maintained by hand and must
-  be extended when a new `docs/releases/release-v*.md` lands. Only the home
+  be extended when a new `releases/release-v*.md` lands. Only the home
   page hero pill derives the latest release automatically (from the
   collection, sorted by major/minor).
 - `src/lib/satteri-mkdocs-compat.mjs` — markdown compat layer for mkdocs

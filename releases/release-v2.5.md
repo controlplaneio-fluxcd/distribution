@@ -1,12 +1,9 @@
-# Enterprise Distribution for Flux v2.5.x
+---
+title: Release v2.5
+description: ControlPlane Enterprise Distribution for Flux v2.5
+---
 
-- [k8s](#supported-kubernetes-versions)
-- [apis](#api-versions)
-  - [ga](#general-availability-ga)
-  - [beta](#beta-preview)
-- [v2.5.0](#v250)
-  - [mainline](#mainline-v250)
-  - [FIPS-compliant](#fips-compliant-v250)
+# Enterprise Distribution for Flux v2.5.x
 
 ## Supported Kubernetes Versions
 

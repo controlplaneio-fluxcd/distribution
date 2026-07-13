@@ -1,13 +1,9 @@
-# Enterprise Distribution for Flux v2.3.x
+---
+title: Release v2.3
+description: ControlPlane Enterprise Distribution for Flux v2.3
+---
 
-- [k8s](#supported-kubernetes-versions)
-- [apis](#api-versions)
-  - [ga](#general-availability-ga)
-  - [beta](#beta-preview)
-  - [promotions](#promotions)
-- [v2.3.0](#v230)
-  - [mainline](#mainline-v230)
-  - [FIPS-compliant](#fips-compliant-v230)
+# Enterprise Distribution for Flux v2.3
 
 ## Supported Kubernetes Versions
 

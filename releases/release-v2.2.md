@@ -1,22 +1,9 @@
-# Enterprise Distribution for Flux v2.2.x
+---
+title: Release v2.2
+description: ControlPlane Enterprise Distribution for Flux v2.2
+---
 
-- [k8s](#supported-kubernetes-versions)
-- [apis](#api-versions)
-  - [ga](#general-availability-ga)
-  - [beta](#beta-preview)
-  - [promotions](#promotions)
-- [v2.2.3](#v223)
-  - [mainline](#mainline-v223)
-  - [FIPS-compliant](#fips-compliant-v223)
-- [v2.2.2](#v222)
-  - [mainline](#mainline-v222)
-  - [FIPS-compliant](#fips-compliant-v222)
-- [v2.2.1](#v221)
-  - [mainline](#mainline-v221)
-  - [FIPS-compliant](#fips-compliant-v221)
-- [v2.2.0](#v220)
-  - [mainline](#mainline-v220)
-  - [FIPS-compliant](#fips-compliant-v220)
+# Enterprise Distribution for Flux v2.2
 
 ## Supported Kubernetes Versions
 

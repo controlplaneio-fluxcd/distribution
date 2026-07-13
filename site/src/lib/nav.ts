@@ -124,7 +124,7 @@ export const mainNav: NavMenu[] = [
 ];
 
 /* Docs sidebar. The Versions list below is maintained by hand and must be
-   extended when a new docs/releases/release-v*.md lands; only the home page
+   extended when a new releases/release-v*.md lands; only the home page
    hero pill derives the latest release automatically. */
 export const docsNav: NavSection[] = [
   {
