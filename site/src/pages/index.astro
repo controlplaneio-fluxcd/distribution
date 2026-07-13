@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroShapes from '../components/HeroShapes.astro';
 import CtaBand from '../components/CtaBand.astro';
+import HybridDiagram from '../components/HybridDiagram.astro';
 import { contactUrl } from '../lib/nav';
 import { getReleases, type Release } from '../lib/releases';
 import shotHome from '../assets/web-ui/fluxcd-web-ui-home-dark.png';
@@ -77,8 +78,8 @@ const rows = [
     title: 'From public cloud to air-gapped, one distribution',
     points: [
       {
-        title: 'Any cloud, any distro',
-        body: 'The same hardened artifacts run on EKS, AKS, GKE, OpenShift, and any CNCF-conformant Kubernetes, including LTS versions.',
+        title: 'Any cloud, any k8s distro',
+        body: 'The same hardened Flux controllers run on EKS, AKS, GKE, OpenShift, and any CNCF-conformant Kubernetes.',
       },
       {
         title: 'Air-gapped by design',
@@ -90,7 +91,7 @@ const rows = [
       },
     ],
     link: { title: 'Read the air-gapped guide', href: '/distribution/install/' },
-    visual: 'terminal',
+    visual: 'diagram',
   },
   {
     eyebrow: 'open source sustainability',
@@ -115,19 +116,6 @@ const timeline = [
   { step: 'response', desc: 'Flux core maintainer engaged within the SLA window' },
   { step: 'remediation', desc: 'Hotfix built, signed, and rolled out by the Flux Operator' },
   { step: 'resolution', desc: 'Root cause documented, fix backported to supported releases' },
-];
-
-/* The real air-gapped mirror workflow from docs/distribution/install.md,
-   pinned to the latest release version */
-const mirror = [
-  { text: '$ flux-operator distro mirror \\', kind: 'cmd' },
-  { text: '  registry.internal/fluxcd \\', kind: 'cmd' },
-  { text: `  --version=${latestRelease ? `${latestRelease.version.slice(1)}.x` : 'latest'} \\`, kind: 'cmd' },
-  { text: '  --variant=enterprise-distroless \\', kind: 'cmd' },
-  { text: '  --verify', kind: 'cmd' },
-  { text: '', kind: 'cmd' },
-  { text: '✔ signatures verified with cosign', kind: 'ok' },
-  { text: '✔ mirrored to registry.internal', kind: 'ok' },
 ];
 
 const compliance = [
@@ -228,21 +216,7 @@ const compliance = [
                 ))}
               </div>
             )}
-            {visual === 'terminal' && (
-              <div class="panel terminal" aria-hidden="true">
-                <div class="term-bar">
-                  <span />
-                  <span />
-                  <span />
-                </div>
-                <div class="term-body">
-                  {mirror.map(({ text, kind }) => (
-                    <span class:list={['term-line', { 'term-ok': kind === 'ok' }]}>{text}</span>
-                  ))}
-                </div>
-                <p class="term-caption">the full distribution, inside your perimeter</p>
-              </div>
-            )}
+            {visual === 'diagram' && <HybridDiagram />}
             {visual === 'banner' && (
               <div class="panel banner">
                 <img src={fluxLogo.src} alt="CNCF Flux" width="320" height="166" loading="lazy" />
@@ -522,54 +496,6 @@ const compliance = [
     letter-spacing: 0.14em;
     color: var(--muted);
     margin: 0;
-  }
-
-  .panel.terminal {
-    background: var(--navy-950);
-    border: 1px solid var(--navy-line);
-    box-shadow: var(--shadow-navy);
-    padding: 1.4rem 1.75rem 1.6rem;
-    overflow: hidden;
-  }
-
-  .term-bar {
-    display: flex;
-    gap: 0.45rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .term-bar span {
-    width: 0.65rem;
-    height: 0.65rem;
-    border-radius: 50%;
-    background: rgba(215, 227, 247, 0.18);
-  }
-
-  .term-body {
-    display: flex;
-    flex-direction: column;
-    font-family: var(--font-mono);
-    font-size: 0.84rem;
-    line-height: 1.75;
-    color: rgba(215, 227, 247, 0.88);
-    overflow-x: auto;
-  }
-
-  .term-line {
-    white-space: pre;
-    min-height: 1em;
-  }
-
-  .term-ok {
-    color: var(--ok);
-  }
-
-  .term-caption {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    letter-spacing: 0.14em;
-    color: rgba(215, 227, 247, 0.5);
-    margin: 1.4rem 0 0;
   }
 
   /* Dark Web UI screenshot framed in navy so it sits well on the light surface */

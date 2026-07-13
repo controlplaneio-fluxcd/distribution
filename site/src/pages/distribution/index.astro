@@ -3,6 +3,22 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProductHero from '../../components/ProductHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { contactUrl } from '../../lib/nav';
+import { getReleases, type Release } from '../../lib/releases';
+
+const latestRelease: Release | undefined = (await getReleases())[0];
+
+/* The real air-gapped mirror workflow from docs/distribution/install.md,
+   pinned to the latest release version */
+const mirror = [
+  { text: '$ flux-operator distro mirror \\', kind: 'cmd' },
+  { text: '  registry.internal/fluxcd \\', kind: 'cmd' },
+  { text: `  --version=${latestRelease ? `${latestRelease.version.slice(1)}.x` : 'latest'} \\`, kind: 'cmd' },
+  { text: '  --variant=enterprise-distroless \\', kind: 'cmd' },
+  { text: '  --verify', kind: 'cmd' },
+  { text: '', kind: 'cmd' },
+  { text: '✔ signatures verified with cosign', kind: 'ok' },
+  { text: '✔ mirrored to registry.internal', kind: 'ok' },
+];
 
 const whyPoints = [
   {
@@ -234,6 +250,45 @@ const pipeline = [
       </div>
     </section>
 
+    <section class="row">
+      <div class="row-copy">
+        <p class="eyebrow">air-gapped operations</p>
+        <h2>Run disconnected without falling behind</h2>
+        <div class="points">
+          <div class="point">
+            <h3>One-command mirroring</h3>
+            <p>
+              The Flux Operator CLI copies the entire distribution, controller images, operator,
+              and Helm charts, to your private registry, verifying image signatures before the transfer.
+            </p>
+          </div>
+          <div class="point">
+            <h3>Automated offline updates</h3>
+            <p>
+              Patch releases and CVE fixes roll out from your own registry on your schedule,
+              applied in-cluster by the Flux Operator without internet egress.
+            </p>
+          </div>
+        </div>
+        <a class="row-more" href="/distribution/install/">Read the air-gapped guide &rarr;</a>
+      </div>
+      <div class="row-visual">
+        <div class="panel terminal" aria-hidden="true">
+          <div class="panel-bar">
+            <span class="dot" />
+            <span class="dot" />
+            <span class="dot" />
+          </div>
+          <div class="term-body">
+            {mirror.map(({ text, kind }) => (
+              <span class:list={['term-line', { 'term-ok': kind === 'ok' }]}>{text}</span>
+            ))}
+          </div>
+          <p class="term-caption">the full distribution, inside your perimeter</p>
+        </div>
+      </div>
+    </section>
+
     <section class="row flip">
       <div class="row-copy">
         <p class="eyebrow">enterprise addons</p>
@@ -449,6 +504,43 @@ const pipeline = [
     border-radius: 50%;
     background: #34d399;
     box-shadow: 0 0 8px rgba(52, 211, 153, 0.7);
+  }
+
+  /* Air-gapped mirror terminal; shares the window chrome with the YAML panel */
+  .panel.terminal {
+    background: var(--navy-950);
+    border: 1px solid var(--navy-line);
+    box-shadow: var(--shadow-navy);
+    overflow: hidden;
+  }
+
+  .term-body {
+    display: flex;
+    flex-direction: column;
+    padding: 1.1rem 1.4rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.84rem;
+    line-height: 1.75;
+    color: #d7e3f7;
+    overflow-x: auto;
+  }
+
+  .term-line {
+    white-space: pre;
+    min-height: 1em;
+  }
+
+  .term-ok {
+    color: #34d399;
+  }
+
+  .term-caption {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    color: rgba(190, 211, 252, 0.55);
+    margin: 0;
+    padding: 1.1rem 1.4rem 1.3rem;
   }
 
   .panel.diagram {

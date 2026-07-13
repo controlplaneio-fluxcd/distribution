@@ -1,0 +1,149 @@
+---
+/* Hand-drawn diagram for the home hybrid & air-gapped row: one signed
+   distribution fanning out to cloud, on-prem, and air-gapped environments.
+   Decorative (aria-hidden); the row copy carries the information. */
+---
+
+<div class="hd-panel" aria-hidden="true">
+  <svg viewBox="0 0 480 352" fill="none">
+    <!-- ControlPlane registry -->
+    <rect x="140" y="14" width="200" height="54" rx="10" class="hd-card hd-hub" />
+    <g transform="translate(160, 30.75) scale(0.293)" class="hd-mark">
+      <path
+        d="m93.2011015 69.9767305h-81.8943123c-.777996 0-1.49780386-.4138814-1.88141406-1.086704-.38145509-.6685776-.36421418-1.489973.04525738-2.1479383l40.94715618-65.79652841c.780151-1.26074639 2.8921623-1.26074639 3.6744684 0l40.9471562 65.79652841c.4051613.6579653.4224022 1.4751158.0431023 2.1479383-.3814551.6728226-1.101263 1.086704-1.8814141 1.086704zm-78.0452796-4.2449373h74.198402l-37.1002786-59.61165482z"
+      />
+      <path
+        d="m19.3959518 57.3191223h-17.24090789c-.77368573 0-1.49133852-.4096365-1.87494872-1.0760916-.3836102-.6664552-.37283464-1.4836056.03017159-2.1394484l32.32670222-53.06171654c.3879204-.63886306 1.1077283-1.12703086 1.8447771-1.0293973.7542897 0 1.4482363.3862893 1.8404669 1.01666249l9.191559 14.85091325-3.6809338 2.2094898-7.3360063-11.85398743-13.8088452 22.66749313-14.72485726 24.1711453h13.43282236z"
+      />
+    </g>
+    <text x="198" y="40" class="hd-title">Distro Registry</text>
+    <text x="198" y="58" class="hd-sub">signed images &amp; SBOMs</text>
+
+    <!-- registry -> mirror -->
+    <path d="M240 68 V94" class="hd-line" />
+    <path d="M235.5 94 h9 L240 101.5 Z" class="hd-arrow" />
+
+    <!-- customer mirror -->
+    <rect x="140" y="104" width="200" height="54" rx="10" class="hd-card hd-hub" />
+    <image href="/images/logo/enterprise-for-flux-cd-icon-white.svg" x="160" y="117" width="28" height="28" />
+    <text x="198" y="130" class="hd-title">Flux Mirror</text>
+    <text x="198" y="148" class="hd-sub">verify &amp; sync</text>
+
+    <!-- mirror -> targets -->
+    <path d="M240 158 V186 M84 186 H396 M84 186 V214 M240 186 V214 M396 186 V214" class="hd-line" />
+    <path d="M79.5 213.5 h9 L84 221 Z" class="hd-arrow" />
+    <path d="M235.5 213.5 h9 L240 221 Z" class="hd-arrow" />
+    <path d="M391.5 213.5 h9 L396 221 Z" class="hd-arrow" />
+
+    <!-- public cloud -->
+    <rect x="10" y="224" width="148" height="118" rx="10" class="hd-card" />
+    <g transform="translate(72, 238)" class="hd-icon">
+      <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
+    </g>
+    <text x="84" y="290" class="hd-title hd-center">Public cloud</text>
+    <text x="84" y="308" class="hd-sub hd-center">EKS &middot; AKS &middot; GKE</text>
+    <circle cx="51" cy="326.5" r="2.5" class="hd-ok-dot" />
+    <text x="58" y="329" class="hd-ok">reconciling</text>
+
+    <!-- on-premises -->
+    <rect x="166" y="224" width="148" height="118" rx="10" class="hd-card" />
+    <g transform="translate(228, 238)" class="hd-icon">
+      <rect x="3" y="4" width="18" height="7" rx="2" />
+      <rect x="3" y="13" width="18" height="7" rx="2" />
+      <path d="M7 7.5h.01M7 16.5h.01" />
+    </g>
+    <text x="240" y="290" class="hd-title hd-center">On-premises</text>
+    <text x="240" y="308" class="hd-sub hd-center">OpenShift</text>
+    <circle cx="207" cy="326.5" r="2.5" class="hd-ok-dot" />
+    <text x="214" y="329" class="hd-ok">reconciling</text>
+
+    <!-- air-gapped -->
+    <rect x="322" y="224" width="148" height="118" rx="10" class="hd-card hd-gapped" />
+    <g transform="translate(384, 238)" class="hd-icon">
+      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+    </g>
+    <text x="396" y="290" class="hd-title hd-center">Air-gapped</text>
+    <text x="396" y="308" class="hd-sub hd-center">Kubernetes</text>
+    <circle cx="363" cy="326.5" r="2.5" class="hd-ok-dot" />
+    <text x="370" y="329" class="hd-ok">reconciling</text>
+  </svg>
+</div>
+
+<style>
+  .hd-panel {
+    background:
+      radial-gradient(20rem 12rem at 50% 0%, rgba(20, 114, 235, 0.18), transparent 70%),
+      var(--navy-950);
+    border: 1px solid var(--navy-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-navy);
+    padding: 1.5rem 1.25rem;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .hd-card {
+    fill: var(--navy-800);
+    stroke: var(--navy-line);
+  }
+
+  .hd-hub {
+    stroke: rgba(114, 174, 250, 0.55);
+  }
+
+  .hd-gapped {
+    stroke: rgba(114, 174, 250, 0.5);
+    stroke-dasharray: 5 4;
+  }
+
+  .hd-mark {
+    fill: #ffffff;
+  }
+
+  .hd-line {
+    stroke: rgba(114, 174, 250, 0.4);
+    stroke-width: 1.5;
+  }
+
+  .hd-arrow {
+    fill: rgba(114, 174, 250, 0.55);
+  }
+
+  .hd-icon {
+    stroke: var(--brand-light);
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .hd-title {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 650;
+    fill: #ffffff;
+  }
+
+  .hd-sub {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    fill: rgba(190, 211, 252, 0.6);
+  }
+
+  .hd-center {
+    text-anchor: middle;
+  }
+
+  .hd-ok {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    fill: #34d399;
+  }
+
+  .hd-ok-dot {
+    fill: #34d399;
+  }
+</style>
