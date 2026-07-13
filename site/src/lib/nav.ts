@@ -48,7 +48,7 @@ export const mainNav: NavMenu[] = [
             icon: 'M3.5 3.5h7v7h-7zM13.5 3.5h7v7h-7zM3.5 13.5h7v7h-7zM13.5 13.5h7v7h-7z',
           },
           {
-            title: 'Pricing',
+            title: 'Plans and Pricing',
             href: '/pricing/',
             description: 'Predictable yearly plans that scale with your clusters, backed by 24/7 support.',
             icon: 'M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8zM7.5 7.5h.01',
