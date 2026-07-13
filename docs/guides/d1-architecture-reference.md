@@ -7,31 +7,19 @@ hide:
 
 # Flux D1 Architectural Reference
 
-We present the Design 1 Reference Architecture Guide,
-our first set of best practices and production ready examples
-for complex multi-tenant multi-cluster environments.
+This guide is a set of best practices and production-ready examples for
+managing complex multi-tenant, multi-cluster environments with Flux.
+It shows how to orchestrate the GitOps delivery of applications and
+infrastructure workloads while catering to the different teams and
+stakeholders within an organisation.
 
+The guide covers the automated update of applications to staging with
+gated promotion to production through GitHub Pull Requests.
 
-<div class="grid cards" markdown>
+### Repositories
 
--   :octicons-git-merge-24:{ .lg .middle } __GitOps Continuous Delivery__
+- [d1-fleet](https://github.com/controlplaneio-fluxcd/d1-fleet) - The desired state of the Kubernetes clusters and tenants in the fleet.
+- [d1-infra](https://github.com/controlplaneio-fluxcd/d1-infra) - The desired state of the cluster add-ons and the monitoring stack.
+- [d1-apps](https://github.com/controlplaneio-fluxcd/d1-apps) - The desired state of the applications deployed across environments.
 
-    ---
-
-    The guide will show you how to orchestrate the GitOps delivery of applications and infrastructure workloads
-    across multi-tenant clusters while catering to the different teams and stakeholders within an organisation.
-    And how to automate the update of Helm OCI Artifacts
-    to the staging environment while enabling gated promotion to production by leveraging GitHub Pull Requests.
-
--   :octicons-shield-check-24:{ .lg .middle } __GitOps Security__
-
-    ---
-
-    The guide will show you how to leverage on GitHub fine-grained Personal Access Tokens and Kubernetes
-    RBAC for segregating responsibilities
-    and access between platform, services, and application teams while maintaining security and compliance
-    in a multi-tenant environment.
-
-</div>
-
-[:octicons-download-24: Download the guide](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/main/guides/ControlPlane_Flux_D1_Reference_Architecture_Guide.pdf){ .md-button .md-button--primary }
+[Download the guide](https://raw.githubusercontent.com/controlplaneio-fluxcd/distribution/main/guides/ControlPlane_Flux_D1_Reference_Architecture_Guide.pdf){ .md-button .md-button--primary }
