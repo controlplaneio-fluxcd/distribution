@@ -11,7 +11,7 @@ export interface Release {
    sorted newest first. Feeds the home hero pill and the docs sidebar
    Versions list, so a new release markdown needs no site edits. */
 export async function getReleases(): Promise<Release[]> {
-  const entries = await getCollection('docs', ({ id }) => id.startsWith('releases/release-v'));
+  const entries = await getCollection('releases', ({ id }) => id.startsWith('releases/release-v'));
   return entries
     .map(({ id }) => {
       const version = id.replace('releases/release-', '');
