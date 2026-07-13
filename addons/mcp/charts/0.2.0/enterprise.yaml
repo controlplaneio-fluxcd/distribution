@@ -1,0 +1,9 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: mcp
+spec:
+  url: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-mcp-enterprise
+  ref:
+    tag: 0.2.0
+    digest: sha256:1e7e77050b09f27ea9c5a648ea44e5da40bfa28d8c5973e5e59a40754a7e684a
