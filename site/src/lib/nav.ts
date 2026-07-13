@@ -123,9 +123,8 @@ export const mainNav: NavMenu[] = [
   },
 ];
 
-/* Docs sidebar. The Versions list below is maintained by hand and must be
-   extended when a new releases/release-v*.md lands; only the home page
-   hero pill derives the latest release automatically. */
+/* Docs sidebar. DocsLayout appends a Versions section generated from the
+   releases collection, so new release notes need no edits here. */
 export const docsNav: NavSection[] = [
   {
     title: 'Flux Distribution',
@@ -157,18 +156,5 @@ export const docsNav: NavSection[] = [
   {
     title: 'Marketplaces',
     items: [{ title: 'AWS Marketplace', href: '/marketplace/aws/' }],
-  },
-  {
-    title: 'Versions',
-    items: [
-      { title: 'Release v2.9', href: '/releases/release-v2.9/' },
-      { title: 'Release v2.8', href: '/releases/release-v2.8/' },
-      { title: 'Release v2.7', href: '/releases/release-v2.7/' },
-      { title: 'Release v2.6', href: '/releases/release-v2.6/' },
-      { title: 'Release v2.5', href: '/releases/release-v2.5/' },
-      { title: 'Release v2.4', href: '/releases/release-v2.4/' },
-      { title: 'Release v2.3', href: '/releases/release-v2.3/' },
-      { title: 'Release v2.2', href: '/releases/release-v2.2/' },
-    ],
   },
 ];

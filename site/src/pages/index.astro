@@ -1,22 +1,15 @@
 ---
 import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroShapes from '../components/HeroShapes.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { contactUrl } from '../lib/nav';
+import { getReleases, type Release } from '../lib/releases';
 import shotHome from '../assets/web-ui/fluxcd-web-ui-home-dark.png';
 import fluxLogo from '../assets/flux-horizontal-color.svg';
 
-/* The hero pill always announces the newest release markdown in docs/releases */
-const releases = await getCollection('docs', ({ id }) => id.startsWith('releases/release-v'));
-const latestRelease: { version: string; major: number; minor: number } | undefined = releases
-  .map(({ id }) => {
-    const version = id.replace('releases/release-', '');
-    const [major = 0, minor = 0] = version.slice(1).split('.').map(Number);
-    return { version, major, minor };
-  })
-  .sort((a, b) => b.major - a.major || b.minor - a.minor)[0];
+/* The hero pill always announces the newest release */
+const latestRelease: Release | undefined = (await getReleases())[0];
 
 const rows = [
   {
@@ -122,7 +115,7 @@ const compliance = [
     <div class="hero-inner">
       {
         latestRelease && (
-          <a class="pill" href={`/releases/release-${latestRelease.version}/`}>
+          <a class="pill" href={latestRelease.href}>
             Flux Distribution {latestRelease.version} is out
             <span class="pill-more">Release notes &rarr;</span>
           </a>

@@ -3,6 +3,7 @@ import type { MarkdownHeading } from 'astro';
 import BaseLayout from './BaseLayout.astro';
 import Search from '../components/Search.astro';
 import { docsNav } from '../lib/nav';
+import { getReleases } from '../lib/releases';
 
 interface Props {
   title: string;
@@ -14,6 +15,14 @@ interface Props {
 const { title, description, headings = [], hideToc = false } = Astro.props;
 const toc = hideToc ? [] : headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 const path = Astro.url.pathname;
+
+const sections = [
+  ...docsNav,
+  {
+    title: 'Versions',
+    items: (await getReleases()).map(({ version, href }) => ({ title: `Release ${version}`, href })),
+  },
+];
 ---
 
 <BaseLayout title={`${title} - ControlPlane Enterprise for Flux CD`} description={description}>
@@ -33,7 +42,7 @@ const path = Astro.url.pathname;
       </div>
       <nav aria-label="Documentation">
         {
-          docsNav.map((section) => (
+          sections.map((section) => (
             <section>
               <p class="section-title">{section.title}</p>
               <ul>

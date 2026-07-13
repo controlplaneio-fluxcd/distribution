@@ -29,10 +29,10 @@ before reporting a change as done.
   in `../releases`, which are shared with the GitHub release process.
   Entry ids keep the exact mkdocs URL paths, including dots (`release-v2.9`).
 - `src/lib/nav.ts` — header/footer/docs-sidebar navigation data plus
-  `contactUrl`. The docs sidebar Versions list is maintained by hand and must
-  be extended when a new `releases/release-v*.md` lands. Only the home
-  page hero pill derives the latest release automatically (from the
-  collection, sorted by major/minor).
+  `contactUrl`.
+- `src/lib/releases.ts` — lists the release notes from the collection,
+  newest first. Feeds the home hero pill and the docs sidebar Versions
+  list, so a new `releases/release-v*.md` shows up with no site edits.
 - `src/lib/satteri-mkdocs-compat.mjs` — markdown compat layer for mkdocs
   syntax used in `docs/` (attr lists, admonitions). Its `SITE_ORIGIN` must
   stay in sync with `site` in `astro.config.mjs`.
@@ -86,6 +86,33 @@ before reporting a change as done.
   workarounds, browser quirks). No narration of what the next line does.
 - TypeScript strictness is enforced by `astro check`; type optional data
   explicitly (e.g. `| undefined`) and guard conditional renders.
+
+## Adding a new guide
+
+1. Create `docs/guides/<slug>.md` (repo root, not under `site/`) with the
+   frontmatter the collection schema requires:
+
+   ```yaml
+   ---
+   title: Flux Something Guide
+   description: One-line summary used for meta tags and search
+   ---
+   ```
+
+   Start the body with a single `#` H1. mkdocs syntax (admonitions,
+   `{ .md-button }` attr lists) is supported via the compat plugin.
+   Optional `hide: [toc]` removes the on-page table of contents.
+2. The page is published automatically at `/guides/<slug>/` and indexed by
+   pagefind; no route or config changes needed.
+3. Add a sidebar entry to the Guides section of `docsNav` in
+   `src/lib/nav.ts`. The sidebar is hand-curated on purpose: pick the title
+   and position deliberately. Only the Versions list is generated.
+4. Images: reference them as `../images/<file>.png` and add the file to
+   both `docs/images/` (GitHub rendering) and `site/public/images/`
+   (site serving). The two directories are mirrored by hand; there is no
+   copy step.
+5. Verify with `npx astro check && npm run build` and check the page and
+   its sidebar entry in the built output.
 
 ## Deployment
 
