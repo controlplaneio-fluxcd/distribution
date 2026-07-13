@@ -73,6 +73,26 @@ const rows = [
     visual: 'compliance',
   },
   {
+    eyebrow: 'hybrid & air-gapped',
+    title: 'From public cloud to air-gapped, one distribution',
+    points: [
+      {
+        title: 'Any cloud, any distro',
+        body: 'The same hardened artifacts run on EKS, AKS, GKE, OpenShift, and any CNCF-conformant Kubernetes, including LTS versions.',
+      },
+      {
+        title: 'Air-gapped by design',
+        body: 'Mirror the entire distribution to your private registry with one command, signatures verified at the boundary.',
+      },
+      {
+        title: 'Updates without internet access',
+        body: 'Patch releases and CVE fixes flow from your own registry, on your schedule, with no outside connectivity.',
+      },
+    ],
+    link: { title: 'Read the air-gapped guide', href: '/distribution/install/' },
+    visual: 'terminal',
+  },
+  {
     eyebrow: 'open source sustainability',
     title: 'Your subscription keeps Flux thriving',
     points: [
@@ -95,6 +115,19 @@ const timeline = [
   { step: 'response', desc: 'Flux core maintainer engaged within the SLA window' },
   { step: 'remediation', desc: 'Hotfix built, signed, and rolled out by the Flux Operator' },
   { step: 'resolution', desc: 'Root cause documented, fix backported to supported releases' },
+];
+
+/* The real air-gapped mirror workflow from docs/distribution/install.md,
+   pinned to the latest release version */
+const mirror = [
+  { text: '$ flux-operator distro mirror \\', kind: 'cmd' },
+  { text: '  registry.internal/fluxcd \\', kind: 'cmd' },
+  { text: `  --version=${latestRelease ? `${latestRelease.version.slice(1)}.x` : 'latest'} \\`, kind: 'cmd' },
+  { text: '  --variant=enterprise-distroless \\', kind: 'cmd' },
+  { text: '  --verify', kind: 'cmd' },
+  { text: '', kind: 'cmd' },
+  { text: '✔ signatures verified with cosign', kind: 'ok' },
+  { text: '✔ mirrored to registry.internal', kind: 'ok' },
 ];
 
 const compliance = [
@@ -193,6 +226,21 @@ const compliance = [
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+            {visual === 'terminal' && (
+              <div class="panel terminal" aria-hidden="true">
+                <div class="term-bar">
+                  <span />
+                  <span />
+                  <span />
+                </div>
+                <div class="term-body">
+                  {mirror.map(({ text, kind }) => (
+                    <span class:list={['term-line', { 'term-ok': kind === 'ok' }]}>{text}</span>
+                  ))}
+                </div>
+                <p class="term-caption">the full distribution, inside your perimeter</p>
               </div>
             )}
             {visual === 'banner' && (
@@ -474,6 +522,54 @@ const compliance = [
     letter-spacing: 0.14em;
     color: var(--muted);
     margin: 0;
+  }
+
+  .panel.terminal {
+    background: var(--navy-950);
+    border: 1px solid var(--navy-line);
+    box-shadow: var(--shadow-navy);
+    padding: 1.4rem 1.75rem 1.6rem;
+    overflow: hidden;
+  }
+
+  .term-bar {
+    display: flex;
+    gap: 0.45rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .term-bar span {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+    background: rgba(215, 227, 247, 0.18);
+  }
+
+  .term-body {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-mono);
+    font-size: 0.84rem;
+    line-height: 1.75;
+    color: rgba(215, 227, 247, 0.88);
+    overflow-x: auto;
+  }
+
+  .term-line {
+    white-space: pre;
+    min-height: 1em;
+  }
+
+  .term-ok {
+    color: var(--ok);
+  }
+
+  .term-caption {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    color: rgba(215, 227, 247, 0.5);
+    margin: 1.4rem 0 0;
   }
 
   /* Dark Web UI screenshot framed in navy so it sits well on the light surface */
