@@ -1,4 +1,4 @@
 images:
   - name: ghcr.io/controlplaneio-fluxcd/distroless-fips/dex
     newTag: v2.45.1
-    digest: sha256:0058e3f2be4aff60982ee62667fc0ad815146f8e5bb34fd4d1993775124f773a
+    digest: sha256:45e598d34a5937e2146ed02c64e0afa0191f91526dacefdf12966a3bb267861a
