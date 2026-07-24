@@ -48,19 +48,14 @@
 
   dialog {
     width: min(40rem, calc(100vw - 2rem));
-    max-height: min(76vh, 44rem);
-    margin: 8vh auto auto;
+    max-height: min(76dvh, 44rem);
+    margin: 8dvh auto auto;
     border: 1px solid var(--border-strong);
     border-radius: var(--radius-md);
     background: var(--bg);
     color: var(--fg);
     padding: 1rem 1.25rem 1.25rem;
     box-shadow: var(--shadow-lift);
-  }
-
-  dialog[open] {
-    display: flex;
-    flex-direction: column;
   }
 
   dialog::backdrop {
@@ -82,24 +77,17 @@
     --pagefind-ui-font: var(--font-body);
     --pagefind-ui-scale: 0.85;
     min-height: 8rem;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    overflow: hidden;
   }
 
   /* Keep the input pinned and let the results list scroll inside the dialog,
-     so the "Load more" button stays reachable on long result sets */
-  #pagefind-container .pagefind-ui,
-  #pagefind-container .pagefind-ui__form {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-
+     so the "Load more" button stays reachable on long result sets. The drawer
+     gets its own definite max-height (76dvh dialog cap minus the input row,
+     message, and dialog padding) instead of a flex-derived one: WebKit
+     resolves a flex chain constrained only by the dialog's max-height to the
+     0 flex-basis and collapses the results to zero height on iOS. */
   #pagefind-container .pagefind-ui__drawer {
+    max-height: min(calc(76dvh - 10rem), 34rem);
     overflow-y: auto;
-    min-height: 0;
     scrollbar-width: thin;
     padding-right: 0.35rem;
   }
