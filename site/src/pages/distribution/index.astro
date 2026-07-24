@@ -31,7 +31,7 @@ const whyPoints = [
   },
   {
     title: 'Hardened images',
-    body: 'FIPS-compliant hardened container images for the GitOps Toolkit controllers, in-sync with the upstream CNCF Flux releases.',
+    body: 'Hardened container images for the GitOps Toolkit controllers, in-sync with the upstream CNCF Flux releases.',
   },
   {
     title: 'Extended Kubernetes compatibility',
@@ -43,12 +43,12 @@ const whyPoints = [
   },
 ];
 
+/* Only the proof points the copy column does not already state, so the panel
+   adds detail instead of echoing the list next to it */
 const compliance = [
-  { title: '24/7 incident support', body: 'On-call access to Flux core maintainers' },
-  { title: 'Zero known CVEs', body: 'Images scanned and patched daily' },
   { title: 'FIPS 140-3', body: 'Approved cryptography end to end' },
-  { title: 'Signed images', body: 'Authenticity verified with Cosign' },
-  { title: 'SBOMs and VEX documents', body: 'Dependency transparency and exploitability status' },
+  { title: 'Signed images', body: 'Cosign signatures backed by GitHub OIDC' },
+  { title: 'SBOMs and VEX documents', body: 'SPDX inventories and OpenVEX exploitability status' },
 ];
 
 const pipeline = [
@@ -195,7 +195,7 @@ const pipeline = [
 
     <section class="row">
       <div class="row-copy">
-        <p class="eyebrow">seamless migration</p>
+        <p class="eyebrow">migration</p>
         <h2>Adopt in minutes, leave whenever you want</h2>
         <div class="points">
           <div class="point">
@@ -203,14 +203,14 @@ const pipeline = [
             <p>
               Moving from upstream Flux to the enterprise distribution is a one-field change:
               point the FluxInstance at the ControlPlane registry and the operator rolls out
-              the hardened controllers in place, without interrupting reconciliation.
+              the hardened controllers in place.
             </p>
           </div>
           <div class="point">
             <h3>No vendor lock-in</h3>
             <p>
               The distribution is 100% compatible with the upstream APIs and manifests.
-              Switching back to the CNCF images is the same one-field change in reverse.
+              Switching back to the CNCF images reverts that one line.
             </p>
           </div>
         </div>
@@ -241,7 +241,7 @@ const pipeline = [
   <section class="band" aria-labelledby="advanced-delivery">
     <div class="band-inner">
       <p class="eyebrow">advanced delivery</p>
-      <h2 id="advanced-delivery">Built the way regulated teams ship</h2>
+      <h2 id="advanced-delivery">Control when changes land, and where they come from</h2>
       <div class="channels">
         <div class="channel">
           <div class="channel-head">
@@ -335,9 +335,9 @@ const pipeline = [
         <p class="eyebrow">enterprise addons</p>
         <h2>Extend the distribution across your platform</h2>
         <p class="row-lead">
-          Enforce identity policies, streamline incident response, and operate GitOps at scale with
-          the Flux Web UI, the Flux MCP Server, and the Dex identity provider, all covered by
-          ControlPlane's SLA for CVE remediation and FIPS compliance.
+          The Flux Web UI, the Flux MCP Server, and the Dex identity provider add live delivery
+          status, AI-assisted troubleshooting, and OIDC single sign-on to the distribution, under
+          the same CVE remediation and FIPS commitments.
         </p>
         <a class="row-more" href="/addons/">Explore the enterprise addons &rarr;</a>
       </div>

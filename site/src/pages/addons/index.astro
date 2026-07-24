@@ -36,18 +36,18 @@ const tour = [
   },
   {
     title: 'Log Viewer',
-    body: 'A viewer that understands your logs: severity levels are picked out, stack traces grouped, and noise filtered away. It parses structured and plain-text formats from any language runtime.',
+    body: 'Severity levels are picked out, stack traces grouped, and noise filtered away. The viewer parses structured and plain-text formats from any language runtime.',
     image: shotLogViewer,
     alt: 'Pod log viewer in the Flux Web UI with severity highlighting and filters for pods, containers and log levels',
   },
   {
     title: 'Favorites',
-    body: 'Build your own watchlist. Star the releases that matter, from production apps to critical infrastructure, and check their health from a single screen.',
+    body: 'Build your own watchlist. Star the releases you own, from production apps to critical infrastructure, and check their health from a single screen.',
     image: shotFavorites,
     alt: 'Favorites board in the Flux Web UI listing starred Flux resources with their readiness status',
   },
   {
-    title: 'Powerful Search',
+    title: 'Search',
     body: 'Type a few characters and jump to any Kustomization, HelmRelease or source repository across every namespace, narrowing by kind, status or name as you go.',
     image: shotSearch,
     alt: 'Search dropdown in the Flux Web UI filtering Flux resources by kind and namespace',
@@ -69,9 +69,9 @@ const addons: Addon[] = [
   {
     tag: 'addon: mcp-server',
     title: 'Flux MCP Server',
-    lead: 'A hardened, exclusively read-only MCP server that connects AI assistants to Flux-managed clusters for incident response and pipeline troubleshooting.',
+    lead: 'A hardened, read-only MCP server that connects AI assistants to Flux-managed clusters for incident response and pipeline troubleshooting.',
     points: [
-      'Read-only by design: no operation can alter cluster state, regardless of kubeconfig permissions',
+      'No operation can alter cluster state, regardless of kubeconfig permissions',
       'Runs locally on dev laptops and workstations over stdio',
       'Works with Claude, Copilot, Cursor, and any MCP-compatible assistant',
     ],
@@ -107,7 +107,7 @@ const addons: Addon[] = [
 >
   <ProductHero
     title="Flux Addons"
-    lead="Extend Flux with a full-featured Web UI, AI-assisted troubleshooting, and single sign-on, all hardened and covered by the same SLAs."
+    lead="Extend Flux with a Web UI, AI-assisted troubleshooting, and single sign-on, hardened and supported by ControlPlane."
     secondary={{ label: 'See pricing', href: '/pricing/' }}
   />
 

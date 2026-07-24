@@ -17,8 +17,8 @@ const included = [
 
 const services = [
   {
-    title: '24/7 Expert Coverage',
-    body: 'Global support teams across North America, EMEA, and APAC with guaranteed response SLAs.',
+    title: 'Global support coverage',
+    body: 'Teams across North America, EMEA, and APAC with guaranteed response SLAs.',
     icon: 'M12 3a8 8 0 018 8v5a3 3 0 01-3 3h-1v-7h4M4 19v-8a8 8 0 018-8m-8 9H3m1 0h3v7H6a3 3 0 01-2-1',
   },
   {
@@ -36,7 +36,7 @@ const services = [
 const consultancy = [
   {
     title: 'Architecture reviews',
-    body: 'A thorough assessment of your GitOps setup with concrete recommendations.',
+    body: 'A review of your GitOps setup against production practice, with a prioritised list of changes.',
   },
   {
     title: 'Flux training',
@@ -131,6 +131,10 @@ const consultancy = [
         ControlPlane offers a range of support services to help you get the most out of the
         enterprise distribution. The support services included in the subscription plans are:
       </p>
+      <p class="policy-link">
+        <a href="/support/">Read the support policy</a> for severity levels, response and
+        resolution targets, and vulnerability remediation SLAs.
+      </p>
       <div class="services">
         {
           services.map(({ title, body, icon }) => (
@@ -176,10 +180,9 @@ const consultancy = [
         <div>
           <h2 id="custom-plans">Custom plans</h2>
           <p>
-            Organizations come in various sizes with different requirements for managing and securing
-            their Kubernetes deployments using GitOps. Talk to us about your environment and get a
-            quote that fits your needs, while contributing positively to the open-source CNCF Flux
-            project.
+            Talk to us about your environment and get a quote that fits it, whether that is a single
+            platform team or a fleet spread across business units. Your subscription funds the
+            maintainers who develop, secure, and release the open source CNCF Flux project.
           </p>
         </div>
         <a class="button button-primary" href={contactUrl} target="_blank" rel="noopener">Contact us</a>
@@ -400,6 +403,11 @@ const consultancy = [
 
   .note p {
     margin: 0;
+  }
+
+  .policy-link {
+    font-size: 0.93rem;
+    margin: 0.75rem 0 0;
   }
 
   .services {
