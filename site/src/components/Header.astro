@@ -469,12 +469,16 @@ const activeMenu = productPages.has(path) ? 'Product' : path === '/' ? undefined
       gap: 1rem;
     }
 
+    /* Pin the hamburger to the right edge, after the controls; margin-left
+       on the controls does the pushing since the nav is out of flow */
     .menu-toggle {
       display: inline-flex;
+      order: 2;
     }
 
     .controls {
       margin-left: auto;
+      order: 1;
     }
 
     .cta {

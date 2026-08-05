@@ -1,0 +1,1046 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { contactUrl } from '../../lib/nav';
+
+/* The three headline commitments an executive reader looks for. Each number is
+   restated with its full conditions in the numbered section that owns it. */
+const commitments = [
+  { value: '1 hour', label: 'Initial response on a production incident' },
+  { value: '4 hours', label: 'Target resolution on a production incident' },
+  { value: '72 hours', label: 'To remediate a critical vulnerability' },
+];
+
+/* Section numbers are part of the page: procurement and audit teams cite them.
+   Renumber the headings and this list together. */
+const contents = [
+  { num: '1', title: 'Scope of support', id: 'scope' },
+  { num: '2', title: 'Raising a case', id: 'cases' },
+  { num: '3', title: 'Severity levels', id: 'severity' },
+  { num: '4', title: 'Response and resolution targets', id: 'targets' },
+  { num: '5', title: 'Vulnerability remediation', id: 'cve' },
+  { num: '6', title: 'Coverage and support hours', id: 'hours' },
+  { num: '7', title: 'Escalation', id: 'escalation' },
+  { num: '8', title: 'Customer responsibilities', id: 'responsibilities' },
+  { num: '9', title: 'Exclusions', id: 'exclusions' },
+  { num: '10', title: 'Definitions', id: 'definitions' },
+];
+
+const channels = [
+  {
+    title: 'Support portal',
+    body: 'The primary channel for raising and tracking Cases, and for access to the technical knowledge base. Credentials are issued to each Authorized User during onboarding.',
+    icon: 'M3 5.5A1.5 1.5 0 014.5 4h15A1.5 1.5 0 0121 5.5v13a1.5 1.5 0 01-1.5 1.5h-15A1.5 1.5 0 013 18.5zM3 9h18M7 13h7',
+  },
+  {
+    title: 'Email',
+    body: 'Cases may also be filed by email to the support address issued at onboarding. Case tracking starts when ControlPlane sends a written acknowledgement.',
+    icon: 'M4 5h16a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V6a1 1 0 011-1zm0 2l8 6 8-6',
+  },
+  {
+    title: 'Phone',
+    body: 'Required to open a Severity 1 Case and start the emergency response workflow. The number is issued at onboarding and is answered at any hour, on any day.',
+    icon: 'M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L8.1 9.9a16 16 0 006 6l1.3-1.2a2 2 0 012.1-.5c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z',
+  },
+];
+
+const severities = [
+  {
+    level: 'Severity 1',
+    label: 'Critical',
+    tone: 'critical',
+    body: 'A production system that is critical to the business is completely inoperable, work has stopped, and no workaround is available.',
+  },
+  {
+    level: 'Severity 2',
+    label: 'High',
+    tone: 'high',
+    body: 'Core functionality in a production system is severely degraded and operations can continue only in a restricted fashion, with no workaround immediately available.',
+  },
+  {
+    level: 'Severity 3',
+    label: 'Medium',
+    tone: 'medium',
+    body: 'Partial loss of non-critical functionality, including defects and performance degradation affecting specific operations, with no known workaround.',
+  },
+  {
+    level: 'Severity 4',
+    label: 'Low',
+    tone: 'low',
+    body: 'No loss of service. Covers requests for technical information, feature requests, and minor defects for which an effective workaround exists.',
+  },
+];
+
+const targets = [
+  {
+    level: 'Severity 1',
+    coverage: '24 hours a day, 7 days a week',
+    channel: 'Phone',
+    response: '1 hour',
+    resolution: '4 hours',
+    note: 'a',
+  },
+  {
+    level: 'Severity 2',
+    coverage: 'Support Hours',
+    channel: 'Portal or phone',
+    response: '4 Support Hours',
+    resolution: '8 Support Hours',
+    note: 'b',
+  },
+  {
+    level: 'Severity 3',
+    coverage: 'Support Hours',
+    channel: 'Portal or phone',
+    response: '1 Support Day',
+    resolution: '2 Support Days',
+    note: null,
+  },
+  {
+    level: 'Severity 4',
+    coverage: 'Support Hours',
+    channel: 'Portal or phone',
+    response: '2 Support Days',
+    resolution: '5 Support Days',
+    note: null,
+  },
+];
+
+const targetNotes = [
+  {
+    key: 'a',
+    text: 'Severity 1 Cases must be opened by phone. Cover runs continuously until the incident is resolved or downgraded, including weekends and public holidays.',
+  },
+  {
+    key: 'b',
+    text: 'Severity 2 Cases are not automatically covered outside Support Hours. Once a workaround is in place, a Severity 2 Case is reclassified as Severity 3.',
+  },
+];
+
+/* Which framework applies is set by the subscription agreement, so both are
+   published rather than one presented as the default */
+const cveFrameworks = [
+  {
+    name: 'Standard remediation',
+    clock: 'The clock starts when ControlPlane identifies a vulnerability or receives a report of one.',
+    rows: [
+      { band: 'Critical, CVSS 9.0 to 10.0', target: '72 hours' },
+      { band: 'High, Medium and Low, CVSS 0.1 to 8.9', target: '5 Support Days' },
+    ],
+  },
+  {
+    name: 'Upstream patch remediation',
+    clock: 'The clock starts when a Qualifying Patch for the vulnerability becomes publicly available.',
+    rows: [
+      { band: 'Critical, CVSS 9.0 to 10.0', target: '7 calendar days' },
+      { band: 'High, Medium and Low, CVSS 0.1 to 8.9', target: '14 calendar days' },
+    ],
+  },
+];
+
+const regions = [
+  { region: 'AMER', name: 'North America', hours: '09:00 to 17:00 EST' },
+  { region: 'EMEA', name: 'Europe, Middle East and Africa', hours: '09:00 to 17:00 GMT or CET' },
+  { region: 'APAC', name: 'Asia-Pacific', hours: '09:00 to 17:00 AEST' },
+];
+
+const escalation = [
+  {
+    tier: 'Level 1',
+    role: 'Enterprise Account Manager',
+    trigger: 'A response or resolution target is at risk, or engineering coordination needs adjusting.',
+  },
+  {
+    tier: 'Level 2',
+    role: 'Head of Customer Success',
+    trigger: 'Resolution is not progressing, business impact is increasing, or the same issue keeps recurring.',
+  },
+  {
+    tier: 'Level 3',
+    role: 'Executive sponsor',
+    trigger: 'Repeated or unresolved Severity 1 Cases, an unmitigated critical vulnerability, or a risk acceptance decision.',
+  },
+];
+
+const responsibilities = [
+  {
+    title: 'Maintain Authorized Users',
+    body: 'Designate at least one Authorized User for the duration of the subscription. Authorized Users need a working knowledge of GitOps practice and the Flux command line tooling in order to work alongside ControlPlane engineers.',
+  },
+  {
+    title: 'Triage before escalating',
+    body: 'Confirm that the problem sits in a supported component and that your own first-line and second-line diagnostics have been exhausted before opening a Case.',
+  },
+  {
+    title: 'Provide diagnostic material',
+    body: 'Supply the logs, manifests, versions, and system access required to reproduce the problem, and keep them current for as long as the Case is open.',
+  },
+];
+
+const exclusions = [
+  'Unsupported Configurations, including modified source code and architectural changes made without written endorsement from ControlPlane.',
+  'Delays caused by the customer, such as missing access, missing environment information, or pending internal approvals.',
+  'Community-only or end-of-life upstream releases that are no longer maintained by their respective projects.',
+  'Consulting, enhancement discussions, and feature requests that fall outside the supported components.',
+];
+
+const definitions = [
+  {
+    term: 'Authorized User',
+    body: 'An individual named by the customer and onboarded to the ControlPlane support system, permitted to open and progress Cases.',
+  },
+  {
+    term: 'Case',
+    body: 'A service request, problem report, question, or defect report submitted by an Authorized User through one of the channels in section 2.',
+  },
+  {
+    term: 'Initial response',
+    body: 'The first substantive reply from a ControlPlane engineer engaged with the Case. An automated ticket acknowledgement is not an initial response.',
+  },
+  {
+    term: 'Resolution',
+    body: 'A fix, a patched build, or a workaround accepted by the customer that returns the affected system to normal operation.',
+  },
+  {
+    term: 'Support Day',
+    body: 'Any day other than a Saturday, a Sunday, or a public holiday in the jurisdiction in which the services are delivered.',
+  },
+  {
+    term: 'Support Hours',
+    body: '09:00 to 17:00 on a Support Day, in the regional time zone assigned to the customer at the start of the subscription.',
+  },
+  {
+    term: 'Supported Configuration',
+    body: 'A distribution channel and version listed in the enterprise documentation, deployed as delivered from the ControlPlane registries.',
+  },
+  {
+    term: 'Qualifying Patch',
+    body: 'A publicly available upstream release that fully mitigates a given vulnerability, used as the start of the clock under upstream patch remediation.',
+  },
+];
+---
+
+<BaseLayout
+  title="Support Policy - ControlPlane Enterprise for Flux CD"
+  description="Support scope, severity levels, response and resolution targets, and vulnerability remediation SLAs for ControlPlane Enterprise for Flux CD"
+  forcedTheme="light"
+>
+  <section class="intro">
+    <div class="intro-inner">
+      <p class="eyebrow center">enterprise support</p>
+      <h1>Support Policy</h1>
+      <p class="lead">
+        The written commitments behind every enterprise subscription, from severity
+        classification to resolution targets and vulnerability remediation SLAs.
+      </p>
+    </div>
+  </section>
+
+  <section class="commit" aria-label="Support commitments at a glance">
+    <div class="commit-inner">
+      {
+        commitments.map(({ value, label }) => (
+          <div class="stat">
+            <p class="stat-value">{value}</p>
+            <p class="stat-label">{label}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <div class="page">
+    <nav class="toc" aria-label="Contents">
+      <p class="toc-title">Contents</p>
+      <ol>
+        {
+          contents.map(({ num, title, id }) => (
+            <li>
+              <a href={`#${id}`}>
+                <span class="toc-num">{num}</span>
+                {title}
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </nav>
+
+    <section class="section" aria-labelledby="scope">
+      <h2 id="scope"><span class="sec-num">1</span>Scope of support</h2>
+      <p>
+        This policy applies to the whole of ControlPlane Enterprise for Flux CD: the
+        hardened <a href="/distribution/">distribution</a> and
+        every <a href="/addons/">enterprise addon</a> covered by your subscription, running in a
+        Supported Configuration. Security fixes and bug fixes are backported to the three most
+        recent minor releases, and the list of Supported Configurations is published in
+        the <a href="/distribution/overview/">enterprise documentation</a>.
+      </p>
+    </section>
+
+    <section class="section" aria-labelledby="cases">
+      <h2 id="cases"><span class="sec-num">2</span>Raising a case</h2>
+      <p>
+        Cases are opened by Authorized Users who have been onboarded to the support system. Contact
+        details for each channel are issued during onboarding and are not published here.
+      </p>
+      <div class="cards">
+        {
+          channels.map(({ title, body, icon }) => (
+            <div class="card">
+              <div class="icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d={icon} />
+                </svg>
+              </div>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="severity">
+      <h2 id="severity"><span class="sec-num">3</span>Severity levels</h2>
+      <p>ControlPlane uses the following definitions to classify Cases.</p>
+      <div class="sev-list">
+        {
+          severities.map(({ level, label, tone, body }) => (
+            <div class:list={['sev', tone]}>
+              <div class="sev-head">
+                <span class="sev-level">{level}</span>
+                <span class="sev-label">{label}</span>
+              </div>
+              <p>{body}</p>
+            </div>
+          ))
+        }
+      </div>
+      <p class="sev-note">
+        The severity of a Case is agreed with the Authorized User when it is opened, and either
+        party may change it if the business impact changes. A Severity 3 defect that develops into
+        a production outage is raised to Severity 1, and a Severity 2 Case with a working
+        workaround in place is lowered to Severity 3.
+      </p>
+    </section>
+
+    <section class="section" aria-labelledby="targets">
+      <h2 id="targets"><span class="sec-num">4</span>Response and resolution targets</h2>
+      <p>
+        ControlPlane meets the targets below for 95% of Cases opened in any calendar month.
+        Initial response and Resolution are defined in section 10.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Severity</th>
+              <th scope="col">Coverage</th>
+              <th scope="col">Channel</th>
+              <th scope="col">Initial response</th>
+              <th scope="col">Target resolution</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              targets.map(({ level, coverage, channel, response, resolution, note }) => (
+                <tr>
+                  <th scope="row">
+                    {level}
+                    {note && <sup class="fn">{note}</sup>}
+                  </th>
+                  <td>{coverage}</td>
+                  <td>{channel}</td>
+                  <td class="num">{response}</td>
+                  <td class="num">{resolution}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <ul class="fn-list">
+        {
+          targetNotes.map(({ key, text }) => (
+            <li>
+              <span class="fn">{key}</span>
+              {text}
+            </li>
+          ))
+        }
+      </ul>
+      <aside class="note tip">
+        <p class="note-title">Root cause analysis</p>
+        <p>
+          For every confirmed Severity 1 and Severity 2 incident, ControlPlane delivers a written
+          root cause analysis within ten calendar days of the Case being resolved.
+        </p>
+      </aside>
+    </section>
+
+    <section class="section" aria-labelledby="cve">
+      <h2 id="cve"><span class="sec-num">5</span>Vulnerability remediation</h2>
+      <p>
+        ControlPlane monitors the Flux controllers and their dependencies for vulnerabilities
+        continuously. Findings are scored with CVSS, assessed for exploitability in the context of
+        the distribution, and either patched or documented as not exploitable in a signed OpenVEX
+        attestation. The <a href="/distribution/security/">security architecture</a> page describes
+        how the assessments and attestations are produced.
+      </p>
+      <p>
+        Two remediation frameworks are available. Your subscription agreement sets which one
+        applies.
+      </p>
+      <div class="frameworks">
+        {
+          cveFrameworks.map(({ name, clock, rows }) => (
+            <div class="framework">
+              <h3>{name}</h3>
+              <p class="framework-clock">{clock}</p>
+              <dl>
+                {rows.map(({ band, target }) => (
+                  <div class="framework-row">
+                    <dt>{band}</dt>
+                    <dd>{target}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="hours">
+      <h2 id="hours"><span class="sec-num">6</span>Coverage and support hours</h2>
+      <p>
+        Support is staffed from North America, EMEA, and Asia-Pacific by ControlPlane support
+        engineers working alongside CNCF Flux core maintainers employed by ControlPlane. Each
+        customer is aligned to one region at the start of the subscription, which sets the Support
+        Hours that apply to Severity 2, 3, and 4 Cases.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Region</th>
+              <th scope="col">Coverage area</th>
+              <th scope="col">Support Hours</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              regions.map(({ region, name, hours }) => (
+                <tr>
+                  <th scope="row">{region}</th>
+                  <td>{name}</td>
+                  <td class="num">{hours}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="footnote">
+        Severity 1 incidents are covered 24 hours a day, 7 days a week, in every region.
+      </p>
+    </section>
+
+    <section class="section" aria-labelledby="escalation">
+      <h2 id="escalation"><span class="sec-num">7</span>Escalation</h2>
+      <p>
+        Three escalation tiers are available to every subscription, each with a named contact
+        provided at onboarding. Every tier carries the authority to commit engineering effort, and
+        the path ends at ControlPlane's executive team rather than at another queue.
+      </p>
+      <ol class="tiers">
+        {
+          escalation.map(({ tier, role, trigger }) => (
+            <li class="tier">
+              <span class="tier-name">{tier}</span>
+              <div>
+                <p class="tier-role">{role}</p>
+                <p class="tier-trigger">{trigger}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="section" aria-labelledby="responsibilities">
+      <h2 id="responsibilities"><span class="sec-num">8</span>Customer responsibilities</h2>
+      <p>The targets in section 4 assume the following on the customer side.</p>
+      <div class="cards">
+        {
+          responsibilities.map(({ title, body }) => (
+            <div class="card">
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="exclusions">
+      <h2 id="exclusions"><span class="sec-num">9</span>Exclusions</h2>
+      <p>The following are not measured against the targets in this policy:</p>
+      <ul class="exclusions">
+        {exclusions.map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="definitions">
+      <h2 id="definitions"><span class="sec-num">10</span>Definitions</h2>
+      <dl class="glossary">
+        {
+          definitions.map(({ term, body }) => (
+            <div class="glossary-row">
+              <dt>{term}</dt>
+              <dd>{body}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <aside class="note info">
+      <p class="note-title">Precedence</p>
+      <p>
+        This page sets out the standard support policy for ControlPlane Enterprise for Flux CD.
+        Individual subscription agreements may carry different terms. Where this page and an
+        executed agreement differ, the agreement applies.
+      </p>
+    </aside>
+
+    <p class="revised">
+      ControlPlane may update this policy as the distribution and the support organisation evolve.
+      Customers are notified of material changes through their account contact.
+      Last updated July 2026.
+    </p>
+  </div>
+
+  <CtaBand
+    title="Put these commitments under contract"
+    body="Talk to ControlPlane about a subscription sized to your fleet, with the remediation framework that fits your regulatory obligations."
+    primary={{ label: 'Contact us', href: contactUrl, external: true }}
+    secondary={{ label: 'See the plans', href: '/pricing/' }}
+  />
+</BaseLayout>
+
+<style>
+  .intro {
+    background: linear-gradient(180deg, color-mix(in srgb, var(--brand) 7%, var(--bg)) 0%, var(--bg) 100%);
+  }
+
+  .intro-inner {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: clamp(4rem, 8vw, 6rem) var(--space) 3rem;
+    text-align: center;
+  }
+
+  .eyebrow.center {
+    text-align: center;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    letter-spacing: -0.03em;
+    margin: 0 0 1.25rem;
+  }
+
+  .lead {
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    color: var(--muted);
+    max-width: 44rem;
+    margin: 0 auto;
+  }
+
+  /* Navy commitments band: the executive summary of the numbered policy below */
+  .commit {
+    background:
+      radial-gradient(44rem 22rem at 50% -40%, rgba(20, 114, 235, 0.32), transparent 62%),
+      var(--navy-900);
+    border-top: 1px solid var(--navy-line);
+    border-bottom: 1px solid var(--navy-line);
+  }
+
+  .commit-inner {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: clamp(2.25rem, 4vw, 3rem) var(--space);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    margin: 0 0 0.4rem;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: rgba(222, 233, 248, 0.78);
+    margin: 0;
+  }
+
+  .page {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: 2.5rem var(--space) 2rem;
+  }
+
+  .toc {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-soft);
+    padding: 1.25rem 1.5rem;
+  }
+
+  .toc-title {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin: 0 0 0.7rem;
+  }
+
+  .toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    columns: 3;
+    column-gap: 2rem;
+  }
+
+  .toc li {
+    break-inside: avoid;
+    margin-bottom: 0.3rem;
+  }
+
+  .toc a {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.88rem;
+    color: var(--fg);
+  }
+
+  .toc-num {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+    min-width: 1.1rem;
+  }
+
+  .section {
+    margin-top: 3rem;
+  }
+
+  h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    margin: 0 0 1rem;
+    scroll-margin-top: calc(var(--header-height) + 1rem);
+  }
+
+  .sec-num {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  .section > p {
+    max-width: 56rem;
+  }
+
+  .footnote {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-top: 1rem;
+  }
+
+  .revised {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* Tables scroll inside their own container so the page body never does */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 1.25rem 0 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.92rem;
+  }
+
+  th,
+  td {
+    text-align: left;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  thead th {
+    background: var(--bg-soft);
+    font-size: 0.78rem;
+    font-weight: 650;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  tbody tr:last-child th,
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  tbody th {
+    font-weight: 650;
+    white-space: nowrap;
+  }
+
+  td {
+    color: var(--muted);
+  }
+
+  .num {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  .fn {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--accent);
+    margin-left: 0.2rem;
+  }
+
+  .fn-list {
+    list-style: none;
+    margin: 0.9rem 0 0;
+    padding: 0;
+    max-width: 56rem;
+  }
+
+  .fn-list li {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .fn-list .fn {
+    margin: 0 0.4rem 0 0;
+  }
+
+  .note {
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-soft);
+    font-size: 0.93rem;
+    margin-top: 1.25rem;
+  }
+
+  .note.tip {
+    border-left: 3px solid var(--ok);
+  }
+
+  .note.info {
+    border-left: 3px solid var(--accent);
+    margin-top: 3rem;
+  }
+
+  .note-title {
+    font-weight: 650;
+    margin: 0 0 0.4rem;
+  }
+
+  .note.tip .note-title {
+    color: var(--ok);
+  }
+
+  .note.info .note-title {
+    color: var(--accent);
+  }
+
+  .note p {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.1rem;
+    margin-top: 1.25rem;
+  }
+
+  .card {
+    padding: 1.4rem 1.3rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-soft);
+  }
+
+  .icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--brand) 12%, transparent);
+    color: var(--accent);
+    margin-bottom: 0.9rem;
+  }
+
+  .card h3 {
+    font-size: 1rem;
+    margin: 0 0 0.4rem;
+  }
+
+  .card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  /* Four severities read as a balanced 2x2 rather than an orphaned 3+1 */
+  .sev-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    gap: 1.1rem;
+    margin-top: 1.25rem;
+  }
+
+  /* Badge hues follow the admonition palette in global.css so severity reads
+     the same here as in the docs: red, amber, cyan, green */
+  .sev {
+    padding: 1.3rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-soft);
+  }
+
+  .sev-note {
+    margin-top: 1.25rem;
+  }
+
+  .sev.critical { --sev-color: #dc2626; }
+  .sev.high { --sev-color: #d97706; }
+  .sev.medium { --sev-color: #0ea5c6; }
+  .sev.low { --sev-color: #00a86b; }
+
+  .sev-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .sev-level {
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  .sev-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: color-mix(in srgb, var(--sev-color) 82%, #000000);
+    background: color-mix(in srgb, var(--sev-color) 13%, transparent);
+    border-radius: 99px;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .sev p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .frameworks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    gap: 1.1rem;
+    margin-top: 1.25rem;
+  }
+
+  .framework {
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-soft);
+  }
+
+  .framework h3 {
+    font-size: 1.05rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .framework-clock {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin: 0 0 1rem;
+  }
+
+  .framework dl {
+    margin: 0;
+  }
+
+  .framework-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.7rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .framework dt {
+    font-size: 0.88rem;
+  }
+
+  .framework dd {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .tiers {
+    list-style: none;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .tier {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-soft);
+  }
+
+  .tier-name {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    padding-top: 0.15rem;
+    width: 4.5rem;
+  }
+
+  .tier-role {
+    font-weight: 650;
+    font-size: 0.98rem;
+    margin: 0;
+  }
+
+  .tier-trigger {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 0.2rem 0 0;
+  }
+
+  .exclusions {
+    margin: 1rem 0 0;
+    padding-left: 1.2rem;
+    max-width: 56rem;
+  }
+
+  .exclusions li {
+    margin-bottom: 0.6rem;
+  }
+
+  .glossary {
+    margin: 1.25rem 0 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .glossary-row {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .glossary dt {
+    font-weight: 650;
+    font-size: 0.95rem;
+  }
+
+  .glossary dd {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+
+  @media (max-width: 860px) {
+    .toc ol {
+      columns: 2;
+    }
+
+    .glossary-row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.3rem;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .commit-inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+
+    .toc ol {
+      columns: 1;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .tier {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+</style>
