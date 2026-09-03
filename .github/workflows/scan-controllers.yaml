@@ -82,7 +82,7 @@ jobs:
             core.setOutput('version', version);
             core.setOutput('version-without-patch', versionWithoutPatch);
       - name: Setup Flux
-        uses: fluxcd/flux2/action@16602fa989daa99762f1c6d1186ae2ad1c735815 #v2.9.3
+        uses: fluxcd/flux2/action@dd233c4fadef306a62b7893204f8e3817fecc2b2 #v2.9.5
         with:
           version: ${{ steps.release.outputs.version }}
       - name: Export images
