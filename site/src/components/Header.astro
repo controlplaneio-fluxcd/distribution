@@ -103,7 +103,7 @@ const activeMenu = productPages.has(path) ? 'Product' : path === '/' ? undefined
                 )}
                 {menu.aside === 'operator' && (
                   <aside class="promo">
-                    <Image class="promo-logo" src={fluxOperatorLogo} alt="Flux Operator" width="162" height="36" />
+                    <Image class="promo-logo" src={fluxOperatorLogo} alt="Flux Operator" width="162" height="36" loading="eager" />
                     <p class="promo-text">
                       Autopilot for Flux CD: self-service capabilities, auto upgrades, and
                       multi-tenancy lockdown.
@@ -115,7 +115,7 @@ const activeMenu = productPages.has(path) ? 'Product' : path === '/' ? undefined
                 )}
                 {menu.aside === 'brand' && (
                   <aside class="promo">
-                    <Image class="promo-logo" src={controlPlaneLogo} alt="ControlPlane" width="144" height="30" />
+                    <Image class="promo-logo" src={controlPlaneLogo} alt="ControlPlane" width="144" height="30" loading="eager" />
                     <p class="promo-text">
                       Cybersecurity consulting and advisory, trusted by the world's leading organisations.
                     </p>

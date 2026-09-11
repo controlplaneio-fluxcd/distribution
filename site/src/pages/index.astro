@@ -615,6 +615,8 @@ const security = [
   .panel.banner img {
     width: clamp(13rem, 55%, 19rem);
     height: auto;
+    /* Chrome flags lazy images whose CSS height is auto; the ratio keeps it explicit */
+    aspect-ratio: 320 / 166;
   }
 
   .banner-caption {
@@ -637,6 +639,7 @@ const security = [
     display: block;
     width: 100%;
     height: auto;
+    aspect-ratio: 1880 / 1852;
   }
 
 </style>
