@@ -8,4 +8,19 @@ updates:
         patterns:
           - "*"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+
+  - package-ecosystem: "npm"
+    directory: "/site"
+    groups:
+      site:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    schedule:
+      interval: "weekly"
