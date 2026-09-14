@@ -139,6 +139,6 @@ jobs:
         api-key: ${{ secrets.ZULIP_API_KEY }}
         organization-url: ${{ secrets.ZULIP_ORGANIZATION_URL }}
         type: stream
-        to: team-flux
+        to: Distribution
         topic: cve-alerts
         content: 'Flux Enterprise Addons CVE alert: ${{ steps.job-url.outputs.url }}'

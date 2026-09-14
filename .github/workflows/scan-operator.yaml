@@ -60,7 +60,7 @@ jobs:
         api-key: ${{ secrets.ZULIP_API_KEY }}
         organization-url: ${{ secrets.ZULIP_ORGANIZATION_URL }}
         type: stream
-        to: team-flux
+        to: Distribution
         topic: cve-alerts
         content: 'Flux Operator CVE alert (not part of CP SLA): ${{ steps.job-url.outputs.url }}'
     - name: Check result
