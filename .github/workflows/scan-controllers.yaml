@@ -96,6 +96,7 @@ jobs:
         continue-on-error: true
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
+          cache: false
           image-ref: ${{ steps.images.outputs.sc }}
           format: 'table'
           exit-code: '1'
@@ -111,6 +112,7 @@ jobs:
         continue-on-error: true
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
+          cache: false
           image-ref: ${{ steps.images.outputs.kc }}
           format: 'table'
           exit-code: '1'
@@ -126,6 +128,7 @@ jobs:
         continue-on-error: true
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
+          cache: false
           image-ref: ${{ steps.images.outputs.hc }}
           format: 'table'
           exit-code: '1'
@@ -141,6 +144,7 @@ jobs:
         continue-on-error: true
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
+          cache: false
           image-ref: ${{ steps.images.outputs.nc }}
           format: 'table'
           exit-code: '1'
@@ -156,6 +160,7 @@ jobs:
         continue-on-error: true
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
+          cache: false
           image-ref: ${{ steps.images.outputs.irc }}
           format: 'table'
           exit-code: '1'
@@ -171,6 +176,7 @@ jobs:
         continue-on-error: true
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
+          cache: false
           image-ref: ${{ steps.images.outputs.iac }}
           format: 'table'
           exit-code: '1'
@@ -187,6 +193,7 @@ jobs:
         continue-on-error: true
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
+          cache: false
           image-ref: ${{ steps.images.outputs.sw }}
           format: 'table'
           exit-code: '1'
