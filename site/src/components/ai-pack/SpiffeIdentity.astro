@@ -1,0 +1,275 @@
+---
+import VizFrame from './VizFrame.astro';
+
+const peers = [
+  { role: 'hub', name: 'Flux MCP Server', id: 'spiffe://example.org/hub/flux-mcp' },
+  { role: 'spoke', name: 'production-eu', id: 'spiffe://example.org/spoke/production-eu/flux-mcp' },
+];
+
+const coverage = [
+  { scope: 'external', path: 'clients to hub' },
+  { scope: 'internal', path: 'hub to spokes' },
+];
+---
+
+<VizFrame
+  title="workload identity"
+  label="Diagram: the hub Flux MCP Server and the production-eu spoke each present an X.509-SVID in the example.org trust domain and verify each other over mutual TLS. SPIFFE covers both external traffic reaching the hub from outside the cluster and internal traffic from the hub to the spokes."
+>
+  <div class="peers">
+    {
+      peers.map(({ role, name, id }, i) => (
+        <>
+          {i === 1 && (
+            <div class="handshake">
+              <span class="hs-line" />
+              <span class="hs-badge">
+                <svg viewBox="0 0 24 24">
+                  <path d="M7 11V8a5 5 0 0 1 10 0v3M5.5 11h13v9.5h-13z" />
+                </svg>
+                mutual TLS
+              </span>
+              <span class="hs-line" />
+            </div>
+          )}
+          <div class="svid">
+            <div class="svid-head">
+              <span class="svid-role">{role}</span>
+              <span class="svid-name">{name}</span>
+              <span class="svid-ok">
+                <svg viewBox="0 0 24 24">
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+                verified
+              </span>
+            </div>
+            <p class="svid-id">{id}</p>
+            <dl class="svid-meta">
+              <div>
+                <dt>type</dt>
+                <dd>X.509-SVID</dd>
+              </div>
+              <div>
+                <dt>trust domain</dt>
+                <dd>example.org</dd>
+              </div>
+            </dl>
+          </div>
+        </>
+      ))
+    }
+  </div>
+
+  <ul class="coverage">
+    {
+      coverage.map(({ scope, path }) => (
+        <li>
+          <span class="cov-scope">{scope}</span>
+          <span class="cov-path">{path}</span>
+          <svg class="cov-ok" viewBox="0 0 24 24">
+            <path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3zm-3 9l2.2 2.2 4.3-4.6" />
+          </svg>
+        </li>
+      ))
+    }
+  </ul>
+</VizFrame>
+
+<style>
+  .peers {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .svid {
+    position: relative;
+    padding: 0.85rem 0.95rem 0.8rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--viz-line-strong);
+    background:
+      linear-gradient(135deg, rgba(20, 114, 235, 0.16), rgba(20, 114, 235, 0.02) 60%),
+      #0a1730;
+    overflow: hidden;
+  }
+
+  .svid::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--brand-light), var(--brand));
+  }
+
+  .svid-head {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .svid-role {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--brand-light);
+    border: 1px solid var(--viz-line-strong);
+    border-radius: 4px;
+    padding: 0.02rem 0.35rem;
+  }
+
+  .svid-name {
+    font-weight: 650;
+    font-size: 0.84rem;
+    color: #ffffff;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .svid-ok {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: var(--viz-ok);
+    white-space: nowrap;
+  }
+
+  .svid-ok svg {
+    width: 0.7rem;
+    height: 0.7rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .svid-id {
+    margin: 0.55rem 0 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--brand-pale);
+    overflow-wrap: anywhere;
+  }
+
+  .svid-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+  }
+
+  .svid-meta div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .svid-meta dt {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--viz-faint);
+  }
+
+  .svid-meta dd {
+    margin: 0;
+    font-size: 0.74rem;
+    color: #dbe6f6;
+  }
+
+  .handshake {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hs-line {
+    height: 0.8rem;
+    border-left: 1.5px dashed var(--viz-line-strong);
+  }
+
+  .hs-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--viz-ok);
+    border: 1px solid rgba(52, 211, 153, 0.35);
+    background: rgba(52, 211, 153, 0.1);
+    border-radius: 99px;
+    padding: 0.2rem 0.7rem;
+  }
+
+  .hs-badge svg {
+    width: 0.75rem;
+    height: 0.75rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .coverage {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin: 1.1rem 0 0;
+    padding: 0;
+  }
+
+  .coverage li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.7rem;
+    border-radius: 8px;
+    border: 1px solid var(--navy-line);
+    background: rgba(14, 28, 54, 0.6);
+    min-width: 0;
+  }
+
+  .cov-scope {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--brand-light);
+  }
+
+  .cov-path {
+    font-size: 0.74rem;
+    color: #dbe6f6;
+  }
+
+  .cov-ok {
+    flex-shrink: 0;
+    margin-left: auto;
+    width: 0.95rem;
+    height: 0.95rem;
+    fill: none;
+    stroke: var(--viz-ok);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @media (max-width: 480px) {
+    .coverage {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,578 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import SessionShowcase from '../../components/ai-pack/SessionShowcase.astro';
+import AccessMap from '../../components/ai-pack/AccessMap.astro';
+import AuthFlow from '../../components/ai-pack/AuthFlow.astro';
+import ScopeConsent from '../../components/ai-pack/ScopeConsent.astro';
+import ClusterFleet from '../../components/ai-pack/ClusterFleet.astro';
+import SpiffeIdentity from '../../components/ai-pack/SpiffeIdentity.astro';
+import EnvCompare from '../../components/ai-pack/EnvCompare.astro';
+import { contactUrl } from '../../lib/nav';
+
+const outcomes = [
+  {
+    title: 'Adopt AI without new risk',
+    body: 'Engineers get AI assistance on production clusters through your SSO and Kubernetes RBAC. Agents never hold cluster credentials, and every session is limited to the tools a person approves.',
+    icon: 'M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3zm-3 9l2.2 2.2 4.3-4.6',
+  },
+  {
+    title: 'Resolve incidents faster',
+    body: 'Agents correlate events, logs, and configuration changes across your fleet, taking on-call engineers from alert to root cause in minutes.',
+    icon: 'M13 2 3 14h9l-1 8 10-12h-9l1-8z',
+  },
+  {
+    title: 'Nothing new to operate',
+    body: 'The authorization server is built in and the MCP Server runs inside the clusters you already manage, so there is no extra platform to deploy or secure.',
+    icon: 'M3.5 3.5h7v7h-7zM13.5 3.5h7v7h-7zM3.5 13.5h7v7h-7zM13.5 13.5h7v7h-7z',
+  },
+];
+
+const steps = [
+  { title: 'Sign in with SSO', body: 'The agent hands sign-in off to your identity provider.' },
+  { title: 'Grant scopes', body: 'The user picks which tools the agent may call in this session.' },
+  { title: 'Query the fleet', body: 'The agent lists clusters through the hub, which routes each tool call to the right spoke.' },
+];
+
+const features = [
+  {
+    tag: 'sso and rbac',
+    title: 'Governed by the controls you already have',
+    lead: 'Access is managed in your identity provider. Add people to the groups that make sense and their agents get the Kubernetes RBAC permissions those groups map to, and nothing more.',
+    points: [
+      'Map IdP groups to the Roles and ClusterRoles you already manage',
+      'Agents need no kubeconfig or cluster credentials of their own',
+    ],
+    visual: AccessMap,
+  },
+  {
+    tag: 'built-in authorization server',
+    title: 'Connect agents without an identity project',
+    lead: 'The MCP Server ships with its own authorization server, so agents connect to it directly. There is no external OAuth authorization server to deploy, configure, or keep running.',
+    points: [
+      'Point an agent at the MCP endpoint and it can sign in, with nothing else to deploy',
+      'Works with your identity provider, or with the Dex addon',
+    ],
+    visual: AuthFlow,
+  },
+  {
+    tag: 'fine-grained scopes',
+    title: 'People stay in charge of their agents',
+    lead: 'Before an agent can act, the user chooses which tools it may use and whether its session stays alive offline. Least privilege becomes a decision made per session, not a policy document.',
+    points: [
+      'Scopes narrow a session further, and never exceed the user’s RBAC permissions',
+      'Allow a dry-run diff of a change without allowing apply, patch, or delete',
+    ],
+    visual: ScopeConsent,
+  },
+  {
+    tag: 'multi-cluster',
+    title: 'One governed entry point for the whole fleet',
+    lead: 'Agents connect to a single MCP Server in your hub cluster, which reaches the MCP Servers in every spoke over a secure connection suited to each environment.',
+    points: [
+      'Configure agents once, against the hub',
+      'Agents list the available clusters through the hub and choose where to look',
+    ],
+    visual: ClusterFleet,
+  },
+  {
+    tag: 'spiffe',
+    title: 'Built on open security standards',
+    lead: 'Both internal and external communication with the MCP Server is protected with SPIFFE, the CNCF standard for workload identity, so it fits a zero-trust architecture.',
+    points: [
+      'Hub and spoke servers authenticate each other over mutual TLS with SPIFFE identities',
+      'The same standard secures traffic reaching the hub from outside the cluster',
+    ],
+    visual: SpiffeIdentity,
+  },
+  {
+    tag: 'secure environment comparison',
+    title: 'Answer cross-environment questions without widening access',
+    lead: 'The MCP Server reads each environment from inside the cluster, so your team can compare development, staging, and production without kubectl access to any of them.',
+    points: [
+      'Spot version and configuration drift before a promotion',
+      'Give reviewers the comparison without giving them cluster access',
+    ],
+    visual: EnvCompare,
+  },
+];
+
+const base = [
+  {
+    title: 'Faster incident response',
+    body: 'Contextual analysis of failing deployments, with remediation steps the agent can explain.',
+    icon: 'M13 2 3 14h9l-1 8 10-12h-9l1-8z',
+  },
+  {
+    title: 'Root cause analysis',
+    body: 'Events, logs, and configuration changes are correlated to find where a failure started.',
+    icon: 'M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM21 21l-4.35-4.35M11 8v3l2 2',
+  },
+  {
+    title: 'Pipeline management',
+    body: 'Preview a change with a server-side dry-run diff, then reconcile, suspend, or resume Flux resources from the agent.',
+    icon: 'M21 12a9 9 0 1 1-9-9c2.5 0 4.8 1 6.4 2.6L21 8m0-5v5h-5',
+  },
+  {
+    title: 'Visualization',
+    body: 'Diagrams of Flux dependencies, resource relationships, and delivery workflows on request.',
+    icon: 'M6 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm12 12a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM6 9v3a3 3 0 0 0 3 3h6',
+  },
+];
+
+const comparison: { label: string; local: string; pack: string }[] = [
+  { label: 'Availability', local: 'Included in every plan', pack: 'Paid add-on' },
+  { label: 'Runs on', local: 'Developer workstations', pack: 'Inside your clusters' },
+  { label: 'Transport', local: 'stdio', pack: 'HTTPS' },
+  { label: 'Authentication', local: 'kubeconfig credentials', pack: 'SSO with the built-in authorization server' },
+  { label: 'Permissions', local: 'kubeconfig permissions', pack: 'RBAC from SSO groups, narrowed by scopes' },
+  { label: 'Multi-cluster', local: 'Switch kubeconfig contexts', pack: 'Hub and spoke, with cluster listing' },
+  { label: 'Workload identity', local: 'None', pack: 'SPIFFE, over mutual TLS' },
+  { label: 'Cluster changes', local: 'Not available', pack: 'Dry-run diff, apply, patch, and reconcile, within RBAC and scopes' },
+];
+---
+
+<BaseLayout
+  title="AI Pack - ControlPlane Enterprise for Flux CD"
+  description="Bring AI-assisted operations to every Flux cluster, governed by your identity provider and Kubernetes RBAC, with nothing new to run."
+  forcedTheme="light"
+>
+  <ProductHero
+    title="AI Pack"
+    lead="Bring AI-assisted operations to every Flux cluster, governed by your identity provider and Kubernetes RBAC, with nothing new to run."
+    secondary={{ label: 'See pricing', href: '/pricing/#ai-pack' }}
+  />
+
+  <section class="outcomes" aria-label="Why the AI Pack">
+    <ul class="outcomes-grid">
+      {
+        outcomes.map(({ title, body, icon }) => (
+          <li>
+            <span class="outcome-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d={icon} />
+              </svg>
+            </span>
+            <h2>{title}</h2>
+            <p>{body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="session" aria-labelledby="session-title">
+    <div class="session-inner">
+      <p class="eyebrow">one session, end to end</p>
+      <h2 id="session-title">From a failing release to its root cause in one conversation</h2>
+      <SessionShowcase />
+      <ol class="steps">
+        {
+          steps.map(({ title, body }, i) => (
+            <li>
+              <span class="step-num" aria-hidden="true">{i + 1}</span>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <div class="rows">
+    {
+      features.map(({ tag, title, lead, points, visual: Visual }, i) => (
+        <section class:list={['row', { flip: i % 2 === 1 }]} aria-label={title}>
+          <div class="row-copy">
+            <p class="eyebrow">{tag}</p>
+            <h2>{title}</h2>
+            <p class="row-lead">{lead}</p>
+            <ul class="checklist">
+              {points.map((point) => (
+                <li>
+                  <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="row-visual">
+            <Visual />
+          </div>
+        </section>
+      ))
+    }
+  </div>
+
+  <section class="band" aria-labelledby="base-title">
+    <div class="band-inner">
+      <p class="eyebrow">built on the flux mcp server</p>
+      <h2 id="base-title">Troubleshooting and operations tools, included</h2>
+      <p class="band-lead">
+        The AI Pack extends the open source <a href="https://fluxoperator.dev/mcp-server/" target="_blank" rel="noopener">Flux MCP Server</a>,
+        so your agents keep its troubleshooting and operations tools.
+      </p>
+      <ul class="base-grid">
+        {
+          base.map(({ title, body, icon }) => (
+            <li>
+              <span class="base-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d={icon} />
+                </svg>
+              </span>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="compare" aria-labelledby="compare-title">
+    <div class="compare-inner">
+      <p class="eyebrow">choosing a server</p>
+      <h2 id="compare-title">From one engineer to the whole organisation</h2>
+      <p class="compare-lead">
+        Every plan includes the <a href="/addons/mcp-stdio/">Local MCP Server</a>, a read-only server
+        for individual workstations. The AI Pack is for organisations that want every team on AI-assisted
+        operations, managed centrally under SSO and RBAC.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col"><span class="visually-hidden">Capability</span></th>
+              <th scope="col">Local MCP Server</th>
+              <th scope="col" class="pack">AI Pack</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              comparison.map(({ label, local, pack }) => (
+                <tr>
+                  <th scope="row">{label}</th>
+                  <td>{local}</td>
+                  <td class="pack">{pack}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Put AI to work on your Flux fleet"
+    body="The AI Pack is available on top of any ControlPlane Enterprise for Flux CD plan. Its hardened images are covered by ControlPlane's CVE remediation SLA, FIPS-compliant, and built with SLSA Build Level 3 provenance."
+    primary={{ label: 'Contact us', href: contactUrl, external: true }}
+    secondary={{ label: 'See pricing', href: '/pricing/#ai-pack' }}
+  />
+</BaseLayout>
+
+<style>
+  .outcomes {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .outcomes-grid {
+    list-style: none;
+    max-width: var(--site-width);
+    margin: 0 auto;
+    padding: clamp(3rem, 6vw, 4.5rem) var(--space);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+  }
+
+  .outcome-icon {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-md);
+    color: var(--accent);
+    background: color-mix(in srgb, var(--brand) 9%, transparent);
+  }
+
+  .outcomes-grid h2 {
+    font-size: 1.25rem;
+    margin: 1.1rem 0 0.5rem;
+  }
+
+  .outcomes-grid p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  .session {
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .session-inner {
+    max-width: var(--site-width);
+    margin: 0 auto;
+    padding: var(--section-pad) var(--space);
+  }
+
+  .session-inner > .eyebrow,
+  .session-inner > h2 {
+    text-align: center;
+  }
+
+  .session-inner > h2 {
+    font-size: var(--text-h2);
+    line-height: 1.12;
+    max-width: 40rem;
+    margin: 0 auto clamp(2rem, 4vw, 3rem);
+  }
+
+  .steps {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    margin: clamp(2rem, 4vw, 2.75rem) 0 0;
+    padding: 0;
+  }
+
+  .step-num {
+    display: inline-grid;
+    place-items: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--brand) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--brand) 30%, transparent);
+  }
+
+  .steps h3 {
+    font-size: 1.02rem;
+    font-weight: 700;
+    margin: 0.75rem 0 0.3rem;
+  }
+
+  .steps p {
+    font-size: 0.94rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .row h2 {
+    margin-bottom: 1rem;
+  }
+
+  .band {
+    background: var(--bg-soft);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .band-inner {
+    max-width: var(--site-width);
+    margin: 0 auto;
+    padding: var(--section-pad) var(--space);
+    text-align: center;
+  }
+
+  .band-inner > h2 {
+    font-size: var(--text-h2);
+    line-height: 1.12;
+    margin: 0 0 1rem;
+  }
+
+  .band-lead {
+    max-width: 38rem;
+    margin: 0 auto clamp(2.5rem, 5vw, 3.25rem);
+    color: var(--muted);
+    font-size: 1.02rem;
+  }
+
+  .base-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.1rem;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+  }
+
+  .base-grid li {
+    padding: 1.4rem 1.3rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .base-grid li:hover {
+    border-color: var(--brand-light);
+    box-shadow: var(--shadow);
+  }
+
+  .base-icon {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: var(--radius-sm);
+    color: var(--accent);
+    background: color-mix(in srgb, var(--brand) 9%, transparent);
+  }
+
+  .base-grid h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 1rem 0 0.35rem;
+  }
+
+  .base-grid p {
+    font-size: 0.92rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .compare-inner {
+    max-width: 56rem;
+    margin: 0 auto;
+    padding: var(--section-pad) var(--space);
+  }
+
+  .compare-inner > .eyebrow,
+  .compare-inner > h2 {
+    text-align: center;
+  }
+
+  .compare-inner > h2 {
+    font-size: var(--text-h2);
+    line-height: 1.12;
+    margin: 0 0 1rem;
+  }
+
+  .compare-lead {
+    max-width: 40rem;
+    margin: 0 auto 2.5rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 1.02rem;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+  }
+
+  table {
+    width: 100%;
+    min-width: 34rem;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  th,
+  td {
+    padding: 0.85rem 1.2rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  tbody tr:last-child th,
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  thead th {
+    font-size: 0.92rem;
+    font-weight: 700;
+    background: var(--bg-soft);
+  }
+
+  thead th.pack {
+    color: var(--accent);
+  }
+
+  tbody th {
+    font-weight: 600;
+    width: 26%;
+  }
+
+  td {
+    color: var(--muted);
+  }
+
+  td.pack {
+    color: var(--fg);
+    font-weight: 550;
+    background: color-mix(in srgb, var(--brand) 4%, transparent);
+  }
+
+  thead th.pack {
+    background: color-mix(in srgb, var(--brand) 8%, var(--bg-soft));
+  }
+
+  @media (max-width: 960px) {
+    .row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .row-visual {
+      max-width: 34rem;
+      width: 100%;
+    }
+
+    .base-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .outcomes-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .steps {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .base-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* Fit the table to the phone rather than scroll it: the AI Pack column
+       is the one readers came for and must not start off-screen. */
+    table {
+      min-width: 0;
+      font-size: 0.84rem;
+    }
+
+    th,
+    td {
+      padding: 0.7rem 0.6rem;
+    }
+
+    tbody th {
+      width: auto;
+    }
+  }
+</style>

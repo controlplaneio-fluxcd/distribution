@@ -77,6 +77,7 @@ const addons: Addon[] = [
     ],
     links: [
       { title: 'Local MCP Server docs', href: '/addons/mcp-stdio/' },
+      { title: 'In-cluster with the AI Pack (paid add-on)', href: '/ai-pack/' },
     ],
     image: mcpDiagram,
     imageAlt: 'Diagram of AI-assisted GitOps where an AI assistant uses the Flux MCP Server to analyze deployments on a cluster while code changes ship through a pull request',
@@ -226,25 +227,7 @@ const addons: Addon[] = [
   }
 
   .checklist {
-    list-style: none;
-    margin: 0 0 1.75rem;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-  }
-
-  .checklist li {
-    display: flex;
-    align-items: baseline;
-    gap: 0.7rem;
-    font-size: 0.98rem;
-  }
-
-  .check {
-    flex-shrink: 0;
-    color: var(--ok);
-    transform: translateY(2px);
+    margin-bottom: 1.75rem;
   }
 
   .links {

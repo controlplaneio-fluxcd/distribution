@@ -1,0 +1,657 @@
+---
+/* Animated walkthrough of one agent session: SSO sign-in, scope grant, then
+   tool calls fanned out from the hub MCP Server to two spoke clusters.
+   CSS only, so it plays without JavaScript. The base styles are the final
+   frame; keyframes run only under prefers-reduced-motion: no-preference.
+   All timings share one 16s loop, expressed as percentages in the keyframes. */
+import WindowBar from './WindowBar.astro';
+import YouTag from './YouTag.astro';
+
+const spokes = [
+  { name: 'staging', meta: 'eu-west-1', state: 'staging' },
+  { name: 'production-eu', meta: 'eu-west-1', state: 'prod' },
+  { name: 'production-us', meta: 'us-east-1', state: 'idle' },
+  { name: 'development', meta: 'on-premises', state: 'idle' },
+];
+---
+
+<div
+  class="showcase"
+  role="img"
+  aria-label="Animated walkthrough: an engineer asks an AI agent why a HelmRelease fails in production. The agent signs in with SSO, is granted read scopes, and the hub Flux MCP Server lists the spoke clusters, then queries staging and production-eu over mutual TLS with SPIFFE identities before the agent reports the root cause."
+>
+  <div class="agent" aria-hidden="true">
+    <WindowBar title="agent session" />
+    <div class="log">
+      <p class="prompt t-prompt"><YouTag />Why is the checkout HelmRelease failing in production-eu?</p>
+
+      <p class="step t-sso">
+        <span class="ico ok">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3M5.5 11h13v9.5h-13z" /></svg>
+        </span>
+        <span>Signed in with SSO as <b>ana@example.com</b><small>groups: sre-oncall, team-checkout</small></span>
+      </p>
+
+      <p class="step t-scope">
+        <span class="ico ok">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6z" /></svg>
+        </span>
+        <span>Scopes granted <code>read resources</code> <code>read logs</code></span>
+      </p>
+
+      <p class="step t-list">
+        <span class="ico info">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10" /></svg>
+        </span>
+        <span>Listed 4 spoke clusters through the hub</span>
+      </p>
+
+      <p class="call t-call1">
+        <span class="arrow">&rarr;</span>
+        <span><span class="tool">get_kubernetes_resources</span> <span class="arg">@staging</span></span>
+        <span class="tick">&check;</span>
+      </p>
+      <p class="call t-call2">
+        <span class="arrow">&rarr;</span>
+        <span><span class="tool">get_kubernetes_resources</span> <span class="arg">@production-eu</span></span>
+        <span class="tick">&check;</span>
+      </p>
+      <p class="call t-call3">
+        <span class="arrow">&rarr;</span>
+        <span><span class="tool">get_kubernetes_logs</span> <span class="arg">@production-eu</span></span>
+        <span class="tick">&check;</span>
+      </p>
+
+      <div class="answer t-answer">
+        <p>
+          <b>checkout</b> 4.2.0 fails its readiness probe in production-eu: the new
+          <code>PAYMENTS_URL</code> value is only set in the staging overlay.
+        </p>
+        <p class="fix">Add the value to the production overlay and Flux rolls it out on the next sync.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="link-a" aria-hidden="true">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+      <path class="wire" d="M0 50 H100" vector-effect="non-scaling-stroke" />
+      <path class="comet c-agent" d="M0 50 H100" vector-effect="non-scaling-stroke" />
+    </svg>
+    <span class="wire-label">HTTPS</span>
+  </div>
+
+  <div class="hub" aria-hidden="true">
+    <div class="hub-card">
+      <span class="hub-glow"></span>
+      <img src="/images/logo/enterprise-for-flux-cd-icon-white.svg" alt="" width="36" height="36" />
+      <p class="hub-title">Flux MCP Server</p>
+      <p class="hub-sub">hub cluster</p>
+      <ul class="modules">
+        <li class="mod t-auth">Authorization server</li>
+        <li class="mod t-rbac">SSO groups to RBAC</li>
+        <li class="mod">SPIFFE workload identity</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="link-b" aria-hidden="true">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+      <path class="wire" d="M0 50 C50 50 50 12.5 100 12.5" vector-effect="non-scaling-stroke" />
+      <path class="wire" d="M0 50 C50 50 50 37.5 100 37.5" vector-effect="non-scaling-stroke" />
+      <path class="wire" d="M0 50 C50 50 50 62.5 100 62.5" vector-effect="non-scaling-stroke" />
+      <path class="wire" d="M0 50 C50 50 50 87.5 100 87.5" vector-effect="non-scaling-stroke" />
+      <path class="comet c-staging" d="M0 50 C50 50 50 12.5 100 12.5" vector-effect="non-scaling-stroke" />
+      <path class="comet c-prod" d="M0 50 C50 50 50 37.5 100 37.5" vector-effect="non-scaling-stroke" />
+    </svg>
+    <span class="wire-label">mTLS</span>
+  </div>
+
+  <ul class="spokes" aria-hidden="true">
+    {
+      spokes.map(({ name, meta, state }) => (
+        <li class:list={['spoke', `s-${state}`]}>
+          <span class="spoke-card">
+            <span class="spoke-status" />
+            <span class="spoke-text">
+              <span class="spoke-name">{name}</span>
+              <span class="spoke-meta">spoke · {meta}</span>
+            </span>
+            <span class="spoke-badge">tool call</span>
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .showcase {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) 4.5rem minmax(0, 0.85fr) 5rem minmax(0, 0.8fr);
+    align-items: stretch;
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--navy-line);
+    background:
+      radial-gradient(40rem 24rem at 58% 50%, rgba(20, 114, 235, 0.22), transparent 70%),
+      radial-gradient(circle at 1px 1px, rgba(114, 174, 250, 0.09) 1px, transparent 0) 0 0 / 22px 22px,
+      var(--navy-950);
+    box-shadow: var(--shadow-navy);
+    color: #dbe6f6;
+    overflow: hidden;
+  }
+
+  .agent {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--navy-line);
+    border-radius: var(--radius-md);
+    background: rgba(8, 18, 38, 0.92);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    min-height: 27rem;
+  }
+
+
+
+
+  .log {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 1.1rem 1.1rem 1.25rem;
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+
+  .log p {
+    margin: 0;
+  }
+
+  .prompt {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+    color: #ffffff;
+    font-weight: 550;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px dashed #1f3359;
+  }
+
+
+  .step {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    color: #c4d3ea;
+  }
+
+  .step b {
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .step small {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--viz-dim);
+  }
+
+  .ico {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    border-radius: 6px;
+    background: rgba(52, 211, 153, 0.12);
+    color: var(--viz-ok);
+  }
+
+  .ico.info {
+    background: rgba(114, 174, 250, 0.14);
+    color: var(--brand-light);
+  }
+
+  .ico svg {
+    width: 0.85rem;
+    height: 0.85rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .log code {
+    font-size: 0.72rem;
+    color: var(--brand-pale);
+    background: rgba(114, 174, 250, 0.12);
+    border: 1px solid rgba(114, 174, 250, 0.22);
+    border-radius: 4px;
+    padding: 0.05em 0.4em;
+    white-space: nowrap;
+  }
+
+  .call {
+    display: grid;
+    grid-template-columns: 1.35rem minmax(0, 1fr) auto;
+    gap: 0.6rem;
+    align-items: baseline;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+  }
+
+  .arrow {
+    text-align: center;
+    color: var(--brand-light);
+  }
+
+  .tool {
+    color: var(--viz-ink);
+  }
+
+  .arg {
+    color: var(--viz-dim);
+    white-space: nowrap;
+  }
+
+  .tick {
+    color: var(--viz-ok);
+  }
+
+  .answer {
+    margin-top: auto;
+    padding: 0.85rem 0.95rem;
+    border-radius: 8px;
+    border: 1px solid rgba(114, 174, 250, 0.25);
+    background: linear-gradient(180deg, rgba(20, 114, 235, 0.16), rgba(20, 114, 235, 0.06));
+    color: #dbe6f6;
+  }
+
+  .answer b {
+    color: #ffffff;
+  }
+
+  .answer .fix {
+    margin-top: 0.45rem;
+    color: var(--viz-soft);
+    font-size: 0.8rem;
+  }
+
+  .link-a,
+  .link-b {
+    position: relative;
+  }
+
+  .link-a svg,
+  .link-b svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .wire {
+    fill: none;
+    stroke: #2a4a80;
+    stroke-width: 1.5;
+  }
+
+  /* Non-scaling strokes dash in screen pixels, so pathLength does not apply.
+     --end must be at least the longest on-screen wire length across the
+     961px+ layouts (measured: agent 72px, staging 234px, prod 112px at 965px);
+     overshooting only speeds the comet up. The 2000px gap keeps a second dash
+     from ever showing. */
+  .comet {
+    fill: none;
+    stroke: var(--brand-light);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 18 2000;
+    stroke-dashoffset: 18;
+    filter: drop-shadow(0 0 4px rgba(114, 174, 250, 0.9));
+  }
+
+  .c-agent { --end: -110px; }
+  .c-staging { --end: -320px; }
+  .c-prod { --end: -180px; }
+
+  .wire-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -170%);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--viz-dim);
+    background: var(--navy-950);
+    border: 1px solid var(--navy-line);
+    border-radius: 99px;
+    padding: 0.05rem 0.45rem;
+    white-space: nowrap;
+  }
+
+  .hub {
+    display: grid;
+    align-items: center;
+  }
+
+  .hub-card {
+    position: relative;
+    text-align: center;
+    padding: 1.4rem 1rem 1.1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--viz-line-strong);
+    background: linear-gradient(180deg, #0f2246, #0a1730);
+    box-shadow: 0 0 0 4px rgba(20, 114, 235, 0.08), 0 20px 50px rgba(0, 0, 0, 0.45);
+  }
+
+  .hub-glow {
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    border: 1px solid var(--brand-light);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .hub-card img {
+    width: 2.25rem;
+    height: 2.25rem;
+    filter: drop-shadow(0 0 14px rgba(114, 174, 250, 0.55));
+  }
+
+  .hub-title {
+    margin: 0.6rem 0 0.1rem;
+    font-weight: 650;
+    font-size: 0.98rem;
+    color: #ffffff;
+  }
+
+  .hub-sub {
+    margin: 0 0 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--brand-light);
+  }
+
+  .modules {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .mod {
+    font-size: 0.72rem;
+    font-weight: 550;
+    color: #b7c8e3;
+    border: 1px solid var(--navy-line);
+    border-radius: 6px;
+    padding: 0.35rem 0.5rem;
+    background: rgba(5, 11, 22, 0.55);
+  }
+
+  /* Spokes: four equal flex rows keep the card centres at 12.5/37.5/62.5/87.5%,
+     which is where the link-b wire endpoints sit. */
+  .spokes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .spoke {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0.35rem 0;
+  }
+
+  .spoke-card {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 0.8rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--navy-line);
+    background: rgba(8, 18, 38, 0.92);
+    transition: border-color 0.2s;
+  }
+
+  .spoke-status {
+    flex-shrink: 0;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--viz-ok);
+    box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.15);
+  }
+
+  .spoke-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .spoke-name {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--viz-ink);
+  }
+
+  .spoke-meta {
+    font-size: 0.68rem;
+    color: var(--viz-dim);
+  }
+
+  .spoke-badge {
+    position: absolute;
+    top: -0.55rem;
+    right: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--navy-950);
+    background: var(--brand-light);
+    border-radius: 99px;
+    padding: 0.05rem 0.45rem;
+    opacity: 0;
+  }
+
+  .s-staging .spoke-card,
+  .s-prod .spoke-card {
+    border-color: var(--viz-line-strong);
+  }
+
+  @media (max-width: 960px) {
+    .showcase {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.25rem;
+    }
+
+    .agent {
+      min-height: 0;
+    }
+
+    .link-a,
+    .link-b {
+      display: none;
+    }
+
+    .hub-card {
+      max-width: 22rem;
+      margin: 0 auto;
+    }
+
+    .spokes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+
+    .spoke {
+      padding: 0;
+    }
+
+    .spoke-card {
+      height: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .spokes {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .t-prompt { animation: in-prompt 16s linear infinite both; }
+    .t-sso { animation: in-12 16s ease-out infinite both; }
+    .t-scope { animation: in-21 16s ease-out infinite both; }
+    .t-list { animation: in-26 16s ease-out infinite both; }
+    .t-call1 { animation: in-31 16s ease-out infinite both; }
+    .t-call2 { animation: in-42 16s ease-out infinite both; }
+    .t-call3 { animation: in-50 16s ease-out infinite both; }
+    .t-answer { animation: in-62 16s ease-out infinite both; }
+
+    .c-agent { animation: comet-agent 16s linear infinite; }
+    .c-staging { animation: comet-staging 16s linear infinite; }
+    .c-prod { animation: comet-prod 16s linear infinite; }
+
+    .t-auth { animation: mod-auth 16s ease-out infinite; }
+    .t-rbac { animation: mod-rbac 16s ease-out infinite; }
+    .hub-glow { animation: hub-pulse 16s ease-out infinite; }
+
+    .s-staging .spoke-card { animation: spoke-staging 16s ease-out infinite; }
+    .s-prod .spoke-card { animation: spoke-prod 16s ease-out infinite; }
+    .s-staging .spoke-badge { animation: badge-staging 16s ease-out infinite; }
+    .s-prod .spoke-badge { animation: badge-prod 16s ease-out infinite; }
+  }
+
+  @keyframes in-prompt {
+    0% { opacity: 0; clip-path: inset(0 100% 0 0); }
+    1% { opacity: 1; clip-path: inset(0 100% 0 0); }
+    8%, 93% { opacity: 1; clip-path: inset(0 0 0 0); }
+    98%, 100% { opacity: 0; clip-path: inset(0 0 0 0); }
+  }
+
+  @keyframes in-12 {
+    0%, 12% { opacity: 0; transform: translateY(6px); }
+    15%, 93% { opacity: 1; transform: none; }
+    98%, 100% { opacity: 0; }
+  }
+
+  @keyframes in-21 {
+    0%, 21% { opacity: 0; transform: translateY(6px); }
+    24%, 93% { opacity: 1; transform: none; }
+    98%, 100% { opacity: 0; }
+  }
+
+  @keyframes in-26 {
+    0%, 26% { opacity: 0; transform: translateY(6px); }
+    29%, 93% { opacity: 1; transform: none; }
+    98%, 100% { opacity: 0; }
+  }
+
+  @keyframes in-31 {
+    0%, 31% { opacity: 0; transform: translateY(6px); }
+    34%, 93% { opacity: 1; transform: none; }
+    98%, 100% { opacity: 0; }
+  }
+
+  @keyframes in-42 {
+    0%, 42% { opacity: 0; transform: translateY(6px); }
+    45%, 93% { opacity: 1; transform: none; }
+    98%, 100% { opacity: 0; }
+  }
+
+  @keyframes in-50 {
+    0%, 50% { opacity: 0; transform: translateY(6px); }
+    53%, 93% { opacity: 1; transform: none; }
+    98%, 100% { opacity: 0; }
+  }
+
+  @keyframes in-62 {
+    0%, 62% { opacity: 0; transform: translateY(8px); }
+    66%, 93% { opacity: 1; transform: none; }
+    98%, 100% { opacity: 0; }
+  }
+
+  /* One pulse per request leaving the agent: sign-in, then each tool call */
+  @keyframes comet-agent {
+    0%, 9% { stroke-dashoffset: 18; }
+    12% { stroke-dashoffset: var(--end); }
+    12.01%, 26% { stroke-dashoffset: 18; }
+    29% { stroke-dashoffset: var(--end); }
+    29.01%, 37% { stroke-dashoffset: 18; }
+    40% { stroke-dashoffset: var(--end); }
+    40.01%, 45% { stroke-dashoffset: 18; }
+    48% { stroke-dashoffset: var(--end); }
+    48.01%, 100% { stroke-dashoffset: 18; }
+  }
+
+  @keyframes comet-staging {
+    0%, 29% { stroke-dashoffset: 18; }
+    32% { stroke-dashoffset: var(--end); }
+    32.01%, 100% { stroke-dashoffset: 18; }
+  }
+
+  @keyframes comet-prod {
+    0%, 40% { stroke-dashoffset: 18; }
+    43% { stroke-dashoffset: var(--end); }
+    43.01%, 48% { stroke-dashoffset: 18; }
+    51% { stroke-dashoffset: var(--end); }
+    51.01%, 100% { stroke-dashoffset: 18; }
+  }
+
+  @keyframes mod-auth {
+    0%, 10%, 26%, 100% { border-color: var(--navy-line); color: #b7c8e3; box-shadow: none; }
+    13%, 22% { border-color: var(--brand-light); color: #ffffff; box-shadow: 0 0 16px rgba(114, 174, 250, 0.35); }
+  }
+
+  @keyframes mod-rbac {
+    0%, 18%, 34%, 100% { border-color: var(--navy-line); color: #b7c8e3; box-shadow: none; }
+    21%, 30% { border-color: var(--brand-light); color: #ffffff; box-shadow: 0 0 16px rgba(114, 174, 250, 0.35); }
+  }
+
+  @keyframes hub-pulse {
+    0%, 10%, 16%, 27%, 34%, 38%, 46%, 53%, 100% { opacity: 0; }
+    12%, 29%, 40%, 48% { opacity: 1; }
+  }
+
+  @keyframes spoke-staging {
+    0%, 31%, 46%, 100% { border-color: var(--navy-line); box-shadow: none; }
+    33%, 42% { border-color: var(--brand-light); box-shadow: 0 0 22px rgba(114, 174, 250, 0.3); }
+  }
+
+  @keyframes spoke-prod {
+    0%, 42%, 64%, 100% { border-color: var(--navy-line); box-shadow: none; }
+    44%, 58% { border-color: var(--brand-light); box-shadow: 0 0 22px rgba(114, 174, 250, 0.3); }
+  }
+
+  @keyframes badge-staging {
+    0%, 31%, 44%, 100% { opacity: 0; transform: translateY(3px); }
+    33%, 41% { opacity: 1; transform: none; }
+  }
+
+  @keyframes badge-prod {
+    0%, 42%, 60%, 100% { opacity: 0; transform: translateY(3px); }
+    44%, 56% { opacity: 1; transform: none; }
+  }
+</style>

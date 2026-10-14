@@ -1,0 +1,273 @@
+---
+import VizFrame from './VizFrame.astro';
+
+/* The stage is 4:3 and the SVG viewBox is 160 x 120, so a point (x, y) in
+   viewBox units sits at (x / 1.6 %, y / 1.2 %). Wires leave the hub
+   vertically and bend out to each spoke; the lock badge sits on the curve
+   midpoint, which for a cubic Bezier is (p0 + 3 c1 + 3 c2 + p3) / 8. */
+const hub = { x: 80, y: 60 };
+const spokes = [
+  { name: 'production-eu', meta: 'eu-west-1', x: 36, y: 15 },
+  { name: 'production-us', meta: 'us-east-1', x: 124, y: 15 },
+  { name: 'staging', meta: 'eu-west-1', x: 36, y: 105 },
+  { name: 'development', meta: 'on-premises', x: 124, y: 105 },
+].map((s) => {
+  const dir = s.y < hub.y ? -1 : 1;
+  const c1 = { x: hub.x, y: hub.y + dir * 30 };
+  const c2 = { x: s.x, y: hub.y + dir * 22 };
+  const mid = {
+    x: (hub.x + 3 * c1.x + 3 * c2.x + s.x) / 8,
+    y: (hub.y + 3 * c1.y + 3 * c2.y + s.y) / 8,
+  };
+  return {
+    ...s,
+    wire: `M${hub.x} ${hub.y} C${c1.x} ${c1.y} ${c2.x} ${c2.y} ${s.x} ${s.y}`,
+    left: s.x / 1.6,
+    top: s.y / 1.2,
+    lockLeft: mid.x / 1.6,
+    lockTop: mid.y / 1.2,
+  };
+});
+---
+
+<VizFrame
+  title="hub and spoke"
+  label="Diagram: a hub cluster runs the Flux MCP Server that AI agents connect to. It reaches the Flux MCP Servers in four spoke clusters, production-eu, production-us, staging and development, over secure connections."
+>
+  <div class="stage">
+    <svg viewBox="0 0 160 120" class="wires">
+      {spokes.map(({ wire }) => <path class="wire" d={wire} />)}
+      {spokes.map(({ wire }, i) => <path class={`pulse p${i}`} d={wire} pathLength="100" />)}
+    </svg>
+
+    {
+      spokes.map(({ lockLeft, lockTop }) => (
+        <span class="lock" style={`left:${lockLeft}%;top:${lockTop}%`}>
+          <svg viewBox="0 0 24 24">
+            <path d="M7 11V8a5 5 0 0 1 10 0v3M5.5 11h13v9.5h-13z" />
+          </svg>
+        </span>
+      ))
+    }
+
+    <div class="hub">
+      <img src="/images/logo/enterprise-for-flux-cd-icon-white.svg" alt="" width="26" height="26" />
+      <span class="hub-name">Flux MCP</span>
+      <span class="hub-sub">hub cluster</span>
+    </div>
+
+    {
+      spokes.map(({ name, meta, left, top }) => (
+        <div class="spoke" style={`left:${left}%;top:${top}%`}>
+          <span class="spoke-dot" />
+          <span class="spoke-text">
+            <span class="spoke-name">{name}</span>
+            <span class="spoke-meta">{meta}</span>
+          </span>
+        </div>
+      ))
+    }
+  </div>
+
+  <p class="foot">
+    <span><span class="foot-key">agents</span> list and reach clusters through the hub</span>
+    <span class="sep"></span>
+    <span><span class="foot-key">spokes</span> run their own MCP Server</span>
+  </p>
+</VizFrame>
+
+<style>
+  .stage {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: radial-gradient(circle at 1px 1px, rgba(114, 174, 250, 0.1) 1px, transparent 0) 0 0 / 18px 18px;
+    border-radius: var(--radius-md);
+  }
+
+  .wires {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .wire {
+    fill: none;
+    stroke: var(--viz-line-strong);
+    stroke-width: 0.7;
+  }
+
+  .pulse {
+    fill: none;
+    stroke: var(--brand-light);
+    stroke-width: 1;
+    stroke-linecap: round;
+    stroke-dasharray: 12 100;
+    stroke-dashoffset: 12;
+    filter: drop-shadow(0 0 1.5px rgba(114, 174, 250, 0.9));
+  }
+
+  .lock {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: grid;
+    place-items: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    border-radius: 50%;
+    background: var(--navy-950);
+    border: 1px solid var(--viz-line-strong);
+    color: var(--viz-ok);
+  }
+
+  .lock svg {
+    width: 0.7rem;
+    height: 0.7rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .hub {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.8rem 1.1rem 0.7rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--brand-light);
+    background: linear-gradient(180deg, #0f2246, #0a1730);
+    box-shadow: 0 0 0 5px rgba(20, 114, 235, 0.12), 0 0 36px rgba(20, 114, 235, 0.35);
+  }
+
+  .hub img {
+    filter: drop-shadow(0 0 10px rgba(114, 174, 250, 0.5));
+  }
+
+  .hub-name {
+    margin-top: 0.35rem;
+    font-weight: 650;
+    font-size: 0.82rem;
+    color: #ffffff;
+    white-space: nowrap;
+  }
+
+  .hub-sub {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--brand-light);
+    white-space: nowrap;
+  }
+
+  .spoke {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.65rem;
+    border-radius: 8px;
+    border: 1px solid var(--navy-line);
+    background: rgba(8, 18, 38, 0.95);
+  }
+
+  .spoke-dot {
+    flex-shrink: 0;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--viz-ok);
+    box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.15);
+  }
+
+  .spoke-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .spoke-name {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--viz-ink);
+    white-space: nowrap;
+  }
+
+  .spoke-meta {
+    font-size: 0.62rem;
+    color: var(--viz-dim);
+    white-space: nowrap;
+  }
+
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    margin: 1rem 0 0;
+    font-size: 0.74rem;
+    color: var(--viz-soft);
+  }
+
+  .foot-key {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    color: var(--brand-light);
+  }
+
+  .sep {
+    width: 0.25rem;
+    height: 0.25rem;
+    margin: 0 0.4rem;
+    border-radius: 50%;
+    background: #3a4d70;
+  }
+
+  @media (max-width: 480px) {
+    .spoke {
+      padding: 0.35rem 0.5rem;
+    }
+
+    .spoke-meta {
+      display: none;
+    }
+
+    .lock {
+      display: none;
+    }
+
+    .foot {
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .sep {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .pulse {
+      animation: travel 5.2s linear infinite;
+    }
+
+    .p1 { animation-delay: 1.3s; }
+    .p2 { animation-delay: 2.6s; }
+    .p3 { animation-delay: 3.9s; }
+  }
+
+  @keyframes travel {
+    0% { stroke-dashoffset: 12; }
+    30% { stroke-dashoffset: -100; }
+    100% { stroke-dashoffset: -100; }
+  }
+</style>

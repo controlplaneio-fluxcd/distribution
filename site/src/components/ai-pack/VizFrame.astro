@@ -1,0 +1,46 @@
+---
+/* Window chrome for the AI Pack product mockups. `light` renders a browser
+   page on white; the default is the navy app surface used by the Web UI
+   screenshots, so mockups and screenshots read as one product. */
+import WindowBar from './WindowBar.astro';
+
+interface Props {
+  title: string;
+  label: string;
+  light?: boolean;
+  lock?: boolean;
+}
+
+const { title, label, light = false, lock = false } = Astro.props;
+---
+
+<div class:list={['viz', { light }]} role="img" aria-label={label}>
+  <WindowBar title={title} light={light} lock={lock} />
+  <div class="viz-body" aria-hidden="true">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .viz {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--navy-line);
+    background:
+      radial-gradient(30rem 16rem at 50% 0%, rgba(20, 114, 235, 0.16), transparent 70%),
+      var(--navy-950);
+    box-shadow: var(--shadow-navy);
+    color: #dbe6f6;
+    overflow: hidden;
+  }
+
+  .viz.light {
+    border-color: var(--border-strong);
+    background: #ffffff;
+    box-shadow: var(--shadow-lift);
+    color: var(--fg);
+  }
+
+  .viz-body {
+    padding: clamp(1rem, 2.4vw, 1.4rem);
+  }
+</style>

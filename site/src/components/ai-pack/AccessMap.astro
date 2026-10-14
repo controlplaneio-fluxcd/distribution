@@ -1,0 +1,264 @@
+---
+import VizFrame from './VizFrame.astro';
+
+const bindings = [
+  { group: 'sre-oncall', kind: 'ClusterRole', name: 'flux-view', reach: 'all namespaces', member: true },
+  { group: 'team-checkout', kind: 'Role', name: 'flux-edit', reach: 'namespace checkout', member: true },
+  { group: 'platform-admins', kind: 'ClusterRole', name: 'cluster-admin', reach: 'whole cluster', member: false },
+];
+---
+
+<VizFrame
+  title="session identity"
+  label="Mockup of a signed-in session: ana@example.com belongs to the sre-oncall and team-checkout groups in the identity provider, which map to the flux-view ClusterRole and a flux-edit Role in the checkout namespace. The platform-admins group and its cluster-admin binding do not apply."
+>
+  <div class="who">
+    <span class="avatar">AN</span>
+    <span class="who-text">
+      <span class="who-name">ana@example.com</span>
+      <span class="who-sub">Signed in through your identity provider</span>
+    </span>
+    <span class="badge">OIDC</span>
+  </div>
+
+  <div class="head">
+    <span>IdP group</span>
+    <span></span>
+    <span>Kubernetes RBAC</span>
+  </div>
+
+  <ul class="map">
+    {
+      bindings.map(({ group, kind, name, reach, member }) => (
+        <li class:list={['bind', { off: !member }]}>
+          <span class="group">
+            <span class="group-dot" />
+            <span class="group-name">{group}</span>
+          </span>
+          <span class="conn">
+            <svg viewBox="0 0 40 10" preserveAspectRatio="none">
+              <path d="M0 5 H34" />
+              <path d="M31 1.5 L36 5 L31 8.5" />
+            </svg>
+          </span>
+          <span class="role">
+            <span class="role-name">
+              <span class="role-kind">{kind}/</span>{name}
+            </span>
+            <span class="role-reach">{member ? reach : 'not a member'}</span>
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="foot">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3zm-3 9l2.2 2.2 4.3-4.6" />
+    </svg>
+    Tool calls run with the RBAC permissions of these groups
+  </p>
+</VizFrame>
+
+<style>
+  .who {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 0.9rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--navy-line);
+    background: rgba(14, 28, 54, 0.7);
+  }
+
+  .avatar {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--brand), var(--brand-light));
+  }
+
+  .who-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .who-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #ffffff;
+  }
+
+  .who-sub {
+    font-size: 0.74rem;
+    color: #8fa1bd;
+  }
+
+  .badge {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--viz-ok);
+    background: rgba(52, 211, 153, 0.12);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    border-radius: 99px;
+    padding: 0.1rem 0.5rem;
+  }
+
+  .head,
+  .bind {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) 2.75rem minmax(0, 1.1fr);
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .head {
+    margin: 1.2rem 0 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--viz-faint);
+  }
+
+  .map {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--viz-ink);
+    padding: 0.55rem 0.7rem;
+    border-radius: 8px;
+    border: 1px solid var(--viz-line-strong);
+    background: rgba(20, 114, 235, 0.14);
+    min-width: 0;
+  }
+
+  /* .group is a flex container, so wrapping has to be set on this span */
+  .group-name {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .group-dot {
+    flex-shrink: 0;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--brand-light);
+  }
+
+  .conn svg {
+    display: block;
+    width: 100%;
+    height: 0.7rem;
+    fill: none;
+    stroke: var(--brand-light);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .role {
+    display: flex;
+    flex-direction: column;
+    padding: 0.45rem 0.7rem;
+    border-radius: 8px;
+    border: 1px solid var(--navy-line);
+    background: rgba(8, 18, 38, 0.9);
+    min-width: 0;
+  }
+
+  .role-name {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: #ffffff;
+    overflow-wrap: anywhere;
+  }
+
+  .role-kind {
+    color: var(--viz-dim);
+  }
+
+  .role-reach {
+    font-size: 0.7rem;
+    color: var(--viz-ok);
+  }
+
+  .bind.off .group {
+    border-style: dashed;
+    border-color: #2a3b5c;
+    background: transparent;
+    color: var(--viz-faint);
+  }
+
+  .bind.off .group-dot {
+    background: #3a4d70;
+  }
+
+  .bind.off .conn svg {
+    stroke: #2a3b5c;
+    stroke-dasharray: 2 3;
+  }
+
+  .bind.off .role {
+    border-style: dashed;
+    border-color: #2a3b5c;
+    background: transparent;
+  }
+
+  .bind.off .role-name,
+  .bind.off .role-kind,
+  .bind.off .role-reach {
+    color: var(--viz-faint);
+  }
+
+  @media (max-width: 560px) {
+    .head,
+    .bind {
+      grid-template-columns: minmax(0, 0.9fr) 1.25rem minmax(0, 1.1fr);
+      gap: 0.4rem;
+    }
+
+    .role-kind {
+      display: block;
+    }
+  }
+
+  .foot {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1.1rem 0 0;
+    padding-top: 0.9rem;
+    border-top: 1px dashed #1f3359;
+    font-size: 0.76rem;
+    color: var(--viz-soft);
+  }
+
+  .foot svg {
+    flex-shrink: 0;
+    color: var(--viz-ok);
+  }
+</style>

@@ -10,7 +10,7 @@ const path = Astro.url.pathname;
 /* Exactly one menu may be highlighted: the standalone marketing pages belong
    to Product, everything else with content is documentation → Resources.
    Keep this set in sync with the Product group hrefs in mainNav. */
-const productPages = new Set(['/distribution/', '/addons/', '/pricing/']);
+const productPages = new Set(['/distribution/', '/addons/', '/ai-pack/', '/pricing/']);
 const activeMenu = productPages.has(path) ? 'Product' : path === '/' ? undefined : 'Resources';
 ---
 
