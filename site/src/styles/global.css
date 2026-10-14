@@ -15,7 +15,7 @@
   --navy-800: #0e1c36;
   --navy-line: #1d3054;
   --shadow-navy: 0 24px 60px rgba(6, 14, 30, 0.35);
-  /* Product mockups on navy (AI Pack visuals): fixed in both themes like the
+  /* Product mockups on navy (Enterprise AI Pack visuals): fixed in both themes like the
      navy surfaces, so they live here rather than in the [data-theme] blocks. */
   --viz-ok: #34d399;
   --viz-line-strong: #2c4c84;
