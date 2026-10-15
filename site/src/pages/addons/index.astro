@@ -55,6 +55,7 @@ const tour = [
 ];
 
 interface Addon {
+  id?: string;
   tag: string;
   title: string;
   lead: string;
@@ -84,6 +85,7 @@ const addons: Addon[] = [
     lightImage: true,
   },
   {
+    id: 'dex',
     tag: 'addon: dex-idp',
     title: 'Dex IdP',
     lead: 'A hardened Dex distribution providing OIDC-based single sign-on for the Flux Web UI and the Flux MCP Server.',
@@ -173,8 +175,8 @@ const addons: Addon[] = [
 
   <div class="rows">
     {
-      addons.map(({ tag, title, lead, points, links, image, imageAlt, lightImage }, i) => (
-        <section class:list={['row', { flip: i % 2 === 0 }]} aria-label={title}>
+      addons.map(({ id, tag, title, lead, points, links, image, imageAlt, lightImage }, i) => (
+        <section class:list={['row', { flip: i % 2 === 0 }]} aria-label={title} id={id}>
           <div class="row-copy">
             <p class="eyebrow">{tag}</p>
             <h2>{title}</h2>
@@ -224,6 +226,11 @@ const addons: Addon[] = [
 
   .row h2 {
     margin-bottom: 1rem;
+  }
+
+  /* Offsets the sticky header when a link deep-links to a row by id */
+  .row[id] {
+    scroll-margin-top: calc(var(--header-height) + 1rem);
   }
 
   .checklist {

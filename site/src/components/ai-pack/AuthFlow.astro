@@ -4,7 +4,7 @@ import VizFrame from './VizFrame.astro';
 
 <VizFrame
   title="authorization flow"
-  label="Diagram: the AI agent connects to the Flux MCP Server over HTTPS. The MCP Server contains its own authorization server, which signs the user in through your identity provider or the Dex addon. No external OAuth authorization server is needed."
+  label="Diagram: the AI agent connects to the Flux MCP Server over HTTPS. The MCP Server contains its own authorization server, which signs the user in through your identity provider or the Dex addon. Dashed boxes show that no external OAuth authorization server or MCP gateway is needed."
 >
   <div class="flow">
     <div class="node agent">
@@ -30,7 +30,7 @@ import VizFrame from './VizFrame.astro';
       <div class="modules">
         <div class="module auth">
           <span class="module-name">Authorization server</span>
-          <span class="module-sub">built in · issues scoped tokens</span>
+          <span class="module-sub">built-in · issues scoped tokens</span>
         </div>
         <div class="module">
           <span class="module-name">MCP tools</span>
@@ -39,9 +39,15 @@ import VizFrame from './VizFrame.astro';
       </div>
     </div>
 
-    <div class="ghost">
-      <span class="ghost-name">External OAuth server</span>
-      <span class="ghost-tag">not needed</span>
+    <div class="ghosts">
+      <div class="ghost">
+        <span class="ghost-name">External OAuth server</span>
+        <span class="ghost-tag">not needed</span>
+      </div>
+      <div class="ghost">
+        <span class="ghost-name">MCP gateway</span>
+        <span class="ghost-tag">not needed</span>
+      </div>
     </div>
 
     <div class="wire">
@@ -78,10 +84,13 @@ import VizFrame from './VizFrame.astro';
     justify-self: stretch;
   }
 
-  .flow > .ghost {
+  .flow > .ghosts {
     grid-column: 2;
     grid-row: 3;
     justify-self: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   .node {
@@ -253,7 +262,7 @@ import VizFrame from './VizFrame.astro';
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .flow > .ghost {
+    .flow > .ghosts {
       grid-column: 1;
       grid-row: auto;
       margin-top: 0.6rem;

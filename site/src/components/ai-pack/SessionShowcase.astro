@@ -87,9 +87,9 @@ const spokes = [
       <p class="hub-title">Flux MCP Server</p>
       <p class="hub-sub">hub cluster</p>
       <ul class="modules">
-        <li class="mod t-auth">Authorization server</li>
-        <li class="mod t-rbac">SSO groups to RBAC</li>
-        <li class="mod">SPIFFE workload identity</li>
+        <li class="mod t-auth">Sign in with SSO</li>
+        <li class="mod t-rbac">Grant scopes</li>
+        <li class="mod t-query">Query the fleet</li>
       </ul>
     </div>
   </div>
@@ -114,7 +114,7 @@ const spokes = [
             <span class="spoke-status" />
             <span class="spoke-text">
               <span class="spoke-name">{name}</span>
-              <span class="spoke-meta">spoke · {meta}</span>
+              <span class="spoke-meta">spoke cluster · {meta}</span>
             </span>
             <span class="spoke-badge">tool call</span>
           </span>
@@ -536,6 +536,7 @@ const spokes = [
 
     .t-auth { animation: mod-auth 16s ease-out infinite; }
     .t-rbac { animation: mod-rbac 16s ease-out infinite; }
+    .t-query { animation: mod-query 16s ease-out infinite; }
     .hub-glow { animation: hub-pulse 16s ease-out infinite; }
 
     .s-staging .spoke-card { animation: spoke-staging 16s ease-out infinite; }
@@ -593,11 +594,14 @@ const spokes = [
     98%, 100% { opacity: 0; }
   }
 
-  /* One pulse per request leaving the agent: sign-in, then each tool call */
+  /* One pulse per request leaving the agent: sign-in, scope grant, then each
+     tool call */
   @keyframes comet-agent {
     0%, 9% { stroke-dashoffset: 18; }
     12% { stroke-dashoffset: var(--end); }
-    12.01%, 26% { stroke-dashoffset: 18; }
+    12.01%, 18% { stroke-dashoffset: 18; }
+    21% { stroke-dashoffset: var(--end); }
+    21.01%, 26% { stroke-dashoffset: 18; }
     29% { stroke-dashoffset: var(--end); }
     29.01%, 37% { stroke-dashoffset: 18; }
     40% { stroke-dashoffset: var(--end); }
@@ -620,14 +624,23 @@ const spokes = [
     51.01%, 100% { stroke-dashoffset: 18; }
   }
 
+  /* Each module lights for its own step and is dark before the next step
+     begins, so only one is ever highlighted at a time. */
   @keyframes mod-auth {
-    0%, 10%, 26%, 100% { border-color: var(--navy-line); color: #b7c8e3; box-shadow: none; }
-    13%, 22% { border-color: var(--brand-light); color: #ffffff; box-shadow: 0 0 16px rgba(114, 174, 250, 0.35); }
+    0%, 10%, 18%, 100% { border-color: var(--navy-line); color: #b7c8e3; box-shadow: none; }
+    12%, 16% { border-color: var(--brand-light); color: #ffffff; box-shadow: 0 0 16px rgba(114, 174, 250, 0.35); }
   }
 
   @keyframes mod-rbac {
-    0%, 18%, 34%, 100% { border-color: var(--navy-line); color: #b7c8e3; box-shadow: none; }
-    21%, 30% { border-color: var(--brand-light); color: #ffffff; box-shadow: 0 0 16px rgba(114, 174, 250, 0.35); }
+    0%, 19%, 27%, 100% { border-color: var(--navy-line); color: #b7c8e3; box-shadow: none; }
+    21%, 25% { border-color: var(--brand-light); color: #ffffff; box-shadow: 0 0 16px rgba(114, 174, 250, 0.35); }
+  }
+
+  /* Query the fleet runs for three tool calls, so the row pulses once per call
+     in step with the hub glow. */
+  @keyframes mod-query {
+    0%, 27%, 34%, 38%, 46%, 53%, 100% { border-color: var(--navy-line); color: #b7c8e3; box-shadow: none; }
+    29%, 40%, 48% { border-color: var(--brand-light); color: #ffffff; box-shadow: 0 0 16px rgba(114, 174, 250, 0.35); }
   }
 
   @keyframes hub-pulse {
