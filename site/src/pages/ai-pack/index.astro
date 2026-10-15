@@ -31,7 +31,7 @@ const outcomes = [
 
 const steps = [
   { title: 'Sign in with SSO', body: 'The MCP Server hands off sign-in to your identity provider. On return, the user claims are mapped to Kubernetes RBAC.' },
-  { title: 'Grant scopes', body: 'The user picks which tools the agent may call in this session on their behalf, and whether the session should be kept alive offline.' },
+  { title: 'Grant scopes', body: 'The user picks which tools the agent may call in this session on their behalf, and decides whether the session should be kept alive offline.' },
   { title: 'Query the fleet', body: 'The agent lists clusters through the hub, which routes tool calls to the spokes over connections secured by built-in or SPIFFE workload identity.' },
 ];
 
