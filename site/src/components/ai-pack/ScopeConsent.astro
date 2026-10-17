@@ -250,7 +250,10 @@ const highlightJSON = (value: unknown): string => {
     const info = root.querySelector<HTMLElement>('[data-info]');
     const pop = root.querySelector<HTMLElement>('[data-info-pop]');
     if (info && pop) {
+      const wrap = info.closest<HTMLElement>('.sub-wrap') ?? root;
+      const hoverable = window.matchMedia('(hover: hover)').matches;
       let hideTimer: ReturnType<typeof setTimeout>;
+      let openBeforePress = false;
       const show = (): void => {
         clearTimeout(hideTimer);
         pop.classList.add('show');
@@ -258,6 +261,7 @@ const highlightJSON = (value: unknown): string => {
         info.setAttribute('aria-expanded', 'true');
       };
       const hide = (): void => {
+        clearTimeout(hideTimer);
         pop.classList.remove('show');
         info.classList.remove('active');
         info.setAttribute('aria-expanded', 'false');
@@ -267,11 +271,35 @@ const highlightJSON = (value: unknown): string => {
         hideTimer = setTimeout(hide, 150);
       };
       info.addEventListener('mouseenter', show);
-      info.addEventListener('focus', show);
       info.addEventListener('mouseleave', scheduleHide);
-      info.addEventListener('blur', scheduleHide);
       pop.addEventListener('mouseenter', show);
       pop.addEventListener('mouseleave', scheduleHide);
+      info.addEventListener('focus', show);
+      // Focus moving between the icon and the popup stays inside the wrapper,
+      // so selecting a tab must not close the popup.
+      wrap.addEventListener('focusout', (e: FocusEvent) => {
+        const next = e.relatedTarget as Node | null;
+        if (next && wrap.contains(next)) return;
+        scheduleHide();
+      });
+      // Touch has no hover, so a tap toggles. Record whether the popup was
+      // already open when the press began, before any synthetic hover opens it.
+      info.addEventListener('pointerdown', () => {
+        openBeforePress = pop.classList.contains('show');
+      });
+      info.addEventListener('click', () => {
+        if (hoverable) return;
+        if (openBeforePress) hide();
+        else show();
+      });
+      // Pressing anywhere inside the popup keeps it open; pressing outside
+      // closes it.
+      pop.addEventListener('pointerdown', show);
+      document.addEventListener('pointerdown', (e: PointerEvent) => {
+        if (!pop.classList.contains('show')) return;
+        if (wrap.contains(e.target as Node)) return;
+        hide();
+      });
       pop.querySelectorAll<HTMLElement>('[data-tab]').forEach((tab) => {
         tab.addEventListener('click', () => {
           pop.querySelectorAll<HTMLElement>('[data-tab]').forEach((t) => {
