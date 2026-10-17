@@ -524,10 +524,10 @@ const spokes = [
     .t-prompt { animation: in-prompt 16s linear infinite both; }
     .t-sso { animation: in-12 16s ease-out infinite both; }
     .t-scope { animation: in-21 16s ease-out infinite both; }
-    .t-list { animation: in-26 16s ease-out infinite both; }
-    .t-call1 { animation: in-31 16s ease-out infinite both; }
-    .t-call2 { animation: in-42 16s ease-out infinite both; }
-    .t-call3 { animation: in-50 16s ease-out infinite both; }
+    .t-list { animation: in-29 16s ease-out infinite both; }
+    .t-call1 { animation: in-41 16s ease-out infinite both; }
+    .t-call2 { animation: in-49 16s ease-out infinite both; }
+    .t-call3 { animation: in-57 16s ease-out infinite both; }
     .t-answer { animation: in-62 16s ease-out infinite both; }
 
     .c-agent { animation: comet-agent 16s linear infinite; }
@@ -564,27 +564,27 @@ const spokes = [
     98%, 100% { opacity: 0; }
   }
 
-  @keyframes in-26 {
-    0%, 26% { opacity: 0; transform: translateY(6px); }
-    29%, 93% { opacity: 1; transform: none; }
+  @keyframes in-29 {
+    0%, 29% { opacity: 0; transform: translateY(6px); }
+    32%, 93% { opacity: 1; transform: none; }
     98%, 100% { opacity: 0; }
   }
 
-  @keyframes in-31 {
-    0%, 31% { opacity: 0; transform: translateY(6px); }
-    34%, 93% { opacity: 1; transform: none; }
+  @keyframes in-41 {
+    0%, 41% { opacity: 0; transform: translateY(6px); }
+    44%, 93% { opacity: 1; transform: none; }
     98%, 100% { opacity: 0; }
   }
 
-  @keyframes in-42 {
-    0%, 42% { opacity: 0; transform: translateY(6px); }
-    45%, 93% { opacity: 1; transform: none; }
+  @keyframes in-49 {
+    0%, 49% { opacity: 0; transform: translateY(6px); }
+    52%, 93% { opacity: 1; transform: none; }
     98%, 100% { opacity: 0; }
   }
 
-  @keyframes in-50 {
-    0%, 50% { opacity: 0; transform: translateY(6px); }
-    53%, 93% { opacity: 1; transform: none; }
+  @keyframes in-57 {
+    0%, 57% { opacity: 0; transform: translateY(6px); }
+    60%, 93% { opacity: 1; transform: none; }
     98%, 100% { opacity: 0; }
   }
 
@@ -594,8 +594,9 @@ const spokes = [
     98%, 100% { opacity: 0; }
   }
 
-  /* One pulse per request leaving the agent: sign-in, scope grant, then each
-     tool call */
+  /* One pulse per request leaving the agent: sign-in, scope grant, the fleet
+     listing, then each tool call. The listing stops at the MCP Server, so it
+     has no matching spoke comet. */
   @keyframes comet-agent {
     0%, 9% { stroke-dashoffset: 18; }
     12% { stroke-dashoffset: var(--end); }
@@ -603,25 +604,27 @@ const spokes = [
     21% { stroke-dashoffset: var(--end); }
     21.01%, 26% { stroke-dashoffset: 18; }
     29% { stroke-dashoffset: var(--end); }
-    29.01%, 37% { stroke-dashoffset: 18; }
-    40% { stroke-dashoffset: var(--end); }
-    40.01%, 45% { stroke-dashoffset: 18; }
-    48% { stroke-dashoffset: var(--end); }
-    48.01%, 100% { stroke-dashoffset: 18; }
+    29.01%, 34% { stroke-dashoffset: 18; }
+    37% { stroke-dashoffset: var(--end); }
+    37.01%, 42% { stroke-dashoffset: 18; }
+    45% { stroke-dashoffset: var(--end); }
+    45.01%, 50% { stroke-dashoffset: 18; }
+    53% { stroke-dashoffset: var(--end); }
+    53.01%, 100% { stroke-dashoffset: 18; }
   }
 
   @keyframes comet-staging {
-    0%, 29% { stroke-dashoffset: 18; }
-    32% { stroke-dashoffset: var(--end); }
-    32.01%, 100% { stroke-dashoffset: 18; }
+    0%, 37% { stroke-dashoffset: 18; }
+    40% { stroke-dashoffset: var(--end); }
+    40.01%, 100% { stroke-dashoffset: 18; }
   }
 
   @keyframes comet-prod {
-    0%, 40% { stroke-dashoffset: 18; }
-    43% { stroke-dashoffset: var(--end); }
-    43.01%, 48% { stroke-dashoffset: 18; }
-    51% { stroke-dashoffset: var(--end); }
-    51.01%, 100% { stroke-dashoffset: 18; }
+    0%, 45% { stroke-dashoffset: 18; }
+    48% { stroke-dashoffset: var(--end); }
+    48.01%, 53% { stroke-dashoffset: 18; }
+    56% { stroke-dashoffset: var(--end); }
+    56.01%, 100% { stroke-dashoffset: 18; }
   }
 
   /* Each module lights for its own step and is dark before the next step
@@ -636,35 +639,35 @@ const spokes = [
     21%, 25% { border-color: var(--brand-light); color: #ffffff; box-shadow: 0 0 16px rgba(114, 174, 250, 0.35); }
   }
 
-  /* Query the fleet runs for three tool calls, so the row pulses once per call
-     in step with the hub glow. */
+  /* Query the fleet glows for the fleet listing, then holds through each tool
+     call while its line fades in, releasing before the next beat. */
   @keyframes mod-query {
-    0%, 27%, 34%, 38%, 46%, 53%, 100% { border-color: var(--navy-line); color: #b7c8e3; box-shadow: none; }
-    29%, 40%, 48% { border-color: var(--brand-light); color: #ffffff; box-shadow: 0 0 16px rgba(114, 174, 250, 0.35); }
+    0%, 27%, 33%, 35%, 43%, 51%, 59%, 100% { border-color: var(--navy-line); color: #b7c8e3; box-shadow: none; }
+    29%, 31%, 37%, 41%, 45%, 49%, 53%, 57% { border-color: var(--brand-light); color: #ffffff; box-shadow: 0 0 16px rgba(114, 174, 250, 0.35); }
   }
 
   @keyframes hub-pulse {
-    0%, 10%, 16%, 27%, 34%, 38%, 46%, 53%, 100% { opacity: 0; }
-    12%, 29%, 40%, 48% { opacity: 1; }
+    0%, 10%, 16%, 27%, 33%, 35%, 43%, 51%, 59%, 100% { opacity: 0; }
+    12%, 29%, 37%, 45%, 53% { opacity: 1; }
   }
 
   @keyframes spoke-staging {
-    0%, 31%, 46%, 100% { border-color: var(--navy-line); box-shadow: none; }
-    33%, 42% { border-color: var(--brand-light); box-shadow: 0 0 22px rgba(114, 174, 250, 0.3); }
+    0%, 40%, 48%, 100% { border-color: var(--navy-line); box-shadow: none; }
+    42%, 46% { border-color: var(--brand-light); box-shadow: 0 0 22px rgba(114, 174, 250, 0.3); }
   }
 
   @keyframes spoke-prod {
-    0%, 42%, 64%, 100% { border-color: var(--navy-line); box-shadow: none; }
-    44%, 58% { border-color: var(--brand-light); box-shadow: 0 0 22px rgba(114, 174, 250, 0.3); }
+    0%, 48%, 54%, 60%, 100% { border-color: var(--navy-line); box-shadow: none; }
+    50%, 52%, 56%, 58% { border-color: var(--brand-light); box-shadow: 0 0 22px rgba(114, 174, 250, 0.3); }
   }
 
   @keyframes badge-staging {
-    0%, 31%, 44%, 100% { opacity: 0; transform: translateY(3px); }
-    33%, 41% { opacity: 1; transform: none; }
+    0%, 40%, 48%, 100% { opacity: 0; transform: translateY(3px); }
+    42%, 46% { opacity: 1; transform: none; }
   }
 
   @keyframes badge-prod {
-    0%, 42%, 60%, 100% { opacity: 0; transform: translateY(3px); }
-    44%, 56% { opacity: 1; transform: none; }
+    0%, 48%, 54%, 60%, 100% { opacity: 0; transform: translateY(3px); }
+    50%, 52%, 56%, 58% { opacity: 1; transform: none; }
   }
 </style>
