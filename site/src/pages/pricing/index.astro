@@ -125,6 +125,24 @@ const consultancy = [
       </div>
     </section>
 
+    <section class="section" id="ai-pack" aria-labelledby="ai-pack-title">
+      <div class="custom addon">
+        <div>
+          <p class="eyebrow">paid add-on</p>
+          <h2 id="ai-pack-title">Enterprise AI Pack</h2>
+          <p>
+            Connect AI agents to every cluster through an enhanced Flux MCP Server, with single
+            sign-on, Kubernetes RBAC, fine-grained scopes, and multi-cluster access. Available on top
+            of any plan, priced on request.
+          </p>
+        </div>
+        <div class="addon-actions">
+          <a class="button button-primary" href={contactUrl} target="_blank" rel="noopener">Contact us</a>
+          <a class="addon-link" href="/ai-pack/">Explore the AI Pack &rarr;</a>
+        </div>
+      </div>
+    </section>
+
     <section class="section" aria-labelledby="support-services">
       <h2 id="support-services">Support services</h2>
       <p>
@@ -229,21 +247,13 @@ const consultancy = [
 
   .section {
     margin-top: 3rem;
+    scroll-margin-top: calc(var(--header-height) + 1rem);
   }
 
   h2 {
     font-size: 1.5rem;
     margin: 0 0 1rem;
     scroll-margin-top: calc(var(--header-height) + 1rem);
-  }
-
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
   }
 
   .plans {
@@ -540,5 +550,36 @@ const consultancy = [
 
   .custom .button {
     flex-shrink: 0;
+  }
+
+  .addon {
+    border-color: color-mix(in srgb, var(--brand) 35%, var(--border));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--brand) 7%, var(--bg)), var(--bg) 70%);
+  }
+
+  /* Undo the .custom p muted reset for the eyebrow label */
+  .addon .eyebrow {
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .addon-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  /* Once the card wraps, the actions sit under left-aligned copy */
+  @media (max-width: 760px) {
+    .addon-actions {
+      align-items: flex-start;
+    }
+  }
+
+  .addon-link {
+    font-size: 0.92rem;
+    font-weight: 650;
   }
 </style>

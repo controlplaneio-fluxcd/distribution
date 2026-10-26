@@ -15,6 +15,14 @@
   --navy-800: #0e1c36;
   --navy-line: #1d3054;
   --shadow-navy: 0 24px 60px rgba(6, 14, 30, 0.35);
+  /* Product mockups on navy (Enterprise AI Pack visuals): fixed in both themes like the
+     navy surfaces, so they live here rather than in the [data-theme] blocks. */
+  --viz-ok: #34d399;
+  --viz-line-strong: #2c4c84;
+  --viz-ink: #e6eefb;
+  --viz-soft: #9fb3d3;
+  --viz-dim: #7f93b5;
+  --viz-faint: #6f84a8;
   --header-height: 4rem;
   --content-width: 50rem;
   --site-width: 76rem;
@@ -315,6 +323,40 @@ pre code {
 .row-more {
   font-weight: 650;
   font-size: 1rem;
+}
+
+.checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.checklist li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  font-size: 0.98rem;
+}
+
+.checklist .check {
+  flex-shrink: 0;
+  color: var(--ok);
+  transform: translateY(2px);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 @media (max-width: 960px) {

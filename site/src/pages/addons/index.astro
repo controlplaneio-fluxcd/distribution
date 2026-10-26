@@ -55,6 +55,7 @@ const tour = [
 ];
 
 interface Addon {
+  id?: string;
   tag: string;
   title: string;
   lead: string;
@@ -68,7 +69,7 @@ interface Addon {
 const addons: Addon[] = [
   {
     tag: 'addon: mcp-server',
-    title: 'Flux MCP Server',
+    title: 'Flux Local MCP Server',
     lead: 'A hardened, read-only MCP server that connects AI assistants to Flux-managed clusters for incident response and pipeline troubleshooting.',
     points: [
       'No operation can alter cluster state, regardless of kubeconfig permissions',
@@ -77,12 +78,14 @@ const addons: Addon[] = [
     ],
     links: [
       { title: 'Local MCP Server docs', href: '/addons/mcp-stdio/' },
+      { title: 'In-cluster with the AI Pack (paid add-on)', href: '/ai-pack/' },
     ],
     image: mcpDiagram,
     imageAlt: 'Diagram of AI-assisted GitOps where an AI assistant uses the Flux MCP Server to analyze deployments on a cluster while code changes ship through a pull request',
     lightImage: true,
   },
   {
+    id: 'dex',
     tag: 'addon: dex-idp',
     title: 'Dex IdP',
     lead: 'A hardened Dex distribution providing OIDC-based single sign-on for the Flux Web UI and the Flux MCP Server.',
@@ -101,7 +104,7 @@ const addons: Addon[] = [
 ---
 
 <BaseLayout
-  title="Enterprise Addons - ControlPlane Enterprise for Flux CD"
+  title="Addons - ControlPlane Enterprise for Flux CD"
   description="Enterprise-grade Flux addons: Web UI dashboard, AI-assisted MCP Server, and Dex single sign-on"
   forcedTheme="light"
 >
@@ -172,8 +175,8 @@ const addons: Addon[] = [
 
   <div class="rows">
     {
-      addons.map(({ tag, title, lead, points, links, image, imageAlt, lightImage }, i) => (
-        <section class:list={['row', { flip: i % 2 === 0 }]} aria-label={title}>
+      addons.map(({ id, tag, title, lead, points, links, image, imageAlt, lightImage }, i) => (
+        <section class:list={['row', { flip: i % 2 === 0 }]} aria-label={title} id={id}>
           <div class="row-copy">
             <p class="eyebrow">{tag}</p>
             <h2>{title}</h2>
@@ -225,26 +228,13 @@ const addons: Addon[] = [
     margin-bottom: 1rem;
   }
 
+  /* Offsets the sticky header when a link deep-links to a row by id */
+  .row[id] {
+    scroll-margin-top: calc(var(--header-height) + 1rem);
+  }
+
   .checklist {
-    list-style: none;
-    margin: 0 0 1.75rem;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-  }
-
-  .checklist li {
-    display: flex;
-    align-items: baseline;
-    gap: 0.7rem;
-    font-size: 0.98rem;
-  }
-
-  .check {
-    flex-shrink: 0;
-    color: var(--ok);
-    transform: translateY(2px);
+    margin-bottom: 1.75rem;
   }
 
   .links {

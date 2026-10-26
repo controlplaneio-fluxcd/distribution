@@ -1,0 +1,219 @@
+---
+import VizFrame from './VizFrame.astro';
+import YouTag from './YouTag.astro';
+
+const releases = [
+  { name: 'checkout', staging: '4.2.0', prod: '4.1.3' },
+  { name: 'payments', staging: '2.7.0', prod: '2.7.0' },
+  { name: 'cert-manager', staging: 'v1.18.2', prod: 'v1.17.4' },
+  { name: 'envoy-gateway', staging: 'v1.5.0', prod: 'v1.5.0' },
+  { name: 'redis', staging: '21.2.0', prod: '21.2.0' },
+];
+
+const drift = releases.filter((r) => r.staging !== r.prod).length;
+---
+
+<VizFrame
+  title="environment comparison"
+  label={`Mockup of an environment comparison between the staging and production-eu clusters: ${drift} of ${releases.length} HelmReleases run different versions, checkout and cert-manager, while payments, envoy-gateway and redis are in sync. The data is read by the MCP Server inside each cluster, with no kubectl access required.`}
+>
+  <div class="ask">
+    <YouTag />
+    What differs between staging and production-eu?
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>HelmRelease</th>
+        <th>staging</th>
+        <th>production-eu</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        releases.map(({ name, staging, prod }) => {
+          const differs = staging !== prod;
+          return (
+            <tr class:list={{ differs }}>
+              <td class="name">{name}</td>
+              <td class="ver">{staging}</td>
+              <td class="ver prod">{prod}</td>
+              <td class="state">
+                <span class:list={['pill', differs ? 'drift' : 'sync']}>{differs ? 'drift' : 'in sync'}</span>
+              </td>
+            </tr>
+          );
+        })
+      }
+    </tbody>
+  </table>
+
+  <div class="foot">
+    <span class="foot-item">
+      <span class="foot-ico read">
+        <svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zm10 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" /></svg>
+      </span>
+      read in-cluster by each MCP Server
+    </span>
+    <span class="foot-item">
+      <span class="foot-ico none">
+        <svg viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h8" /></svg>
+      </span>
+      kubectl access: none
+    </span>
+  </div>
+</VizFrame>
+
+<style>
+  .ask {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    font-size: 0.86rem;
+    font-weight: 550;
+    color: #ffffff;
+  }
+
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--navy-line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    font-size: 0.78rem;
+  }
+
+  th {
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--viz-faint);
+    padding: 0.55rem 0.75rem;
+    background: rgba(14, 28, 54, 0.8);
+    border-bottom: 1px solid var(--navy-line);
+  }
+
+  td {
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid rgba(29, 48, 84, 0.6);
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  tr.differs td {
+    background: rgba(251, 191, 36, 0.05);
+  }
+
+  .name {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--viz-ink);
+  }
+
+  .ver {
+    font-family: var(--font-mono);
+    color: var(--viz-soft);
+    white-space: nowrap;
+  }
+
+  .differs .ver {
+    color: #ffffff;
+  }
+
+  .differs .ver.prod {
+    color: #fbbf24;
+  }
+
+  .state {
+    text-align: right;
+  }
+
+  .pill {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-radius: 99px;
+    padding: 0.08rem 0.5rem;
+    white-space: nowrap;
+  }
+
+  .pill.drift {
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+  }
+
+  .pill.sync {
+    color: var(--viz-ok);
+    background: rgba(52, 211, 153, 0.1);
+    border: 1px solid rgba(52, 211, 153, 0.25);
+  }
+
+
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.4rem;
+    margin-top: 1rem;
+    font-size: 0.74rem;
+    color: var(--viz-soft);
+  }
+
+  .foot-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .foot-ico {
+    display: grid;
+    place-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 6px;
+  }
+
+  .foot-ico svg {
+    width: 0.75rem;
+    height: 0.75rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .foot-ico.read {
+    color: var(--brand-light);
+    background: rgba(114, 174, 250, 0.14);
+  }
+
+  .foot-ico.none {
+    color: var(--viz-ok);
+    background: rgba(52, 211, 153, 0.12);
+  }
+
+  @media (max-width: 480px) {
+    td,
+    th {
+      padding: 0.5rem 0.5rem;
+    }
+
+    .pill.sync {
+      display: none;
+    }
+  }
+</style>

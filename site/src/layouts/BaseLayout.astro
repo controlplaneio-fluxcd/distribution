@@ -25,7 +25,10 @@ const ogImage = new URL('/images/og/og-cpef.png', Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/images/logo/enterprise-for-flux-cd-icon-colour.png" type="image/png" />
+    <link rel="icon" href="/images/logo/enterprise-for-flux-cd-icon-colour.svg" type="image/svg+xml" />
+    <link rel="icon" href="/images/logo/enterprise-for-flux-cd-icon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/images/logo/enterprise-for-flux-cd-icon-180.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />

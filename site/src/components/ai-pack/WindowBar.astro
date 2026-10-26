@@ -1,0 +1,80 @@
+---
+interface Props {
+  title: string;
+  light?: boolean;
+  lock?: boolean;
+}
+
+const { title, light = false, lock = false } = Astro.props;
+---
+
+<div class:list={['bar', { light }]} aria-hidden="true">
+  <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+  <span class:list={['title', { url: lock }]}>
+    {
+      lock && (
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 11V8a5 5 0 0 1 10 0v3M5.5 11h13v9.5h-13z" />
+        </svg>
+      )
+    }
+    {title}
+  </span>
+</div>
+
+<style>
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.7rem 0.9rem;
+    border-bottom: 1px solid var(--navy-line);
+  }
+
+  .bar.light {
+    border-bottom-color: var(--border);
+    background: var(--bg-soft);
+  }
+
+  .dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: #22335a;
+  }
+
+  .light .dot {
+    background: var(--border-strong);
+  }
+
+  .title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--viz-dim);
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .title.url {
+    flex: 1;
+    justify-content: center;
+    margin-right: 2.4rem;
+    padding: 0.2rem 0.75rem;
+    border-radius: 99px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .title.url svg {
+    flex-shrink: 0;
+    color: var(--ok);
+  }
+</style>
