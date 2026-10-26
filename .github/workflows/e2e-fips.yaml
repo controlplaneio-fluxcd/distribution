@@ -104,7 +104,7 @@ jobs:
           --ignore-paths="clusters/**/flux-system/"
           flux create kustomization flux-system \
           --source=flux-system \
-          --path=./tests/${FLUX_VERSION:0:4}/clusters/kind
+          --path=./tests/${FLUX_VERSION%.*}/clusters/kind
       - name: Verify cluster reconciliation
         run: |
           kubectl -n flux-system wait kustomization/sources --for=condition=ready --timeout=2m
