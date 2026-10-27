@@ -1,71 +1,124 @@
 ---
-/* Hand-drawn diagram for the home hybrid & air-gapped row: one signed
-   distribution fanning out to cloud, on-prem, and air-gapped environments.
-   Decorative (aria-hidden); the row copy carries the information. */
+/* Diagram for the home hybrid & air-gapped row. Story, top to bottom: a
+   signed Flux release leaves the ControlPlane registry, its signature is
+   verified at the edge of the customer's infrastructure, it lands in their
+   private registry, and rolls out to cloud, on-prem and air-gapped
+   clusters. Decorative (aria-hidden); the row copy carries the
+   information.
+
+   Motion: the page script adds .in-view the first time the panel scrolls
+   into view and toggles .offscreen to pause the loop. The diagram is always
+   fully drawn; one 6s cycle repeats: the release tag pops, a token
+   travels to the edge, the badge flips to verified, the token lands in the
+   private registry and fans out, and each cluster flips from the previous
+   Flux version to the latest one. The previous-version start state sits
+   behind html.js and prefers-reduced-motion: no-preference, so the static
+   diagram (everything on the latest version) is the fallback. */
+import { getReleases } from '../lib/releases';
+
+const [latest, previous] = await getReleases();
+const latestVersion = latest?.version ?? 'latest';
+const previousVersion = previous?.version ?? latestVersion;
+
+const clusters = [
+  { x: 20, cx: 89, title: 'Public cloud', sub: 'EKS · AKS · GKE', icon: 'cloud' },
+  { x: 171, cx: 240, title: 'On-premises', sub: 'OpenShift', icon: 'server' },
+  { x: 322, cx: 391, title: 'Air-gapped', sub: 'Kubernetes', icon: 'shield' },
+];
+
+const fanOut = (cx: number, end: number) => (cx === 240 ? `M240 202 V${end}` : `M240 202 V226 H${cx} V${end}`);
 ---
 
-<div class="hd-panel" aria-hidden="true">
-  <svg viewBox="0 0 480 352" fill="none">
-    <!-- ControlPlane registry -->
-    <rect x="140" y="14" width="200" height="54" rx="10" class="hd-card hd-hub" />
-    <g transform="translate(160, 30.75) scale(0.293)" class="hd-mark">
-      <path
-        d="m93.2011015 69.9767305h-81.8943123c-.777996 0-1.49780386-.4138814-1.88141406-1.086704-.38145509-.6685776-.36421418-1.489973.04525738-2.1479383l40.94715618-65.79652841c.780151-1.26074639 2.8921623-1.26074639 3.6744684 0l40.9471562 65.79652841c.4051613.6579653.4224022 1.4751158.0431023 2.1479383-.3814551.6728226-1.101263 1.086704-1.8814141 1.086704zm-78.0452796-4.2449373h74.198402l-37.1002786-59.61165482z"
-      />
-      <path
-        d="m19.3959518 57.3191223h-17.24090789c-.77368573 0-1.49133852-.4096365-1.87494872-1.0760916-.3836102-.6664552-.37283464-1.4836056.03017159-2.1394484l32.32670222-53.06171654c.3879204-.63886306 1.1077283-1.12703086 1.8447771-1.0293973.7542897 0 1.4482363.3862893 1.8404669 1.01666249l9.191559 14.85091325-3.6809338 2.2094898-7.3360063-11.85398743-13.8088452 22.66749313-14.72485726 24.1711453h13.43282236z"
-      />
+<div class="hd-panel" data-reveal aria-hidden="true">
+  <svg viewBox="0 0 480 394" fill="none">
+    <!-- customer infrastructure -->
+    <g>
+      <rect x="4" y="108" width="472" height="282" rx="14" class="hd-infra" />
     </g>
-    <text x="198" y="40" class="hd-title">Distro Registry</text>
-    <text x="198" y="58" class="hd-sub">signed images &amp; SBOMs</text>
 
-    <!-- registry -> mirror -->
-    <path d="M240 68 V94" class="hd-line" />
-    <path d="M235.5 94 h9 L240 101.5 Z" class="hd-arrow" />
+    <!-- wires -->
+    <path d="M240 72 V138" class="hd-line" />
+    <path d="M235.5 138 h9 L240 145.5 Z" class="hd-arrow" />
+    {clusters.map(({ cx }) => <path d={fanOut(cx, 244)} class="hd-line" />)}
+    {clusters.map(({ cx }) => <path d={`M${cx - 4.5} 244 h9 L${cx} 251.5 Z`} class="hd-arrow" />)}
+    <text x="248" y="90" class="hd-zone">mirror</text>
 
-    <!-- customer mirror -->
-    <rect x="140" y="104" width="200" height="54" rx="10" class="hd-card hd-hub" />
-    <image href="/images/logo/enterprise-for-flux-cd-icon-white.svg" x="160" y="117" width="28" height="28" />
-    <text x="198" y="130" class="hd-title">Flux Mirror</text>
-    <text x="198" y="148" class="hd-sub">verify &amp; sync</text>
+    <!-- release tokens: offset-path coordinates are in viewBox units -->
+    <circle r="4.5" class="hd-token hd-token-in" style="offset-path: path('M240 72 V146')" />
+    {clusters.map(({ cx }) => <circle r="4.5" class="hd-token hd-token-out" style={`offset-path: path('${fanOut(cx, 252)}')`} />)}
 
-    <!-- mirror -> targets -->
-    <path d="M240 158 V186 M84 186 H396 M84 186 V214 M240 186 V214 M396 186 V214" class="hd-line" />
-    <path d="M79.5 213.5 h9 L84 221 Z" class="hd-arrow" />
-    <path d="M235.5 213.5 h9 L240 221 Z" class="hd-arrow" />
-    <path d="M391.5 213.5 h9 L396 221 Z" class="hd-arrow" />
-
-    <!-- public cloud -->
-    <rect x="10" y="224" width="148" height="118" rx="10" class="hd-card" />
-    <g transform="translate(72, 238)" class="hd-icon">
-      <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
+    <!-- ControlPlane registry and the release tag -->
+    <g>
+      <rect x="140" y="16" width="200" height="56" rx="10" class="hd-card hd-hub" />
+      <g transform="translate(160, 33.75) scale(0.293)" class="hd-mark">
+        <path
+          d="m93.2011015 69.9767305h-81.8943123c-.777996 0-1.49780386-.4138814-1.88141406-1.086704-.38145509-.6685776-.36421418-1.489973.04525738-2.1479383l40.94715618-65.79652841c.780151-1.26074639 2.8921623-1.26074639 3.6744684 0l40.9471562 65.79652841c.4051613.6579653.4224022 1.4751158.0431023 2.1479383-.3814551.6728226-1.101263 1.086704-1.8814141 1.086704zm-78.0452796-4.2449373h74.198402l-37.1002786-59.61165482z"
+        />
+        <path
+          d="m19.3959518 57.3191223h-17.24090789c-.77368573 0-1.49133852-.4096365-1.87494872-1.0760916-.3836102-.6664552-.37283464-1.4836056.03017159-2.1394484l32.32670222-53.06171654c.3879204-.63886306 1.1077283-1.12703086 1.8447771-1.0293973.7542897 0 1.4482363.3862893 1.8404669 1.01666249l9.191559 14.85091325-3.6809338 2.2094898-7.3360063-11.85398743-13.8088452 22.66749313-14.72485726 24.1711453h13.43282236z"
+        />
+      </g>
+      <text x="198" y="42" class="hd-title">Distro Registry</text>
+      <text x="198" y="60" class="hd-sub">signed images &amp; SBOMs</text>
     </g>
-    <text x="84" y="290" class="hd-title hd-center">Public cloud</text>
-    <text x="84" y="308" class="hd-sub hd-center">EKS &middot; AKS &middot; GKE</text>
-    <circle cx="51" cy="326.5" r="2.5" class="hd-ok-dot" />
-    <text x="58" y="329" class="hd-ok">reconciling</text>
-
-    <!-- on-premises -->
-    <rect x="166" y="224" width="148" height="118" rx="10" class="hd-card" />
-    <g transform="translate(228, 238)" class="hd-icon">
-      <rect x="3" y="4" width="18" height="7" rx="2" />
-      <rect x="3" y="13" width="18" height="7" rx="2" />
-      <path d="M7 7.5h.01M7 16.5h.01" />
+    <g class="hd-tag">
+      <rect x="352" y="33" width="82" height="22" rx="11" class="hd-tag-pill" />
+      <text x="393" y="47.5" class="hd-tag-text hd-center">flux {latestVersion}</text>
     </g>
-    <text x="240" y="290" class="hd-title hd-center">On-premises</text>
-    <text x="240" y="308" class="hd-sub hd-center">OpenShift</text>
-    <circle cx="207" cy="326.5" r="2.5" class="hd-ok-dot" />
-    <text x="214" y="329" class="hd-ok">reconciling</text>
 
-    <!-- air-gapped -->
-    <rect x="322" y="224" width="148" height="118" rx="10" class="hd-card hd-gapped" />
-    <g transform="translate(384, 238)" class="hd-icon">
-      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+    <!-- signature check at the edge -->
+    <g>
+      <rect x="166" y="97" width="148" height="22" rx="11" class="hd-badge" />
+      <g class="hd-verified">
+        <circle cx="181" cy="108" r="6" class="hd-check-bg" />
+        <path d="M178.2 108.2 l2 2 l3.8 -4" class="hd-check" />
+        <text x="192" y="111.5" class="hd-badge-text hd-ok">signature verified</text>
+      </g>
+      <text x="240" y="111.5" class="hd-badge-text hd-pending hd-center">verifying signature</text>
     </g>
-    <text x="396" y="290" class="hd-title hd-center">Air-gapped</text>
-    <text x="396" y="308" class="hd-sub hd-center">Kubernetes</text>
-    <circle cx="363" cy="326.5" r="2.5" class="hd-ok-dot" />
-    <text x="370" y="329" class="hd-ok">reconciling</text>
+
+    <!-- private registry -->
+    <g>
+      <rect x="140" y="146" width="200" height="56" rx="10" class="hd-card hd-hub hd-private" />
+      <g transform="translate(160, 162)" class="hd-icon">
+        <ellipse cx="12" cy="5" rx="9" ry="3" />
+        <path d="M3 5V19A9 3 0 0 0 21 19V5M3 12A9 3 0 0 0 21 12" />
+      </g>
+      <text x="198" y="172" class="hd-title">Private Registry</text>
+      <text x="198" y="190" class="hd-sub">on your schedule</text>
+    </g>
+
+    {
+      clusters.map(({ x, cx, title, sub, icon }) => (
+        <g>
+          <rect x={x} y="252" width="138" height="118" rx="10" class="hd-card" />
+          <g transform={`translate(${cx - 12}, 266)`} class="hd-icon">
+            {icon === 'cloud' && <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />}
+            {icon === 'server' && (
+              <>
+                <rect x="3" y="4" width="18" height="7" rx="2" />
+                <rect x="3" y="13" width="18" height="7" rx="2" />
+                <path d="M7 7.5h.01M7 16.5h.01" />
+              </>
+            )}
+            {icon === 'shield' && (
+              <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+            )}
+          </g>
+          <text x={cx} y="318" class="hd-title hd-center">{title}</text>
+          <text x={cx} y="336" class="hd-sub hd-center">{sub}</text>
+          <g class="hd-old">
+            <circle cx={cx - 27} cy="354.5" r="2.5" class="hd-old-dot" />
+            <text x={cx - 20} y="357" class="hd-status hd-old-text">flux {previousVersion}</text>
+          </g>
+          <g class="hd-new">
+            <circle cx={cx - 27} cy="354.5" r="2.5" class="hd-ok-dot" />
+            <circle cx={cx - 27} cy="354.5" r="2.5" class="hd-ping" />
+            <text x={cx - 20} y="357" class="hd-status hd-ok">flux {latestVersion}</text>
+          </g>
+        </g>
+      ))
+    }
   </svg>
 </div>
 
@@ -76,6 +129,18 @@
     height: auto;
   }
 
+  .hd-infra {
+    fill: var(--bg-soft);
+    stroke: var(--border-strong);
+  }
+
+  .hd-zone {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    fill: var(--muted);
+  }
+
   .hd-card {
     fill: var(--navy-800);
     stroke: var(--navy-line);
@@ -83,11 +148,6 @@
 
   .hd-hub {
     stroke: rgba(114, 174, 250, 0.55);
-  }
-
-  .hd-gapped {
-    stroke: rgba(114, 174, 250, 0.5);
-    stroke-dasharray: 5 4;
   }
 
   .hd-mark {
@@ -127,13 +187,212 @@
     text-anchor: middle;
   }
 
-  .hd-ok {
+  .hd-tag-pill {
+    fill: rgba(20, 114, 235, 0.1);
+    stroke: rgba(20, 114, 235, 0.5);
+  }
+
+  .hd-tag-text {
     font-family: var(--font-mono);
     font-size: 9.5px;
+    font-weight: 600;
+    fill: var(--brand);
+  }
+
+  .hd-tag {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .hd-badge {
+    fill: var(--navy-900);
+    stroke: rgba(52, 211, 153, 0.45);
+  }
+
+  .hd-badge-text {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+  }
+
+  .hd-check-bg {
+    fill: rgba(52, 211, 153, 0.18);
+  }
+
+  .hd-check {
+    stroke: #34d399;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .hd-pending {
+    fill: var(--viz-soft);
+    opacity: 0;
+  }
+
+  .hd-status {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+  }
+
+  .hd-ok {
     fill: #34d399;
   }
 
   .hd-ok-dot {
     fill: #34d399;
+  }
+
+  .hd-old {
+    opacity: 0;
+  }
+
+  .hd-old-dot {
+    fill: var(--viz-faint);
+  }
+
+  .hd-old-text {
+    fill: var(--viz-dim);
+  }
+
+  .hd-token,
+  .hd-ping {
+    opacity: 0;
+  }
+
+  .hd-token {
+    fill: var(--brand-light);
+    stroke: #ffffff;
+    stroke-width: 1.5;
+    filter: drop-shadow(0 0 4px rgba(20, 114, 235, 0.9));
+    offset-rotate: 0deg;
+  }
+
+  .hd-ping {
+    fill: none;
+    stroke: #34d399;
+    stroke-width: 1.2;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Clusters start on the previous release and upgrade as the token lands */
+    :global(html.js) .hd-old {
+      opacity: 1;
+    }
+
+    :global(html.js) .hd-new {
+      opacity: 0;
+    }
+
+    /* One 6s cycle shared by every looping element so the stages line up:
+       tag pops (0-9%), token to the edge (6-16%), held for the check
+       (16-26%), on to the private registry (26-34%), registry flash
+       (32-40%), fan out (38-56%), clusters upgrade (56%), reset (94-100%) */
+    .in-view .hd-tag {
+      animation: hd-tag 6s ease-out 0.6s infinite both;
+    }
+
+    .in-view .hd-token-in {
+      animation: hd-token-in 6s linear 0.6s infinite;
+    }
+
+    .in-view .hd-token-out {
+      animation: hd-token-out 6s ease-in-out 0.6s infinite;
+    }
+
+    .in-view .hd-verified {
+      animation: hd-verified 6s ease-out 0.6s infinite both;
+    }
+
+    .in-view .hd-pending {
+      animation: hd-pending 6s ease-out 0.6s infinite both;
+    }
+
+    .in-view .hd-private {
+      animation: hd-flash 6s ease-in-out 0.6s infinite;
+    }
+
+    .in-view .hd-old {
+      animation: hd-old 6s ease-out 0.6s infinite both;
+    }
+
+    .in-view .hd-new {
+      animation: hd-new 6s ease-out 0.6s infinite both;
+    }
+
+    .in-view .hd-ping {
+      animation: hd-ping 6s ease-out 0.6s infinite;
+    }
+
+    .offscreen * {
+      animation-play-state: paused !important;
+    }
+  }
+
+  @keyframes {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes hd-tag {
+    0% { transform: scale(1); }
+    5% { transform: scale(1.12); }
+    9%, 100% { transform: scale(1); }
+  }
+
+  /* The edge badge sits at 48% of the registry -> private registry path;
+     the token waits under it while the signature is checked */
+  @keyframes hd-token-in {
+    0%, 5% { offset-distance: 0%; opacity: 0; }
+    6% { offset-distance: 0%; opacity: 1; }
+    16%, 26% { offset-distance: 48%; opacity: 1; }
+    34% { offset-distance: 100%; opacity: 1; }
+    35%, 100% { offset-distance: 100%; opacity: 0; }
+  }
+
+  @keyframes hd-token-out {
+    0%, 37% { offset-distance: 0%; opacity: 0; }
+    38% { offset-distance: 0%; opacity: 1; }
+    56% { offset-distance: 100%; opacity: 1; }
+    57%, 100% { offset-distance: 100%; opacity: 0; }
+  }
+
+  @keyframes hd-pending {
+    0%, 15% { opacity: 0; }
+    17%, 22% { opacity: 1; }
+    24%, 100% { opacity: 0; }
+  }
+
+  @keyframes hd-verified {
+    0%, 15% { opacity: 1; }
+    17%, 22% { opacity: 0; }
+    25%, 100% { opacity: 1; }
+  }
+
+  @keyframes hd-flash {
+    0%, 32% { stroke: rgba(114, 174, 250, 0.55); stroke-width: 1; }
+    36% { stroke: #72aefa; stroke-width: 2.5; }
+    44%, 100% { stroke: rgba(114, 174, 250, 0.55); stroke-width: 1; }
+  }
+
+  @keyframes hd-old {
+    0%, 55% { opacity: 1; }
+    58%, 94% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes hd-new {
+    0%, 55% { opacity: 0; }
+    58%, 94% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  @keyframes hd-ping {
+    0%, 56% { opacity: 0; transform: scale(1); }
+    58% { opacity: 0.85; }
+    80%, 100% { opacity: 0; transform: scale(3.8); }
   }
 </style>
