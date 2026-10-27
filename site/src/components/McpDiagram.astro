@@ -1,0 +1,220 @@
+---
+/* Hand-drawn diagram for the Flux Local MCP Server row on /addons/, drawn in
+   the same style as HybridDiagram. Blue wires are the read-only MCP path,
+   navy wires are the GitOps path every app change takes. */
+
+const cards = [
+  { x: 18, y: 34, title: 'Developer', sub: 'chat & code', icon: 'user' },
+  { x: 202, y: 34, title: 'AI assistant', sub: 'MCP client', icon: 'bot' },
+  { x: 18, y: 146, title: 'App repo', sub: 'local checkout', icon: 'branch' },
+  { x: 202, y: 146, title: 'Flux MCP Server', sub: 'read-only · kubeconfig', icon: 'flux', hub: true },
+  { x: 18, y: 258, title: 'Pull request', sub: 'review & merge', icon: 'pr' },
+  { x: 406, y: 34, title: 'App preview', sub: 'ready', icon: 'app', ok: true },
+  { x: 406, y: 146, title: 'Kubernetes API', sub: 'resources & logs', icon: 'wheel' },
+  { x: 406, y: 258, title: 'Flux Operator', sub: 'reconciling', icon: 'sync', ok: true },
+];
+---
+
+<div
+  class="md-panel"
+  role="img"
+  aria-label="Diagram: on the dev machine a developer chats with an AI assistant and edits the app repo. The assistant uses the Flux MCP Server over stdio, which reads the dev cluster's Kubernetes API through the local kubeconfig. Code changes are pushed as a pull request, which the Flux Operator pulls and applies to the cluster, where the app preview runs."
+>
+  <svg viewBox="0 0 572 352" fill="none" aria-hidden="true">
+    <!-- zones -->
+    <text x="14" y="12" class="md-label">dev machine</text>
+    <rect x="4" y="20" width="360" height="216" rx="12" class="md-zone" />
+    <text x="402" y="12" class="md-label">dev cluster</text>
+    <rect x="392" y="20" width="176" height="328" rx="12" class="md-zone" />
+
+    <!-- developer -> assistant -->
+    <path d="M166 72 H194" class="md-line" />
+    <path d="M194 67.5 v9 L201.5 72 Z" class="md-arrow" />
+    <text x="184" y="64" class="md-label md-center">chat</text>
+
+    <!-- developer -> app repo -->
+    <path d="M92 110 V138" class="md-line" />
+    <path d="M87.5 138 h9 L92 145.5 Z" class="md-arrow" />
+    <text x="100" y="132" class="md-label">code</text>
+
+    <!-- assistant -> mcp server -->
+    <path d="M276 110 V138" class="md-read" />
+    <path d="M271.5 138 h9 L276 145.5 Z" class="md-read-arrow" />
+    <text x="284" y="132" class="md-label">stdio</text>
+
+    <!-- mcp server -> kubernetes api -->
+    <path d="M350 184 H398" class="md-read" />
+    <path d="M398 179.5 v9 L405.5 184 Z" class="md-read-arrow" />
+
+    <!-- app repo -> pull request -->
+    <path d="M92 222 V250" class="md-line" />
+    <path d="M87.5 250 h9 L92 257.5 Z" class="md-arrow" />
+    <text x="100" y="246" class="md-label">push</text>
+
+    <!-- pull request -> operator -->
+    <path d="M166 296 H398" class="md-line" />
+    <path d="M398 291.5 v9 L405.5 296 Z" class="md-arrow" />
+    <text x="276" y="288" class="md-label md-center">pull &amp; deploy</text>
+
+    <!-- operator -> kubernetes api -->
+    <path d="M480 258 V230" class="md-line" />
+    <path d="M475.5 230 h9 L480 222.5 Z" class="md-arrow" />
+
+    <!-- kubernetes api -> app -->
+    <path d="M480 146 V118" class="md-line" />
+    <path d="M475.5 118 h9 L480 110.5 Z" class="md-arrow" />
+
+    {
+      cards.map(({ x, y, title, sub, icon, hub, ok }) => {
+        const cx = x + 74;
+        return (
+          <g>
+            <rect x={x} y={y} width="148" height="76" rx="10" class:list={['md-card', { 'md-hub': hub }]} />
+            {icon === 'flux' ? (
+              <image href="/images/logo/enterprise-for-flux-cd-icon-white.svg" x={cx - 13} y={y + 10} width="26" height="26" />
+            ) : (
+              <g transform={`translate(${cx - 12}, ${y + 11})`} class="md-icon">
+                {icon === 'user' && (
+                  <>
+                    <circle cx="12" cy="7" r="4" />
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                  </>
+                )}
+                {icon === 'bot' && (
+                  <>
+                    <rect x="3" y="11" width="18" height="10" rx="2" />
+                    <circle cx="12" cy="5" r="2" />
+                    <path d="M12 7v4M8 16h.01M16 16h.01" />
+                  </>
+                )}
+                {icon === 'branch' && (
+                  <>
+                    <circle cx="18" cy="6" r="3" />
+                    <circle cx="6" cy="18" r="3" />
+                    <path d="M6 3v12M18 9a9 9 0 0 1-9 9" />
+                  </>
+                )}
+                {icon === 'pr' && (
+                  <>
+                    <circle cx="18" cy="18" r="3" />
+                    <circle cx="6" cy="6" r="3" />
+                    <path d="M13 6h3a2 2 0 0 1 2 2v7M6 9v12" />
+                  </>
+                )}
+                {icon === 'app' && (
+                  <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73zM12 22V12M3.29 7 12 12l8.71-5M7.5 4.27l9 5.15" />
+                )}
+                {icon === 'wheel' && (
+                  <>
+                    <circle cx="12" cy="12" r="8" />
+                    <circle cx="12" cy="12" r="2.5" />
+                    <path d="M12 2v7.5M19 5l-5.23 5.23M22 12h-7.5M19 19l-5.23-5.23M12 14.5V22M10.23 13.77 5 19M9.5 12H2M10.23 10.23 5 5" />
+                  </>
+                )}
+                {icon === 'sync' && (
+                  <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8M21 3v5h-5M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16M8 16H3v5" />
+                )}
+              </g>
+            )}
+            <text x={cx} y={y + 52} class="md-title md-center">{title}</text>
+            {ok ? (
+              <>
+                <circle cx={cx - sub.length * 2.85 - 6} cy={y + 63} r="2.5" class="md-ok-dot" />
+                <text x={cx + 4} y={y + 66} class="md-ok md-center">{sub}</text>
+              </>
+            ) : (
+              <text x={cx} y={y + 66} class="md-sub md-center">{sub}</text>
+            )}
+          </g>
+        );
+      })
+    }
+
+    <!-- legend -->
+    <path d="M206 326 H222" class="md-read" />
+    <text x="228" y="329" class="md-label">read-only</text>
+    <path d="M292 326 H308" class="md-line" />
+    <text x="314" y="329" class="md-label">GitOps</text>
+  </svg>
+</div>
+
+<style>
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .md-zone {
+    fill: var(--bg-soft);
+    stroke: var(--border-strong);
+    stroke-dasharray: 5 4;
+  }
+
+  .md-card {
+    fill: var(--navy-800);
+    stroke: var(--navy-line);
+  }
+
+  .md-hub {
+    stroke: rgba(114, 174, 250, 0.55);
+  }
+
+  .md-line {
+    stroke: var(--navy-800);
+    stroke-width: 1.5;
+  }
+
+  .md-arrow {
+    fill: var(--navy-800);
+  }
+
+  .md-read {
+    stroke: var(--brand);
+    stroke-width: 1.5;
+  }
+
+  .md-read-arrow {
+    fill: var(--brand);
+  }
+
+  .md-icon {
+    stroke: var(--brand-light);
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .md-title {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 650;
+    fill: #ffffff;
+  }
+
+  .md-sub {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    fill: rgba(190, 211, 252, 0.6);
+  }
+
+  .md-label {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    fill: var(--muted);
+  }
+
+  .md-center {
+    text-anchor: middle;
+  }
+
+  .md-ok {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    fill: #34d399;
+  }
+
+  .md-ok-dot {
+    fill: #34d399;
+  }
+</style>
