@@ -15,8 +15,8 @@ export interface NavGroup {
 export interface NavMenu {
   title: string;
   groups: NavGroup[];
-  /* Right-hand panel column: demo CTA, ControlPlane brand or Flux Operator card */
-  aside?: 'demo' | 'brand' | 'operator';
+  /* Right-hand panel column: AI Pack card, ControlPlane brand or Flux Operator card */
+  aside?: 'ai-pack' | 'brand' | 'operator';
 }
 
 export interface NavSection {
@@ -31,7 +31,7 @@ export const githubUrl = 'https://github.com/controlplaneio-fluxcd/distribution'
 export const mainNav: NavMenu[] = [
   {
     title: 'Product',
-    aside: 'demo',
+    aside: 'ai-pack',
     groups: [
       {
         items: [
@@ -46,12 +46,6 @@ export const mainNav: NavMenu[] = [
             href: '/addons/',
             description: 'Give your teams full visibility over Flux, from live dashboards to AI assistants.',
             icon: 'M3.5 3.5h7v7h-7zM13.5 3.5h7v7h-7zM3.5 13.5h7v7h-7zM13.5 13.5h7v7h-7z',
-          },
-          {
-            title: 'Enterprise AI Pack',
-            href: '/ai-pack/',
-            description: 'Connect AI agents to every cluster with single sign-on, RBAC, and scoped access.',
-            icon: 'M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3zM19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15z',
           },
           {
             title: 'Plans and Pricing',

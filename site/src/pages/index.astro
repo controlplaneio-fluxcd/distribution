@@ -214,9 +214,10 @@ const security = [
           </div>
           <div class="row-visual">
             {visual === 'timeline' && (
-              <div class="panel timeline" aria-hidden="true">
+              <div class="panel timeline" data-reveal aria-hidden="true">
                 {timeline.map(({ step, desc }, i) => (
-                  <div class="tl-row">
+                  <div class="tl-row" style={`--i: ${i}`}>
+                    <span class="tl-node" />
                     <span class="tl-step">{String(i + 1).padStart(2, '0')} {step}</span>
                     <p>{desc}</p>
                   </div>
@@ -331,6 +332,24 @@ const security = [
       window.setTimeout(() => prev.classList.remove('is-leaving'), 500);
       next.classList.add('is-active');
     }, 2600);
+  }
+
+  /* Diagrams marked data-reveal play their intro the first time they scroll
+     into view; .offscreen pauses their looping animations */
+  const reveals = document.querySelectorAll<HTMLElement>('[data-reveal]');
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const { target, isIntersecting } of entries) {
+          if (isIntersecting) target.classList.add('in-view');
+          target.classList.toggle('offscreen', !isIntersecting);
+        }
+      },
+      { threshold: 0.35 },
+    );
+    reveals.forEach((el) => observer.observe(el));
+  } else {
+    reveals.forEach((el) => el.classList.add('in-view'));
   }
 </script>
 
@@ -565,15 +584,137 @@ const security = [
     box-shadow: var(--shadow-navy);
   }
 
+  /* Progress rail: each row owns its node and the rail segment down to the
+     next node. The static state is the finished timeline; the in-view
+     animation plays it step by step. */
   .tl-row {
-    padding: 0.9rem 0;
+    --node: 0.7rem;
+    --node-top: 1.05rem;
+    position: relative;
+    padding: 0.9rem 0 0.9rem 2.1rem;
   }
 
-  .tl-row + .tl-row {
-    border-top: 1px solid var(--navy-line);
+  .tl-row:not(:last-child)::before,
+  .tl-row:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: calc(var(--node) / 2 - 1px);
+    top: calc(var(--node-top) + var(--node));
+    bottom: calc(var(--node-top) * -1);
+    width: 2px;
+    background: var(--navy-line);
+  }
+
+  .tl-row:not(:last-child)::after {
+    background: linear-gradient(var(--brand-light), rgba(114, 174, 250, 0.35));
+    transform-origin: top;
+  }
+
+  .tl-node {
+    position: absolute;
+    left: 0;
+    top: var(--node-top);
+    width: var(--node);
+    height: var(--node);
+    border-radius: 50%;
+    border: 2px solid var(--brand-light);
+    background: var(--brand-light);
+    box-shadow: 0 0 0 4px rgba(114, 174, 250, 0.14);
+  }
+
+  .tl-row:last-child .tl-node {
+    border-color: var(--viz-ok);
+    background: var(--viz-ok);
+    box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.16);
+  }
+
+  .tl-row:last-child .tl-node::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    border: 1.5px solid var(--viz-ok);
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .timeline:not(.in-view) .tl-step,
+    :global(html.js) .timeline:not(.in-view) .tl-row p {
+      opacity: 0;
+    }
+
+    :global(html.js) .timeline:not(.in-view) .tl-row::after {
+      transform: scaleY(0);
+    }
+
+    :global(html.js) .timeline:not(.in-view) .tl-node {
+      background: var(--navy-950);
+      border-color: var(--navy-line);
+      box-shadow: none;
+    }
+
+    .timeline.in-view .tl-step,
+    .timeline.in-view .tl-row p {
+      animation: tl-text 0.5s ease-out calc(var(--i) * 0.6s) both;
+    }
+
+    .timeline.in-view .tl-node {
+      animation: tl-node 0.45s cubic-bezier(0.3, 1.6, 0.5, 1) calc(var(--i) * 0.6s) both;
+    }
+
+    .timeline.in-view .tl-row::after {
+      animation: tl-rail 0.5s ease-in-out calc(var(--i) * 0.6s + 0.2s) both;
+    }
+
+    .timeline.in-view .tl-row:last-child .tl-node::after {
+      animation: tl-ping 2.6s ease-out 2.4s infinite;
+    }
+
+    .timeline.offscreen .tl-row:last-child .tl-node::after {
+      animation-play-state: paused;
+    }
+  }
+
+  @keyframes tl-text {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes tl-node {
+    from {
+      background: var(--navy-950);
+      border-color: var(--navy-line);
+      box-shadow: none;
+      transform: scale(0.6);
+    }
+  }
+
+  @keyframes tl-rail {
+    from {
+      transform: scaleY(0);
+    }
+  }
+
+  @keyframes tl-ping {
+    0% {
+      opacity: 0.8;
+      transform: scale(1);
+    }
+    70%,
+    100% {
+      opacity: 0;
+      transform: scale(2.8);
+    }
   }
 
   .tl-step {
+    display: block;
     font-family: var(--font-mono);
     font-size: 0.78rem;
     text-transform: uppercase;
