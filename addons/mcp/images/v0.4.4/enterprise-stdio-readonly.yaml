@@ -1,0 +1,4 @@
+images:
+  - name: ghcr.io/controlplaneio-fluxcd/flux-mcp-enterprise
+    newTag: v0.4.4-stdio-readonly
+    digest: sha256:ac5a2709aa6b081457c55e40cf2f19fba57636b21218d15fed5e627d40f0a255
