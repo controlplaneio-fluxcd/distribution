@@ -1,10 +1,10 @@
 images:
   - name: ghcr.io/controlplaneio-fluxcd/distroless/source-controller
     newTag: v1.8.5
-    digest: sha256:88146621ef474ffef9d408625b3c18de05eca26312596ff325e964b4cec274c0
+    digest: sha256:ce757c52c3c978ad8ae5c727689ac70e1080a03a0a5f263254720f9c8736c794
   - name: ghcr.io/controlplaneio-fluxcd/distroless/kustomize-controller
     newTag: v1.8.5
-    digest: sha256:4d17d68299c2e2595b110874173d819eff78afc4635bda95d32e8096ad2706a7
+    digest: sha256:d2ee8898af2bd1593833b283826431cffc761685d1dafee683fad8fb19daf89f
   - name: ghcr.io/controlplaneio-fluxcd/distroless/helm-controller
     newTag: v1.5.5
     digest: sha256:7188312388f5a0b50bf34d6fce86093487646a3294cc1eb50d1b4d9e172f5163
