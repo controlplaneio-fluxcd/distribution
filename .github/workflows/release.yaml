@@ -23,11 +23,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Setup Flux
-        uses: fluxcd/flux2/action@dd233c4fadef306a62b7893204f8e3817fecc2b2 #v2.9.5
+        uses: fluxcd/flux2/action@3fa784edd773d56630bb9f62645e08f70c2cff0a #v2.10.0
         with:
           version: ${{ github.ref_name }}
       - name: Login to GHCR
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4.7.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -89,11 +89,11 @@ jobs:
           notes="See the distribution [release notes](https://github.com/controlplaneio-fluxcd/distribution/blob/main/releases/release-${GITHUB_REF_NAME:0:4}.md) for more details."
           gh release create ${{ github.ref_name }} --title="${title}" --notes="${notes}" --verify-tag
       - name: Setup Flux
-        uses: fluxcd/flux2/action@dd233c4fadef306a62b7893204f8e3817fecc2b2 #v2.9.5
+        uses: fluxcd/flux2/action@3fa784edd773d56630bb9f62645e08f70c2cff0a #v2.10.0
         with:
           version: ${{ github.ref_name }}
       - name: Login to GHCR
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4.7.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
