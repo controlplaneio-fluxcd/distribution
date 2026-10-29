@@ -30,9 +30,9 @@ const outcomes = [
 ];
 
 const steps = [
-  { title: 'Sign in with SSO', body: 'The MCP Server hands off sign-in to your identity provider. On return, the user claims are mapped to Kubernetes RBAC.' },
-  { title: 'Grant scopes', body: 'The user picks which tools the agent may call in this session on their behalf, and decides whether the session should be kept alive offline.' },
-  { title: 'Query the fleet', body: 'The agent lists clusters through the hub, which routes tool calls to the spokes over connections secured by built-in or SPIFFE workload identity.' },
+  { title: 'Secured with SSO', body: 'The MCP Server hands off sign-in to your identity provider. On return, the user claims are mapped to Kubernetes RBAC.' },
+  { title: 'Restrict Scopes', body: 'The user picks which tools the agent may call in this session on their behalf, and decides whether the session should be kept alive offline.' },
+  { title: 'Multi-Cluster Analysis', body: 'The agent lists clusters through the hub, which routes tool calls to the spokes over connections secured by built-in or SPIFFE workload identity.' },
 ];
 
 interface Feature {
@@ -47,7 +47,7 @@ interface Feature {
 const features: Feature[] = [
   {
     tag: 'sso and rbac',
-    title: 'Governed by the controls you already have',
+    title: 'Governed by Your Existing Controls',
     lead: 'Access is managed in your identity provider. Add people to the groups that make sense and their agents get the Kubernetes RBAC permissions those groups map to, nothing more.',
     points: [
       'Map IdP groups to the Roles and ClusterRoles you already manage',
@@ -176,7 +176,7 @@ const comparison: { label: string; local: string; pack: string }[] = [
   <section class="session" aria-labelledby="session-title">
     <div class="session-inner">
       <p class="eyebrow">one session, end to end</p>
-      <h2 id="session-title">From a failing release to its root cause in one conversation</h2>
+      <h2 id="session-title">Automated root cause analysis</h2>
       <SessionShowcase />
       <ol class="steps">
         {
