@@ -24,11 +24,21 @@ jobs:
       env:
         REGISTRY: ghcr.io/controlplaneio-fluxcd/flux-operator
         VERSION: ${{ steps.release.outputs.version }}
+    - name: Setup Trivy
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+        wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
+        echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/trivy.list
+        sudo apt-get update
+        sudo apt-get install -y trivy
     - name: Scan flux-operator
       id: fo
       continue-on-error: true
       uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
       with:
+        skip-setup-trivy: true
         cache: false
         image-ref: ${{ steps.image.outputs.fo }}
         format: table
