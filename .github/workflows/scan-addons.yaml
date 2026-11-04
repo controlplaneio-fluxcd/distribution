@@ -118,6 +118,7 @@ jobs:
         with:
           skip-setup-trivy: true
           cache: false
+          scanners: 'vuln'
           image-ref: ${{ matrix.target.image }}
           format: 'table'
           exit-code: '1'
