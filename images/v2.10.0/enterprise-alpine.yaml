@@ -4,7 +4,7 @@ images:
     digest: sha256:2363e3caa9f7aab630d937ba2e82d872ca0a35ac3d1b15aabe7c5b8432016ac2
   - name: ghcr.io/controlplaneio-fluxcd/alpine/kustomize-controller
     newTag: v1.10.1
-    digest: sha256:cbbfdac699c3e3d1a0ab142ff15cb90314568010db177727dc93ba2c5880325c
+    digest: sha256:8c6e9212ce7cea4c3dbdf1c403d8653e07056285b540c1db2ba494356419565f
   - name: ghcr.io/controlplaneio-fluxcd/alpine/helm-controller
     newTag: v1.7.1
     digest: sha256:67615545e9704986abc2b0ea15ff4ae09c3e59d6684dcb8a78e89b47ce74aa87
