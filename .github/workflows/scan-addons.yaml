@@ -26,8 +26,9 @@ on:
         description: 'vulnerability severity'
         required: true
         type: choice
-        default: CRITICAL,HIGH,MEDIUM,LOW
+        default: CRITICAL,HIGH,MEDIUM,LOW,UNKNOWN
         options:
+          - CRITICAL,HIGH,MEDIUM,LOW,UNKNOWN
           - CRITICAL,HIGH,MEDIUM,LOW
           - CRITICAL,HIGH,MEDIUM
           - CRITICAL,HIGH
@@ -114,7 +115,7 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
-          severity: ${{ inputs.severity || 'CRITICAL,HIGH,MEDIUM,LOW' }}
+          severity: ${{ inputs.severity || 'CRITICAL,HIGH,MEDIUM,LOW,UNKNOWN' }}
           trivyignores: ${{ steps.ignores.outputs.files }}
         env:
           TRIVY_USERNAME: ${{ github.actor }}
